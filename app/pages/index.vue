@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {
-  ArrowRight, BarChart3, Bell, Boxes, Building2, Check, CheckCircle2, ChevronRight,
-  Camera, CircleUserRound, LayoutTemplate, Mail, Menu,
-  MessageCircle, Package, Percent, Pill, Search, ShoppingBag, Store, Tag, Users, X
+  ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2, CircleUserRound,
+  CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
+  PackageCheck, Percent, Pill, Search, ShieldCheck, ShoppingBag, Store, Tag, Users, X, Zap
 } from '@lucide/vue'
 
 type Plan = {
@@ -21,6 +21,7 @@ type CheckoutResponse = { data: { public_id: string }, checkout_url: string }
 type FormKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
 
 const config = useRuntimeConfig()
+const pageRoot = ref<HTMLElement | null>(null)
 const plans = ref<Plan[]>([])
 const plansLoading = ref(true)
 const plansError = ref('')
@@ -29,8 +30,27 @@ const selectedPlan = ref<Plan | null>(null)
 const submitting = ref(false)
 const submitError = ref('')
 const mobileMenuOpen = ref(false)
+const activeJourney = ref(0)
 const form = reactive({ owner_name: '', owner_email: '', phone: '', store_name: '', segment: '' })
 const formErrors = reactive<Partial<Record<FormKey, string>>>({})
+
+const journeySteps = [
+  { icon: Store, label: 'Loja virtual', title: 'O cliente encontra o produto certo.', description: 'Uma vitrine rápida, responsiva e com a identidade do seu negócio.' },
+  { icon: CreditCard, label: 'Pagamento', title: 'A compra acontece sem atrito.', description: 'Checkout direto, com Pix, boleto e cartão em uma jornada segura.' },
+  { icon: PackageCheck, label: 'Gestão', title: 'O pedido já chega organizado.', description: 'Pagamento, estoque e cliente atualizados no mesmo painel.' },
+  { icon: MessageCircle, label: 'Relacionamento', title: 'A conversa continua no WhatsApp.', description: 'Confirmações, recuperação de carrinho e novas oportunidades de venda.' }
+]
+
+const ecosystemModules = [
+  { icon: Store, title: 'Loja virtual', detail: 'Sua marca no ar' },
+  { icon: Package, title: 'Catálogo', detail: 'Produtos organizados' },
+  { icon: CreditCard, title: 'Pagamentos', detail: 'Pix, boleto e cartão' },
+  { icon: ShoppingBag, title: 'Pedidos', detail: 'Operação centralizada' },
+  { icon: Tag, title: 'Promoções', detail: 'Cupons e campanhas' },
+  { icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto' },
+  { icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham' },
+  { icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento' }
+]
 
 const money = (value: number | string) => new Intl.NumberFormat('pt-BR', {
   style: 'currency', currency: 'BRL', maximumFractionDigits: 0
@@ -94,144 +114,249 @@ const submitCheckout = async () => {
   }
 }
 
-onMounted(loadPlans)
+let destroyMotion: (() => void) | undefined
+
+onMounted(async () => {
+  loadPlans()
+
+  const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+    import('gsap'),
+    import('gsap/ScrollTrigger')
+  ])
+  gsap.registerPlugin(ScrollTrigger)
+
+  const root = pageRoot.value
+  if (!root) return
+
+  const media = gsap.matchMedia()
+  const context = gsap.context(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduceMotion) return
+
+    const intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    intro
+      .from('[data-header]', { y: -24, opacity: 0, duration: .7 })
+      .from('.hero-kicker', { y: 14, opacity: 0, duration: .55 }, '-=.25')
+      .from('.hero-line', { yPercent: 110, rotate: 1.5, duration: .95, stagger: .1 }, '-=.3')
+      .from('.hero-support', { y: 18, opacity: 0, duration: .65 }, '-=.55')
+      .from('.hero-action', { y: 12, opacity: 0, duration: .5, stagger: .08 }, '-=.45')
+      .from('.hero-proof', { opacity: 0, y: 8, duration: .45, stagger: .06 }, '-=.25')
+      .from('.hero-console', { opacity: 0, x: 42, rotateY: -6, scale: .96, duration: 1.1 }, '-=1')
+      .from('.hero-event', { opacity: 0, scale: .9, y: 12, duration: .6, stagger: .1 }, '-=.5')
+
+    gsap.fromTo('.hero-chart-line',
+      { strokeDasharray: 500, strokeDashoffset: 500 },
+      { strokeDashoffset: 0, duration: 1.7, ease: 'power2.inOut', delay: .75 })
+
+    gsap.timeline({
+      scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: 1 }
+    })
+      .to('.hero-copy', { y: -80, opacity: .18, ease: 'none' }, 0)
+      .to('.hero-stage', { scale: .97, y: 24, ease: 'none' }, 0)
+      .to('.hero-console', { scale: 1.045, y: 72, ease: 'none' }, 0)
+      .to('.hero-event-left', { x: -42, y: -18, ease: 'none' }, 0)
+      .to('.hero-event-right', { x: 46, y: -46, ease: 'none' }, 0)
+
+    root.querySelectorAll<HTMLElement>('.section-reveal').forEach((section) => {
+      gsap.from(section.children, {
+        opacity: 0, y: 18, duration: .55, stagger: .075, ease: 'power2.out',
+        scrollTrigger: { trigger: section, start: 'top 82%', toggleActions: 'play none none reverse' }
+      })
+    })
+
+    media.add('(min-width: 1024px)', () => {
+      ScrollTrigger.create({
+        trigger: '.journey-scroll',
+        start: 'top top',
+        end: '+=2400',
+        pin: '.journey-pin',
+        scrub: .8,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          activeJourney.value = Math.min(journeySteps.length - 1, Math.floor(self.progress * journeySteps.length))
+          gsap.set('.journey-progress-fill', { scaleY: self.progress, transformOrigin: 'top center' })
+        }
+      })
+    })
+
+    gsap.fromTo('.ecosystem-line',
+      { strokeDasharray: 340, strokeDashoffset: 340 },
+      {
+        strokeDashoffset: 0, duration: 1.15, stagger: .08, ease: 'power2.inOut',
+        scrollTrigger: { trigger: '.ecosystem-map', start: 'top 72%', once: true }
+      })
+
+    gsap.to('.ecosystem-module', {
+      y: (index) => index % 2 === 0 ? -18 : 18,
+      ease: 'none',
+      scrollTrigger: { trigger: '.ecosystem-map', start: 'top bottom', end: 'bottom top', scrub: 1.1 }
+    })
+
+    gsap.from('.comparison-card', {
+      opacity: 0,
+      y: 36,
+      scale: .94,
+      duration: .85,
+      stagger: .12,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.comparison-grid', start: 'top 78%', once: true }
+    })
+
+    ScrollTrigger.batch('.reveal-card', {
+      start: 'top 88%',
+      once: true,
+      onEnter: (elements) => gsap.from(elements, {
+        opacity: 0, y: 20, scale: .97, duration: .55,
+        stagger: .07, ease: 'power2.out', overwrite: true
+      })
+    })
+
+  }, root)
+
+  destroyMotion = () => { media.revert(); context.revert() }
+})
+
+onBeforeUnmount(() => destroyMotion?.())
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-white">
-    <header class="fixed inset-x-0 top-0 z-40 border-b border-white/60 bg-white/90 backdrop-blur-xl">
+  <div ref="pageRoot" class="overflow-x-hidden bg-white">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header data-header class="premium-header fixed inset-x-0 top-0 z-40">
       <div class="site-container flex h-[72px] items-center gap-8">
         <a href="#inicio" class="text-[21px] font-extrabold tracking-[.12em]" aria-label="Elínea — início"><span class="text-primary">.</span>ELÍNEA</a>
         <nav class="ml-auto hidden items-center gap-8 text-xs font-semibold text-muted-foreground lg:flex" aria-label="Navegação principal">
-          <a class="transition hover:text-primary" href="#produto">Produto</a>
-          <a class="transition hover:text-primary" href="#recursos">Recursos</a>
+          <a class="transition hover:text-primary" href="#jornada">Como funciona</a>
+          <a class="transition hover:text-primary" href="#recursos">Ecossistema</a>
           <a class="transition hover:text-primary" href="#solucoes">Soluções</a>
           <a class="transition hover:text-primary" href="#planos">Preços</a>
-          <a class="transition hover:text-primary" href="#rodape">Desenvolvedores</a>
+          <a class="transition hover:text-primary" href="#rodape">Empresa</a>
         </nav>
         <a class="ml-auto hidden text-xs font-semibold text-muted-foreground hover:text-primary sm:block lg:ml-8" href="https://admin.elinea.com.br">Entrar</a>
         <a class="site-btn hidden sm:inline-flex" href="#planos">Criar minha loja <ArrowRight :size="15" /></a>
-        <button class="btn btn-ghost btn-square ml-auto lg:hidden" type="button" aria-label="Alternar menu" @click="mobileMenuOpen = !mobileMenuOpen">
+        <button class="btn btn-ghost btn-square ml-auto lg:hidden" type="button" aria-label="Alternar menu" :aria-expanded="mobileMenuOpen" aria-controls="menu-mobile" @click="mobileMenuOpen = !mobileMenuOpen">
           <X v-if="mobileMenuOpen" :size="22" /><Menu v-else :size="22" />
         </button>
       </div>
-      <nav v-if="mobileMenuOpen" class="grid gap-1 border-t border-border bg-white p-5 text-sm font-medium lg:hidden">
-        <a v-for="item in [{l:'Produto',h:'#produto'},{l:'Recursos',h:'#recursos'},{l:'Soluções',h:'#solucoes'},{l:'Preços',h:'#planos'}]" :key="item.h" class="rounded-lg px-3 py-2 hover:bg-accent" :href="item.h" @click="mobileMenuOpen=false">{{ item.l }}</a>
+      <nav v-if="mobileMenuOpen" id="menu-mobile" class="grid gap-1 border-t border-border bg-white p-5 text-sm font-medium text-foreground lg:hidden">
+        <a v-for="item in [{l:'Como funciona',h:'#jornada'},{l:'Ecossistema',h:'#recursos'},{l:'Soluções',h:'#solucoes'},{l:'Preços',h:'#planos'}]" :key="item.h" class="rounded-lg px-3 py-2 hover:bg-accent" :href="item.h" @click="mobileMenuOpen=false">{{ item.l }}</a>
         <a class="rounded-lg px-3 py-2 hover:bg-accent" href="https://admin.elinea.com.br">Entrar</a>
       </nav>
     </header>
 
-    <main>
-      <section id="inicio" class="hero-wash relative pt-[72px]">
-        <div class="site-container grid min-h-[650px] items-center gap-14 py-20 lg:grid-cols-[.88fr_1.12fr] lg:py-24">
-          <div class="relative z-10">
-            <span class="site-label">Mais vendas. Menos complicação.</span>
-            <h1 class="max-w-[580px] text-[2.65rem] leading-[1.02] font-bold tracking-[-.055em] sm:text-[4rem]">Ecommerce simples<br>para negócios reais.</h1>
-            <p class="site-copy max-w-[510px] text-base">Crie sua loja, venda online e gerencie seu negócio em uma plataforma feita para simplificar o ecommerce.</p>
-            <div class="mt-8 flex flex-wrap gap-3">
-              <a class="site-btn" href="#planos">Criar minha loja <ArrowRight :size="16" /></a>
-              <a class="site-btn-outline" href="#produto">Conhecer a plataforma</a>
+    <main id="conteudo">
+      <section id="inicio" class="hero-wash relative overflow-hidden pt-[72px]">
+        <div class="hero-copy site-container relative z-10 pt-24 text-center sm:pt-32">
+          <div class="mx-auto max-w-5xl">
+            <span class="hero-kicker inline-flex items-center gap-3 text-[11px] font-semibold text-primary"><span class="size-1.5 rounded-full bg-primary"></span> Tudo para vender. Sem montar tudo do zero.</span>
+            <h1 class="mx-auto mt-7 max-w-5xl text-[3.35rem] leading-[.94] font-semibold tracking-[-.07em] text-balance sm:text-[5.6rem] lg:text-[7rem]">
+              <span class="block overflow-hidden pb-1"><span class="hero-line block">Ecommerce simples</span></span>
+              <span class="block overflow-hidden pb-2"><span class="hero-line block">para negócios reais.</span></span>
+            </h1>
+            <p class="hero-support mx-auto mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-[19px] sm:leading-8">Loja virtual, gestão, pagamentos e automação de vendas em uma plataforma que não exige conhecimento técnico.</p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+              <a class="hero-action site-btn" href="#planos">Criar minha loja <ArrowRight :size="16" /></a>
+              <a class="hero-action site-btn-outline" href="#jornada">Ver como funciona</a>
             </div>
-            <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[12px] font-medium text-muted-foreground">
-              <span class="flex items-center gap-2"><CheckCircle2 :size="15" class="text-primary" /> Sem fidelidade</span>
-              <span class="flex items-center gap-2"><CheckCircle2 :size="15" class="text-primary" /> Suporte humanizado</span>
-              <span class="flex items-center gap-2"><CheckCircle2 :size="15" class="text-primary" /> Setup rápido</span>
+            <div class="mt-9 flex flex-wrap justify-center gap-x-7 gap-y-3 text-[12px] font-medium text-muted-foreground">
+              <span class="hero-proof flex items-center gap-2"><ShieldCheck :size="15" class="text-primary" /> Pagamentos seguros</span>
+              <span class="hero-proof flex items-center gap-2"><Zap :size="15" class="text-primary" /> Implantação assistida</span>
+              <span class="hero-proof flex items-center gap-2"><MessageCircle :size="15" class="text-primary" /> Suporte próximo</span>
             </div>
           </div>
+        </div>
 
-          <div class="relative mx-auto h-[420px] w-full max-w-[650px] lg:h-[485px]" aria-label="Prévia do painel Elínea">
-            <div class="absolute inset-x-2 top-5 h-[350px] rounded-[42%] bg-cyan-200/30 blur-3xl"></div>
-            <div class="mock-window absolute top-8 right-3 left-0 rotate-[2deg] sm:left-8">
-              <div class="mock-nav"><b class="mr-auto text-[11px] tracking-widest"><span class="text-primary">.</span>ELÍNEA</b><Bell :size="12" class="text-muted-foreground" /><CircleUserRound :size="18" /></div>
-              <div class="grid h-[315px] grid-cols-[105px_1fr] sm:grid-cols-[130px_1fr]">
-                <aside class="border-r border-border p-3">
-                  <div class="mock-side-item"><BarChart3 :size="12" /> Início</div><div class="mock-side-item active"><ShoppingBag :size="12" /> Pedidos</div><div class="mock-side-item"><Package :size="12" /> Produtos</div><div class="mock-side-item"><Users :size="12" /> Clientes</div><div class="mock-side-item"><Percent :size="12" /> Marketing</div>
-                </aside>
-                <div class="p-4 sm:p-6"><p class="text-[10px] text-muted-foreground">Olá, João!</p><h3 class="mt-1 text-base font-bold">Seu negócio hoje</h3>
-                  <div class="mt-5 grid grid-cols-2 gap-3"><div class="rounded-lg border border-border p-3"><small class="text-[8px] text-muted-foreground">Faturamento</small><b class="mt-1 block text-base">R$ 4.280,90</b><span class="text-[8px] text-primary">↗ 12% este mês</span></div><div class="rounded-lg border border-border p-3"><small class="text-[8px] text-muted-foreground">Pedidos</small><b class="mt-1 block text-base">48</b><span class="text-[8px] text-primary">8 em andamento</span></div></div>
-                  <div class="mt-4 rounded-lg border border-border p-3"><div class="flex items-center justify-between text-[8px]"><b>Vendas dos últimos 7 dias</b><span>R$ 4.280,90</span></div><svg class="mt-3 h-20 w-full" viewBox="0 0 300 70" fill="none"><path d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9" stroke="#079455" stroke-width="2"/><path d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9 V70 H0Z" fill="url(#heroChart)"/><defs><linearGradient id="heroChart" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#22c55e" stop-opacity=".22"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs></svg></div>
+        <div class="site-container pb-12 pt-10 sm:pt-16 lg:pb-20">
+          <div class="hero-visual relative mx-auto h-[440px] w-full max-w-[1120px] [perspective:1400px] sm:h-[570px] lg:h-[650px]" aria-label="Painel da operação Elínea">
+            <div class="hero-stage absolute inset-x-0 top-12 bottom-0 rounded-[40px] border border-white bg-[#e7ecea] shadow-[inset_0_1px_0_white]"></div>
+            <div class="hero-console mock-window absolute top-3 right-5 left-5 sm:top-10 sm:right-16 sm:left-16 lg:right-24 lg:left-24">
+              <div class="mock-nav"><b class="mr-auto text-[11px] tracking-widest"><span class="text-primary">.</span>ELÍNEA</b><Search :size="12" class="text-muted-foreground"/><Bell :size="12" class="text-muted-foreground"/><CircleUserRound :size="18"/></div>
+              <div class="grid h-[330px] grid-cols-[105px_1fr] sm:h-[430px] sm:grid-cols-[150px_1fr]">
+                <aside class="border-r border-border p-3"><div class="mock-side-item active"><BarChart3 :size="12"/> Visão geral</div><div class="mock-side-item"><ShoppingBag :size="12"/> Pedidos</div><div class="mock-side-item"><Package :size="12"/> Produtos</div><div class="mock-side-item"><Users :size="12"/> Clientes</div><div class="mock-side-item"><Percent :size="12"/> Marketing</div></aside>
+                <div class="p-4 sm:p-8"><p class="text-[9px] text-muted-foreground">Visão geral</p><div class="mt-1 flex items-center"><h3 class="text-base font-bold sm:text-xl">Sua operação hoje</h3><span class="ml-auto rounded-full bg-emerald-50 px-2 py-1 text-[7px] font-bold text-primary sm:px-3 sm:py-1.5">Tudo funcionando</span></div>
+                  <div class="mt-5 grid grid-cols-3 gap-2 sm:gap-4"><div v-for="metric in [['Vendas','R$ 12.480'],['Pedidos','48'],['Clientes','1.245']]" :key="metric[0]" class="rounded-xl border border-border p-3 sm:p-5"><small class="text-[7px] text-muted-foreground sm:text-[9px]">{{ metric[0] }}</small><b class="mt-1 block text-[12px] sm:text-xl">{{ metric[1] }}</b><span class="text-[7px] text-primary sm:text-[8px]">Em crescimento</span></div></div>
+                  <div class="mt-4 rounded-xl border border-border p-3 sm:mt-5 sm:p-5"><div class="flex items-center justify-between text-[8px] sm:text-[9px]"><b>Vendas dos últimos 7 dias</b><span>R$ 4.280,90</span></div><svg class="mt-3 h-20 w-full sm:h-28" viewBox="0 0 300 70" fill="none"><path class="hero-chart-line" d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9" stroke="#07945e" stroke-width="2"/><path d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9 V70 H0Z" fill="url(#heroChart)"/><defs><linearGradient id="heroChart" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#07945e" stop-opacity=".18"/><stop offset="1" stop-color="#07945e" stop-opacity="0"/></linearGradient></defs></svg></div>
                 </div>
               </div>
             </div>
-            <div class="phone-frame float-card absolute right-0 bottom-0 w-[170px] overflow-hidden bg-white sm:w-[190px]">
-              <div class="flex items-center justify-between bg-white px-4 py-3 text-[8px] font-bold"><span>9:01</span><span class="h-2 w-12 rounded-full bg-slate-900"></span></div>
-              <div class="border-y border-border p-3"><b class="text-[10px]">PharmaVida</b><p class="text-[7px] text-muted-foreground">Manipulação</p></div>
-              <div class="h-28 bg-[radial-gradient(circle_at_60%_50%,#c9a57c_0_10%,transparent_11%),linear-gradient(135deg,#f5efe8,#e8ddd0)]"></div>
-              <div class="p-3"><b class="text-[11px] leading-tight">Saúde personalizada para uma vida melhor.</b><button class="btn mt-3 h-8 min-h-8 w-full rounded-md border-0 bg-primary text-[8px] text-white">Comprar agora</button></div>
+            <div class="hero-event hero-event-left absolute top-2 left-1 z-20 hidden items-center gap-3 rounded-2xl border border-border bg-white/90 p-3 shadow-xl backdrop-blur sm:flex lg:top-24"><span class="grid size-9 place-items-center rounded-xl bg-emerald-50 text-primary"><Store :size="17"/></span><span><b class="block text-[10px]">Loja publicada</b><small class="text-[8px] text-muted-foreground">Pronta para receber pedidos</small></span></div>
+            <div class="hero-event hero-event-right absolute right-1 bottom-5 z-20 flex items-center gap-3 rounded-2xl border border-border bg-white/90 p-3 shadow-xl backdrop-blur lg:bottom-20"><span class="grid size-9 place-items-center rounded-xl bg-primary text-white"><Check :size="17"/></span><span><b class="block text-[10px]">Venda concluída</b><small class="text-[8px] text-muted-foreground">Pedido e estoque atualizados</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="brand-strip border-y border-border bg-white py-9">
+        <div class="site-container"><p class="text-center text-[10px] font-semibold tracking-[.06em] text-muted-foreground">Negócios reais já vendem com a Elínea</p><div class="mt-7 grid grid-cols-2 gap-6 text-center text-sm font-semibold tracking-tight text-[#87938e] sm:grid-cols-3 lg:grid-cols-6"><span>PharmaVida</span><span>NUTRIMAX</span><span>essência</span><span>FórmulaCerta</span><span>BioAtiva</span><span>DermaPlus</span></div></div>
+      </section>
+
+      <section id="jornada" class="journey-scroll bg-white">
+        <div class="journey-pin flex min-h-screen items-center py-24 lg:py-12">
+          <div class="site-container w-full">
+            <div class="section-reveal mb-14 max-w-3xl"><span class="site-label">Uma venda movimenta tudo</span><h2 class="site-title">Da primeira visita<br>à próxima compra.</h2><p class="site-copy">Cada etapa conversa com a seguinte. Você acompanha a operação sem alternar entre ferramentas e planilhas.</p></div>
+            <div class="hidden gap-14 lg:grid lg:grid-cols-[.72fr_1.28fr]">
+              <div class="relative pl-8">
+                <span class="journey-progress absolute inset-y-2 left-0 w-px bg-border"><span class="journey-progress-fill block h-full w-full origin-top scale-y-0 bg-primary"></span></span>
+                <button v-for="(step,index) in journeySteps" :key="step.label" type="button" class="journey-step block w-full border-b border-border py-5 text-left" :class="{ active: activeJourney === index }" :aria-pressed="activeJourney === index" @click="activeJourney = index"><span class="text-[10px] font-semibold text-primary">0{{ index + 1 }} · {{ step.label }}</span><strong class="mt-2 block text-xl leading-tight">{{ step.title }}</strong><span class="mt-2 block max-w-sm text-xs leading-5 text-muted-foreground">{{ step.description }}</span></button>
+              </div>
+              <div class="journey-stage relative min-h-[450px] overflow-hidden rounded-[28px] border border-border bg-[#edf2f0] p-7">
+                <Transition name="journey" mode="out-in">
+                  <div :key="activeJourney" class="journey-scene h-full">
+                    <div class="mb-7 flex items-center gap-2 text-[9px] font-semibold text-muted-foreground"><span class="size-2 rounded-full bg-primary"></span>{{ journeySteps[activeJourney]?.label }} em movimento</div>
+                    <div v-if="activeJourney === 0" class="storefront-preview mx-auto max-w-md overflow-hidden rounded-2xl bg-white shadow-xl"><div class="flex items-center justify-between border-b border-border px-5 py-4 text-[9px]"><b>CASA NATIVA</b><span>Produtos&nbsp;&nbsp; Sobre&nbsp;&nbsp; Carrinho</span></div><div class="grid grid-cols-[1.1fr_.9fr] items-center gap-5 p-7"><div><small class="text-[8px] text-primary">Novidades da semana</small><h3 class="mt-2 text-2xl font-semibold tracking-tight">Cuidado que faz parte da rotina.</h3><button class="mt-5 rounded-lg bg-primary px-4 py-2 text-[8px] font-semibold text-white">Comprar agora</button></div><div class="aspect-[4/5] rounded-xl bg-[linear-gradient(145deg,#dcebe4,#b7cfc3)] p-4"><div class="mx-auto mt-8 h-28 w-16 rounded-[14px_14px_8px_8px] bg-white shadow-lg"></div></div></div></div>
+                    <div v-else-if="activeJourney === 1" class="checkout-preview mx-auto grid max-w-lg grid-cols-[1fr_.72fr] overflow-hidden rounded-2xl bg-white shadow-xl"><div class="p-7"><h3 class="text-sm font-bold">Finalizar compra</h3><div class="mt-5 grid gap-3"><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Nome completo</div><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Endereço de entrega</div><div class="grid grid-cols-2 gap-3"><div class="h-10 rounded-lg border border-primary bg-emerald-50 p-3 text-[8px] font-bold text-primary">Pix</div><div class="h-10 rounded-lg border border-border p-3 text-[8px]">Cartão</div></div><button class="mt-2 rounded-lg bg-primary p-3 text-[9px] font-bold text-white">Pagar com segurança</button></div></div><aside class="bg-[#f7f9f8] p-6 text-[9px]"><b>Seu pedido</b><div class="mt-5 flex gap-3"><div class="size-12 rounded-lg bg-[#dcebe4]"></div><span>Vitamina C<br><b>R$ 48,00</b></span></div><div class="mt-6 border-t border-border pt-4"><span class="flex justify-between"><span>Total</span><b>R$ 48,00</b></span></div></aside></div>
+                    <div v-else-if="activeJourney === 2" class="orders-preview mock-window mx-auto max-w-xl"><div class="mock-nav"><b class="mr-auto text-[10px]">Pedidos</b><Search :size="12"/><Bell :size="12"/></div><div class="p-6"><div class="flex items-center"><h3 class="text-lg font-bold">Pedido #1052</h3><span class="ml-auto rounded-full bg-emerald-50 px-3 py-1 text-[8px] font-bold text-primary">Pagamento aprovado</span></div><div class="mt-6 grid grid-cols-3 gap-3"><div v-for="item in [['Cliente','Ana Clara'],['Entrega','Transportadora'],['Total','R$ 349,90']]" :key="item[0]" class="rounded-xl border border-border p-4 text-[8px]"><span class="text-muted-foreground">{{ item[0] }}</span><b class="mt-1 block">{{ item[1] }}</b></div></div><div class="mt-5 rounded-xl border border-border p-4"><div class="flex items-center gap-3 text-[9px]"><CheckCircle2 :size="16" class="text-primary"/><b>Estoque atualizado automaticamente</b></div><div class="mt-3 flex items-center gap-3 text-[9px]"><CheckCircle2 :size="16" class="text-primary"/><b>Cliente adicionado à base</b></div></div></div></div>
+                    <div v-else class="whatsapp-preview mx-auto max-w-sm overflow-hidden rounded-[24px] border-[7px] border-[#173c30] bg-[#eef4f1] shadow-xl"><div class="bg-[#173c30] px-5 py-4 text-[10px] font-bold text-white">Elínea <span class="block text-[7px] font-normal text-white/60">automação ativa</span></div><div class="space-y-3 p-5 text-[9px]"><div class="mr-8 rounded-xl rounded-tl-sm bg-white p-3 shadow-sm">Olá, Ana! Seu pedido foi confirmado e já estamos preparando tudo.</div><div class="ml-12 rounded-xl rounded-tr-sm bg-[#d8f5e5] p-3 shadow-sm">Ótimo, obrigada!</div><div class="mr-5 rounded-xl rounded-tl-sm bg-white p-3 shadow-sm">Quando quiser comprar novamente, sua loja está a um toque de distância.</div></div></div>
+                  </div>
+                </Transition>
+              </div>
+            </div>
+            <div class="grid gap-4 lg:hidden"><article v-for="(step,index) in journeySteps" :key="step.label" class="reveal-card rounded-2xl border border-border bg-[#f7f9f8] p-6"><span class="grid size-10 place-items-center rounded-xl bg-emerald-50 text-primary"><component :is="step.icon" :size="19"/></span><small class="mt-5 block font-semibold text-primary">0{{ index + 1 }} · {{ step.label }}</small><h3 class="mt-2 text-xl font-semibold tracking-tight">{{ step.title }}</h3><p class="mt-2 text-sm leading-6 text-muted-foreground">{{ step.description }}</p></article></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="recursos" class="ecosystem-section py-24 lg:py-36">
+        <div class="site-container">
+          <div class="section-reveal mx-auto max-w-3xl text-center"><span class="site-label">Um ecossistema, não um quebra-cabeça</span><h2 class="site-title">Tudo o que vende<br>trabalhando junto.</h2><p class="site-copy mx-auto">O Elínea conecta as ferramentas essenciais da operação e continua preparado para receber novos módulos e integrações.</p></div>
+          <div class="ecosystem-map relative mx-auto mt-16 max-w-5xl">
+            <svg class="pointer-events-none absolute inset-0 hidden h-full w-full lg:block" viewBox="0 0 1000 560" fill="none" aria-hidden="true"><path v-for="path in ['M500 280 L170 105','M500 280 L500 70','M500 280 L830 105','M500 280 L875 280','M500 280 L830 455','M500 280 L500 490','M500 280 L170 455','M500 280 L125 280']" :key="path" class="ecosystem-line" :d="path" stroke="#79b99e" stroke-width="1.4"/></svg>
+            <div class="ecosystem-grid relative grid grid-cols-2 gap-3 lg:grid-cols-3 lg:grid-rows-3 lg:gap-10">
+              <article v-for="(module,index) in ecosystemModules" :key="module.title" class="reveal-card ecosystem-module" :class="`module-${index + 1}`"><span class="grid size-10 place-items-center rounded-xl bg-emerald-50 text-primary"><component :is="module.icon" :size="18"/></span><div><h3 class="text-sm font-bold">{{ module.title }}</h3><p class="mt-1 text-[10px] text-muted-foreground">{{ module.detail }}</p></div></article>
+              <div class="ecosystem-core col-span-2 grid min-h-36 place-items-center rounded-[26px] bg-[#173c30] p-7 text-center text-white lg:col-span-1 lg:col-start-2 lg:row-start-2"><div><span class="text-xl font-extrabold tracking-[.12em]"><i class="not-italic text-[#5cdda4]">.</i>ELÍNEA</span><p class="mt-2 text-[10px] text-white/60">Uma operação conectada</p></div></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="border-y border-border bg-white py-9">
-        <div class="site-container"><p class="text-center text-[9px] font-bold tracking-[.2em] text-muted-foreground uppercase">Negócios reais já vendem com a Elínea</p><div class="mt-7 grid grid-cols-2 gap-6 text-center text-sm font-bold text-slate-400 sm:grid-cols-3 lg:grid-cols-6"><span>✤ PharmaVida</span><span>✣ NUTRIMAX</span><span>◈ essência</span><span>◉ FórmulaCerta</span><span>⌘ BioAtiva</span><span>◍ DermaPlus</span></div></div>
-      </section>
-
-      <section id="produto" class="site-container grid items-center gap-14 py-24 lg:grid-cols-2 lg:py-32">
-        <div class="mock-window order-2 lg:order-1">
-          <div class="mock-nav"><span class="mock-dot bg-red-300"></span><span class="mock-dot bg-amber-300"></span><span class="mock-dot bg-emerald-300"></span><b class="ml-2 text-[10px] tracking-wider">.ELÍNEA</b><span class="ml-auto rounded-md bg-slate-800 px-3 py-1 text-[7px] text-white">Salvar</span></div>
-          <div class="grid min-h-[330px] grid-cols-[120px_1fr] gap-4 p-4"><aside class="rounded-xl border border-border p-3"><p class="text-[9px] font-bold">Escolha um tema</p><div class="mt-3 grid grid-cols-2 gap-2"><div v-for="name in ['Clean','Minimal','Natural','Moderno']" :key="name"><div class="h-14 rounded-md bg-[linear-gradient(135deg,#f0e8dd,#d9c5aa)]"></div><span class="text-[7px]">{{ name }}</span></div></div></aside><div class="grid place-items-center rounded-xl bg-[#eee9df] p-6 text-center"><div><p class="text-2xl font-bold tracking-tight">Beleza que<br>cuida de você</p><button class="mt-4 rounded-md bg-[#5d4c40] px-4 py-2 text-[8px] text-white">Ver produtos</button></div></div></div>
-        </div>
-        <div class="order-1 lg:order-2 lg:pl-12"><span class="site-label">Sua loja, do seu jeito.</span><h2 class="site-title">Crie, personalize<br>e publique.</h2><p class="site-copy">Escolha um tema, personalize com a identidade do seu negócio e coloque sua loja no ar em poucos cliques. Sem precisar desenvolver nada.</p><div class="mt-6 grid gap-2"><span v-for="item in ['Temas prontos e personalizáveis','Domínio próprio','Editor visual intuitivo','Sua loja online em minutos']" :key="item" class="check-line"><CheckCircle2 :size="16" />{{ item }}</span></div><a class="site-btn-outline mt-7" href="#planos">Conhecer os temas <ArrowRight :size="15" /></a></div>
-      </section>
-
-      <section id="recursos" class="mint-wash py-24 lg:py-32">
-        <div class="site-container grid items-center gap-14 lg:grid-cols-[.78fr_1.22fr]">
-          <div><span class="site-label">Gestão sem complicação.</span><h2 class="site-title">Uma operação inteira<br>em um único painel.</h2><p class="site-copy">Gerencie produtos, pedidos, clientes, cupons, relatórios e muito mais. Tudo em um só lugar, de forma simples e organizada.</p><div class="mt-7 grid gap-4"><div v-for="item in [{i:Package,t:'Produtos',d:'Cadastre e organize seu catálogo.'},{i:ShoppingBag,t:'Pedidos',d:'Acompanhe todo o ciclo de venda.'},{i:Users,t:'Clientes',d:'Tenha seus clientes organizados.'},{i:Tag,t:'Cupons e promoções',d:'Crie campanhas sem depender de desenvolvedor.'}]" :key="item.t" class="flex gap-3"><span class="grid size-10 shrink-0 place-items-center rounded-xl border border-emerald-100 bg-white text-primary"><component :is="item.i" :size="18" /></span><p class="text-[13px]"><b class="block">{{ item.t }}</b><span class="text-muted-foreground">{{ item.d }}</span></p></div></div></div>
-          <div class="mock-window">
-            <div class="mock-nav"><b class="mr-auto text-[11px] tracking-wider">.ELÍNEA</b><Search :size="13"/><Bell :size="13"/><CircleUserRound :size="18"/></div>
-            <div class="grid min-h-[390px] grid-cols-[115px_1fr]"><aside class="border-r border-border p-3"><div class="mock-side-item"><BarChart3 :size="12"/> Início</div><div class="mock-side-item active"><ShoppingBag :size="12"/> Pedidos</div><div class="mock-side-item"><Package :size="12"/> Produtos</div><div class="mock-side-item"><Users :size="12"/> Clientes</div><div class="mock-side-item"><Percent :size="12"/> Marketing</div></aside><div class="p-5"><div class="flex items-center"><h3 class="text-lg font-bold">Pedidos</h3><button class="ml-auto rounded-md bg-primary px-3 py-2 text-[8px] font-semibold text-white">+ Novo pedido</button></div><div class="mt-5 flex gap-4 border-b border-border pb-2 text-[8px]"><b class="text-primary">Todos</b><span>Aguardando</span><span>Pagos</span><span>Enviados</span></div><div class="mt-4 rounded-md border border-border p-2 text-[8px] text-muted-foreground">⌕ Buscar pedido, cliente ou produto...</div><div class="mt-3 overflow-hidden rounded-lg border border-border"><div v-for="(row,i) in [['#1052','Ana Clara Silva','Pago','R$ 349,90'],['#1051','Marcos Oliveira','Enviado','R$ 189,90'],['#1050','Juliana Costa','Pago','R$ 305,90'],['#1049','Rafael Lima','Aguardando','R$ 158,90'],['#1048','Fernanda Souza','Pago','R$ 279,90']]" :key="i" class="grid grid-cols-4 border-b border-border px-3 py-3 text-[7px] last:border-0"><b>{{ row[0] }}</b><span>{{ row[1] }}</span><span class="text-primary">{{ row[2] }}</span><span>{{ row[3] }}</span></div></div></div></div>
-          </div>
+      <section class="complexity-section border-y border-border bg-white py-24 lg:py-32">
+        <div class="site-container grid gap-14 lg:grid-cols-[.7fr_1.3fr]">
+          <div class="section-reveal"><span class="site-label">Tecnologia sem peso</span><h2 class="site-title">Você cuida do negócio.<br>O Elínea organiza o digital.</h2><p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias ferramentas por conta própria.</p><a class="site-btn mt-8" href="#planos">Começar com suporte <ArrowRight :size="15"/></a></div>
+          <div class="comparison-grid grid gap-4 sm:grid-cols-2"><article class="comparison-card border border-border bg-[#f6f7f6] p-7"><span class="text-xs font-semibold text-muted-foreground">Montando sozinho</span><ul class="mt-7 grid gap-4 text-sm text-muted-foreground"><li v-for="item in ['Hospedagem e manutenção','Integrações manuais','Fornecedores separados','Atualizações e correções']" :key="item" class="flex items-center gap-3"><X :size="16" class="shrink-0 text-[#9ba49f]"/>{{ item }}</li></ul></article><article class="comparison-card integrated border border-[#b9decf] bg-[#edf8f2] p-7"><span class="text-xs font-semibold text-primary">Operando com Elínea</span><ul class="mt-7 grid gap-4 text-sm font-medium"><li v-for="item in ['Estrutura pronta para vender','Recursos trabalhando juntos','Uma operação centralizada','Evolução contínua da plataforma']" :key="item" class="flex items-center gap-3"><CheckCircle2 :size="16" class="shrink-0 text-primary"/>{{ item }}</li></ul></article></div>
         </div>
       </section>
 
-      <section class="site-container grid items-center gap-14 py-24 lg:grid-cols-2 lg:py-32">
-        <div class="relative mx-auto w-full max-w-[520px] pb-12">
-          <div class="soft-card max-w-[310px] p-5"><h3 class="text-sm font-bold">Finalizar compra</h3><div class="mt-4 flex justify-between text-[8px] text-muted-foreground"><span class="text-primary">● Entrega</span><span>● Pagamento</span><span>● Revisão</span></div><label class="mt-5 block text-[8px] font-semibold">Número do cartão</label><div class="input mt-1 h-9 w-full rounded-lg border-border text-[9px]">1234 5678 9012 3456</div><div class="mt-3 grid grid-cols-2 gap-3"><div><label class="text-[8px]">Validade</label><div class="input mt-1 h-9 rounded-lg border-border text-[9px]">MM/AA</div></div><div><label class="text-[8px]">CVV</label><div class="input mt-1 h-9 rounded-lg border-border text-[9px]">123</div></div></div><button class="btn mt-5 h-9 min-h-9 w-full rounded-md border-0 bg-primary text-[9px] text-white">Pagar agora</button></div>
-          <div class="float-card soft-card absolute right-0 bottom-0 grid w-[190px] place-items-center p-8 text-center"><CheckCircle2 :size="38" class="text-primary"/><b class="mt-3 text-xs">Pagamento aprovado!</b><span class="text-[8px] text-muted-foreground">Seu pedido foi confirmado.</span></div>
-        </div>
-        <div class="lg:pl-12"><span class="site-label">Venda. Receba. Acompanhe.</span><h2 class="site-title">Pagamentos online<br>sem complicação.</h2><p class="site-copy">Aceite pagamentos com segurança e ofereça uma experiência de compra completa para seus clientes.</p><div class="mt-6 grid gap-2"><span v-for="item in ['Checkout otimizado','Cartão, Pix e boleto','Integração com Fiserv','Acompanhamento em tempo real']" :key="item" class="check-line"><CheckCircle2 :size="16"/>{{ item }}</span></div><a class="site-btn-outline mt-7" href="#planos">Saiba mais sobre pagamentos <ArrowRight :size="15"/></a></div>
+      <section id="solucoes" class="site-container py-24 lg:py-32">
+        <div class="section-reveal max-w-3xl"><span class="site-label">Feito para quem vende de verdade</span><h2 class="site-title">O mesmo núcleo.<br>Diferentes negócios.</h2><p class="site-copy">Começamos perto das farmácias de manipulação e construímos uma plataforma capaz de acompanhar muitos outros segmentos.</p></div>
+        <div class="mt-12 grid gap-px overflow-hidden rounded-[24px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-4"><article v-for="item in [{i:Pill,t:'Farmácias de manipulação',d:'Catálogo especializado e venda direta.'},{i:Store,t:'Lojas especializadas',d:'Uma vitrine profissional para o seu nicho.'},{i:Building2,t:'Pequenos varejistas',d:'Comece no digital com estrutura.'},{i:LayoutTemplate,t:'Marcas próprias',d:'Presença digital sem depender de marketplaces.'}]" :key="item.t" class="reveal-card segment-card bg-white p-7"><component :is="item.i" :size="25" class="text-primary"/><h3 class="mt-8 text-sm font-bold">{{ item.t }}</h3><p class="mt-2 text-xs leading-5 text-muted-foreground">{{ item.d }}</p></article></div>
       </section>
 
-      <section class="mint-wash overflow-hidden py-24 lg:py-28">
-        <div class="site-container grid items-center gap-16 lg:grid-cols-[1fr_1.05fr]">
-          <div><span class="site-label">Automações que geram resultados</span><h2 class="site-title">Sua loja continua<br>vendendo mesmo<br>depois que o cliente sai.</h2><p class="site-copy">Recupere carrinhos abandonados, envie lembretes, divulgue promoções e mantenha o relacionamento com seus clientes de forma automática.</p><div class="mt-6 grid gap-2"><span v-for="item in ['Recuperação de carrinho','Mensagens personalizadas','Campanhas e promoções','Integração com WhatsApp (via Twilio)']" :key="item" class="check-line"><CheckCircle2 :size="16"/>{{ item }}</span></div><a class="site-btn mt-7" href="#planos">Começar funciona <ArrowRight :size="15"/></a></div>
-          <div class="relative mx-auto flex w-full max-w-[560px] items-center justify-center gap-5"><div class="phone-frame w-[230px] overflow-hidden bg-[#ecf3ed]"><div class="bg-[#087d59] px-4 py-4 text-[10px] font-semibold text-white">‹ &nbsp; Elínea <span class="block pl-4 text-[7px] font-normal text-white/70">online</span></div><div class="m-3 rounded-xl bg-white p-3 text-[9px]"><p>Olá, Ana! 👋</p><p>Você deixou alguns produtos no seu carrinho.</p><div class="mt-3 flex items-center gap-2 rounded-lg bg-stone-50 p-2"><div class="size-10 rounded bg-stone-200"></div><b>Vitamina C Manipulada<br>R$ 48,00</b></div><button class="btn mt-3 h-8 min-h-8 w-full rounded-md border-0 bg-primary text-[8px] text-white">Finalizar minha compra</button></div></div><div class="grid w-[215px] gap-4"><div v-for="item in [{i:ShoppingBag,t:'Carrinho abandonado'},{i:CheckCircle2,t:'Confirmação de pedido'},{i:Tag,t:'Promoções e novidades'},{i:Users,t:'Pós-venda'}]" :key="item.t" class="soft-card flex items-center gap-3 p-4 text-[10px] font-semibold"><component :is="item.i" :size="21" class="text-primary"/>{{ item.t }}</div></div></div>
-        </div>
-      </section>
+      <section id="planos" class="plans-section py-24 lg:py-32"><div class="site-container"><div class="section-reveal flex flex-wrap items-end justify-between gap-5"><div><span class="site-label">Planos para o seu momento</span><h2 class="site-title">Comece com o que precisa.<br>Evolua quando fizer sentido.</h2></div><div class="join rounded-xl border border-border bg-white p-1 text-[10px] font-semibold"><button class="join-item rounded-lg bg-primary px-5 py-2 text-white">Mensal</button><button class="join-item px-5 py-2">Anual <small class="ml-1 text-primary">Economize até 20%</small></button></div></div><div v-if="plansError" class="alert alert-error mt-8 text-sm"><span>{{ plansError }}</span><button class="btn btn-sm" type="button" @click="loadPlans">Tentar novamente</button></div><div v-if="plansLoading" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><div v-for="item in 4" :key="item" class="skeleton h-[430px] rounded-2xl"></div></div><div v-else class="mt-10 grid gap-4 sm:grid-cols-2" :class="plans.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'"><article v-for="(plan,index) in plans" :key="plan.id" class="plan-card soft-card relative flex min-h-[430px] flex-col p-6" :class="index === 1 ? 'featured-plan border-primary ring-1 ring-primary' : ''"><span v-if="index === 1" class="absolute -top-3 right-5 rounded-full bg-primary px-4 py-1 text-[9px] font-bold text-white">Mais escolhido</span><h3 class="text-base font-bold">{{ plan.name }}</h3><p class="mt-1 min-h-10 text-[10px] text-muted-foreground">{{ plan.description }}</p><div class="mt-5"><span class="text-xs">R$</span> <strong class="text-3xl tracking-tight">{{ money(plan.monthly_amount).replace('R$ ','') }}</strong><span class="text-[10px] text-muted-foreground">/mês</span></div><ul class="mt-6 grid gap-2 text-[11px]"><li class="flex gap-2"><Check :size="14" class="text-primary"/>{{ plan.product_limit ? `Até ${plan.product_limit.toLocaleString('pt-BR')} produtos` : 'Produtos ilimitados' }}</li><li v-for="feature in plan.features" :key="feature" class="flex gap-2"><Check :size="14" class="shrink-0 text-primary"/>{{ feature }}</li></ul><button class="btn mt-auto h-10 min-h-10 rounded-lg text-xs" :class="index === 1 ? 'border-0 bg-primary text-white' : 'btn-outline border-primary text-primary hover:bg-primary hover:text-white'" type="button" @click="openCheckout(plan)">Começar agora</button></article></div><p v-if="plans.length" class="mt-5 text-center text-[9px] text-muted-foreground">A implantação inclui configuração, treinamento, personalização e publicação.</p></div></section>
 
-      <section id="solucoes" class="site-container py-24">
-        <div class="text-center"><span class="site-label">Planos para quem vende de verdade</span><h2 class="site-title">Soluções para diferentes tipos de negócios.</h2></div>
-        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><article v-for="item in [{i:Pill,t:'Farmácias de manipulação',d:'Venda seus produtos diretamente aos seus clientes.'},{i:Store,t:'Lojas físicas',d:'Leve seu catálogo para a internet.'},{i:Building2,t:'Pequenos negócios',d:'Comece a vender online rapidamente.'},{i:LayoutTemplate,t:'Marcas próprias',d:'Construa sua presença digital sem depender de marketplaces.'}]" :key="item.t" class="soft-card p-6"><component :is="item.i" :size="30" class="text-primary"/><h3 class="mt-5 text-sm font-bold">{{ item.t }}</h3><p class="mt-2 text-xs leading-5 text-muted-foreground">{{ item.d }}</p></article></div>
-      </section>
-
-      <section id="planos" class="bg-[#fbfcfc] py-24">
-        <div class="site-container">
-          <div class="flex flex-wrap items-end justify-between gap-5"><div><span class="site-label">Planos para o seu momento</span><h2 class="site-title">Escolha o plano ideal para o seu negócio.</h2></div><div class="join rounded-lg border border-border bg-white p-1 text-[10px] font-semibold"><button class="join-item rounded-md bg-primary px-5 py-2 text-white">Mensal</button><button class="join-item px-5 py-2">Anual <small class="ml-1 text-primary">Economize até 20%</small></button></div></div>
-          <div v-if="plansError" class="alert alert-error mt-8 text-sm"><span>{{ plansError }}</span><button class="btn btn-sm" type="button" @click="loadPlans">Tentar novamente</button></div>
-          <div v-if="plansLoading" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><div v-for="item in 4" :key="item" class="skeleton h-[430px] rounded-2xl"></div></div>
-          <div v-else class="mt-10 grid gap-4 sm:grid-cols-2" :class="plans.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'">
-            <article v-for="(plan,index) in plans" :key="plan.id" class="soft-card relative flex min-h-[430px] flex-col p-6" :class="index === 1 ? 'border-primary ring-1 ring-primary' : ''"><span v-if="index === 1" class="absolute -top-3 right-5 rounded-full bg-primary px-4 py-1 text-[9px] font-bold text-white">Mais escolhido</span><h3 class="text-base font-bold">{{ plan.name }}</h3><p class="mt-1 min-h-10 text-[10px] text-muted-foreground">{{ plan.description }}</p><div class="mt-5"><span class="text-xs">R$</span> <strong class="text-3xl tracking-tight">{{ money(plan.monthly_amount).replace('R$ ','') }}</strong><span class="text-[10px] text-muted-foreground">/mês</span></div><ul class="mt-6 grid gap-2 text-[11px]"><li class="flex gap-2"><Check :size="14" class="text-primary"/>{{ plan.product_limit ? `Até ${plan.product_limit.toLocaleString('pt-BR')} produtos` : 'Produtos ilimitados' }}</li><li v-for="feature in plan.features" :key="feature" class="flex gap-2"><Check :size="14" class="shrink-0 text-primary"/>{{ feature }}</li></ul><button class="btn mt-auto h-10 min-h-10 rounded-md text-xs" :class="index === 1 ? 'border-0 bg-primary text-white' : 'btn-outline border-primary text-primary hover:bg-primary hover:text-white'" type="button" @click="openCheckout(plan)">Começar agora</button></article>
-          </div>
-          <p v-if="plans.length" class="mt-5 text-center text-[9px] text-muted-foreground">Taxa de implantação informada no checkout, incluindo configuração, treinamento, personalização e publicação.</p>
-        </div>
-      </section>
-
-      <section class="dark-cta py-12 text-white"><div class="site-container flex flex-col items-start justify-between gap-7 sm:flex-row sm:items-center"><div><h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Seu negócio já está pronto.<br>Agora falta sua loja.</h2><p class="mt-2 text-xs text-white/65">Crie sua loja com a Elínea e comece a vender online hoje mesmo.</p></div><div><a class="site-btn" href="#planos">Criar minha loja <ArrowRight :size="15"/></a><p class="mt-3 text-[9px] text-white/60">Sem fidelidade. Setup rápido. Suporte de verdade.</p></div></div></section>
+      <section class="closing-cta py-16"><div class="site-container flex flex-col items-start justify-between gap-8 md:flex-row md:items-center"><div><span class="text-xs font-semibold text-primary">Sua operação pode começar simples.</span><h2 class="mt-3 text-3xl font-semibold tracking-[-.045em] sm:text-4xl">Seu negócio já existe.<br>Agora ele pode vender online.</h2></div><div><a class="site-btn" href="#planos">Criar minha loja <ArrowRight :size="15"/></a><p class="mt-3 text-[10px] text-muted-foreground">Setup assistido e suporte de verdade.</p></div></div></section>
     </main>
 
-    <footer id="rodape" class="border-t border-border py-12"><div class="site-container grid gap-10 md:grid-cols-[1.2fr_2fr_auto]"><div><a href="#inicio" class="text-lg font-extrabold tracking-widest"><span class="text-primary">.</span>ELÍNEA</a><p class="mt-3 text-[10px] text-muted-foreground">Ecommerce simples para negócios reais.</p></div><div class="grid grid-cols-2 gap-8 text-[10px] sm:grid-cols-4"><div><b>Produto</b><a class="mt-3 block text-muted-foreground" href="#recursos">Recursos</a><a class="mt-2 block text-muted-foreground" href="#planos">Preços</a><a class="mt-2 block text-muted-foreground" href="#produto">Temas</a></div><div><b>Soluções</b><a class="mt-3 block text-muted-foreground" href="#solucoes">Farmácias</a><a class="mt-2 block text-muted-foreground" href="#solucoes">Lojas físicas</a><a class="mt-2 block text-muted-foreground" href="#solucoes">Pequenos negócios</a></div><div><b>Desenvolvedores</b><a class="mt-3 block text-muted-foreground" href="#">Documentação</a><a class="mt-2 block text-muted-foreground" href="#">API</a><a class="mt-2 block text-muted-foreground" href="#">Status</a></div><div><b>Empresa</b><a class="mt-3 block text-muted-foreground" href="#">Sobre</a><a class="mt-2 block text-muted-foreground" href="#">Contato</a><a class="mt-2 block text-muted-foreground" href="#">Privacidade</a></div></div><div class="flex gap-3 text-muted-foreground"><Camera :size="17"/><MessageCircle :size="17"/><Mail :size="17"/></div></div><div class="site-container mt-10 border-t border-border pt-6 text-right text-[9px] text-muted-foreground">© 2026 Elínea. Todos os direitos reservados.</div></footer>
+    <footer id="rodape" class="site-footer border-t py-12"><div class="site-container grid gap-10 md:grid-cols-[1.2fr_2fr_auto]"><div><a href="#inicio" class="text-lg font-extrabold tracking-widest"><span class="text-primary">.</span>ELÍNEA</a><p class="mt-3 text-[10px] text-muted-foreground">Ecommerce simples para negócios reais.</p></div><div class="grid grid-cols-2 gap-8 text-[10px] sm:grid-cols-4"><div><b>Produto</b><a class="mt-3 block text-muted-foreground" href="#jornada">Como funciona</a><a class="mt-2 block text-muted-foreground" href="#recursos">Ecossistema</a><a class="mt-2 block text-muted-foreground" href="#planos">Preços</a></div><div><b>Soluções</b><a class="mt-3 block text-muted-foreground" href="#solucoes">Farmácias</a><a class="mt-2 block text-muted-foreground" href="#solucoes">Lojas especializadas</a><a class="mt-2 block text-muted-foreground" href="#solucoes">Pequenos negócios</a></div><div><b>Plataforma</b><a class="mt-3 block text-muted-foreground" href="#">Documentação</a><a class="mt-2 block text-muted-foreground" href="#">Integrações</a><a class="mt-2 block text-muted-foreground" href="#">Status</a></div><div><b>Empresa</b><a class="mt-3 block text-muted-foreground" href="#">Sobre</a><a class="mt-2 block text-muted-foreground" href="#">Contato</a><a class="mt-2 block text-muted-foreground" href="#">Privacidade</a></div></div><div class="flex gap-3 text-muted-foreground"><MessageCircle :size="17"/><Mail :size="17"/></div></div><div class="footer-wordmark mt-14 py-5 text-center" aria-hidden="true">ELÍNEA</div><div class="site-container mt-8 text-right text-[9px] text-muted-foreground">© 2026 Elínea. Todos os direitos reservados.</div></footer>
 
     <dialog class="modal" :class="{ 'modal-open': checkoutOpen }" @click.self="closeCheckout">
       <section class="modal-box max-w-2xl border border-border bg-popover text-popover-foreground shadow-2xl">
         <button class="btn btn-ghost btn-sm btn-circle absolute top-4 right-4" type="button" aria-label="Fechar" @click="closeCheckout"><X :size="18"/></button>
         <span class="site-label">Implantação Elínea</span><h2 class="text-lg font-semibold">Comece com o plano {{ selectedPlan?.name }}</h2><p class="mt-1 text-sm text-muted-foreground">Preencha os dados do responsável. Na próxima etapa, o pagamento será processado com segurança pela Stripe.</p>
         <form class="mt-6 grid gap-4 sm:grid-cols-2" novalidate @submit.prevent="submitCheckout">
-          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>Seu nome <em class="text-error not-italic">*</em></span><input v-model="form.owner_name" class="input h-10 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.owner_name ? 'input-error' : ''" :aria-invalid="!!formErrors.owner_name" maxlength="255" autocomplete="name" @input="clearError('owner_name')"><small v-if="formErrors.owner_name" class="text-error">{{ formErrors.owner_name }}</small></label>
-          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>E-mail <em class="text-error not-italic">*</em></span><input v-model="form.owner_email" class="input h-10 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.owner_email ? 'input-error' : ''" :aria-invalid="!!formErrors.owner_email" type="email" maxlength="255" autocomplete="email" @input="clearError('owner_email')"><small v-if="formErrors.owner_email" class="text-error">{{ formErrors.owner_email }}</small></label>
-          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground">Telefone<input v-model="form.phone" class="input h-10 w-full rounded-lg border-border px-3 text-sm focus:outline-none" maxlength="30" autocomplete="tel"></label>
-          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>Segmento <em class="text-error not-italic">*</em></span><input v-model="form.segment" class="input h-10 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.segment ? 'input-error' : ''" :aria-invalid="!!formErrors.segment" maxlength="100" placeholder="Moda, beleza..." @input="clearError('segment')"><small v-if="formErrors.segment" class="text-error">{{ formErrors.segment }}</small></label>
-          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground sm:col-span-2"><span>Nome da loja <em class="text-error not-italic">*</em></span><input v-model="form.store_name" class="input h-10 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.store_name ? 'input-error' : ''" :aria-invalid="!!formErrors.store_name" maxlength="255" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" class="text-error">{{ formErrors.store_name }}</small></label>
+          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>Seu nome <em class="text-error not-italic">*</em></span><input v-model="form.owner_name" class="input h-11 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.owner_name ? 'input-error' : ''" :aria-invalid="!!formErrors.owner_name" maxlength="255" autocomplete="name" @input="clearError('owner_name')"><small v-if="formErrors.owner_name" class="text-error">{{ formErrors.owner_name }}</small></label>
+          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>E-mail <em class="text-error not-italic">*</em></span><input v-model="form.owner_email" class="input h-11 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.owner_email ? 'input-error' : ''" :aria-invalid="!!formErrors.owner_email" type="email" maxlength="255" autocomplete="email" @input="clearError('owner_email')"><small v-if="formErrors.owner_email" class="text-error">{{ formErrors.owner_email }}</small></label>
+          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground">Telefone<input v-model="form.phone" class="input h-11 w-full rounded-lg border-border px-3 text-sm focus:outline-none" maxlength="30" autocomplete="tel"></label>
+          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground"><span>Segmento <em class="text-error not-italic">*</em></span><input v-model="form.segment" class="input h-11 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.segment ? 'input-error' : ''" :aria-invalid="!!formErrors.segment" maxlength="100" placeholder="Moda, beleza..." @input="clearError('segment')"><small v-if="formErrors.segment" class="text-error">{{ formErrors.segment }}</small></label>
+          <label class="grid gap-1.5 text-xs font-medium text-muted-foreground sm:col-span-2"><span>Nome da loja <em class="text-error not-italic">*</em></span><input v-model="form.store_name" class="input h-11 w-full rounded-lg border-border px-3 text-sm focus:outline-none" :class="formErrors.store_name ? 'input-error' : ''" :aria-invalid="!!formErrors.store_name" maxlength="255" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" class="text-error">{{ formErrors.store_name }}</small></label>
           <div v-if="submitError" class="alert alert-error py-3 text-sm sm:col-span-2">{{ submitError }}</div>
           <div class="modal-action mt-2 sm:col-span-2"><button class="btn btn-outline rounded-lg" type="button" @click="closeCheckout">Cancelar</button><button class="btn rounded-lg border-0 bg-primary text-primary-foreground" type="submit" :disabled="submitting"><span v-if="submitting" class="loading loading-spinner loading-xs"></span>{{ submitting ? 'Abrindo pagamento...' : `Continuar — ${money(selectedPlan?.implementation_amount || 0)}` }}<ArrowRight v-if="!submitting" :size="16"/></button></div>
         </form>
