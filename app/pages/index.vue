@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import heroStudioUrl from '~/assets/images/elinea-hero-studio.png'
 import {
-  ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2, CircleUserRound,
+  ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2,
   CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
-  PackageCheck, Percent, Pill, Search, ShieldCheck, ShoppingBag, Store, Tag, Users, X, Zap
+  PackageCheck, Pill, Search, ShoppingBag, Store, Tag, X, Zap
 } from '@lucide/vue'
 
 type Plan = {
@@ -30,6 +31,7 @@ const selectedPlan = ref<Plan | null>(null)
 const submitting = ref(false)
 const submitError = ref('')
 const mobileMenuOpen = ref(false)
+const headerScrolled = ref(false)
 const activeJourney = ref(0)
 const form = reactive({ owner_name: '', owner_email: '', phone: '', store_name: '', segment: '' })
 const formErrors = reactive<Partial<Record<FormKey, string>>>({})
@@ -115,9 +117,12 @@ const submitCheckout = async () => {
 }
 
 let destroyMotion: (() => void) | undefined
+const updateHeaderState = () => { headerScrolled.value = window.scrollY > 24 }
 
 onMounted(async () => {
   loadPlans()
+  updateHeaderState()
+  window.addEventListener('scroll', updateHeaderState, { passive: true })
 
   const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
     import('gsap'),
@@ -141,21 +146,15 @@ onMounted(async () => {
       .from('.hero-support', { y: 18, opacity: 0, duration: .65 }, '-=.55')
       .from('.hero-action', { y: 12, opacity: 0, duration: .5, stagger: .08 }, '-=.45')
       .from('.hero-proof', { opacity: 0, y: 8, duration: .45, stagger: .06 }, '-=.25')
-      .from('.hero-console', { opacity: 0, x: 42, rotateY: -6, scale: .96, duration: 1.1 }, '-=1')
-      .from('.hero-event', { opacity: 0, scale: .9, y: 12, duration: .6, stagger: .1 }, '-=.5')
-
-    gsap.fromTo('.hero-chart-line',
-      { strokeDasharray: 500, strokeDashoffset: 500 },
-      { strokeDashoffset: 0, duration: 1.7, ease: 'power2.inOut', delay: .75 })
+      .from('.hero-photo', { opacity: 0, scale: 1.045, duration: 1.35 }, '-=1.15')
+      .from('.hero-scroll-cue', { opacity: 0, y: 8, duration: .5 }, '-=.35')
 
     gsap.timeline({
       scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: 1 }
     })
-      .to('.hero-copy', { y: -80, opacity: .18, ease: 'none' }, 0)
-      .to('.hero-stage', { scale: .97, y: 24, ease: 'none' }, 0)
-      .to('.hero-console', { scale: 1.045, y: 72, ease: 'none' }, 0)
-      .to('.hero-event-left', { x: -42, y: -18, ease: 'none' }, 0)
-      .to('.hero-event-right', { x: 46, y: -46, ease: 'none' }, 0)
+      .to('.hero-copy', { y: -64, opacity: .28, ease: 'none' }, 0)
+      .to('.hero-photo', { scale: 1.06, y: 30, ease: 'none' }, 0)
+      .to('.hero-scroll-cue', { y: -20, opacity: 0, ease: 'none' }, 0)
 
     root.querySelectorAll<HTMLElement>('.section-reveal').forEach((section) => {
       gsap.from(section.children, {
@@ -177,6 +176,12 @@ onMounted(async () => {
           gsap.set('.journey-progress-fill', { scaleY: self.progress, transformOrigin: 'top center' })
         }
       })
+
+      gsap.to('.ecosystem-module', {
+        y: (index) => index % 2 === 0 ? -18 : 18,
+        ease: 'none',
+        scrollTrigger: { trigger: '.ecosystem-map', start: 'top bottom', end: 'bottom top', scrub: 1.1 }
+      })
     })
 
     gsap.fromTo('.ecosystem-line',
@@ -185,12 +190,6 @@ onMounted(async () => {
         strokeDashoffset: 0, duration: 1.15, stagger: .08, ease: 'power2.inOut',
         scrollTrigger: { trigger: '.ecosystem-map', start: 'top 72%', once: true }
       })
-
-    gsap.to('.ecosystem-module', {
-      y: (index) => index % 2 === 0 ? -18 : 18,
-      ease: 'none',
-      scrollTrigger: { trigger: '.ecosystem-map', start: 'top bottom', end: 'bottom top', scrub: 1.1 }
-    })
 
     gsap.from('.comparison-card', {
       opacity: 0,
@@ -216,21 +215,24 @@ onMounted(async () => {
   destroyMotion = () => { media.revert(); context.revert() }
 })
 
-onBeforeUnmount(() => destroyMotion?.())
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateHeaderState)
+  destroyMotion?.()
+})
 </script>
 
 <template>
   <div ref="pageRoot" class="overflow-x-hidden bg-white">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <header data-header class="premium-header fixed inset-x-0 top-0 z-40">
+    <header data-header class="premium-header fixed inset-x-0 top-0 z-40" :class="{ 'is-scrolled': headerScrolled }">
       <div class="site-container flex h-[72px] items-center gap-8">
         <a href="#inicio" class="text-[21px] font-extrabold tracking-[.12em]" aria-label="Elínea — início"><span class="text-primary">.</span>ELÍNEA</a>
         <nav class="ml-auto hidden items-center gap-8 text-xs font-semibold text-muted-foreground lg:flex" aria-label="Navegação principal">
-          <a class="transition hover:text-primary" href="#jornada">Como funciona</a>
-          <a class="transition hover:text-primary" href="#recursos">Ecossistema</a>
+          <a class="transition hover:text-primary" href="#jornada">Produto</a>
           <a class="transition hover:text-primary" href="#solucoes">Soluções</a>
           <a class="transition hover:text-primary" href="#planos">Preços</a>
-          <a class="transition hover:text-primary" href="#rodape">Empresa</a>
+          <a class="transition hover:text-primary" href="#recursos">Recursos</a>
+          <a class="transition hover:text-primary" href="#rodape">Conteúdo</a>
         </nav>
         <a class="ml-auto hidden text-xs font-semibold text-muted-foreground hover:text-primary sm:block lg:ml-8" href="https://admin.elinea.com.br">Entrar</a>
         <a class="site-btn hidden sm:inline-flex" href="#planos">Criar minha loja <ArrowRight :size="15" /></a>
@@ -245,44 +247,29 @@ onBeforeUnmount(() => destroyMotion?.())
     </header>
 
     <main id="conteudo">
-      <section id="inicio" class="hero-wash relative overflow-hidden pt-[72px]">
-        <div class="hero-copy site-container relative z-10 pt-24 text-center sm:pt-32">
-          <div class="mx-auto max-w-5xl">
-            <span class="hero-kicker inline-flex items-center gap-3 text-[11px] font-semibold text-primary"><span class="size-1.5 rounded-full bg-primary"></span> Tudo para vender. Sem montar tudo do zero.</span>
-            <h1 class="mx-auto mt-7 max-w-5xl text-[3.35rem] leading-[.94] font-semibold tracking-[-.07em] text-balance sm:text-[5.6rem] lg:text-[7rem]">
-              <span class="block overflow-hidden pb-1"><span class="hero-line block">Ecommerce simples</span></span>
-              <span class="block overflow-hidden pb-2"><span class="hero-line block">para negócios reais.</span></span>
+      <section id="inicio" class="hero-home relative isolate overflow-hidden">
+        <img class="hero-photo absolute inset-0 -z-20 size-full object-cover" :src="heroStudioUrl" alt="" aria-hidden="true" fetchpriority="high">
+        <div class="hero-photo-overlay absolute inset-0 -z-10"></div>
+        <div class="site-container flex min-h-[900px] items-center pt-[72px]">
+          <div class="hero-copy max-w-[610px] pb-20 pt-20 sm:pb-28 lg:pb-10 lg:pt-24">
+            <span class="hero-kicker block text-[10px] font-semibold tracking-[.28em] text-[#65716d]">E-commerce sem complicação</span>
+            <h1 class="mt-6 text-[3.2rem] leading-[.98] font-semibold tracking-[-.06em] text-[#0a1713] sm:text-[3.8rem] lg:text-[3.95rem]">
+              <span class="block overflow-hidden pb-1"><span class="hero-line block lg:whitespace-nowrap">Ecommerce simples</span></span>
+              <span class="block overflow-hidden pb-2"><span class="hero-line block lg:whitespace-nowrap">para <span class="text-primary">negócios reais.</span></span></span>
             </h1>
-            <p class="hero-support mx-auto mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-[19px] sm:leading-8">Loja virtual, gestão, pagamentos e automação de vendas em uma plataforma que não exige conhecimento técnico.</p>
-            <div class="mt-8 flex flex-wrap justify-center gap-3">
-              <a class="hero-action site-btn" href="#planos">Criar minha loja <ArrowRight :size="16" /></a>
-              <a class="hero-action site-btn-outline" href="#jornada">Ver como funciona</a>
+            <p class="hero-support mt-6 max-w-[500px] text-[17px] leading-7 text-[#38433f] sm:text-[19px] sm:leading-8">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com mais vendas e menos complicação.</p>
+            <div class="mt-8 flex flex-wrap items-center gap-4">
+              <a class="hero-action site-btn px-8" href="#planos">Criar minha loja <ArrowRight :size="16" /></a>
+              <a class="hero-action hero-text-link inline-flex min-h-12 items-center gap-2 px-4 text-[13px] font-semibold text-[#08794f]" href="#jornada">Conhecer a plataforma <ArrowRight :size="14" /></a>
             </div>
-            <div class="mt-9 flex flex-wrap justify-center gap-x-7 gap-y-3 text-[12px] font-medium text-muted-foreground">
-              <span class="hero-proof flex items-center gap-2"><ShieldCheck :size="15" class="text-primary" /> Pagamentos seguros</span>
-              <span class="hero-proof flex items-center gap-2"><Zap :size="15" class="text-primary" /> Implantação assistida</span>
-              <span class="hero-proof flex items-center gap-2"><MessageCircle :size="15" class="text-primary" /> Suporte próximo</span>
+            <div class="mt-10 flex flex-wrap gap-x-8 gap-y-4 text-[12px] font-medium text-[#35423d]">
+              <span class="hero-proof flex items-center gap-2"><Zap :size="18" class="text-primary" /> Setup rápido</span>
+              <span class="hero-proof flex items-center gap-2"><MessageCircle :size="18" class="text-primary" /> Suporte especializado</span>
+              <span class="hero-proof flex items-center gap-2"><BarChart3 :size="18" class="text-primary" /> Sem fidelidade</span>
             </div>
           </div>
         </div>
-
-        <div class="site-container pb-12 pt-10 sm:pt-16 lg:pb-20">
-          <div class="hero-visual relative mx-auto h-[440px] w-full max-w-[1120px] [perspective:1400px] sm:h-[570px] lg:h-[650px]" aria-label="Painel da operação Elínea">
-            <div class="hero-stage absolute inset-x-0 top-12 bottom-0 rounded-[40px] border border-white bg-[#e7ecea] shadow-[inset_0_1px_0_white]"></div>
-            <div class="hero-console mock-window absolute top-3 right-5 left-5 sm:top-10 sm:right-16 sm:left-16 lg:right-24 lg:left-24">
-              <div class="mock-nav"><b class="mr-auto text-[11px] tracking-widest"><span class="text-primary">.</span>ELÍNEA</b><Search :size="12" class="text-muted-foreground"/><Bell :size="12" class="text-muted-foreground"/><CircleUserRound :size="18"/></div>
-              <div class="grid h-[330px] grid-cols-[105px_1fr] sm:h-[430px] sm:grid-cols-[150px_1fr]">
-                <aside class="border-r border-border p-3"><div class="mock-side-item active"><BarChart3 :size="12"/> Visão geral</div><div class="mock-side-item"><ShoppingBag :size="12"/> Pedidos</div><div class="mock-side-item"><Package :size="12"/> Produtos</div><div class="mock-side-item"><Users :size="12"/> Clientes</div><div class="mock-side-item"><Percent :size="12"/> Marketing</div></aside>
-                <div class="p-4 sm:p-8"><p class="text-[9px] text-muted-foreground">Visão geral</p><div class="mt-1 flex items-center"><h3 class="text-base font-bold sm:text-xl">Sua operação hoje</h3><span class="ml-auto rounded-full bg-emerald-50 px-2 py-1 text-[7px] font-bold text-primary sm:px-3 sm:py-1.5">Tudo funcionando</span></div>
-                  <div class="mt-5 grid grid-cols-3 gap-2 sm:gap-4"><div v-for="metric in [['Vendas','R$ 12.480'],['Pedidos','48'],['Clientes','1.245']]" :key="metric[0]" class="rounded-xl border border-border p-3 sm:p-5"><small class="text-[7px] text-muted-foreground sm:text-[9px]">{{ metric[0] }}</small><b class="mt-1 block text-[12px] sm:text-xl">{{ metric[1] }}</b><span class="text-[7px] text-primary sm:text-[8px]">Em crescimento</span></div></div>
-                  <div class="mt-4 rounded-xl border border-border p-3 sm:mt-5 sm:p-5"><div class="flex items-center justify-between text-[8px] sm:text-[9px]"><b>Vendas dos últimos 7 dias</b><span>R$ 4.280,90</span></div><svg class="mt-3 h-20 w-full sm:h-28" viewBox="0 0 300 70" fill="none"><path class="hero-chart-line" d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9" stroke="#07945e" stroke-width="2"/><path d="M0 61 C28 60 35 28 63 37 S102 62 126 38 S161 7 184 24 S218 58 241 40 S270 16 300 9 V70 H0Z" fill="url(#heroChart)"/><defs><linearGradient id="heroChart" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#07945e" stop-opacity=".18"/><stop offset="1" stop-color="#07945e" stop-opacity="0"/></linearGradient></defs></svg></div>
-                </div>
-              </div>
-            </div>
-            <div class="hero-event hero-event-left absolute top-2 left-1 z-20 hidden items-center gap-3 rounded-2xl border border-border bg-white/90 p-3 shadow-xl backdrop-blur sm:flex lg:top-24"><span class="grid size-9 place-items-center rounded-xl bg-emerald-50 text-primary"><Store :size="17"/></span><span><b class="block text-[10px]">Loja publicada</b><small class="text-[8px] text-muted-foreground">Pronta para receber pedidos</small></span></div>
-            <div class="hero-event hero-event-right absolute right-1 bottom-5 z-20 flex items-center gap-3 rounded-2xl border border-border bg-white/90 p-3 shadow-xl backdrop-blur lg:bottom-20"><span class="grid size-9 place-items-center rounded-xl bg-primary text-white"><Check :size="17"/></span><span><b class="block text-[10px]">Venda concluída</b><small class="text-[8px] text-muted-foreground">Pedido e estoque atualizados</small></span></div>
-          </div>
-        </div>
+        <a class="hero-scroll-cue absolute right-8 bottom-8 hidden items-center gap-4 text-[9px] font-semibold tracking-[.22em] text-[#26332e] uppercase lg:flex" href="#jornada"><span class="h-9 w-px bg-[#26332e]"></span>Role para explorar</a>
       </section>
 
       <section class="brand-strip border-y border-border bg-white py-9">
