@@ -44,6 +44,8 @@ Manter título, navegação, links e botões em HTML, selecionáveis e acessíve
 
 O header fica fixo e translúcido sobre o hero. Ao rolar, assume fundo branco com transição suave. **Preservar o shadow solicitado pelo usuário.** A implementação atual usa o limite de 24px, branco com 96% de opacidade e blur; esses valores podem ser ajustados para legibilidade, mantendo o comportamento. O menu aberto deve ser legível e os links precisam corresponder a destinos reais.
 
+No desktop, uma barra social escura permanece fixa e centralizada na lateral esquerda, seguindo a referência aprovada em 12 de setembro de 2026. Exibir somente Facebook e Instagram, com o rótulo vertical “Siga-nos”. Os destinos vêm de `NUXT_PUBLIC_FACEBOOK_URL` e `NUXT_PUBLIC_INSTAGRAM_URL`; não fixar perfis não confirmados no componente compartilhado. Ocultar a barra abaixo de 768px para não cobrir o conteúdo móvel.
+
 No mobile, reorganizar texto e fotografia verticalmente, com o produto abaixo e um recorte planejado. Garantir espaço suficiente para conteúdo, CTAs e imagem em vez de depender apenas de uma altura fixa. Não aceitar texto cortado, sobreposição ou rolagem horizontal.
 
 ## Identidade, cores e tipografia

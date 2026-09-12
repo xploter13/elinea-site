@@ -1,7 +1,10 @@
 import tailwindcss from '@tailwindcss/vite'
 import { createResolver } from '@nuxt/kit'
 
-const apiBase = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000/api/v1'
+const runtimeEnv = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
+const apiBase = runtimeEnv?.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000/api/v1'
+const facebookUrl = runtimeEnv?.NUXT_PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/'
+const instagramUrl = runtimeEnv?.NUXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/'
 const { resolve } = createResolver(import.meta.url)
 const localPackages = {
   '@elinea/ui/marketing': resolve('../elinea-ui/src/marketing.ts'),
@@ -18,7 +21,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
     server: { fs: { allow: [resolve('..')] } },
   },
-  runtimeConfig: { public: { apiBase } },
+  runtimeConfig: { public: { apiBase, facebookUrl, instagramUrl } },
   app: { head: { htmlAttrs: { lang: 'pt-BR' }, title: 'Elínea — Sua loja online, simples de verdade', meta: [
     { name: 'description', content: 'Crie e gerencie sua loja online com catálogo, pedidos, pagamentos e suporte em uma única plataforma.' },
     { name: 'theme-color', content: '#079455' },
