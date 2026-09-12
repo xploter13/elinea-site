@@ -330,14 +330,6 @@
     color: var(--primary);
 }
 
-.brand-strip span {
-    transition: color .25s ease, opacity .25s ease;
-}
-
-.brand-strip span:hover {
-    color: var(--primary);
-}
-
 .journey-scroll {
     background: #f5f6f5;
 }
@@ -520,8 +512,6 @@
     .hero-kicker,
     .hero-text-link,
     .hero-feature-card p,
-    .brand-strip p,
-    .brand-strip span,
     .journey-step > span,
     .ecosystem-module h3,
     .ecosystem-module p,

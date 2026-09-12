@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import heroStudioUrl from '~/assets/images/h3-slider-img-1.webp'
-import { MarketingButton, MarketingSocialRail } from '@elinea/ui/marketing'
+import { MarketingButton, MarketingLogoCarousel, MarketingSocialRail } from '@elinea/ui/marketing'
 import {
   ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2,
   CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
@@ -42,6 +42,15 @@ const journeySteps = [
   { icon: CreditCard, label: 'Pagamento', title: 'A compra acontece sem atrito.', description: 'Checkout direto, com Pix, boleto e cartão em uma jornada segura.' },
   { icon: PackageCheck, label: 'Gestão', title: 'O pedido já chega organizado.', description: 'Pagamento, estoque e cliente atualizados no mesmo painel.' },
   { icon: MessageCircle, label: 'Relacionamento', title: 'A conversa continua no WhatsApp.', description: 'Confirmações, recuperação de carrinho e novas oportunidades de venda.' }
+]
+
+const brandLogos = [
+  { name: 'PharmaVida' },
+  { name: 'NUTRIMAX' },
+  { name: 'essência' },
+  { name: 'FórmulaCerta' },
+  { name: 'BioAtiva' },
+  { name: 'DermaPlus' },
 ]
 
 const ecosystemModules = [
@@ -281,9 +290,9 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section class="brand-strip border-y border-border bg-white py-9">
-        <div class="site-container"><p class="text-center text-[10px] font-semibold tracking-[.06em] text-muted-foreground">Negócios reais já vendem com a Elínea</p><div class="mt-7 grid grid-cols-2 gap-6 text-center text-sm font-semibold tracking-tight text-[#87938e] sm:grid-cols-3 lg:grid-cols-6"><span>PharmaVida</span><span>NUTRIMAX</span><span>essência</span><span>FórmulaCerta</span><span>BioAtiva</span><span>DermaPlus</span></div></div>
-      </section>
+      <MarketingLogoCarousel :items="brandLogos">
+        <template #label>Uma plataforma para <mark>negócios reais</mark></template>
+      </MarketingLogoCarousel>
 
       <section id="jornada" class="journey-scroll bg-white">
         <div class="journey-pin flex min-h-screen items-center py-24 lg:py-12">

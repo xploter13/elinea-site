@@ -84,13 +84,19 @@ Manter assets usados pelo site dentro do repositório, sem depender de caminhos 
 Preservar como base a sequência atual:
 
 1. Hero e apresentação comercial.
-2. Faixa de marcas/prova social, usando apenas clientes e autorizações confirmados.
+2. Carrossel contínuo de logos em cards claros, com selo central acima. Usar apenas
+   clientes e autorizações confirmados na versão publicada.
 3. Jornada da venda: loja → pagamento → gestão → relacionamento.
 4. Ecossistema de recursos conectados.
 5. Comparação entre montar a estrutura sozinho e operar com Elínea.
 6. Segmentos atendidos.
 7. Planos.
 8. Chamada final e rodapé.
+
+A faixa de logos segue a referência de um trilho horizontal contínuo, com cards de
+superfície suave e movimento uniforme. Os nomes sem imagem atualmente presentes são
+fallbacks tipográficos da implementação anterior, não comprovação de clientes. Trocar
+cada item pelo arquivo oficial e respectivo texto alternativo após confirmação.
 
 Os nomes, números, percentuais e estados de mockups não constituem dados reais. Não inventar clientes, depoimentos, resultados, descontos ou funcionalidades para preencher a interface. Preços e contratação devem continuar integrados aos dados e ao fluxo existentes.
 
