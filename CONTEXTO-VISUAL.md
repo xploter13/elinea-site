@@ -30,7 +30,7 @@ Evitar as direções já rejeitadas: grandes fundos pretos combinados com verde 
 
 Desktop: fotografia ocupando toda a largura, conteúdo à esquerda e pessoa em destaque à direita. Um overlay verde profundo escurece a área esquerda e perde intensidade antes da pessoa, seguindo a composição da referência Tekmino aprovada em 12 de setembro de 2026. Título, apoio e navegação usam tons claros sobre esse campo; o header retorna ao fundo branco e texto escuro após o scroll. O título deve manter o impacto e a proporção da referência sem invadir o assunto principal da fotografia. Ajustar tamanho e largura conforme o espaço real; não impor uma quebra de duas linhas que corte o texto em telas menores.
 
-Dois cards claros sobrepostos à base direita do hero conectam a fotografia aos benefícios do produto. Usar conteúdo verificável da plataforma e manter a composição compacta, sem transformar o hero em uma grade de recursos.
+Dois cards claros sobrepostos à base direita do hero conectam a fotografia aos benefícios do produto. Somente os cards têm fundo branco; o fundo e toda a moldura externa do dock usam a superfície suave `--muted`, também visível no espaço entre eles, sem um divisor adicional. Os ícones e títulos têm presença suficiente para leitura rápida. Usar conteúdo verificável da plataforma e manter a composição compacta, sem transformar o hero em uma grade de recursos.
 
 Conteúdo de referência:
 

@@ -267,11 +267,11 @@ onBeforeUnmount(() => {
         </div>
         <div class="hero-feature-dock" aria-label="Destaques da plataforma">
           <article class="hero-feature-card">
-            <span class="hero-feature-icon"><Store :size="24" stroke-width="1.8" /></span>
+            <span class="hero-feature-icon"><Store :size="30" stroke-width="1.8" /></span>
             <div><h2>Loja pronta para vender</h2><p>Catálogo, carrinho e checkout na mesma experiência.</p></div>
           </article>
           <article class="hero-feature-card">
-            <span class="hero-feature-icon"><BarChart3 :size="24" stroke-width="1.8" /></span>
+            <span class="hero-feature-icon"><BarChart3 :size="30" stroke-width="1.8" /></span>
             <div><h2>Gestão em um só lugar</h2><p>Pedidos, pagamentos e clientes no mesmo painel.</p></div>
           </article>
         </div>
