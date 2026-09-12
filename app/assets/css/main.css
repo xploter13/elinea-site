@@ -212,6 +212,34 @@
     backdrop-filter: blur(18px) saturate(135%);
 }
 
+.site-logo {
+    position: relative;
+    display: inline-flex;
+    width: 132px;
+    height: 30px;
+    flex: 0 0 auto;
+    align-items: center;
+}
+
+.site-logo__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
+    transition: opacity .3s ease;
+}
+
+.site-logo__image--official,
+.premium-header.is-scrolled .site-logo__image--white {
+    opacity: 0;
+}
+
+.premium-header.is-scrolled .site-logo__image--official {
+    opacity: 1;
+}
+
 .skip-link {
     position: fixed;
     top: 12px;

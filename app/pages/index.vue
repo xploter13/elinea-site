@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import heroStudioUrl from '~/assets/images/h3-slider-img-1.webp'
+import logoOfficialUrl from '~/assets/images/elinea-logo.svg'
+import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
 import { MarketingButton, MarketingLogoCarousel, MarketingSocialRail } from '@elinea/ui/marketing'
 import {
   ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2,
@@ -239,7 +241,10 @@ onBeforeUnmount(() => {
     />
     <header data-header class="premium-header fixed inset-x-0 top-0 z-40" :class="{ 'is-scrolled': headerScrolled }">
       <div class="site-container flex h-[72px] items-center gap-8">
-        <a href="#inicio" class="text-[21px] font-extrabold tracking-[.12em]" aria-label="Elínea — início"><span class="text-primary">.</span>ELÍNEA</a>
+        <a href="#inicio" class="site-logo" aria-label="Elínea — início">
+          <img class="site-logo__image site-logo__image--white" :src="logoWhiteUrl" alt="" aria-hidden="true">
+          <img class="site-logo__image site-logo__image--official" :src="logoOfficialUrl" alt="" aria-hidden="true">
+        </a>
         <nav class="ml-auto hidden items-center gap-8 text-xs font-semibold text-muted-foreground lg:flex" aria-label="Navegação principal">
           <a class="transition hover:text-primary" href="#jornada">Produto</a>
           <a class="transition hover:text-primary" href="#solucoes">Soluções</a>

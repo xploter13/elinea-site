@@ -61,7 +61,7 @@ Reutilizar os tokens de `app/assets/css/main.css`. Esta é a paleta de referênc
 | Texto secundário | `#62716b` | Descrições e apoio |
 | Superfície suave | `#edf2f0` | Áreas de produto e agrupamentos |
 
-O logotipo oficial foi fornecido pelo usuário: lettering próprio em azul-marinho com detalhes verdes e acento em “ELÍNEA”. Preservar desenho, proporção, cores e acento. Não tratar texto digitado com um ponto verde como reprodução fiel desse arquivo. Se o original não estiver disponível no repositório, localizar o asset fornecido ou pedir o arquivo antes de recriá-lo.
+O logotipo oficial foi fornecido pelo usuário: lettering próprio em azul-marinho com detalhes verdes e acento em “ELÍNEA”. Preservar desenho, proporção, cores e acento. As versões vetoriais ficam em `app/assets/images/elinea-logo.svg` e `app/assets/images/elinea-logo-white.svg`. No header transparente, usar o lettering branco com os detalhes verdes; após o scroll e a entrada do fundo branco, fazer a transição para a versão oficial azul-marinho e verde. Não tratar texto digitado com um ponto verde como reprodução fiel da marca.
 
 Fonte atual: **Manrope**, com fallbacks definidos no tema. Títulos fortes, espaçamento entre letras moderadamente fechado e corpo confortável. Usar a hierarquia existente de `.site-title`, `.site-copy` e botões; evitar uma nova família de estilos por seção. No desktop, textos reais de navegação, apoio, cards, controles, planos, formulários e rodapé devem ter no mínimo 16px, conforme decisão aprovada em 12 de setembro de 2026. Textos internos de mockups ilustrativos podem permanecer menores para preservar a escala simulada da interface; não usar esses tamanhos no conteúdo comercial.
 
