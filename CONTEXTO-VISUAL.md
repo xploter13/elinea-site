@@ -46,7 +46,7 @@ O header fica fixo e translúcido sobre o hero. Ao rolar, assume fundo branco co
 
 No desktop, uma barra social escura permanece fixa e centralizada na lateral esquerda, seguindo a referência aprovada em 12 de setembro de 2026. Exibir somente Facebook e Instagram, com o rótulo vertical “Siga-nos”. Os destinos vêm de `NUXT_PUBLIC_FACEBOOK_URL` e `NUXT_PUBLIC_INSTAGRAM_URL`; não fixar perfis não confirmados no componente compartilhado. Ocultar a barra abaixo de 768px para não cobrir o conteúdo móvel.
 
-No mobile, reorganizar texto e fotografia verticalmente, com o produto abaixo e um recorte planejado. Garantir espaço suficiente para conteúdo, CTAs e imagem em vez de depender apenas de uma altura fixa. Não aceitar texto cortado, sobreposição ou rolagem horizontal.
+No mobile, reorganizar texto e fotografia verticalmente, com o produto abaixo e um recorte planejado. A fotografia usa escurecimento uniforme, sem degradê ou máscara atravessando a pessoa, e mantém o rosto próximo ao centro do enquadramento. Garantir espaço suficiente para conteúdo, CTAs e imagem em vez de depender apenas de uma altura fixa. Não aceitar texto cortado, sobreposição ou rolagem horizontal.
 
 ## Identidade, cores e tipografia
 
