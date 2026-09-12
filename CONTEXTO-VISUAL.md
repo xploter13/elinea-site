@@ -1,6 +1,6 @@
 # Elínea — Contexto visual e direção do site
 
-Atualizado em 11 de setembro de 2026. Este documento registra o alinhamento com o responsável pelo projeto e orienta as próximas alterações. A implementação atual é uma base em evolução, não uma aprovação automática de cada detalhe. Novas orientações explícitas do usuário prevalecem; incorporar aqui as decisões que mudarem a direção.
+Atualizado em 12 de setembro de 2026. Este documento registra o alinhamento com o responsável pelo projeto e orienta as próximas alterações. A implementação atual é uma base em evolução, não uma aprovação automática de cada detalhe. Novas orientações explícitas do usuário prevalecem; incorporar aqui as decisões que mudarem a direção.
 
 ## Produto e posicionamento
 
@@ -21,14 +21,16 @@ O usuário gostou da organização das seções e do conteúdo. Refinamentos vis
 Referências fornecidas pelo usuário:
 
 - A página do iPhone, da Apple, orientou o ritmo de apresentação, o foco no produto e os efeitos ligados ao scroll. É uma referência de intenção, não uma especificação para copiar a identidade da Apple.
-- A referência mais recente para o hero é a imagem de um escritório claro, mesa de pedra, vegetação, luz de janela e dashboard em perspectiva à direita. Ela substitui a proposta anterior de hero centralizado com título monumental e painel abaixo.
+- A imagem aprovada para o hero é uma cena profissional com notebook em primeiro plano à esquerda e uma empreendedora à direita, em um ambiente contemporâneo iluminado. O asset foi escolhido e aprovado pelo usuário em 12 de setembro de 2026. Ela substitui a cena anterior com dashboard em perspectiva.
 - O portfólio de Luiz Fernando Costa foi uma referência exploratória anterior. Em caso de conflito, prevalecem o hero mais recente e as decisões registradas aqui.
 
 Evitar as direções já rejeitadas: grandes fundos pretos combinados com verde escuro e manchas, brilhos ou detalhes verdes decorativos espalhados pelo background. Usar o verde com intenção em ações, identidade e dados.
 
 ## Hero e navegação
 
-Desktop: fotografia ocupando toda a largura, conteúdo à esquerda e dashboard em perspectiva à direita. O título deve manter o impacto e a proporção da referência sem invadir o painel. Ajustar tamanho e largura conforme o espaço real; não impor uma quebra de duas linhas que corte o texto em telas menores.
+Desktop: fotografia ocupando toda a largura, conteúdo à esquerda e pessoa em destaque à direita. Um overlay verde profundo escurece a área esquerda e perde intensidade antes da pessoa, seguindo a composição da referência Tekmino aprovada em 12 de setembro de 2026. Título, apoio e navegação usam tons claros sobre esse campo; o header retorna ao fundo branco e texto escuro após o scroll. O título deve manter o impacto e a proporção da referência sem invadir o assunto principal da fotografia. Ajustar tamanho e largura conforme o espaço real; não impor uma quebra de duas linhas que corte o texto em telas menores.
+
+Dois cards claros sobrepostos à base direita do hero conectam a fotografia aos benefícios do produto. Usar conteúdo verificável da plataforma e manter a composição compacta, sem transformar o hero em uma grade de recursos.
 
 Conteúdo de referência:
 
@@ -65,11 +67,11 @@ Sombras devem criar profundidade suave. Bordas discretas e cantos arredondados v
 
 ## Imagens e assets
 
-Background atual: `app/assets/images/elinea-hero-studio.png`, gerado com as imagens do usuário como referências. A cena contém aplicações geradas da marca no painel e em um objeto físico; verificar fidelidade ao logo original antes de considerar qualquer geração uma reprodução exata.
+Background atual e aprovado: `app/assets/images/h3-slider-img-1.webp`, selecionado e integrado pelo usuário. Preservar esse asset como imagem principal do hero até nova orientação explícita.
 
-Brief para futuras variações: escritório contemporâneo claro, mesa de pedra, janela com luz natural, sombras arquitetônicas, vegetação discreta, dashboard branco e verde em perspectiva à direita e espaço livre à esquerda. Aplicar o logotipo oficial nos locais coerentes da cena. Não incluir navegação, títulos, CTAs ou textos promocionais dentro da fotografia.
+Brief para futuras variações: ambiente profissional contemporâneo, luz natural, pessoa à direita e espaço visual utilizável à esquerda para o conteúdo. Não incluir navegação, títulos, CTAs ou textos promocionais dentro da fotografia.
 
-Importar esse asset no componente usando `~/assets/images/elinea-hero-studio.png` e vincular o resultado ao `src`. A URL literal `/images/elinea-hero-studio.png` apresentou 404 neste ambiente; apenas trocar `src` por `:src` não resolveu o problema. A importação pelo Vite foi validada com resposta HTTP 200 e inclusão no build.
+Importar esse asset no componente usando `~/assets/images/h3-slider-img-1.webp` e vincular o resultado ao `src`. A importação pelo Vite é necessária para que o arquivo seja incluído corretamente no build.
 
 Manter assets usados pelo site dentro do repositório, sem depender de caminhos pessoais do Windows ou da pasta do gerador. Otimizar formato e tamanho quando possível, preservar proporções, priorizar a imagem do hero e conferir o carregamento real no navegador.
 

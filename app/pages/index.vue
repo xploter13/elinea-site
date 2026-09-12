@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import heroStudioUrl from '~/assets/images/elinea-hero-studio.png'
+import heroStudioUrl from '~/assets/images/h3-slider-img-1.webp'
 import {
   ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2,
   CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
-  PackageCheck, Pill, Search, ShoppingBag, Store, Tag, X, Zap
+  PackageCheck, Pill, Search, ShoppingBag, Store, Tag, X
 } from '@lucide/vue'
 
 type Plan = {
@@ -145,16 +145,15 @@ onMounted(async () => {
       .from('.hero-line', { yPercent: 110, rotate: 1.5, duration: .95, stagger: .1 }, '-=.3')
       .from('.hero-support', { y: 18, opacity: 0, duration: .65 }, '-=.55')
       .from('.hero-action', { y: 12, opacity: 0, duration: .5, stagger: .08 }, '-=.45')
-      .from('.hero-proof', { opacity: 0, y: 8, duration: .45, stagger: .06 }, '-=.25')
       .from('.hero-photo', { opacity: 0, scale: 1.045, duration: 1.35 }, '-=1.15')
-      .from('.hero-scroll-cue', { opacity: 0, y: 8, duration: .5 }, '-=.35')
+      .from('.hero-feature-card', { opacity: 0, y: 24, duration: .65, stagger: .1 }, '-=.45')
 
     gsap.timeline({
       scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: 1 }
     })
       .to('.hero-copy', { y: -64, opacity: .28, ease: 'none' }, 0)
       .to('.hero-photo', { scale: 1.06, y: 30, ease: 'none' }, 0)
-      .to('.hero-scroll-cue', { y: -20, opacity: 0, ease: 'none' }, 0)
+      .to('.hero-feature-dock', { y: 38, opacity: .35, ease: 'none' }, 0)
 
     root.querySelectorAll<HTMLElement>('.section-reveal').forEach((section) => {
       gsap.from(section.children, {
@@ -250,26 +249,31 @@ onBeforeUnmount(() => {
       <section id="inicio" class="hero-home relative isolate overflow-hidden">
         <img class="hero-photo absolute inset-0 -z-20 size-full object-cover" :src="heroStudioUrl" alt="" aria-hidden="true" fetchpriority="high">
         <div class="hero-photo-overlay absolute inset-0 -z-10"></div>
-        <div class="site-container flex min-h-[900px] items-center pt-[72px]">
-          <div class="hero-copy max-w-[610px] pb-20 pt-20 sm:pb-28 lg:pb-10 lg:pt-24">
-            <span class="hero-kicker block text-[10px] font-semibold tracking-[.28em] text-[#65716d]">E-commerce sem complicação</span>
-            <h1 class="mt-6 text-[3.2rem] leading-[.98] font-semibold tracking-[-.06em] text-[#0a1713] sm:text-[3.8rem] lg:text-[3.95rem]">
-              <span class="block overflow-hidden pb-1"><span class="hero-line block lg:whitespace-nowrap">Ecommerce simples</span></span>
-              <span class="block overflow-hidden pb-2"><span class="hero-line block lg:whitespace-nowrap">para <span class="text-primary">negócios reais.</span></span></span>
+        <div class="site-container hero-layout flex items-center pt-[72px]">
+          <div class="hero-copy max-w-[720px]">
+            <span class="hero-kicker inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-semibold text-white/75 shadow-sm backdrop-blur-md"><span class="size-2 rounded-full bg-[#5cdda4]"></span> Sua operação digital, bem resolvida</span>
+            <h1 class="hero-title mt-7 text-[3.25rem] leading-[.96] font-semibold tracking-[-.065em] text-white sm:text-[4.25rem] lg:text-[5rem]">
+              <span class="block overflow-hidden pb-1"><span class="hero-line block">Ecommerce<span class="hero-desktop-word"> simples</span></span></span>
+              <span class="hero-mobile-line overflow-hidden pb-1"><span class="hero-line block">simples para</span></span>
+              <span class="block overflow-hidden pb-2"><span class="hero-line block"><span class="hero-desktop-word">para </span>negócios reais.</span></span>
             </h1>
-            <p class="hero-support mt-6 max-w-[500px] text-[17px] leading-7 text-[#38433f] sm:text-[19px] sm:leading-8">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com mais vendas e menos complicação.</p>
-            <div class="mt-8 flex flex-wrap items-center gap-4">
-              <a class="hero-action site-btn px-8" href="#planos">Criar minha loja <ArrowRight :size="16" /></a>
-              <a class="hero-action hero-text-link inline-flex min-h-12 items-center gap-2 px-4 text-[13px] font-semibold text-[#08794f]" href="#jornada">Conhecer a plataforma <ArrowRight :size="14" /></a>
-            </div>
-            <div class="mt-10 flex flex-wrap gap-x-8 gap-y-4 text-[12px] font-medium text-[#35423d]">
-              <span class="hero-proof flex items-center gap-2"><Zap :size="18" class="text-primary" /> Setup rápido</span>
-              <span class="hero-proof flex items-center gap-2"><MessageCircle :size="18" class="text-primary" /> Suporte especializado</span>
-              <span class="hero-proof flex items-center gap-2"><BarChart3 :size="18" class="text-primary" /> Sem fidelidade</span>
+            <p class="hero-support mt-6 max-w-[520px] text-[17px] leading-7 text-white/75 sm:text-[18px] sm:leading-8">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com mais vendas e menos complicação.</p>
+            <div class="hero-actions mt-9 flex flex-wrap items-center gap-5">
+              <a class="hero-action hero-primary-action" href="#planos"><span>Criar minha loja</span><span class="hero-action-icon"><ArrowRight :size="18" /></span></a>
+              <a class="hero-action hero-text-link inline-flex min-h-12 items-center gap-2 text-[13px] font-semibold text-white/85" href="#jornada">Conhecer a plataforma <ArrowRight :size="15" /></a>
             </div>
           </div>
         </div>
-        <a class="hero-scroll-cue absolute right-8 bottom-8 hidden items-center gap-4 text-[9px] font-semibold tracking-[.22em] text-[#26332e] uppercase lg:flex" href="#jornada"><span class="h-9 w-px bg-[#26332e]"></span>Role para explorar</a>
+        <div class="hero-feature-dock" aria-label="Destaques da plataforma">
+          <article class="hero-feature-card">
+            <span class="hero-feature-icon"><Store :size="24" stroke-width="1.8" /></span>
+            <div><h2>Loja pronta para vender</h2><p>Catálogo, carrinho e checkout na mesma experiência.</p></div>
+          </article>
+          <article class="hero-feature-card">
+            <span class="hero-feature-icon"><BarChart3 :size="24" stroke-width="1.8" /></span>
+            <div><h2>Gestão em um só lugar</h2><p>Pedidos, pagamentos e clientes no mesmo painel.</p></div>
+          </article>
+        </div>
       </section>
 
       <section class="brand-strip border-y border-border bg-white py-9">
