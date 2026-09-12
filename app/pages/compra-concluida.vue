@@ -1,4 +1,5 @@
 <script setup lang="ts">import {ArrowRight, CircleCheckBig} from '@lucide/vue';
+import { MarketingButton } from '@elinea/ui/marketing'
 
 useHead({title: 'Compra recebida — Elínea'})</script>
 <template>
@@ -9,7 +10,7 @@ useHead({title: 'Compra recebida — Elínea'})</script>
       <h1>Seu pagamento está sendo confirmado.</h1>
       <p>Assim que a Stripe confirmar o pagamento, nossa equipe dará andamento à implantação. Você receberá cada
         atualização no e-mail informado.</p>
-      <UiButton class="mt-6" variant="solid" to="/">Voltar ao site<template #icon><ArrowRight :size="18"/></template></UiButton>
+      <MarketingButton class="mt-6" variant="solid" to="/">Voltar ao site<template #icon><ArrowRight :size="18"/></template></MarketingButton>
     </section>
   </main>
 </template>

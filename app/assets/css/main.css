@@ -127,90 +127,6 @@
         @apply mt-5 max-w-xl text-[15px] leading-7 text-muted-foreground;
     }
 
-    .ui-button {
-        display: inline-flex;
-        min-height: 48px;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        border: 1px solid transparent;
-        border-radius: var(--radius-xl);
-        padding: 0 24px;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: color .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease;
-    }
-
-    .ui-button:hover {
-        transform: translateY(-2px);
-    }
-
-    .ui-button--primary {
-        min-height: 58px;
-        gap: 18px;
-        background: var(--primary);
-        padding: 5px 5px 5px 26px;
-        color: white;
-        font-weight: 700;
-        box-shadow: 0 18px 36px -20px rgba(7, 148, 94, .8);
-    }
-
-    .ui-button--primary:hover {
-        background: #067e51;
-        box-shadow: 0 22px 40px -20px rgba(7, 148, 94, .9);
-    }
-
-    .ui-button--solid {
-        border-color: var(--primary);
-        background: var(--primary);
-        color: var(--primary-foreground);
-        box-shadow: 0 12px 28px -14px rgba(7, 148, 94, .8);
-    }
-
-    .ui-button--solid:hover {
-        border-color: #067e51;
-        background: #067e51;
-    }
-
-    .ui-button--outline {
-        border-color: var(--border-color);
-        background: rgba(255, 255, 255, .75);
-        color: var(--foreground);
-        box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
-        backdrop-filter: blur(8px);
-    }
-
-    .ui-button--outline:hover {
-        border-color: rgba(23, 54, 44, .2);
-        background: white;
-    }
-
-    .ui-button__label,
-    .ui-button__icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .ui-button--primary .ui-button__icon {
-        width: 48px;
-        height: 48px;
-        border-radius: var(--radius-xl);
-        background: #17362c;
-        color: white;
-    }
-
-    .ui-button:disabled,
-    .ui-button[aria-disabled="true"] {
-        opacity: .5;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-
     .check-line {
         @apply flex items-start gap-2 text-[13px] leading-5 text-muted-foreground;
     }
@@ -285,7 +201,7 @@
 }
 
 .premium-header:not(.is-scrolled) nav:not(#menu-mobile) a,
-.premium-header:not(.is-scrolled) .site-container > a:not(.ui-button) {
+.premium-header:not(.is-scrolled) .site-container > a:not(.marketing-button) {
     color: rgba(255, 255, 255, .78);
 }
 
@@ -599,7 +515,7 @@
     .premium-header a[href*="admin.elinea.com.br"],
     .site-label,
     .site-copy,
-    .ui-button,
+    .marketing-button,
     .skip-link,
     .hero-kicker,
     .hero-text-link,
@@ -733,7 +649,7 @@
         font-size: 10px;
     }
 
-    .hero-actions .ui-button--primary {
+    .hero-actions .marketing-button--primary {
         min-height: 56px;
     }
 

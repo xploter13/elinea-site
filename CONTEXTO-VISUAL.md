@@ -65,7 +65,7 @@ Fonte atual: **Manrope**, com fallbacks definidos no tema. Títulos fortes, espa
 
 Sombras devem criar profundidade suave. Bordas discretas e cantos arredondados variam conforme a função: controles menores, cards intermediários e cenas de produto maiores. Evitar excesso de cartões idênticos, halos verdes e efeitos de vidro sem propósito. Ícones seguem a família Lucide já usada no projeto.
 
-Botões de ação usam o componente global `app/components/UiButton.vue`, com as variantes `primary`, `outline` e `solid`. `primary` preserva o desenho aprovado no hero, incluindo o ícone destacado e os cantos definidos por `--radius-xl`; `outline` atende ações secundárias e `solid` substitui o antigo padrão `site-btn`. As classes globais do sistema são `.ui-button` e seus modificadores `.ui-button--primary`, `.ui-button--outline` e `.ui-button--solid`.
+Botões de ação usam o componente `MarketingButton` exportado por `@elinea/ui/marketing`, com as variantes `primary`, `outline` e `solid`. Ele pertence ao domínio de marketing e é separado do `StorefrontButton`, usado nos fluxos transacionais da loja. `primary` preserva o desenho aprovado no hero, incluindo o ícone destacado e os cantos configuráveis por `--elinea-marketing-button-radius`; `outline` atende ações secundárias e `solid` substitui o antigo padrão `site-btn`. O site consome o código-fonte local do pacote por alias durante o desenvolvimento. A taxonomia compartilhada completa está registrada em `elinea-ui/docs/context.md`.
 
 ## Imagens e assets
 
