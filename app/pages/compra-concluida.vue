@@ -9,9 +9,7 @@ useHead({title: 'Compra recebida — Elínea'})</script>
       <h1>Seu pagamento está sendo confirmado.</h1>
       <p>Assim que a Stripe confirmar o pagamento, nossa equipe dará andamento à implantação. Você receberá cada
         atualização no e-mail informado.</p>
-      <NuxtLink class="button" to="/">Voltar ao site
-        <ArrowRight :size="18"/>
-      </NuxtLink>
+      <UiButton class="mt-6" variant="solid" to="/">Voltar ao site<template #icon><ArrowRight :size="18"/></template></UiButton>
     </section>
   </main>
 </template>

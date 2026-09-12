@@ -61,9 +61,11 @@ Reutilizar os tokens de `app/assets/css/main.css`. Esta é a paleta de referênc
 
 O logotipo oficial foi fornecido pelo usuário: lettering próprio em azul-marinho com detalhes verdes e acento em “ELÍNEA”. Preservar desenho, proporção, cores e acento. Não tratar texto digitado com um ponto verde como reprodução fiel desse arquivo. Se o original não estiver disponível no repositório, localizar o asset fornecido ou pedir o arquivo antes de recriá-lo.
 
-Fonte atual: **Manrope**, com fallbacks definidos no tema. Títulos fortes, espaçamento entre letras moderadamente fechado e corpo confortável. Usar a hierarquia existente de `.site-title`, `.site-copy` e botões; evitar uma nova família de estilos por seção. Não usar textos minúsculos dos mockups como padrão para o conteúdo comercial.
+Fonte atual: **Manrope**, com fallbacks definidos no tema. Títulos fortes, espaçamento entre letras moderadamente fechado e corpo confortável. Usar a hierarquia existente de `.site-title`, `.site-copy` e botões; evitar uma nova família de estilos por seção. No desktop, textos reais de navegação, apoio, cards, controles, planos, formulários e rodapé devem ter no mínimo 16px, conforme decisão aprovada em 12 de setembro de 2026. Textos internos de mockups ilustrativos podem permanecer menores para preservar a escala simulada da interface; não usar esses tamanhos no conteúdo comercial.
 
 Sombras devem criar profundidade suave. Bordas discretas e cantos arredondados variam conforme a função: controles menores, cards intermediários e cenas de produto maiores. Evitar excesso de cartões idênticos, halos verdes e efeitos de vidro sem propósito. Ícones seguem a família Lucide já usada no projeto.
+
+Botões de ação usam o componente global `app/components/UiButton.vue`, com as variantes `primary`, `outline` e `solid`. `primary` preserva o desenho aprovado no hero, incluindo o ícone destacado e os cantos definidos por `--radius-xl`; `outline` atende ações secundárias e `solid` substitui o antigo padrão `site-btn`. As classes globais do sistema são `.ui-button` e seus modificadores `.ui-button--primary`, `.ui-button--outline` e `.ui-button--solid`.
 
 ## Imagens e assets
 
