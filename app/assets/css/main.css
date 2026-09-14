@@ -58,6 +58,9 @@
     --dark-base-100: oklch(0.16 0.012 240);
     --dark-base-200: oklch(0.195 0.014 240);
     --dark-base-300: oklch(0.225 0.016 240);
+    --elinea-dark-100: var(--dark-base-100);
+    --elinea-dark-200: var(--dark-base-200);
+    --elinea-dark-300: var(--dark-base-300);
     --background: #fafcfb;
     --foreground: var(--dark-base-300);
     --heading-color: var(--dark-base-100);
