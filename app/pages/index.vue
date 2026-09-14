@@ -74,14 +74,14 @@ const brandLogos = [
 ]
 
 const ecosystemModules = [
-  { icon: Store, title: 'Loja virtual', detail: 'Sua marca no ar' },
-  { icon: Package, title: 'Catálogo', detail: 'Produtos organizados' },
-  { icon: CreditCard, title: 'Pagamentos', detail: 'Pix, boleto e cartão' },
-  { icon: ShoppingBag, title: 'Pedidos', detail: 'Operação centralizada' },
-  { icon: Tag, title: 'Promoções', detail: 'Cupons e campanhas' },
-  { icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto' },
-  { icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham' },
-  { icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento' }
+  { icon: Store, title: 'Loja virtual', detail: 'Sua marca no ar', tone: 'emerald' },
+  { icon: Package, title: 'Catálogo', detail: 'Produtos organizados', tone: 'blue' },
+  { icon: CreditCard, title: 'Pagamentos', detail: 'Pix, boleto e cartão', tone: 'amber' },
+  { icon: ShoppingBag, title: 'Pedidos', detail: 'Operação centralizada', tone: 'amber' },
+  { icon: Tag, title: 'Promoções', detail: 'Cupons e campanhas', tone: 'violet' },
+  { icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto', tone: 'blue' },
+  { icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham', tone: 'violet' },
+  { icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento', tone: 'emerald' }
 ]
 
 const money = (value: number | string) => new Intl.NumberFormat('pt-BR', {
@@ -370,11 +370,11 @@ onBeforeUnmount(() => {
 
           <div class="ecosystem-stage">
             <svg class="ecosystem-connections" viewBox="0 0 1200 680" fill="none" preserveAspectRatio="none" aria-hidden="true">
-              <path v-for="path in ['M250 98 C330 98 340 238 420 238','M250 254 C330 254 345 292 420 292','M250 410 C330 410 345 346 420 346','M250 566 C330 566 340 400 420 400','M950 98 C870 98 860 238 780 238','M950 254 C870 254 855 292 780 292','M950 410 C870 410 855 346 780 346','M950 566 C870 566 860 400 780 400']" :key="path" class="ecosystem-line" :d="path" />
+              <path v-for="(path,index) in ['M250 98 C330 98 340 238 420 238','M250 254 C330 254 345 292 420 292','M250 410 C330 410 345 346 420 346','M250 566 C330 566 340 400 420 400','M950 98 C870 98 860 238 780 238','M950 254 C870 254 855 292 780 292','M950 410 C870 410 855 346 780 346','M950 566 C870 566 860 400 780 400']" :key="path" class="ecosystem-line" :class="`tone-${ecosystemModules[index]?.tone}`" :d="path" />
             </svg>
 
             <div class="ecosystem-rail ecosystem-rail--left">
-              <article v-for="module in ecosystemModules.slice(0, 4)" :key="module.title" class="ecosystem-module">
+              <article v-for="module in ecosystemModules.slice(0, 4)" :key="module.title" class="ecosystem-module" :class="`tone-${module.tone}`">
                 <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20" stroke-width="1.8" /></span>
                 <div><h3>{{ module.title }}</h3><p>{{ module.detail }}</p></div>
               </article>
@@ -387,18 +387,18 @@ onBeforeUnmount(() => {
               </div>
               <div class="ecosystem-core-card__copy">
                 <span>O centro da sua operação</span>
-                <h3>Um núcleo para tudo o que faz o negócio avançar.</h3>
+                <h3>Toda a operação, no mesmo núcleo.</h3>
                 <p>Loja, pedidos e relacionamento compartilham o mesmo contexto, do primeiro acesso à próxima compra.</p>
               </div>
               <div class="ecosystem-core-flow" role="list" aria-label="Fluxo conectado da plataforma">
-                <div role="listitem"><Store :size="19" aria-hidden="true" /><span><small>Venda</small><strong>Loja e checkout</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
-                <div role="listitem"><PackageCheck :size="19" aria-hidden="true" /><span><small>Operação</small><strong>Pedido organizado</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
-                <div role="listitem"><MessageCircle :size="19" aria-hidden="true" /><span><small>Relacionamento</small><strong>Cliente no contexto</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
+                <div role="listitem"><Store :size="19" aria-hidden="true" /><span><small>Venda</small><strong>Loja e checkout</strong></span></div>
+                <div role="listitem"><PackageCheck :size="19" aria-hidden="true" /><span><small>Operação</small><strong>Pedidos</strong></span></div>
+                <div role="listitem"><MessageCircle :size="19" aria-hidden="true" /><span><small>Relacionamento</small><strong>Clientes</strong></span></div>
               </div>
             </article>
 
             <div class="ecosystem-rail ecosystem-rail--right">
-              <article v-for="module in ecosystemModules.slice(4)" :key="module.title" class="ecosystem-module">
+              <article v-for="module in ecosystemModules.slice(4)" :key="module.title" class="ecosystem-module" :class="`tone-${module.tone}`">
                 <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20" stroke-width="1.8" /></span>
                 <div><h3>{{ module.title }}</h3><p>{{ module.detail }}</p></div>
               </article>
