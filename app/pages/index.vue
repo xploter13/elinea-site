@@ -46,6 +46,24 @@ const journeySteps = [
   { icon: MessageCircle, label: 'Relacionamento', title: 'A conversa continua no WhatsApp.', description: 'Confirmações, recuperação de carrinho e novas oportunidades de venda.' }
 ]
 
+const selectJourneyStep = (index: number) => {
+  activeJourney.value = index
+}
+
+const handleJourneyKeydown = async (event: KeyboardEvent, index: number) => {
+  let nextIndex = index
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % journeySteps.length
+  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + journeySteps.length) % journeySteps.length
+  else if (event.key === 'Home') nextIndex = 0
+  else if (event.key === 'End') nextIndex = journeySteps.length - 1
+  else return
+
+  event.preventDefault()
+  selectJourneyStep(nextIndex)
+  await nextTick()
+  document.getElementById(`journey-tab-${nextIndex}`)?.focus()
+}
+
 const brandLogos = [
   { name: 'PharmaVida' },
   { name: 'NUTRIMAX' },
@@ -165,7 +183,7 @@ onMounted(async () => {
     })
       .to('.hero-copy', { y: -64, opacity: .28, ease: 'none' }, 0)
       .to('.hero-photo', { scale: 1.06, y: 30, ease: 'none' }, 0)
-      .to('.hero-feature-dock', { y: 38, opacity: .35, ease: 'none' }, 0)
+
 
     root.querySelectorAll<HTMLElement>('.section-reveal').forEach((section) => {
       gsap.from(section.children, {
@@ -175,19 +193,6 @@ onMounted(async () => {
     })
 
     media.add('(min-width: 1024px)', () => {
-      ScrollTrigger.create({
-        trigger: '.journey-scroll',
-        start: 'top top',
-        end: '+=2400',
-        pin: '.journey-pin',
-        scrub: .8,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          activeJourney.value = Math.min(journeySteps.length - 1, Math.floor(self.progress * journeySteps.length))
-          gsap.set('.journey-progress-fill', { scaleY: self.progress, transformOrigin: 'top center' })
-        }
-      })
-
       gsap.to('.ecosystem-module', {
         y: (index) => index % 2 === 0 ? -18 : 18,
         ease: 'none',
@@ -283,44 +288,70 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
-        <div class="hero-feature-dock" aria-label="Destaques da plataforma">
-          <article class="hero-feature-card">
-            <span class="hero-feature-icon"><Store :size="30" stroke-width="1.8" /></span>
-            <div><h2>Loja pronta para vender</h2><p>Catálogo, carrinho e checkout na mesma experiência.</p></div>
-          </article>
-          <article class="hero-feature-card">
-            <span class="hero-feature-icon"><BarChart3 :size="30" stroke-width="1.8" /></span>
-            <div><h2>Gestão em um só lugar</h2><p>Pedidos, pagamentos e clientes no mesmo painel.</p></div>
-          </article>
-        </div>
       </section>
 
       <MarketingLogoCarousel :items="brandLogos">
         <template #label>Uma plataforma para <mark>negócios reais</mark></template>
       </MarketingLogoCarousel>
 
-      <section id="jornada" class="journey-scroll bg-white">
-        <div class="journey-pin flex min-h-screen items-center py-24 lg:py-12">
-          <div class="site-container w-full">
-            <div class="section-reveal mb-14 max-w-3xl"><span class="site-label">Uma venda movimenta tudo</span><h2 class="site-title">Da primeira visita<br>à próxima compra.</h2><p class="site-copy">Cada etapa conversa com a seguinte. Você acompanha a operação sem alternar entre ferramentas e planilhas.</p></div>
-            <div class="hidden gap-14 lg:grid lg:grid-cols-[.72fr_1.28fr]">
-              <div class="relative pl-8">
-                <span class="journey-progress absolute inset-y-2 left-0 w-px bg-border"><span class="journey-progress-fill block h-full w-full origin-top scale-y-0 bg-primary"></span></span>
-                <button v-for="(step,index) in journeySteps" :key="step.label" type="button" class="journey-step block w-full border-b border-border py-5 text-left" :class="{ active: activeJourney === index }" :aria-pressed="activeJourney === index" @click="activeJourney = index"><span class="text-[10px] font-semibold text-primary">0{{ index + 1 }} · {{ step.label }}</span><strong class="mt-2 block text-xl leading-tight">{{ step.title }}</strong><span class="mt-2 block max-w-sm text-xs leading-5 text-muted-foreground">{{ step.description }}</span></button>
-              </div>
-              <div class="journey-stage relative min-h-[450px] overflow-hidden rounded-[28px] border border-border bg-[#edf2f0] p-7">
-                <Transition name="journey" mode="out-in">
-                  <div :key="activeJourney" class="journey-scene h-full">
-                    <div class="mb-7 flex items-center gap-2 text-[9px] font-semibold text-muted-foreground"><span class="size-2 rounded-full bg-primary"></span>{{ journeySteps[activeJourney]?.label }} em movimento</div>
-                    <div v-if="activeJourney === 0" class="storefront-preview mx-auto max-w-md overflow-hidden rounded-2xl bg-white shadow-xl"><div class="flex items-center justify-between border-b border-border px-5 py-4 text-[9px]"><b>CASA NATIVA</b><span>Produtos&nbsp;&nbsp; Sobre&nbsp;&nbsp; Carrinho</span></div><div class="grid grid-cols-[1.1fr_.9fr] items-center gap-5 p-7"><div><small class="text-[8px] text-primary">Novidades da semana</small><h3 class="mt-2 text-2xl font-semibold tracking-tight">Cuidado que faz parte da rotina.</h3><button class="mt-5 rounded-lg bg-primary px-4 py-2 text-[8px] font-semibold text-white">Comprar agora</button></div><div class="aspect-[4/5] rounded-xl bg-[linear-gradient(145deg,#dcebe4,#b7cfc3)] p-4"><div class="mx-auto mt-8 h-28 w-16 rounded-[14px_14px_8px_8px] bg-white shadow-lg"></div></div></div></div>
-                    <div v-else-if="activeJourney === 1" class="checkout-preview mx-auto grid max-w-lg grid-cols-[1fr_.72fr] overflow-hidden rounded-2xl bg-white shadow-xl"><div class="p-7"><h3 class="text-sm font-bold">Finalizar compra</h3><div class="mt-5 grid gap-3"><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Nome completo</div><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Endereço de entrega</div><div class="grid grid-cols-2 gap-3"><div class="h-10 rounded-lg border border-primary bg-emerald-50 p-3 text-[8px] font-bold text-primary">Pix</div><div class="h-10 rounded-lg border border-border p-3 text-[8px]">Cartão</div></div><button class="mt-2 rounded-lg bg-primary p-3 text-[9px] font-bold text-white">Pagar com segurança</button></div></div><aside class="bg-[#f7f9f8] p-6 text-[9px]"><b>Seu pedido</b><div class="mt-5 flex gap-3"><div class="size-12 rounded-lg bg-[#dcebe4]"></div><span>Vitamina C<br><b>R$ 48,00</b></span></div><div class="mt-6 border-t border-border pt-4"><span class="flex justify-between"><span>Total</span><b>R$ 48,00</b></span></div></aside></div>
+      <section id="jornada" class="journey-section">
+        <div class="site-container py-24 lg:py-32">
+          <div class="section-reveal journey-heading">
+            <div class="max-w-[760px]">
+              <span class="site-label">Uma venda movimenta tudo</span>
+              <h2 class="site-title">Da primeira visita<br>à próxima compra.</h2>
+              <p class="site-copy">Cada etapa conversa com a seguinte. Você acompanha a operação sem alternar entre ferramentas e planilhas.</p>
+            </div>
+            <MarketingButton class="journey-heading__action" variant="solid" href="#recursos">Explorar recursos<template #icon><ArrowRight :size="16" /></template></MarketingButton>
+          </div>
+
+          <div class="journey-shell">
+            <div class="journey-tabs" role="tablist" aria-label="Etapas de uma venda">
+              <button
+                v-for="(step,index) in journeySteps"
+                :id="`journey-tab-${index}`"
+                :key="step.label"
+                type="button"
+                role="tab"
+                class="journey-tab"
+                :class="{ active: activeJourney === index }"
+                :aria-selected="activeJourney === index"
+                aria-controls="journey-panel"
+                :tabindex="activeJourney === index ? 0 : -1"
+                @click="selectJourneyStep(index)"
+                @keydown="handleJourneyKeydown($event, index)"
+              >
+                <span class="journey-tab__number">0{{ index + 1 }}</span>
+                <span>{{ step.label }}</span>
+              </button>
+            </div>
+
+            <div
+              id="journey-panel"
+              class="journey-panel"
+              role="tabpanel"
+              :aria-labelledby="`journey-tab-${activeJourney}`"
+              tabindex="0"
+            >
+              <Transition name="journey" mode="out-in">
+                <div :key="activeJourney" class="journey-panel__inner">
+                  <div class="journey-detail">
+                    <span class="journey-detail__icon" aria-hidden="true"><component :is="journeySteps[activeJourney]?.icon" :size="30" stroke-width="1.8" /></span>
+                    <span class="journey-detail__step">Etapa 0{{ activeJourney + 1 }}</span>
+                    <h3>{{ journeySteps[activeJourney]?.title }}</h3>
+                    <p>{{ journeySteps[activeJourney]?.description }}</p>
+                    <a class="journey-detail__link" href="#recursos">Ver como tudo se conecta <ArrowRight :size="16" aria-hidden="true" /></a>
+                  </div>
+
+                  <div class="journey-stage" aria-hidden="true">
+                    <div v-if="activeJourney === 0" class="storefront-preview mx-auto max-w-md overflow-hidden rounded-2xl bg-white shadow-xl"><div class="flex items-center justify-between border-b border-border px-5 py-4 text-[9px]"><b>CASA NATIVA</b><span>Produtos&nbsp;&nbsp; Sobre&nbsp;&nbsp; Carrinho</span></div><div class="grid grid-cols-[1.1fr_.9fr] items-center gap-5 p-7"><div><small class="text-[8px] text-primary">Novidades da semana</small><h3 class="mt-2 text-2xl font-semibold tracking-tight">Cuidado que faz parte da rotina.</h3><span class="mt-5 inline-block rounded-lg bg-primary px-4 py-2 text-[8px] font-semibold text-white">Comprar agora</span></div><div class="aspect-[4/5] rounded-xl bg-[linear-gradient(145deg,#dcebe4,#b7cfc3)] p-4"><div class="mx-auto mt-8 h-28 w-16 rounded-[14px_14px_8px_8px] bg-white shadow-lg"></div></div></div></div>
+                    <div v-else-if="activeJourney === 1" class="checkout-preview mx-auto grid max-w-lg grid-cols-[1fr_.72fr] overflow-hidden rounded-2xl bg-white shadow-xl"><div class="p-7"><h3 class="text-sm font-bold">Finalizar compra</h3><div class="mt-5 grid gap-3"><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Nome completo</div><div class="h-10 rounded-lg border border-border px-3 py-2 text-[9px] text-muted-foreground">Endereço de entrega</div><div class="grid grid-cols-2 gap-3"><div class="h-10 rounded-lg border border-primary bg-emerald-50 p-3 text-[8px] font-bold text-primary">Pix</div><div class="h-10 rounded-lg border border-border p-3 text-[8px]">Cartão</div></div><span class="mt-2 rounded-lg bg-primary p-3 text-center text-[9px] font-bold text-white">Pagar com segurança</span></div></div><aside class="bg-[#f7f9f8] p-6 text-[9px]"><b>Seu pedido</b><div class="mt-5 flex gap-3"><div class="size-12 rounded-lg bg-[#dcebe4]"></div><span>Vitamina C<br><b>R$ 48,00</b></span></div><div class="mt-6 border-t border-border pt-4"><span class="flex justify-between"><span>Total</span><b>R$ 48,00</b></span></div></aside></div>
                     <div v-else-if="activeJourney === 2" class="orders-preview mock-window mx-auto max-w-xl"><div class="mock-nav"><b class="mr-auto text-[10px]">Pedidos</b><Search :size="12"/><Bell :size="12"/></div><div class="p-6"><div class="flex items-center"><h3 class="text-lg font-bold">Pedido #1052</h3><span class="ml-auto rounded-full bg-emerald-50 px-3 py-1 text-[8px] font-bold text-primary">Pagamento aprovado</span></div><div class="mt-6 grid grid-cols-3 gap-3"><div v-for="item in [['Cliente','Ana Clara'],['Entrega','Transportadora'],['Total','R$ 349,90']]" :key="item[0]" class="rounded-xl border border-border p-4 text-[8px]"><span class="text-muted-foreground">{{ item[0] }}</span><b class="mt-1 block">{{ item[1] }}</b></div></div><div class="mt-5 rounded-xl border border-border p-4"><div class="flex items-center gap-3 text-[9px]"><CheckCircle2 :size="16" class="text-primary"/><b>Estoque atualizado automaticamente</b></div><div class="mt-3 flex items-center gap-3 text-[9px]"><CheckCircle2 :size="16" class="text-primary"/><b>Cliente adicionado à base</b></div></div></div></div>
                     <div v-else class="whatsapp-preview mx-auto max-w-sm overflow-hidden rounded-[24px] border-[7px] border-[#173c30] bg-[#eef4f1] shadow-xl"><div class="bg-[#173c30] px-5 py-4 text-[10px] font-bold text-white">Elínea <span class="block text-[7px] font-normal text-white/60">automação ativa</span></div><div class="space-y-3 p-5 text-[9px]"><div class="mr-8 rounded-xl rounded-tl-sm bg-white p-3 shadow-sm">Olá, Ana! Seu pedido foi confirmado e já estamos preparando tudo.</div><div class="ml-12 rounded-xl rounded-tr-sm bg-[#d8f5e5] p-3 shadow-sm">Ótimo, obrigada!</div><div class="mr-5 rounded-xl rounded-tl-sm bg-white p-3 shadow-sm">Quando quiser comprar novamente, sua loja está a um toque de distância.</div></div></div>
                   </div>
-                </Transition>
-              </div>
+                </div>
+              </Transition>
             </div>
-            <div class="grid gap-4 lg:hidden"><article v-for="(step,index) in journeySteps" :key="step.label" class="reveal-card rounded-2xl border border-border bg-[#f7f9f8] p-6"><span class="grid size-10 place-items-center rounded-xl bg-emerald-50 text-primary"><component :is="step.icon" :size="19"/></span><small class="mt-5 block font-semibold text-primary">0{{ index + 1 }} · {{ step.label }}</small><h3 class="mt-2 text-xl font-semibold tracking-tight">{{ step.title }}</h3><p class="mt-2 text-sm leading-6 text-muted-foreground">{{ step.description }}</p></article></div>
           </div>
         </div>
       </section>

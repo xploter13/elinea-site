@@ -93,6 +93,8 @@ Preservar como base a sequência atual:
 7. Planos.
 8. Chamada final e rodapé.
 
+A jornada da venda usa uma composição inspirada na referência visual enviada em 14 de setembro de 2026: título e ação no topo, seletor horizontal das quatro etapas e um painel amplo que combina benefício comercial com uma cena do produto. A etapa ativa pode ser escolhida por clique, toque ou teclado. No mobile, o seletor passa para duas colunas e o painel empilha conteúdo e mockup. Manter a paleta da Elínea; o verde-limão da referência não faz parte da identidade aprovada.
+
 A faixa de logos segue a referência de um trilho horizontal contínuo, com cards de
 superfície suave e movimento uniforme. Os nomes sem imagem atualmente presentes são
 fallbacks tipográficos da implementação anterior, não comprovação de clientes. Trocar
