@@ -99,12 +99,14 @@ O ecossistema de recursos mantém a metáfora de módulos conectados, mas com hi
 
 A seção “Tecnologia sem peso” apresenta a comparação em uma única cena assimétrica: o cenário de montagem independente é plano e discreto, enquanto o painel Elínea recebe a elevação principal, cabeçalho no tom escuro oficial e itens conectados em verde. A seta entre os painéis comunica transição, não uma etapa interativa. No cenário independente, usar ícones semânticos da família Lucide para hospedagem, integrações, fornecedores e manutenção, evitando repetir símbolos de erro. No mobile, os dois cenários formam uma sequência vertical.
 
+A seção de planos usa os cinco planos e valores fornecidos pelo usuário como dados locais enquanto a integração definitiva não é feita. A composição é um carrossel editorial com três cards completos no desktop, dois no tablet e um no celular, sem deixar o último card visível cortado, com navegação por teclado e gesto, além de setas posicionadas em calhas laterais, centralizadas verticalmente e separadas dos cards por respiro claro. O contador visual foi removido e seu espaço passou a abrigar o switch Mensal/Anual. Enquanto não houver uma tabela anual confirmada, o valor anual exibido corresponde exatamente a 12 mensalidades, sem desconto implícito. O plano E-commerce recebe o selo “Recomendado”; o plano Completo preserva a superfície escura da marca, mas sem selo. Não apresentar desconto ou condição comercial sem dados confirmados. Para reduzir a carga visual, cada card mostra inicialmente seis recursos e oferece divulgação progressiva para revelar ou recolher sua lista completa; observações comerciais importantes continuam visíveis no estado resumido. As descrições dos cinco planos mantêm o mesmo comprimento de 145 caracteres e uma construção textual equivalente para alinhar o ritmo e a altura dos resumos.
+
 A faixa de logos segue a referência de um trilho horizontal contínuo, com cards de
 superfície suave e movimento uniforme. Os nomes sem imagem atualmente presentes são
 fallbacks tipográficos da implementação anterior, não comprovação de clientes. Trocar
 cada item pelo arquivo oficial e respectivo texto alternativo após confirmação.
 
-Os nomes, números, percentuais e estados de mockups não constituem dados reais. Não inventar clientes, depoimentos, resultados, descontos ou funcionalidades para preencher a interface. Preços e contratação devem continuar integrados aos dados e ao fluxo existentes.
+Os nomes, números, percentuais e estados de mockups não constituem dados reais. Não inventar clientes, depoimentos, resultados, descontos ou funcionalidades para preencher a interface. A seção de planos é a exceção temporária de integração: seus dados comerciais locais foram fornecidos explicitamente pelo usuário e devem ser preservados até a conexão definitiva com a API.
 
 ## Movimento e interação
 

@@ -4,7 +4,7 @@ import logoOfficialUrl from '~/assets/images/elinea-logo.svg'
 import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
 import {MarketingButton, MarketingLogoCarousel, MarketingSocialRail} from '@elinea/ui/marketing'
 import {
-  ArrowRight, BarChart3, Bell, Bot, Boxes, Building2, Check, CheckCircle2,
+  ArrowLeft, ArrowRight, BarChart3, Bell, Bot, Boxes, Building2, Check, CheckCircle2, ChevronDown,
   CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
   PackageCheck, Pill, Search, ServerCog, ShoppingBag, Store, Tag, Unplug, Wrench, X
 } from '@lucide/vue'
@@ -13,22 +13,26 @@ type Plan = {
   id: number
   name: string
   slug: string
-  description: string | null
-  monthly_amount: number | string
-  implementation_amount: number | string
-  currency: string
-  product_limit: number | null
+  description: string
+  monthly_amount: number | null
+  implementation_amount: number | null
+  implementation_label: string
   features: string[]
+  features_label?: string
+  note?: string
+  tone: 'neutral' | 'mint' | 'blue' | 'dark' | 'violet'
+  featured?: boolean
 }
-type PlansResponse = { data: Plan[] }
 type CheckoutResponse = { data: { public_id: string }, checkout_url: string }
 type FormKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
 
 const config = useRuntimeConfig()
 const pageRoot = ref<HTMLElement | null>(null)
-const plans = ref<Plan[]>([])
-const plansLoading = ref(true)
-const plansError = ref('')
+const plansCarousel = ref<HTMLElement | null>(null)
+const canScrollPlansBack = ref(false)
+const canScrollPlansForward = ref(true)
+const expandedPlanIds = ref<number[]>([])
+const billingCycle = ref<'monthly' | 'annual'>('monthly')
 const checkoutOpen = ref(false)
 const selectedPlan = ref<Plan | null>(null)
 const submitting = ref(false)
@@ -118,21 +122,102 @@ const connectedOperationItems = [
   'Evolução contínua da plataforma'
 ]
 
+const plans: Plan[] = [
+  {
+    id: 1,
+    name: 'Catálogo',
+    slug: 'catalogo',
+    description: 'Indicado para negócios que querem apresentar seus produtos online com organização, domínio próprio e contato direto, sem checkout dentro do site.',
+    monthly_amount: 9900,
+    implementation_amount: 49000,
+    implementation_label: 'R$ 490',
+    features: ['Catálogo de produtos', 'Categorias e marcas', 'Variações e imagens', 'Controle de estoque', 'Painel administrativo', 'Domínio próprio', 'SSL', 'Botão de contato pelo WhatsApp', 'Relatórios básicos', 'Suporte'],
+    tone: 'neutral'
+  },
+  {
+    id: 2,
+    name: 'WhatsApp',
+    slug: 'whatsapp',
+    description: 'Indicado para negócios que vendem pelo WhatsApp e querem transformar o atendimento manual em uma operação estruturada, automatizada e mensurável.',
+    monthly_amount: 24900,
+    implementation_amount: 0,
+    implementation_label: 'Grátis',
+    features: ['Catálogo de produtos', 'Controle de estoque', 'Gestão de contatos', 'Central de conversas', 'Atendimento pelo WhatsApp', 'Chatbot de vendas', 'Automações comerciais', 'Histórico de mensagens', 'Gestão de pedidos', 'Acompanhamento de vendas', 'Relatórios básicos', 'Campanhas pelo WhatsApp', 'Suporte'],
+    note: 'O consumo de mensagens poderá possuir franquia ou cobrança adicional conforme o modelo adotado com o provedor oficial de WhatsApp.',
+    tone: 'mint'
+  },
+  {
+    id: 3,
+    name: 'E-commerce',
+    slug: 'e-commerce',
+    description: 'Indicado para empresas que querem uma loja virtual completa, com uma jornada de compra online que reúne carrinho, checkout, pagamentos e pedidos.',
+    monthly_amount: 24900,
+    implementation_amount: 79000,
+    implementation_label: 'R$ 790',
+    features: ['Tudo do plano Catálogo', 'Carrinho de compras', 'Checkout', 'Gestão de pedidos', 'Pagamento online', 'Integração com gateways', 'Pix e cartão', 'Cálculo de frete', 'Cupons', 'Promoções', 'Avaliações de produtos', 'Lista de desejos', 'Newsletter', 'Campanhas por e-mail', 'E-mails transacionais', 'Relatórios comerciais completos', 'Integrações com serviços externos', 'Suporte'],
+    tone: 'blue',
+    featured: true
+  },
+  {
+    id: 4,
+    name: 'Completo',
+    slug: 'completo',
+    description: 'Indicado para negócios que querem integrar e-commerce, atendimento, vendas e automações pelo WhatsApp em uma operação única, organizada e segura.',
+    monthly_amount: 39900,
+    implementation_amount: 99000,
+    implementation_label: 'R$ 990',
+    features: ['Tudo do plano E-commerce', 'Central de atendimento pelo WhatsApp', 'Gestão de contatos e conversas', 'Chatbot de vendas', 'Automações pelo WhatsApp', 'Automação baseada em eventos de pedidos', 'Recuperação de oportunidades', 'Recuperação de carrinho abandonado', 'Mensagens automáticas de pedidos', 'Campanhas pelo WhatsApp', 'Histórico das conversas', 'Integração entre atendimento e pedidos', 'Relatórios completos', 'Suporte'],
+    note: 'O consumo de mensagens poderá possuir franquia ou cobrança adicional conforme o modelo adotado com o provedor oficial de WhatsApp.',
+    tone: 'dark'
+  },
+  {
+    id: 5,
+    name: 'Personalizado',
+    slug: 'personalizado',
+    description: 'Indicado para empresas com regras próprias, que precisam adaptar a Elínea com integrações, automações e recursos desenvolvidos para sua operação.',
+    monthly_amount: null,
+    implementation_amount: null,
+    implementation_label: 'Sob consulta',
+    features_label: 'Pode incluir',
+    features: ['Recursos do plano Completo', 'Layout exclusivo', 'Integrações personalizadas', 'Integração com ERP', 'Gateways específicos', 'Regras comerciais próprias', 'Funcionalidades sob demanda', 'Automações personalizadas', 'Relatórios personalizados', 'Acompanhamento técnico', 'Suporte prioritário'],
+    note: 'O projeto é analisado individualmente e pode envolver cobrança de implantação, desenvolvimento e mensalidade.',
+    tone: 'violet'
+  }
+]
+
 const money = (value: number | string) => new Intl.NumberFormat('pt-BR', {
   style: 'currency', currency: 'BRL', maximumFractionDigits: 0
 }).format(Number(value) / 100)
 
-const loadPlans = async () => {
-  plansLoading.value = true
-  plansError.value = ''
-  try {
-    plans.value = (await $fetch<PlansResponse>(`${config.public.apiBase}/plans`)).data
-  } catch {
-    plansError.value = 'Não foi possível carregar os planos agora. Tente novamente em instantes.'
-  } finally {
-    plansLoading.value = false
-  }
+const scrollPlans = (direction: -1 | 1) => {
+  const carousel = plansCarousel.value
+  if (!carousel) return
+  const card = carousel.querySelector<HTMLElement>('.plan-card')
+  if (!card) return
+  const gap = Number.parseFloat(getComputedStyle(carousel).columnGap) || 16
+  carousel.scrollBy({left: direction * (card.offsetWidth + gap), behavior: 'smooth'})
 }
+
+const updatePlanControls = () => {
+  const carousel = plansCarousel.value
+  if (!carousel) return
+  canScrollPlansBack.value = carousel.scrollLeft > 2
+  canScrollPlansForward.value = carousel.scrollLeft < carousel.scrollWidth - carousel.clientWidth - 2
+}
+
+const planBillingAmount = (plan: Plan) => billingCycle.value === 'annual'
+    ? (plan.monthly_amount || 0) * 12
+    : plan.monthly_amount || 0
+
+const isPlanExpanded = (planId: number) => expandedPlanIds.value.includes(planId)
+
+const togglePlanFeatures = (planId: number) => {
+  expandedPlanIds.value = isPlanExpanded(planId)
+      ? expandedPlanIds.value.filter(id => id !== planId)
+      : [...expandedPlanIds.value, planId]
+}
+
+const visiblePlanFeatures = (plan: Plan) => isPlanExpanded(plan.id) ? plan.features : plan.features.slice(0, 6)
 
 const openCheckout = (plan: Plan) => {
   selectedPlan.value = plan
@@ -188,9 +273,11 @@ const updateHeaderState = () => {
 }
 
 onMounted(async () => {
-  loadPlans()
   updateHeaderState()
+  await nextTick()
+  updatePlanControls()
   window.addEventListener('scroll', updateHeaderState, {passive: true})
+  window.addEventListener('resize', updatePlanControls, {passive: true})
 
   const [{default: gsap}, {ScrollTrigger}] = await Promise.all([
     import('gsap'),
@@ -276,6 +363,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateHeaderState)
+  window.removeEventListener('resize', updatePlanControls)
   destroyMotion?.()
 })
 </script>
@@ -635,52 +723,72 @@ onBeforeUnmount(() => {
 
       <section id="planos" class="plans-section py-24 lg:py-32">
         <div class="site-container">
-          <div class="section-reveal flex flex-wrap items-end justify-between gap-5">
-            <div><span class="site-label">Planos para o seu momento</span>
-              <h2 class="site-title">Comece com o que precisa.<br>Evolua quando fizer sentido.</h2></div>
-            <div class="join rounded-xl border border-border bg-white p-1 text-[10px] font-semibold">
-              <button class="join-item rounded-lg bg-primary px-5 py-2 text-white">Mensal</button>
-              <button class="join-item px-5 py-2">Anual <small class="ml-1 text-primary">Economize até 20%</small>
-              </button>
+          <div class="plans-heading section-reveal">
+            <div>
+              <span class="site-label">Planos para o seu momento</span>
+              <h2 class="site-title">Uma estrutura que<br>acompanha o seu negócio.</h2>
+            </div>
+            <div class="plans-heading__aside">
+              <p>Do catálogo essencial a uma operação feita sob medida. Escolha o ponto de partida e evolua dentro do mesmo ecossistema.</p>
+              <div class="plans-billing" aria-label="Periodicidade dos planos">
+                <span :class="{'is-active': billingCycle === 'monthly'}">Mensal</span>
+                <button type="button" role="switch" :aria-checked="billingCycle === 'annual'"
+                        :aria-label="billingCycle === 'monthly' ? 'Exibir valores anuais' : 'Exibir valores mensais'"
+                        @click="billingCycle = billingCycle === 'monthly' ? 'annual' : 'monthly'">
+                  <span aria-hidden="true"></span>
+                </button>
+                <span :class="{'is-active': billingCycle === 'annual'}">Anual</span>
+              </div>
             </div>
           </div>
-          <div v-if="plansError" class="alert alert-error mt-8 text-sm"><span>{{ plansError }}</span>
-            <MarketingButton variant="outline" type="button" @click="loadPlans">Tentar novamente</MarketingButton>
+          <div class="plans-carousel-shell">
+            <button class="plans-carousel-control plans-carousel-control--previous" type="button" aria-label="Ver plano anterior" :disabled="!canScrollPlansBack" @click="scrollPlans(-1)">
+              <ArrowLeft :size="21" aria-hidden="true"/>
+            </button>
+            <div ref="plansCarousel" class="plans-carousel" tabindex="0" role="region" aria-label="Planos disponíveis" @scroll.passive="updatePlanControls" @keydown.left.prevent="scrollPlans(-1)" @keydown.right.prevent="scrollPlans(1)">
+              <article v-for="plan in plans" :key="plan.id" class="plan-card" :class="[`plan-card--${plan.tone}`, {'plan-card--featured': plan.featured, 'plan-card--expanded': isPlanExpanded(plan.id)}]" :aria-label="`Plano ${plan.name}`">
+              <div class="plan-card__summary">
+                <div class="plan-card__name">
+                  <h3>{{ plan.name }}</h3>
+                  <span v-if="plan.featured">Recomendado</span>
+                </div>
+                <div class="plan-card__price">
+                  <template v-if="plan.monthly_amount !== null">
+                    <small>R$</small><strong>{{ money(planBillingAmount(plan)).replace('R$ ', '') }}</strong><span>/{{ billingCycle === 'monthly' ? 'mês' : 'ano' }}</span>
+                  </template>
+                  <strong v-else>Sob consulta</strong>
+                </div>
+                <p>{{ plan.description }}</p>
+                <dl>
+                  <div><dt>Implantação</dt><dd>{{ plan.implementation_label }}</dd></div>
+                  <div><dt>{{ billingCycle === 'monthly' ? 'Mensalidade' : 'Plano anual' }}</dt><dd>{{ plan.monthly_amount === null ? 'Sob consulta' : money(planBillingAmount(plan)) }}</dd></div>
+                </dl>
+                <MarketingButton class="plan-card__action" :variant="plan.featured || plan.tone === 'dark' ? 'solid' : 'outline'" type="button" @click="openCheckout(plan)">
+                  {{ plan.slug === 'personalizado' ? 'Conversar sobre o projeto' : 'Escolher este plano' }}
+                  <template #icon><ArrowRight :size="16" aria-hidden="true"/></template>
+                </MarketingButton>
+              </div>
+              <div class="plan-card__features">
+                <h4>{{ plan.features_label || 'Inclui' }}</h4>
+                <ul :id="`plan-features-${plan.id}`">
+                  <li v-for="feature in visiblePlanFeatures(plan)" :key="feature"><Check :size="15" aria-hidden="true"/>{{ feature }}</li>
+                </ul>
+                <button v-if="plan.features.length > 6" class="plan-card__features-toggle" type="button"
+                        :aria-expanded="isPlanExpanded(plan.id)" :aria-controls="`plan-features-${plan.id}`"
+                        @click="togglePlanFeatures(plan.id)">
+                  {{ isPlanExpanded(plan.id) ? 'Mostrar menos' : `Ver mais ${plan.features.length - 6} recursos` }}
+                  <ChevronDown :size="17" aria-hidden="true"/>
+                </button>
+                <p v-if="plan.note" class="plan-card__note">{{ plan.note }}</p>
+              </div>
+              </article>
+            </div>
+            <button class="plans-carousel-control plans-carousel-control--next" type="button" aria-label="Ver próximo plano" :disabled="!canScrollPlansForward" @click="scrollPlans(1)">
+              <ArrowRight :size="21" aria-hidden="true"/>
+            </button>
           </div>
-          <div v-if="plansLoading" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div v-for="item in 4" :key="item" class="skeleton h-[430px] rounded-2xl"></div>
-          </div>
-          <div v-else class="mt-10 grid gap-4 sm:grid-cols-2"
-               :class="plans.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'">
-            <article v-for="(plan,index) in plans" :key="plan.id"
-                     class="plan-card soft-card relative flex min-h-[430px] flex-col p-6"
-                     :class="index === 1 ? 'featured-plan border-primary ring-1 ring-primary' : ''"><span
-                v-if="index === 1"
-                class="absolute -top-3 right-5 rounded-full bg-primary px-4 py-1 text-[9px] font-bold text-white">Mais escolhido</span>
-              <h3 class="text-base font-bold">{{ plan.name }}</h3>
-              <p class="mt-1 min-h-10 text-[10px] text-muted-foreground">{{ plan.description }}</p>
-              <div class="mt-5"><span class="text-xs">R$</span> <strong
-                  class="text-3xl tracking-tight">{{ money(plan.monthly_amount).replace('R$ ', '') }}</strong><span
-                  class="text-[10px] text-muted-foreground">/mês</span></div>
-              <ul class="mt-6 grid gap-2 text-[11px]">
-                <li class="flex gap-2">
-                  <Check :size="14" class="text-primary"/>
-                  {{
-                    plan.product_limit ? `Até ${plan.product_limit.toLocaleString('pt-BR')} produtos` : 'Produtos ilimitados'
-                  }}
-                </li>
-                <li v-for="feature in plan.features" :key="feature" class="flex gap-2">
-                  <Check :size="14" class="shrink-0 text-primary"/>
-                  {{ feature }}
-                </li>
-              </ul>
-              <MarketingButton class="mt-auto w-full" :variant="index === 1 ? 'solid' : 'outline'" type="button"
-                               @click="openCheckout(plan)">Começar agora
-              </MarketingButton>
-            </article>
-          </div>
-          <p v-if="plans.length" class="mt-5 text-center text-[9px] text-muted-foreground">A implantação inclui
-            configuração, treinamento, personalização e publicação.</p></div>
+          <p class="plans-footnote">Deslize ou use as setas para comparar todos os planos.</p>
+        </div>
       </section>
 
       <section id="solucoes" class="site-container py-24 lg:py-32">
@@ -796,7 +904,7 @@ onBeforeUnmount(() => {
             <MarketingButton variant="outline" type="button" @click="closeCheckout">Cancelar</MarketingButton>
             <MarketingButton variant="solid" type="submit" :disabled="submitting"><span v-if="submitting"
                                                                                         class="loading loading-spinner loading-xs"></span>{{
-                submitting ? 'Abrindo pagamento...' : `Continuar — ${money(selectedPlan?.implementation_amount || 0)}`
+                submitting ? 'Abrindo pagamento...' : selectedPlan?.implementation_amount === null ? 'Enviar interesse' : `Continuar — ${money(selectedPlan?.implementation_amount || 0)}`
               }}
               <template #icon>
                 <ArrowRight v-if="!submitting" :size="16"/>
