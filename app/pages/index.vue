@@ -4,9 +4,9 @@ import logoOfficialUrl from '~/assets/images/elinea-logo.svg'
 import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
 import { MarketingButton, MarketingLogoCarousel, MarketingSocialRail } from '@elinea/ui/marketing'
 import {
-  ArrowRight, BarChart3, Bell, Bot, Building2, Check, CheckCircle2,
+  ArrowRight, BarChart3, Bell, Bot, Boxes, Building2, Check, CheckCircle2,
   CreditCard, LayoutTemplate, Mail, Menu, MessageCircle, Package,
-  PackageCheck, Pill, Search, ShoppingBag, Store, Tag, X
+  PackageCheck, Pill, Search, ServerCog, ShoppingBag, Store, Tag, Unplug, Wrench, X
 } from '@lucide/vue'
 
 type Plan = {
@@ -82,6 +82,20 @@ const ecosystemModules = [
   { icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto', tone: 'blue' },
   { icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham', tone: 'violet' },
   { icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento', tone: 'emerald' }
+]
+
+const manualOperationItems = [
+  { icon: ServerCog, label: 'Hospedagem e manutenção' },
+  { icon: Unplug, label: 'Integrações manuais' },
+  { icon: Boxes, label: 'Fornecedores separados' },
+  { icon: Wrench, label: 'Atualizações e correções' }
+]
+
+const connectedOperationItems = [
+  'Estrutura pronta para vender',
+  'Recursos trabalhando juntos',
+  'Uma operação centralizada',
+  'Evolução contínua da plataforma'
 ]
 
 const money = (value: number | string) => new Intl.NumberFormat('pt-BR', {
@@ -407,10 +421,44 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section class="complexity-section border-y border-border bg-white py-24 lg:py-32">
-        <div class="site-container grid gap-14 lg:grid-cols-[.7fr_1.3fr]">
-          <div class="section-reveal"><span class="site-label">Tecnologia sem peso</span><h2 class="site-title">Você cuida do negócio.<br>O Elínea organiza o digital.</h2><p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias ferramentas por conta própria.</p><MarketingButton class="mt-8" variant="solid" href="#planos">Começar com suporte<template #icon><ArrowRight :size="15"/></template></MarketingButton></div>
-          <div class="comparison-grid grid gap-4 sm:grid-cols-2"><article class="comparison-card border border-border bg-[#f6f7f6] p-7"><span class="text-xs font-semibold text-muted-foreground">Montando sozinho</span><ul class="mt-7 grid gap-4 text-sm text-muted-foreground"><li v-for="item in ['Hospedagem e manutenção','Integrações manuais','Fornecedores separados','Atualizações e correções']" :key="item" class="flex items-center gap-3"><X :size="16" class="shrink-0 text-[#9ba49f]"/>{{ item }}</li></ul></article><article class="comparison-card integrated border border-[#b9decf] bg-[#edf8f2] p-7"><span class="text-xs font-semibold text-primary">Operando com Elínea</span><ul class="mt-7 grid gap-4 text-sm font-medium"><li v-for="item in ['Estrutura pronta para vender','Recursos trabalhando juntos','Uma operação centralizada','Evolução contínua da plataforma']" :key="item" class="flex items-center gap-3"><CheckCircle2 :size="16" class="shrink-0 text-primary"/>{{ item }}</li></ul></article></div>
+      <section class="complexity-section py-24 lg:py-32">
+        <div class="site-container complexity-layout">
+          <div class="section-reveal complexity-intro">
+            <span class="site-label">Tecnologia sem peso</span>
+            <h2 class="site-title">Você cuida do negócio.<br>O Elínea organiza o digital.</h2>
+            <p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias ferramentas por conta própria.</p>
+            <div class="complexity-principle"><i aria-hidden="true"></i><p>A tecnologia trabalha nos bastidores. Você segue no controle.</p></div>
+            <MarketingButton class="mt-8" variant="solid" href="#planos">Começar com suporte<template #icon><ArrowRight :size="15"/></template></MarketingButton>
+          </div>
+
+          <div class="comparison-stage">
+            <header class="comparison-stage__header">
+              <div><span>Uma operação, dois cenários</span><h3>Menos peças soltas. Mais negócio andando.</h3></div>
+              <span class="comparison-status"><i aria-hidden="true"></i> Estrutura conectada</span>
+            </header>
+
+            <div class="comparison-grid">
+              <article class="comparison-card comparison-card--manual">
+                <header><span>Montando sozinho</span><small>Mais pontos para coordenar</small></header>
+                <ul>
+                  <li v-for="item in manualOperationItems" :key="item.label"><component :is="item.icon" :size="18" stroke-width="1.8" aria-hidden="true" />{{ item.label }}</li>
+                </ul>
+              </article>
+
+              <span class="comparison-direction" aria-hidden="true"><ArrowRight :size="20" /></span>
+
+              <article class="comparison-card comparison-card--connected">
+                <header><img :src="logoWhiteUrl" alt=""><span>Operando com Elínea</span></header>
+                <div class="comparison-card__body">
+                  <span>Uma base para operar</span>
+                  <h3>O digital trabalha junto.</h3>
+                  <ul>
+                    <li v-for="item in connectedOperationItems" :key="item"><CheckCircle2 :size="18" aria-hidden="true" />{{ item }}</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </div>
         </div>
       </section>
 
