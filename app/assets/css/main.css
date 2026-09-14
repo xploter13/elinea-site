@@ -10,14 +10,14 @@
     --color-base-100: oklch(1 0 0);
     --color-base-200: oklch(0.968 0.004 240);
     --color-base-300: oklch(0.91 0.006 240 / 68%);
-    --color-base-content: oklch(0.215 0.018 240);
+    --color-base-content: oklch(0.225 0.016 240);
     --color-primary: oklch(0.57 0.17 152);
     --color-primary-content: oklch(0.985 0.006 150);
     --color-secondary: oklch(0.958 0.006 240);
-    --color-secondary-content: oklch(0.215 0.018 240);
+    --color-secondary-content: oklch(0.225 0.016 240);
     --color-accent: oklch(0.953 0.008 240);
-    --color-accent-content: oklch(0.215 0.018 240);
-    --color-neutral: oklch(0.25 0.016 240);
+    --color-accent-content: oklch(0.225 0.016 240);
+    --color-neutral: oklch(0.195 0.014 240);
     --color-neutral-content: oklch(0.985 0.006 240);
     --color-success: oklch(0.57 0.17 152);
     --color-error: oklch(0.58 0.20 22);
@@ -47,30 +47,36 @@
     --color-border: var(--border-color);
     --color-input: var(--input);
     --color-ring: var(--ring);
+    --color-dark-100: var(--dark-base-100);
+    --color-dark-200: var(--dark-base-200);
+    --color-dark-300: var(--dark-base-300);
     --font-sans: "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
     --font-display: "Sora", "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
+    --dark-base-100: oklch(0.16 0.012 240);
+    --dark-base-200: oklch(0.195 0.014 240);
+    --dark-base-300: oklch(0.225 0.016 240);
     --background: #fafcfb;
-    --foreground: #17362c;
-    --heading-color: #031b39;
+    --foreground: var(--dark-base-300);
+    --heading-color: var(--dark-base-100);
     --surface: oklch(0.998 0.001 240);
     --surface-2: oklch(0.962 0.005 240);
     --card: #fff;
-    --card-foreground: oklch(0.215 0.018 240);
+    --card-foreground: var(--dark-base-300);
     --popover: #fff;
-    --popover-foreground: oklch(0.215 0.018 240);
+    --popover-foreground: var(--dark-base-300);
     --primary: #07945e;
     --primary-foreground: oklch(0.985 0.006 150);
     --muted: #edf2f0;
     --muted-foreground: #62716b;
     --accent: oklch(0.953 0.008 240);
-    --accent-foreground: oklch(0.215 0.018 240);
-    --border-color: rgba(13, 49, 36, .11);
+    --accent-foreground: var(--dark-base-300);
+    --border-color: oklch(0.225 0.016 240 / .11);
     --input: #fff;
     --ring: oklch(0.57 0.17 152 / 34%);
-    --shadow-soft: 0 1px 1px rgba(15, 23, 42, .025), 0 22px 60px -38px rgba(9, 52, 37, .35);
+    --shadow-soft: 0 1px 1px oklch(0.16 0.012 240 / .025), 0 22px 60px -38px oklch(0.16 0.012 240 / .35);
 }
 
 @layer base {
@@ -113,7 +119,7 @@
 
     ::selection {
         background: #bcefd4;
-        color: #063d29;
+        color: var(--dark-base-200);
     }
 }
 
@@ -197,7 +203,7 @@
     color: var(--foreground);
     border-bottom: 1px solid transparent;
     background: rgba(255, 255, 255, .2);
-    box-shadow: 0 14px 42px -36px rgba(23, 54, 44, .45);
+    box-shadow: 0 14px 42px -36px oklch(0.225 0.016 240 / .45);
     backdrop-filter: blur(4px) saturate(115%);
     transition: background-color .35s ease, border-color .35s ease, box-shadow .35s ease, backdrop-filter .35s ease;
 }
@@ -214,9 +220,9 @@
 }
 
 .premium-header.is-scrolled {
-    border-color: rgba(23, 54, 44, .09);
+    border-color: oklch(0.225 0.016 240 / .09);
     background: rgba(255, 255, 255, .96);
-    box-shadow: 0 16px 42px -24px rgba(23, 54, 44, .3);
+    box-shadow: 0 16px 42px -24px oklch(0.195 0.014 240 / .3);
     backdrop-filter: blur(18px) saturate(135%);
 }
 
@@ -284,7 +290,7 @@
 }
 
 .hero-photo-overlay {
-    background: linear-gradient(90deg, rgba(5, 17, 13, .94) 0%, rgba(8, 28, 21, .84) 29%, rgba(10, 32, 24, .52) 48%, rgba(10, 32, 24, .08) 70%, transparent 82%), linear-gradient(0deg, rgba(5, 17, 13, .25), transparent 38%);
+    background: linear-gradient(90deg, oklch(0.16 0.012 240 / .95) 0%, oklch(0.195 0.014 240 / .86) 29%, oklch(0.225 0.016 240 / .56) 48%, oklch(0.225 0.016 240 / .09) 70%, transparent 82%), linear-gradient(0deg, oklch(0.16 0.012 240 / .28), transparent 38%);
 }
 
 .hero-copy {
@@ -367,7 +373,7 @@
 
 .journey-tab.active {
     background: #fff;
-    box-shadow: 0 8px 24px -20px rgba(23, 54, 44, .48);
+    box-shadow: 0 8px 24px -20px oklch(0.195 0.014 240 / .48);
     color: var(--primary);
 }
 
@@ -601,23 +607,14 @@
     gap: clamp(40px, 5vw, 72px);
     margin-top: 72px;
     overflow: hidden;
-    border: 1px solid var(--border-color);
+    border: 1px solid oklch(0.225 0.016 240 / .08);
     border-radius: 36px;
-    background-color: #eef2f6;
-    background-image:
-        linear-gradient(rgba(3, 27, 57, .038) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(3, 27, 57, .038) 1px, transparent 1px);
-    background-size: 56px 56px;
+    background: #fff;
     padding: 48px 56px;
-    box-shadow: 0 42px 110px -76px rgba(3, 27, 57, .58), inset 0 1px 0 rgba(255, 255, 255, .95);
-}
-
-.ecosystem-stage::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(238, 242, 246, .94), transparent 24%, transparent 76%, rgba(238, 242, 246, .94));
-    content: '';
-    pointer-events: none;
+    box-shadow:
+        0 2px 5px oklch(0.16 0.012 240 / .025),
+        0 24px 54px -24px oklch(0.195 0.014 240 / .16),
+        0 64px 120px -68px oklch(0.16 0.012 240 / .22);
 }
 
 .ecosystem-connections {
@@ -714,7 +711,7 @@
     background: #fff;
     padding: clamp(28px, 3vw, 44px);
     color: var(--foreground);
-    box-shadow: 0 42px 90px -50px rgba(3, 27, 57, .62), inset 0 1px 0 #fff;
+    box-shadow: 0 42px 90px -50px oklch(0.16 0.012 240 / .62), inset 0 1px 0 #fff;
 }
 
 .ecosystem-core-card__top {
@@ -724,7 +721,7 @@
     gap: 24px;
     margin: clamp(-44px, -3vw, -28px) clamp(-44px, -3vw, -28px) 0;
     border-bottom: 1px solid rgba(161, 190, 222, .2);
-    background: linear-gradient(115deg, #031b39 0%, #0a3548 72%, #16433e 100%);
+    background: linear-gradient(115deg, var(--dark-base-100) 0%, var(--dark-base-200) 62%, var(--dark-base-300) 100%);
     padding: 25px clamp(28px, 3vw, 44px);
 }
 
@@ -765,7 +762,7 @@
 .ecosystem-core-card__copy h3 {
     max-width: 480px;
     margin-top: 12px;
-    color: #082844;
+    color: var(--dark-base-100);
     font-size: clamp(2.05rem, 2.55vw, 2.85rem);
     font-weight: 620;
     line-height: 1.02;
@@ -831,7 +828,7 @@
 
 .ecosystem-core-flow strong {
     margin-top: 2px;
-    color: #082844;
+    color: var(--dark-base-200);
     font-size: 11px;
     font-weight: 650;
     line-height: 1.25;
@@ -873,7 +870,7 @@
 .footer-wordmark {
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
-    color: rgba(23, 60, 48, .055);
+    color: oklch(0.225 0.016 240 / .055);
     font-size: clamp(4.5rem, 14vw, 11rem);
     font-weight: 800;
     line-height: .9;
@@ -1050,7 +1047,7 @@
 @media (max-width: 767px) {
     .hero-home {
         min-height: 980px;
-        background: #071812;
+        background: var(--dark-base-100);
     }
 
     .hero-layout {
@@ -1070,7 +1067,7 @@
     }
 
     .hero-photo-overlay {
-        background: rgba(5, 17, 13, .24);
+        background: oklch(0.16 0.012 240 / .24);
     }
 }
 
