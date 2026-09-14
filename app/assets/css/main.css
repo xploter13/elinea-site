@@ -48,11 +48,13 @@
     --color-input: var(--input);
     --color-ring: var(--ring);
     --font-sans: "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Sora", "Manrope", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
     --background: #fafcfb;
     --foreground: #17362c;
+    --heading-color: #031b39;
     --surface: oklch(0.998 0.001 240);
     --surface-2: oklch(0.962 0.005 240);
     --card: #fff;
@@ -90,6 +92,11 @@
         text-rendering: optimizeLegibility;
     }
 
+    h1, h2, h3 {
+        font-family: var(--font-display);
+        color: var(--heading-color);
+    }
+
     button, input {
         font: inherit;
     }
@@ -120,7 +127,8 @@
     }
 
     .site-title {
-        @apply text-[2.5rem] leading-[1.02] font-semibold tracking-[-.058em] text-foreground sm:text-[3.6rem] lg:text-[4.5rem];
+        @apply text-[2.5rem] leading-[1.01] font-semibold tracking-[-.038em] sm:text-[3.6rem] lg:text-[4.5rem];
+        color: var(--heading-color);
     }
 
     .site-copy {
@@ -287,6 +295,12 @@
     will-change: transform, opacity;
 }
 
+.hero-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -.045em;
+}
+
 .hero-mobile-line {
     display: none;
 }
@@ -420,7 +434,7 @@
     font-size: clamp(2rem, 3.2vw, 3.2rem);
     font-weight: 650;
     line-height: 1.03;
-    letter-spacing: -.052em;
+    letter-spacing: -.034em;
 }
 
 .journey-detail p {
@@ -755,7 +769,7 @@
     font-size: clamp(2.05rem, 2.55vw, 2.85rem);
     font-weight: 620;
     line-height: 1.02;
-    letter-spacing: -.055em;
+    letter-spacing: -.034em;
 }
 
 .ecosystem-core-card__copy p {
@@ -864,6 +878,7 @@
     font-weight: 800;
     line-height: .9;
     letter-spacing: -.075em;
+    font-family: var(--font-display);
     overflow: hidden;
 }
 
