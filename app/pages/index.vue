@@ -192,20 +192,22 @@ onMounted(async () => {
       })
     })
 
-    media.add('(min-width: 1024px)', () => {
-      gsap.to('.ecosystem-module', {
-        y: (index) => index % 2 === 0 ? -18 : 18,
-        ease: 'none',
-        scrollTrigger: { trigger: '.ecosystem-map', start: 'top bottom', end: 'bottom top', scrub: 1.1 }
-      })
+    const ecosystemIntro = gsap.timeline({
+      scrollTrigger: { trigger: '.ecosystem-stage', start: 'top 76%', once: true }
     })
-
-    gsap.fromTo('.ecosystem-line',
-      { strokeDasharray: 340, strokeDashoffset: 340 },
-      {
-        strokeDashoffset: 0, duration: 1.15, stagger: .08, ease: 'power2.inOut',
-        scrollTrigger: { trigger: '.ecosystem-map', start: 'top 72%', once: true }
-      })
+    ecosystemIntro
+      .from('.ecosystem-core-card', { opacity: 0, y: 28, scale: .975, duration: .75, ease: 'power3.out' })
+      .from('.ecosystem-module', {
+        opacity: 0,
+        x: (index) => index < 4 ? -22 : 22,
+        duration: .5,
+        stagger: .055,
+        ease: 'power2.out'
+      }, '-=.38')
+      .fromTo('.ecosystem-line',
+        { strokeDasharray: 360, strokeDashoffset: 360 },
+        { strokeDashoffset: 0, duration: .8, stagger: .045, ease: 'power2.inOut' },
+        '-=.62')
 
     gsap.from('.comparison-card', {
       opacity: 0,
@@ -358,12 +360,48 @@ onBeforeUnmount(() => {
 
       <section id="recursos" class="ecosystem-section py-24 lg:py-36">
         <div class="site-container">
-          <div class="section-reveal mx-auto max-w-3xl text-center"><span class="site-label">Um ecossistema, não um quebra-cabeça</span><h2 class="site-title">Tudo o que vende<br>trabalhando junto.</h2><p class="site-copy mx-auto">O Elínea conecta as ferramentas essenciais da operação e continua preparado para receber novos módulos e integrações.</p></div>
-          <div class="ecosystem-map relative mx-auto mt-16 max-w-5xl">
-            <svg class="pointer-events-none absolute inset-0 hidden h-full w-full lg:block" viewBox="0 0 1000 560" fill="none" aria-hidden="true"><path v-for="path in ['M500 280 L170 105','M500 280 L500 70','M500 280 L830 105','M500 280 L875 280','M500 280 L830 455','M500 280 L500 490','M500 280 L170 455','M500 280 L125 280']" :key="path" class="ecosystem-line" :d="path" stroke="#79b99e" stroke-width="1.4"/></svg>
-            <div class="ecosystem-grid relative grid grid-cols-2 gap-3 lg:grid-cols-3 lg:grid-rows-3 lg:gap-10">
-              <article v-for="(module,index) in ecosystemModules" :key="module.title" class="reveal-card ecosystem-module" :class="`module-${index + 1}`"><span class="grid size-10 place-items-center rounded-xl bg-emerald-50 text-primary"><component :is="module.icon" :size="18"/></span><div><h3 class="text-sm font-bold">{{ module.title }}</h3><p class="mt-1 text-[10px] text-muted-foreground">{{ module.detail }}</p></div></article>
-              <div class="ecosystem-core col-span-2 grid min-h-36 place-items-center rounded-[26px] bg-[#173c30] p-7 text-center text-white lg:col-span-1 lg:col-start-2 lg:row-start-2"><div><span class="text-xl font-extrabold tracking-[.12em]"><i class="not-italic text-[#5cdda4]">.</i>ELÍNEA</span><p class="mt-2 text-[10px] text-white/60">Uma operação conectada</p></div></div>
+          <div class="section-reveal ecosystem-heading">
+            <div class="max-w-[760px]">
+              <span class="site-label">Um ecossistema, não um quebra-cabeça</span>
+              <h2 class="site-title">Tudo o que vende<br>trabalhando junto.</h2>
+            </div>
+            <p class="site-copy">O Elínea conecta as ferramentas essenciais da operação e continua preparado para receber novos módulos e integrações.</p>
+          </div>
+
+          <div class="ecosystem-stage">
+            <svg class="ecosystem-connections" viewBox="0 0 1200 680" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <path v-for="path in ['M250 98 C330 98 340 238 420 238','M250 254 C330 254 345 292 420 292','M250 410 C330 410 345 346 420 346','M250 566 C330 566 340 400 420 400','M950 98 C870 98 860 238 780 238','M950 254 C870 254 855 292 780 292','M950 410 C870 410 855 346 780 346','M950 566 C870 566 860 400 780 400']" :key="path" class="ecosystem-line" :d="path" />
+            </svg>
+
+            <div class="ecosystem-rail ecosystem-rail--left">
+              <article v-for="module in ecosystemModules.slice(0, 4)" :key="module.title" class="ecosystem-module">
+                <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20" stroke-width="1.8" /></span>
+                <div><h3>{{ module.title }}</h3><p>{{ module.detail }}</p></div>
+              </article>
+            </div>
+
+            <article class="ecosystem-core-card">
+              <div class="ecosystem-core-card__top">
+                <img :src="logoWhiteUrl" alt="Elínea">
+                <span><i></i> Operação conectada</span>
+              </div>
+              <div class="ecosystem-core-card__copy">
+                <span>O centro da sua operação</span>
+                <h3>Um núcleo para tudo o que faz o negócio avançar.</h3>
+                <p>Loja, pedidos e relacionamento compartilham o mesmo contexto, do primeiro acesso à próxima compra.</p>
+              </div>
+              <div class="ecosystem-core-flow" role="list" aria-label="Fluxo conectado da plataforma">
+                <div role="listitem"><Store :size="19" aria-hidden="true" /><span><small>Venda</small><strong>Loja e checkout</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
+                <div role="listitem"><PackageCheck :size="19" aria-hidden="true" /><span><small>Operação</small><strong>Pedido organizado</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
+                <div role="listitem"><MessageCircle :size="19" aria-hidden="true" /><span><small>Relacionamento</small><strong>Cliente no contexto</strong></span><CheckCircle2 :size="18" aria-hidden="true" /></div>
+              </div>
+            </article>
+
+            <div class="ecosystem-rail ecosystem-rail--right">
+              <article v-for="module in ecosystemModules.slice(4)" :key="module.title" class="ecosystem-module">
+                <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20" stroke-width="1.8" /></span>
+                <div><h3>{{ module.title }}</h3><p>{{ module.detail }}</p></div>
+              </article>
             </div>
           </div>
         </div>
