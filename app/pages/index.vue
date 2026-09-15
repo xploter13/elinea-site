@@ -31,6 +31,7 @@ const pageRoot = ref<HTMLElement | null>(null)
 const plansCarousel = ref<HTMLElement | null>(null)
 const canScrollPlansBack = ref(false)
 const canScrollPlansForward = ref(true)
+const activeEcosystem = ref(0)
 const expandedPlanIds = ref<number[]>([])
 const billingCycle = ref<'monthly' | 'annual'>('monthly')
 const checkoutOpen = ref(false)
@@ -73,20 +74,6 @@ const journeySteps = [
 
 const selectJourneyStep = (index: number) => {
   activeJourney.value = index
-}
-
-const handleJourneyKeydown = async (event: KeyboardEvent, index: number) => {
-  let nextIndex = index
-  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % journeySteps.length
-  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + journeySteps.length) % journeySteps.length
-  else if (event.key === 'Home') nextIndex = 0
-  else if (event.key === 'End') nextIndex = journeySteps.length - 1
-  else return
-
-  event.preventDefault()
-  selectJourneyStep(nextIndex)
-  await nextTick()
-  document.getElementById(`journey-tab-${nextIndex}`)?.focus()
 }
 
 const segments = [
@@ -154,15 +141,35 @@ const brandLogos = [
 ]
 
 const ecosystemModules = [
-  {icon: Store, title: 'Loja virtual', detail: 'Sua marca no ar', tone: 'emerald'},
-  {icon: Package, title: 'Catálogo', detail: 'Produtos organizados', tone: 'blue'},
-  {icon: CreditCard, title: 'Pagamentos', detail: 'Pix, boleto e cartão', tone: 'amber'},
-  {icon: ShoppingBag, title: 'Pedidos', detail: 'Operação centralizada', tone: 'amber'},
-  {icon: Tag, title: 'Promoções', detail: 'Cupons e campanhas', tone: 'violet'},
-  {icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto', tone: 'blue'},
-  {icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham', tone: 'violet'},
-  {icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento', tone: 'emerald'}
+  {icon: Store, title: 'Loja virtual', detail: 'Sua marca no ar', description: 'Uma vitrine responsiva, organizada e pronta para apresentar seus produtos com identidade própria.', statement: 'Sua loja deixa de ser uma peça isolada e passa a iniciar todo o fluxo da venda.', tone: 'emerald'},
+  {icon: Package, title: 'Catálogo', detail: 'Produtos organizados', description: 'Categorias, variações, imagens e estoque reunidos para facilitar a rotina e a escolha do cliente.', statement: 'Produto, estoque e apresentação permanecem no mesmo contexto, sem informação espalhada.', tone: 'blue'},
+  {icon: CreditCard, title: 'Pagamentos', detail: 'Pix, boleto e cartão', description: 'Meios de pagamento integrados a uma jornada de compra direta, clara e segura.', statement: 'O pagamento acompanha a compra e mantém a operação atualizada depois da confirmação.', tone: 'amber'},
+  {icon: ShoppingBag, title: 'Pedidos', detail: 'Operação centralizada', description: 'Acompanhe o que foi vendido e mantenha cada pedido dentro do mesmo fluxo de operação.', statement: 'Cada nova venda já chega organizada para o negócio continuar andando.', tone: 'amber'},
+  {icon: Tag, title: 'Promoções', detail: 'Cupons e campanhas', description: 'Crie incentivos comerciais e destaque oportunidades sem perder o controle da operação.', statement: 'A campanha encontra o produto, a compra e o cliente dentro da mesma estrutura.', tone: 'violet'},
+  {icon: BarChart3, title: 'Relatórios', detail: 'Decisões com contexto', description: 'Visualize os dados comerciais da loja e transforme movimento em decisões mais bem informadas.', statement: 'Os dados deixam de ser peças soltas e passam a contar o que acontece na operação.', tone: 'blue'},
+  {icon: Bot, title: 'Automações', detail: 'Fluxos que trabalham', description: 'Conecte tarefas e eventos da venda para reduzir etapas repetitivas no dia a dia.', statement: 'A operação reage aos eventos da venda sem depender de uma sequência manual.', tone: 'violet'},
+  {icon: MessageCircle, title: 'WhatsApp', detail: 'Venda e relacionamento', description: 'Aproxime atendimento, oportunidades e histórico de conversas da jornada de compra.', statement: 'A conversa continua com o contexto da compra, do atendimento à próxima oportunidade.', tone: 'emerald'}
 ]
+
+const selectedEcosystem = computed(() => ecosystemModules[activeEcosystem.value]!)
+
+const selectEcosystem = (index: number) => {
+  activeEcosystem.value = (index + ecosystemModules.length) % ecosystemModules.length
+}
+
+const handleEcosystemKeydown = async (event: KeyboardEvent, index: number) => {
+  let nextIndex = index
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % ecosystemModules.length
+  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + ecosystemModules.length) % ecosystemModules.length
+  else if (event.key === 'Home') nextIndex = 0
+  else if (event.key === 'End') nextIndex = ecosystemModules.length - 1
+  else return
+
+  event.preventDefault()
+  selectEcosystem(nextIndex)
+  await nextTick()
+  document.getElementById(`ecosystem-tab-${nextIndex}`)?.focus()
+}
 
 const manualOperationItems = [
   {icon: ServerCog, label: 'Hospedagem e manutenção'},
@@ -466,25 +473,20 @@ onMounted(async () => {
 
     const ecosystemIntro = gsap.timeline({
       scrollTrigger: {
-        trigger: '.ecosystem-stage',
+        trigger: '.ecosystem-showcase',
         start: 'top 88%',
         end: 'top 32%',
         scrub: .8
       }
     })
     ecosystemIntro
-        .from('.ecosystem-core-card', {opacity: .25, scale: .93, duration: .7, ease: 'power2.out'})
-        .from('.ecosystem-module', {
+        .from('.ecosystem-showcase__panel', {
           opacity: 0,
-          x: (index) => index < 4 ? -48 : 48,
-          duration: .65,
-          stagger: .045,
+          y: (index) => index === 1 ? 54 : 30,
+          duration: .75,
+          stagger: .1,
           ease: 'power2.out'
-        }, '-=.52')
-        .fromTo('.ecosystem-line',
-            {strokeDasharray: 360, strokeDashoffset: 360},
-            {strokeDashoffset: 0, duration: .72, stagger: .035, ease: 'power1.inOut'},
-            '-=.58')
+        })
 
     const comparisonIntro = gsap.timeline({
       scrollTrigger: {
@@ -549,30 +551,6 @@ onMounted(async () => {
           ease: 'none',
           scrollTrigger: {trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: .8}
         })
-
-    media.add('(min-width: 1024px)', () => {
-      gsap.fromTo('.ecosystem-rail--left',
-          {y: 34},
-          {
-            y: -30,
-            ease: 'none',
-            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
-          })
-      gsap.fromTo('.ecosystem-rail--right',
-          {y: -28},
-          {
-            y: 34,
-            ease: 'none',
-            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
-          })
-      gsap.fromTo('.ecosystem-core-card',
-          {y: 18},
-          {
-            y: -18,
-            ease: 'none',
-            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
-          })
-    })
 
   }, root)
 
@@ -712,9 +690,7 @@ onBeforeUnmount(() => {
                   :class="{ active: activeJourney === index }"
                   :aria-selected="activeJourney === index"
                   aria-controls="journey-panel"
-                  :tabindex="activeJourney === index ? 0 : -1"
                   @click="selectJourneyStep(index)"
-                  @keydown="handleJourneyKeydown($event, index)"
               >
                 <span class="journey-tab__number">0{{ index + 1 }}</span>
                 <span>{{ step.label }}</span>
@@ -845,57 +821,56 @@ onBeforeUnmount(() => {
               receber novos módulos e integrações.</p>
           </div>
 
-          <div class="ecosystem-stage">
-            <svg class="ecosystem-connections" viewBox="0 0 1200 680" fill="none" preserveAspectRatio="none"
-                 aria-hidden="true">
-              <path
-                  v-for="(path,index) in ['M250 98 C330 98 340 238 420 238','M250 254 C330 254 345 292 420 292','M250 410 C330 410 345 346 420 346','M250 566 C330 566 340 400 420 400','M950 98 C870 98 860 238 780 238','M950 254 C870 254 855 292 780 292','M950 410 C870 410 855 346 780 346','M950 566 C870 566 860 400 780 400']"
-                  :key="path" class="ecosystem-line" :class="`tone-${ecosystemModules[index]?.tone}`" :d="path"/>
-            </svg>
+          <div class="ecosystem-tabs" role="tablist" aria-label="Módulos da plataforma">
+            <button v-for="(module, index) in ecosystemModules" :id="`ecosystem-tab-${index}`" :key="module.title"
+                    type="button" role="tab" :aria-selected="activeEcosystem === index"
+                    aria-controls="ecosystem-panel" :tabindex="activeEcosystem === index ? 0 : -1"
+                    :class="{ 'is-active': activeEcosystem === index }" @click="selectEcosystem(index)"
+                    @keydown="handleEcosystemKeydown($event, index)">{{ module.title }}</button>
+          </div>
 
-            <div class="ecosystem-rail ecosystem-rail--left">
-              <article v-for="module in ecosystemModules.slice(0, 4)" :key="module.title" class="ecosystem-module"
-                       :class="`tone-${module.tone}`">
-                <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20"
-                                                                                   stroke-width="1.8"/></span>
-                <div><h3>{{ module.title }}</h3>
-                  <p>{{ module.detail }}</p></div>
-              </article>
-            </div>
+          <div class="ecosystem-showcase" aria-live="polite">
+            <Transition name="ecosystem" mode="out-in">
+              <div id="ecosystem-panel" :key="activeEcosystem"
+                   class="ecosystem-showcase__inner" role="tabpanel"
+                   :aria-labelledby="`ecosystem-tab-${activeEcosystem}`">
+                <article class="ecosystem-showcase__panel ecosystem-editorial">
+                  <span>{{ selectedEcosystem.detail }}</span>
+                  <h3>{{ selectedEcosystem.title }}</h3>
+                  <p>{{ selectedEcosystem.description }}</p>
+                  <a href="#planos">Encontrar meu plano <ArrowRight :size="16" aria-hidden="true"/></a>
+                </article>
 
-            <article class="ecosystem-core-card">
-              <div class="ecosystem-core-card__top">
-                <img :src="logoWhiteUrl" alt="Elínea">
-                <span><i></i> Operação conectada</span>
-              </div>
-              <div class="ecosystem-core-card__copy">
-                <span>O centro da sua operação</span>
-                <h3>Toda a operação, no mesmo núcleo.</h3>
-                <p>Loja, pedidos e relacionamento compartilham o mesmo contexto, do primeiro acesso à próxima
-                  compra.</p>
-              </div>
-              <div class="ecosystem-core-flow" role="list" aria-label="Fluxo conectado da plataforma">
-                <div role="listitem">
-                  <Store :size="19" aria-hidden="true"/>
-                  <span><small>Venda</small><strong>Loja e checkout</strong></span></div>
-                <div role="listitem">
-                  <PackageCheck :size="19" aria-hidden="true"/>
-                  <span><small>Operação</small><strong>Pedidos</strong></span></div>
-                <div role="listitem">
-                  <MessageCircle :size="19" aria-hidden="true"/>
-                  <span><small>Relacionamento</small><strong>Clientes</strong></span></div>
-              </div>
-            </article>
+                <div class="ecosystem-showcase__panel ecosystem-visual" :class="`tone-${selectedEcosystem.tone}`"
+                     aria-hidden="true">
+                  <div class="ecosystem-visual__top"><span>Elínea</span><small>Módulo conectado</small></div>
+                  <div class="ecosystem-visual__scene">
+                    <i class="ecosystem-visual__orbit ecosystem-visual__orbit--one"></i>
+                    <i class="ecosystem-visual__orbit ecosystem-visual__orbit--two"></i>
+                    <span class="ecosystem-visual__icon"><component :is="selectedEcosystem.icon" :size="58"
+                                                                     stroke-width="1.35"/></span>
+                    <span class="ecosystem-visual__chip ecosystem-visual__chip--sale">Venda</span>
+                    <span class="ecosystem-visual__chip ecosystem-visual__chip--operation">Operação</span>
+                    <span class="ecosystem-visual__chip ecosystem-visual__chip--customer">Cliente</span>
+                  </div>
+                  <strong>{{ selectedEcosystem.title }}</strong>
+                </div>
 
-            <div class="ecosystem-rail ecosystem-rail--right">
-              <article v-for="module in ecosystemModules.slice(4)" :key="module.title" class="ecosystem-module"
-                       :class="`tone-${module.tone}`">
-                <span class="ecosystem-module__icon" aria-hidden="true"><component :is="module.icon" :size="20"
-                                                                                   stroke-width="1.8"/></span>
-                <div><h3>{{ module.title }}</h3>
-                  <p>{{ module.detail }}</p></div>
-              </article>
-            </div>
+                <aside class="ecosystem-showcase__panel ecosystem-statement">
+                  <p>{{ selectedEcosystem.statement }}</p>
+                  <div><span><i aria-hidden="true"></i> Um único contexto</span><small>Do primeiro acesso à próxima compra.</small></div>
+                </aside>
+              </div>
+            </Transition>
+          </div>
+
+          <div class="ecosystem-controls">
+            <button type="button" aria-label="Ver módulo anterior" @click="selectEcosystem(activeEcosystem - 1)">
+              <ArrowLeft :size="25" aria-hidden="true"/>
+            </button>
+            <button type="button" aria-label="Ver próximo módulo" @click="selectEcosystem(activeEcosystem + 1)">
+              <ArrowRight :size="25" aria-hidden="true"/>
+            </button>
           </div>
         </div>
       </section>
