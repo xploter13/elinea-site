@@ -142,7 +142,8 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 /* Operation */
 .operation { background: linear-gradient(90deg, #fafcfb 0%, #f5f9f6 100%); }
 .operation-title__line { display: block; overflow: hidden; padding-bottom: .07em; }
-.operation-title__text { display: block; }
+.operation-title__text { display: block; white-space: nowrap; }
+.operation-title__char { display: inline-block; }
 .operation-title__text--muted { color: #61706b; font-weight: 450; }
 .benefit-list { display: grid; gap: .65rem; margin: 1.5rem 0 0; padding: 0; list-style: none; color: #53645e; font-size: .92rem; font-weight: 600; }
 .benefit-list li { display: flex; align-items: center; gap: .65rem; }

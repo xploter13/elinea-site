@@ -102,7 +102,7 @@ onMounted(async () => {
       })
       const operationTitle = document.querySelector<HTMLElement>('[data-operation-title]')
       if (operationTitle) {
-        gsap.from(operationTitle.querySelectorAll('[data-operation-line]'), { yPercent: 110, duration: .72, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: operationTitle, start: 'top 84%', once: true } })
+        gsap.fromTo(operationTitle.querySelectorAll('[data-operation-char]'), { opacity: .14 }, { opacity: 1, duration: 1, stagger: .035, ease: 'none', scrollTrigger: { trigger: operationTitle, start: 'top 88%', end: 'bottom 45%', scrub: .65 } })
       }
       const path = document.querySelector<SVGPathElement>('[data-sale-path]')
       if (path) { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); gsap.to(path, { strokeDashoffset: 0, ease: 'none', scrollTrigger: { trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7 } }) }

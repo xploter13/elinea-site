@@ -8,6 +8,13 @@ const metrics = [
   { icon: Package, label: 'Produtos', value: '356 ativos' },
   { icon: TrendingUp, label: 'Conversões', value: '3,2%' },
 ]
+
+const titleLines = [
+  { text: 'Você cuida', muted: false },
+  { text: 'do negócio.', muted: false },
+  { text: 'O Elínea cuida', muted: true },
+  { text: 'do digital.', muted: true },
+]
 </script>
 
 <template>
@@ -20,10 +27,11 @@ const metrics = [
           data-operation-title
           aria-label="Você cuida do negócio. O Elínea cuida do digital."
         >
-          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text" data-operation-line>Você cuida</span></span>
-          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text" data-operation-line>do negócio.</span></span>
-          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text operation-title__text--muted" data-operation-line>O Elínea cuida</span></span>
-          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text operation-title__text--muted" data-operation-line>do digital.</span></span>
+          <span v-for="line in titleLines" :key="line.text" class="operation-title__line" aria-hidden="true">
+            <span class="operation-title__text" :class="{ 'operation-title__text--muted': line.muted }">
+              <span v-for="(character, index) in Array.from(line.text)" :key="`${line.text}-${index}`" class="operation-title__char" data-operation-char>{{ character === ' ' ? '\u00a0' : character }}</span>
+            </span>
+          </span>
         </h2>
         <p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias ferramentas por conta própria.</p>
         <ul class="benefit-list">
