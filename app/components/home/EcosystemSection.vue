@@ -1,16 +1,40 @@
 <script setup lang="ts">
-import { BarChart3, Bot, CreditCard, MessageCircle, Package, ShoppingBag, Store, Users } from '@lucide/vue'
+import { BarChart3, Bot, CreditCard, MessageCircle, Package, Pause, Play, ShoppingBag, Store, Users } from '@lucide/vue'
 
-const modules = [
-  { icon: Store, label: 'Loja virtual', pos: 'one' },
-  { icon: Package, label: 'Catálogo', pos: 'two' },
-  { icon: CreditCard, label: 'Pagamentos', pos: 'three' },
-  { icon: ShoppingBag, label: 'Pedidos', pos: 'four' },
-  { icon: Users, label: 'Clientes', pos: 'five' },
-  { icon: BarChart3, label: 'Relatórios', pos: 'six' },
-  { icon: Bot, label: 'Automação', pos: 'seven' },
-  { icon: MessageCircle, label: 'WhatsApp', pos: 'eight' },
+const outerModules = [
+  { icon: Store, label: 'Loja virtual' },
+  { icon: CreditCard, label: 'Pagamentos' },
+  { icon: ShoppingBag, label: 'Pedidos' },
+  { icon: Users, label: 'Clientes' },
+  { icon: MessageCircle, label: 'WhatsApp' },
 ]
+
+const innerModules = [
+  { icon: Package, label: 'Catálogo' },
+  { icon: BarChart3, label: 'Relatórios' },
+  { icon: Bot, label: 'Automação' },
+]
+
+const orbitRoot = ref<HTMLElement | null>(null)
+const manuallyPaused = ref(false)
+const isVisible = ref(false)
+const pageIsHidden = ref(false)
+const orbitIsPaused = computed(() => manuallyPaused.value || !isVisible.value || pageIsHidden.value)
+
+let observer: IntersectionObserver | undefined
+const updatePageVisibility = () => { pageIsHidden.value = document.hidden }
+
+onMounted(() => {
+  updatePageVisibility()
+  observer = new IntersectionObserver(([entry]) => { isVisible.value = Boolean(entry?.isIntersecting) }, { threshold: .12 })
+  if (orbitRoot.value) observer.observe(orbitRoot.value)
+  document.addEventListener('visibilitychange', updatePageVisibility)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  document.removeEventListener('visibilitychange', updatePageVisibility)
+})
 </script>
 
 <template>
@@ -23,12 +47,23 @@ const modules = [
         <a class="text-cta text-cta--light" href="#produto">Explorar a plataforma <span aria-hidden="true">→</span></a>
       </div>
 
-      <div class="ecosystem-orbit" aria-label="Módulos conectados à plataforma Elínea">
+      <div ref="orbitRoot" class="ecosystem-orbit" :class="{ 'is-paused': orbitIsPaused }" aria-label="Módulos conectados à plataforma Elínea">
         <i class="orbit orbit--outer" aria-hidden="true"></i><i class="orbit orbit--inner" aria-hidden="true"></i>
-        <div class="ecosystem-core"><span>ELÍNEA</span><small>Operação central</small></div>
-        <div v-for="module in modules" :key="module.label" class="ecosystem-module" :class="`ecosystem-module--${module.pos}`">
-          <component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span>
+        <div class="orbit-track orbit-track--outer">
+          <div v-for="(module, index) in outerModules" :key="module.label" class="ecosystem-node" :style="{ '--angle': `${index * 72 - 90}deg`, '--angle-negative': `${(index * 72 - 90) * -1}deg` }">
+            <div class="ecosystem-module"><component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span></div>
+          </div>
         </div>
+        <div class="orbit-track orbit-track--inner">
+          <div v-for="(module, index) in innerModules" :key="module.label" class="ecosystem-node" :style="{ '--angle': `${index * 120 - 30}deg`, '--angle-negative': `${(index * 120 - 30) * -1}deg` }">
+            <div class="ecosystem-module"><component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span></div>
+          </div>
+        </div>
+        <div class="ecosystem-core"><span>ELÍNEA</span><small>Operação central</small></div>
+        <button class="orbit-toggle" type="button" :aria-label="manuallyPaused ? 'Retomar movimento dos módulos' : 'Pausar movimento dos módulos'" :aria-pressed="manuallyPaused" @click="manuallyPaused = !manuallyPaused">
+          <Play v-if="manuallyPaused" :size="16" aria-hidden="true" /><Pause v-else :size="16" aria-hidden="true" />
+          <span>{{ manuallyPaused ? 'Retomar' : 'Pausar' }}</span>
+        </button>
       </div>
     </div>
   </section>
