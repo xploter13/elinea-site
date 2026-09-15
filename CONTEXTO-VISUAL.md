@@ -77,6 +77,9 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
 
+O carrossel de planos permanece rolável por gesto, teclado e controles visuais, mas a
+barra de rolagem nativa não deve ficar visível.
+
 O hero, o header e o footer preservam sua direção atual. Mudanças futuras devem ser
 refinamentos, salvo nova orientação explícita.
 
