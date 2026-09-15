@@ -75,7 +75,8 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
    narrativos para Pedidos, Catálogo, Clientes e WhatsApp. A imagem comunica controle
    por meio de objetos comerciais conectados a um núcleo verde, sem telas ou mockups
    de sistema.
-7. Segmentos em painéis editoriais expansíveis.
+7. Segmentos em painéis editoriais expansíveis. “Marcas próprias” usa uma natureza-morta
+   conceitual de embalagens fictícias unificadas pelo verde, sem logos ou textos.
 8. Integrações separadas entre disponíveis e em evolução, sem promessas indevidas.
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
@@ -184,6 +185,7 @@ Os assets da Home ficam em `app/assets/images`:
 - logos colorida e branca da Elínea;
 - fotografia principal do hero;
 - composição visual do comerciante/operação.
+- composição conceitual de embalagens para o segmento de marcas próprias.
 
 Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente atende à
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens
