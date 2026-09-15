@@ -97,6 +97,9 @@ refinamentos, salvo nova orientação explícita.
   “Você cuida do negócio” e “O Elínea cuida do digital”.
 - Na seção “Tudo sob controle”, os módulos operacionais aparecem progressivamente em
   cards conforme o scroll; no mobile, permanecem no fluxo vertical da página.
+- Os cards do mapa de integrações flutuam continuamente com movimentos curtos e
+  assíncronos. No mobile, deixam a composição absoluta e passam ao fluxo da página
+  ao redor do núcleo para preservar legibilidade e impedir overflow.
 - A linha do fluxo de venda é desenhada durante o scroll e os estados entram em
   sequência.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
