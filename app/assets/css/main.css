@@ -69,12 +69,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 .site-copy { max-width: 38rem; margin-top: 1.75rem; color: var(--muted); font-size: clamp(1rem, 1.15vw, 1.15rem); line-height: 1.72; }
 .chapter--dark .site-title { color: #fff; }
 .chapter--dark .site-copy { color: rgba(255,255,255,.59); }
-.text-cta { display: inline-flex; min-height: 48px; margin-top: 2rem; align-items: center; gap: .8rem; border-bottom: 1px solid var(--ink); font-size: .9rem; font-weight: 700; }
-.text-cta__icon { display: inline-flex; align-items: center; justify-content: center; color: var(--green); transition: transform .2s ease; }
-.text-cta:hover .text-cta__icon { transform: translateX(4px); }
-.text-cta--light { position: relative; border-bottom-color: transparent; color: white; }
-.text-cta--light::after { position: absolute; right: 0; bottom: 0; left: 0; height: 1px; background: rgba(255,255,255,.55); content: ''; transform: scaleX(0); transform-origin: left center; transition: transform .28s ease; }
-.text-cta--light:hover::after, .text-cta--light:focus-visible::after { transform: scaleX(1); }
+.chapter-text-cta { margin-top: 2rem; }
 .solid-cta { display: inline-flex; min-height: 50px; margin-top: 2rem; padding: 0 1.25rem; align-items: center; gap: .7rem; border-radius: .75rem; background: var(--green); color: white; font-size: .9rem; font-weight: 700; box-shadow: 0 16px 35px -20px #07945e; }
 .skip-link { position: fixed; z-index: 100; top: 8px; left: 8px; padding: .7rem 1rem; border-radius: .5rem; background: white; transform: translateY(-150%); }
 .skip-link:focus { transform: none; }

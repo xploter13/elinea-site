@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ArrowRight, BarChart3, Bot, CreditCard, MessageCircle, Package, ShoppingBag, Store, Users } from '@lucide/vue'
+import { BarChart3, Bot, CreditCard, MessageCircle, Package, ShoppingBag, Store, Users } from '@lucide/vue'
+import { MarketingTextButton } from '@elinea/ui/marketing'
 
 const outerModules = [
   { icon: Store, label: 'Loja virtual' },
@@ -43,10 +44,7 @@ onBeforeUnmount(() => {
         <p class="site-label">Um ecossistema, sem limites</p>
         <h2 class="site-title">Tudo o que<br>você precisa,<br>trabalhando<br>junto.</h2>
         <p class="site-copy">Do catálogo ao pós-venda, o Elínea conecta as ferramentas essenciais da sua operação em um só lugar.</p>
-        <a class="text-cta text-cta--light" href="#produto">
-          Explorar a plataforma
-          <span class="text-cta__icon" aria-hidden="true"><ArrowRight :size="16" /></span>
-        </a>
+        <MarketingTextButton class="chapter-text-cta" tone="light" href="#produto">Explorar a plataforma</MarketingTextButton>
       </div>
 
       <div ref="orbitRoot" class="ecosystem-orbit" :class="{ 'is-paused': orbitIsPaused }" aria-label="Módulos conectados à plataforma Elínea">

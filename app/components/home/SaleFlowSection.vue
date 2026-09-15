@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Check, CreditCard, MessageCircle, Package, ShoppingBag } from '@lucide/vue'
+import { MarketingTextButton } from '@elinea/ui/marketing'
 
 const steps = [
   { icon: ShoppingBag, label: 'Pedido realizado', value: 'R$ 129,90', className: 'sale-step--order' },
@@ -17,7 +18,7 @@ const steps = [
         <p class="site-label">Do clique ao cliente fiel</p>
         <h2 class="site-title">Uma venda<br>movimenta<br>tudo.</h2>
         <p class="site-copy">Cada venda no Elínea ativa uma operação completa: pagamento, estoque, comunicação e muito mais. Tudo acontece em um único ecossistema.</p>
-        <a class="text-cta" href="#ecossistema">Ver como funciona <span aria-hidden="true">→</span></a>
+        <MarketingTextButton class="chapter-text-cta" href="#ecossistema">Ver como funciona</MarketingTextButton>
       </div>
 
       <div class="sale-map" aria-label="Fluxo integrado de uma venda">
