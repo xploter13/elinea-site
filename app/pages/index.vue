@@ -583,11 +583,10 @@ onBeforeUnmount(() => {
         </a>
         <nav class="ml-auto hidden items-center gap-8 text-xs font-semibold text-muted-foreground lg:flex"
              aria-label="Navegação principal">
-          <a class="transition hover:text-primary" href="#jornada">Produto</a>
-          <a class="transition hover:text-primary" href="#solucoes">Soluções</a>
-          <a class="transition hover:text-primary" href="#planos">Preços</a>
-          <a class="transition hover:text-primary" href="#recursos">Recursos</a>
-          <a class="transition hover:text-primary" href="#rodape">Conteúdo</a>
+          <a class="transition hover:text-primary" href="#">Home</a>
+          <a class="transition hover:text-primary" href="#">Plataforma</a>
+          <a class="transition hover:text-primary" href="#">Preços</a>
+          <a class="transition hover:text-primary" href="#">Recursos</a>
         </nav>
         <a class="ml-auto hidden text-xs font-semibold text-muted-foreground hover:text-primary sm:block lg:ml-8"
            href="https://admin.elinea.com.br">Entrar</a>
@@ -646,11 +645,11 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <MarketingLogoCarousel :items="brandLogos">
+<!--      <MarketingLogoCarousel :items="brandLogos">
         <template #label>Uma plataforma para
           <mark>negócios reais</mark>
         </template>
-      </MarketingLogoCarousel>
+      </MarketingLogoCarousel>-->
 
       <section id="jornada" class="journey-section">
         <div class="site-container py-24 lg:py-32">
