@@ -787,7 +787,6 @@ onBeforeUnmount(() => {
               <ArrowRight :size="21" aria-hidden="true"/>
             </button>
           </div>
-          <p class="plans-footnote">Deslize ou use as setas para comparar todos os planos.</p>
         </div>
       </section>
 
