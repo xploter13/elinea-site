@@ -40,6 +40,7 @@ const submitError = ref('')
 const mobileMenuOpen = ref(false)
 const headerScrolled = ref(false)
 const activeJourney = ref(0)
+const activeSegment = ref(0)
 const form = reactive({owner_name: '', owner_email: '', phone: '', store_name: '', segment: ''})
 const formErrors = reactive<Partial<Record<FormKey, string>>>({})
 
@@ -86,6 +87,61 @@ const handleJourneyKeydown = async (event: KeyboardEvent, index: number) => {
   selectJourneyStep(nextIndex)
   await nextTick()
   document.getElementById(`journey-tab-${nextIndex}`)?.focus()
+}
+
+const segments = [
+  {
+    icon: Pill,
+    label: 'Farmácias de manipulação',
+    title: 'Uma experiência à altura do cuidado da sua farmácia.',
+    description: 'Apresente seu catálogo com clareza e transforme a procura do cliente em uma jornada de compra direta, profissional e bem acompanhada.',
+    emphasis: 'Catálogo especializado',
+    highlights: ['Produtos organizados', 'Compra direta', 'Atendimento conectado']
+  },
+  {
+    icon: Store,
+    label: 'Lojas especializadas',
+    title: 'Seu nicho ganha uma vitrine com identidade própria.',
+    description: 'Organize produtos, destaque o que torna sua curadoria diferente e ofereça uma compra simples sem perder a personalidade do negócio.',
+    emphasis: 'Vitrine de nicho',
+    highlights: ['Curadoria em destaque', 'Promoções', 'Checkout integrado']
+  },
+  {
+    icon: Building2,
+    label: 'Pequenos varejistas',
+    title: 'Uma estrutura digital que não pesa na rotina.',
+    description: 'Comece com o essencial para vender online e mantenha catálogo, pagamentos e pedidos reunidos enquanto a operação evolui.',
+    emphasis: 'Operação organizada',
+    highlights: ['Loja online', 'Pagamentos', 'Gestão de pedidos']
+  },
+  {
+    icon: LayoutTemplate,
+    label: 'Marcas próprias',
+    title: 'Sua marca conduz a experiência do começo ao fim.',
+    description: 'Construa presença digital em um espaço próprio, apresente seus produtos com consistência e reduza a dependência de marketplaces.',
+    emphasis: 'Marca em primeiro plano',
+    highlights: ['Identidade própria', 'Domínio próprio', 'Venda direta']
+  }
+]
+
+const selectedSegment = computed(() => segments[activeSegment.value]!)
+
+const selectSegment = (index: number) => {
+  activeSegment.value = index
+}
+
+const handleSegmentKeydown = async (event: KeyboardEvent, index: number) => {
+  let nextIndex = index
+  if (event.key === 'ArrowDown' || event.key === 'ArrowRight') nextIndex = (index + 1) % segments.length
+  else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') nextIndex = (index - 1 + segments.length) % segments.length
+  else if (event.key === 'Home') nextIndex = 0
+  else if (event.key === 'End') nextIndex = segments.length - 1
+  else return
+
+  event.preventDefault()
+  selectSegment(nextIndex)
+  await nextTick()
+  document.getElementById(`segment-tab-${nextIndex}`)?.focus()
 }
 
 const brandLogos = [
@@ -279,11 +335,12 @@ onMounted(async () => {
   window.addEventListener('scroll', updateHeaderState, {passive: true})
   window.addEventListener('resize', updatePlanControls, {passive: true})
 
-  const [{default: gsap}, {ScrollTrigger}] = await Promise.all([
+  const [{default: gsap}, {ScrollTrigger}, {SplitText}] = await Promise.all([
     import('gsap'),
-    import('gsap/ScrollTrigger')
+    import('gsap/ScrollTrigger'),
+    import('gsap/SplitText')
   ])
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger, SplitText)
 
   const root = pageRoot.value
   if (!root) return
@@ -310,47 +367,176 @@ onMounted(async () => {
         .to('.hero-photo', {scale: 1.06, y: 30, ease: 'none'}, 0)
 
 
-    root.querySelectorAll<HTMLElement>('.section-reveal').forEach((section) => {
-      gsap.from(section.children, {
-        opacity: 0, y: 18, duration: .55, stagger: .075, ease: 'power2.out',
-        scrollTrigger: {trigger: section, start: 'top 82%', toggleActions: 'play none none reverse'}
+    const journeyTitle = root.querySelector<HTMLElement>('.journey-title')
+    if (journeyTitle) {
+      const split = SplitText.create(journeyTitle, {
+        type: 'lines',
+        mask: 'lines',
+        linesClass: 'journey-title__line',
+        aria: 'auto'
+      })
+
+      gsap.from(split.lines, {
+        yPercent: 112,
+        rotate: 1.2,
+        transformOrigin: 'left bottom',
+        duration: .95,
+        stagger: .11,
+        ease: 'power4.out',
+        scrollTrigger: {trigger: journeyTitle, start: 'top 84%', once: true}
+      })
+    }
+
+    gsap.from('.journey-heading__support > *', {
+      opacity: 0,
+      y: 18,
+      duration: .65,
+      stagger: .1,
+      ease: 'power3.out',
+      scrollTrigger: {trigger: '.journey-heading__support', start: 'top 88%', once: true}
+    })
+
+    root.querySelectorAll<HTMLElement>('.motion-title').forEach((title) => {
+      const split = SplitText.create(title, {
+        type: 'lines',
+        mask: 'lines',
+        linesClass: 'motion-title__line',
+        aria: 'auto'
+      })
+
+      gsap.from(split.lines, {
+        yPercent: 108,
+        rotate: .8,
+        transformOrigin: 'left bottom',
+        duration: .85,
+        stagger: .09,
+        ease: 'power4.out',
+        scrollTrigger: {trigger: title, start: 'top 88%', once: true}
+      })
+    })
+
+    root.querySelectorAll<HTMLElement>('.section-reveal:not(.journey-heading)').forEach((section) => {
+      const supportingContent = section.querySelectorAll<HTMLElement>(
+          '.site-label, .site-copy, .complexity-principle, .complexity-intro > .marketing-button, .plans-heading__aside'
+      )
+      gsap.from(supportingContent, {
+        opacity: 0,
+        y: 16,
+        duration: .55,
+        stagger: .07,
+        ease: 'power2.out',
+        scrollTrigger: {trigger: section, start: 'top 86%', once: true}
       })
     })
 
     const ecosystemIntro = gsap.timeline({
-      scrollTrigger: {trigger: '.ecosystem-stage', start: 'top 76%', once: true}
+      scrollTrigger: {
+        trigger: '.ecosystem-stage',
+        start: 'top 88%',
+        end: 'top 32%',
+        scrub: .8
+      }
     })
     ecosystemIntro
-        .from('.ecosystem-core-card', {opacity: 0, y: 28, scale: .975, duration: .75, ease: 'power3.out'})
+        .from('.ecosystem-core-card', {opacity: .25, scale: .93, duration: .7, ease: 'power2.out'})
         .from('.ecosystem-module', {
           opacity: 0,
-          x: (index) => index < 4 ? -22 : 22,
-          duration: .5,
-          stagger: .055,
+          x: (index) => index < 4 ? -48 : 48,
+          duration: .65,
+          stagger: .045,
           ease: 'power2.out'
-        }, '-=.38')
+        }, '-=.52')
         .fromTo('.ecosystem-line',
             {strokeDasharray: 360, strokeDashoffset: 360},
-            {strokeDashoffset: 0, duration: .8, stagger: .045, ease: 'power2.inOut'},
-            '-=.62')
+            {strokeDashoffset: 0, duration: .72, stagger: .035, ease: 'power1.inOut'},
+            '-=.58')
 
-    gsap.from('.comparison-card', {
+    const comparisonIntro = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.comparison-stage',
+        start: 'top 90%',
+        end: 'top 38%',
+        scrub: .75
+      }
+    })
+    comparisonIntro
+        .from('.comparison-stage', {opacity: .35, y: 70, scale: .96, duration: .9, ease: 'power3.out'})
+        .from('.comparison-card--manual', {opacity: 0, x: -34, duration: .55, ease: 'power2.out'}, '-=.65')
+        .from('.comparison-card--connected', {opacity: 0, x: 42, duration: .65, ease: 'power2.out'}, '-=.48')
+        .from('.comparison-direction', {
+          opacity: 0,
+          rotate: -55,
+          scale: .6,
+          duration: .35,
+          ease: 'back.out(1.4)'
+        }, '-=.35')
+
+    gsap.from('.plan-card', {
       opacity: 0,
-      y: 36,
-      scale: .94,
-      duration: .85,
-      stagger: .12,
-      ease: 'power3.out',
-      scrollTrigger: {trigger: '.comparison-grid', start: 'top 78%', once: true}
+      y: 72,
+      rotate: (index) => [-1.6, .8, -0.6, 1.2, -.8][index] ?? 0,
+      duration: 1,
+      stagger: .09,
+      ease: 'power4.out',
+      clearProps: 'transform,opacity',
+      scrollTrigger: {trigger: '.plans-carousel-shell', start: 'top 84%', once: true}
     })
 
-    ScrollTrigger.batch('.reveal-card', {
-      start: 'top 88%',
-      once: true,
-      onEnter: (elements) => gsap.from(elements, {
-        opacity: 0, y: 20, scale: .97, duration: .55,
-        stagger: .07, ease: 'power2.out', overwrite: true
-      })
+    gsap.from('.segments-stage', {
+      opacity: .25,
+      y: 42,
+      clipPath: 'inset(0 0 100% 0 round 32px)',
+      duration: 1.1,
+      ease: 'power4.out',
+      clearProps: 'transform,opacity,clipPath',
+      scrollTrigger: {trigger: '.segments-stage', start: 'top 86%', once: true}
+    })
+
+    const closingIntro = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.closing-cta',
+        start: 'top 92%',
+        end: 'top 48%',
+        scrub: .75
+      }
+    })
+    closingIntro
+        .from('.closing-cta__copy', {opacity: .2, y: 54, duration: .8, ease: 'power3.out'})
+        .from('.closing-cta__action', {opacity: 0, y: 28, duration: .5, ease: 'power2.out'}, '-=.42')
+        .from('.closing-cta__rule', {scaleX: 0, duration: .7, ease: 'power2.inOut'}, '-=.6')
+
+    gsap.fromTo('.footer-wordmark img',
+        {opacity: .015, scale: .86, y: 34},
+        {
+          opacity: .075,
+          scale: 1,
+          y: 0,
+          ease: 'none',
+          scrollTrigger: {trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: .8}
+        })
+
+    media.add('(min-width: 1024px)', () => {
+      gsap.fromTo('.ecosystem-rail--left',
+          {y: 34},
+          {
+            y: -30,
+            ease: 'none',
+            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
+          })
+      gsap.fromTo('.ecosystem-rail--right',
+          {y: -28},
+          {
+            y: 34,
+            ease: 'none',
+            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
+          })
+      gsap.fromTo('.ecosystem-core-card',
+          {y: 18},
+          {
+            y: -18,
+            ease: 'none',
+            scrollTrigger: {trigger: '.ecosystem-section', start: 'top bottom', end: 'bottom top', scrub: .8}
+          })
     })
 
   }, root)
@@ -455,21 +641,31 @@ onBeforeUnmount(() => {
       <section id="jornada" class="journey-section">
         <div class="site-container py-24 lg:py-32">
           <div class="section-reveal journey-heading">
-            <div class="max-w-[760px]">
+            <div class="journey-heading__title">
               <span class="site-label">Uma venda movimenta tudo</span>
-              <h2 class="site-title">Da primeira visita<br>à próxima compra.</h2>
+              <h2 class="site-title journey-title">Da primeira visita<br>à próxima compra.</h2>
+            </div>
+            <div class="journey-heading__support">
               <p class="site-copy">Cada etapa conversa com a seguinte. Você acompanha a operação sem alternar entre
                 ferramentas e planilhas.</p>
+              <MarketingButton class="journey-heading__action" variant="solid" href="#recursos">Explorar recursos
+                <template #icon>
+                  <ArrowRight :size="16"/>
+                </template>
+              </MarketingButton>
             </div>
-            <MarketingButton class="journey-heading__action" variant="solid" href="#recursos">Explorar recursos
-              <template #icon>
-                <ArrowRight :size="16"/>
-              </template>
-            </MarketingButton>
           </div>
 
-          <div class="journey-shell">
+          <div
+              class="journey-shell"
+              :style="{ '--journey-progress': `${((activeJourney + 1) / journeySteps.length) * 100}%` }"
+          >
             <div class="journey-tabs" role="tablist" aria-label="Etapas de uma venda">
+              <div class="journey-tabs__intro" aria-hidden="true">
+                <span>Fluxo da venda</span>
+                <strong>0{{ activeJourney + 1 }} / 04</strong>
+                <i><b></b></i>
+              </div>
               <button
                   v-for="(step,index) in journeySteps"
                   :id="`journey-tab-${index}`"
@@ -496,6 +692,7 @@ onBeforeUnmount(() => {
                 :aria-labelledby="`journey-tab-${activeJourney}`"
                 tabindex="0"
             >
+              <div class="journey-panel__counter" aria-hidden="true">0{{ activeJourney + 1 }}</div>
               <Transition name="journey" mode="out-in">
                 <div :key="activeJourney" class="journey-panel__inner">
                   <div class="journey-detail">
@@ -606,7 +803,7 @@ onBeforeUnmount(() => {
           <div class="section-reveal ecosystem-heading">
             <div class="max-w-[760px]">
               <span class="site-label">Um ecossistema, não um quebra-cabeça</span>
-              <h2 class="site-title">Tudo o que vende<br>trabalhando junto.</h2>
+              <h2 class="site-title motion-title">Tudo o que vende<br>trabalhando junto.</h2>
             </div>
             <p class="site-copy">O Elínea conecta as ferramentas essenciais da operação e continua preparado para
               receber novos módulos e integrações.</p>
@@ -671,7 +868,7 @@ onBeforeUnmount(() => {
         <div class="site-container complexity-layout">
           <div class="section-reveal complexity-intro">
             <span class="site-label">Tecnologia sem peso</span>
-            <h2 class="site-title">Você cuida do negócio.<br>O Elínea organiza o digital.</h2>
+            <h2 class="site-title motion-title">Você cuida do negócio.<br>O Elínea organiza o digital.</h2>
             <p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias
               ferramentas por conta própria.</p>
             <div class="complexity-principle"><i aria-hidden="true"></i>
@@ -726,10 +923,11 @@ onBeforeUnmount(() => {
           <div class="plans-heading section-reveal">
             <div>
               <span class="site-label">Planos para o seu momento</span>
-              <h2 class="site-title">Uma estrutura que<br>acompanha o seu negócio.</h2>
+              <h2 class="site-title motion-title">Uma estrutura que<br>acompanha o seu negócio.</h2>
             </div>
             <div class="plans-heading__aside">
-              <p>Do catálogo essencial a uma operação feita sob medida. Escolha o ponto de partida e evolua dentro do mesmo ecossistema.</p>
+              <p>Do catálogo essencial a uma operação feita sob medida. Escolha o ponto de partida e evolua dentro do
+                mesmo ecossistema.</p>
               <div class="plans-billing" aria-label="Periodicidade dos planos">
                 <span :class="{'is-active': billingCycle === 'monthly'}">Mensal</span>
                 <button type="button" role="switch" :aria-checked="billingCycle === 'annual'"
@@ -742,89 +940,162 @@ onBeforeUnmount(() => {
             </div>
           </div>
           <div class="plans-carousel-shell">
-            <button class="plans-carousel-control plans-carousel-control--previous" type="button" aria-label="Ver plano anterior" :disabled="!canScrollPlansBack" @click="scrollPlans(-1)">
+            <button class="plans-carousel-control plans-carousel-control--previous" type="button"
+                    aria-label="Ver plano anterior" :disabled="!canScrollPlansBack" @click="scrollPlans(-1)">
               <ArrowLeft :size="21" aria-hidden="true"/>
             </button>
-            <div ref="plansCarousel" class="plans-carousel" tabindex="0" role="region" aria-label="Planos disponíveis" @scroll.passive="updatePlanControls" @keydown.left.prevent="scrollPlans(-1)" @keydown.right.prevent="scrollPlans(1)">
-              <article v-for="plan in plans" :key="plan.id" class="plan-card" :class="[`plan-card--${plan.tone}`, {'plan-card--featured': plan.featured, 'plan-card--expanded': isPlanExpanded(plan.id)}]" :aria-label="`Plano ${plan.name}`">
-              <div class="plan-card__summary">
-                <div class="plan-card__name">
-                  <h3>{{ plan.name }}</h3>
-                  <span v-if="plan.featured">Recomendado</span>
+            <div ref="plansCarousel" class="plans-carousel" tabindex="0" role="region" aria-label="Planos disponíveis"
+                 @scroll.passive="updatePlanControls" @keydown.left.prevent="scrollPlans(-1)"
+                 @keydown.right.prevent="scrollPlans(1)">
+              <article v-for="plan in plans" :key="plan.id" class="plan-card"
+                       :class="[`plan-card--${plan.tone}`, {'plan-card--featured': plan.featured, 'plan-card--expanded': isPlanExpanded(plan.id)}]"
+                       :aria-label="`Plano ${plan.name}`">
+                <div class="plan-card__summary">
+                  <div class="plan-card__name">
+                    <h3>{{ plan.name }}</h3>
+                    <span v-if="plan.featured">Recomendado</span>
+                  </div>
+                  <div class="plan-card__price">
+                    <template v-if="plan.monthly_amount !== null">
+                      <small>R$</small><strong>{{
+                        money(planBillingAmount(plan)).replace('R$ ', '')
+                      }}</strong><span>/{{ billingCycle === 'monthly' ? 'mês' : 'ano' }}</span>
+                    </template>
+                    <strong v-else>Sob consulta</strong>
+                  </div>
+                  <p>{{ plan.description }}</p>
+                  <dl>
+                    <div>
+                      <dt>Implantação</dt>
+                      <dd>{{ plan.implementation_label }}</dd>
+                    </div>
+                    <div>
+                      <dt>{{ billingCycle === 'monthly' ? 'Mensalidade' : 'Plano anual' }}</dt>
+                      <dd>{{ plan.monthly_amount === null ? 'Sob consulta' : money(planBillingAmount(plan)) }}</dd>
+                    </div>
+                  </dl>
+                  <MarketingButton class="plan-card__action"
+                                   :variant="plan.featured || plan.tone === 'dark' ? 'solid' : 'outline'" type="button"
+                                   @click="openCheckout(plan)">
+                    {{ plan.slug === 'personalizado' ? 'Conversar sobre o projeto' : 'Escolher este plano' }}
+                    <template #icon>
+                      <ArrowRight :size="16" aria-hidden="true"/>
+                    </template>
+                  </MarketingButton>
                 </div>
-                <div class="plan-card__price">
-                  <template v-if="plan.monthly_amount !== null">
-                    <small>R$</small><strong>{{ money(planBillingAmount(plan)).replace('R$ ', '') }}</strong><span>/{{ billingCycle === 'monthly' ? 'mês' : 'ano' }}</span>
-                  </template>
-                  <strong v-else>Sob consulta</strong>
+                <div class="plan-card__features">
+                  <h4>{{ plan.features_label || 'Inclui' }}</h4>
+                  <ul :id="`plan-features-${plan.id}`">
+                    <li v-for="feature in visiblePlanFeatures(plan)" :key="feature">
+                      <Check :size="15" aria-hidden="true"/>
+                      {{ feature }}
+                    </li>
+                  </ul>
+                  <button v-if="plan.features.length > 6" class="plan-card__features-toggle" type="button"
+                          :aria-expanded="isPlanExpanded(plan.id)" :aria-controls="`plan-features-${plan.id}`"
+                          @click="togglePlanFeatures(plan.id)">
+                    {{ isPlanExpanded(plan.id) ? 'Mostrar menos' : `Ver mais ${plan.features.length - 6} recursos` }}
+                    <ChevronDown :size="17" aria-hidden="true"/>
+                  </button>
+                  <p v-if="plan.note" class="plan-card__note">{{ plan.note }}</p>
                 </div>
-                <p>{{ plan.description }}</p>
-                <dl>
-                  <div><dt>Implantação</dt><dd>{{ plan.implementation_label }}</dd></div>
-                  <div><dt>{{ billingCycle === 'monthly' ? 'Mensalidade' : 'Plano anual' }}</dt><dd>{{ plan.monthly_amount === null ? 'Sob consulta' : money(planBillingAmount(plan)) }}</dd></div>
-                </dl>
-                <MarketingButton class="plan-card__action" :variant="plan.featured || plan.tone === 'dark' ? 'solid' : 'outline'" type="button" @click="openCheckout(plan)">
-                  {{ plan.slug === 'personalizado' ? 'Conversar sobre o projeto' : 'Escolher este plano' }}
-                  <template #icon><ArrowRight :size="16" aria-hidden="true"/></template>
-                </MarketingButton>
-              </div>
-              <div class="plan-card__features">
-                <h4>{{ plan.features_label || 'Inclui' }}</h4>
-                <ul :id="`plan-features-${plan.id}`">
-                  <li v-for="feature in visiblePlanFeatures(plan)" :key="feature"><Check :size="15" aria-hidden="true"/>{{ feature }}</li>
-                </ul>
-                <button v-if="plan.features.length > 6" class="plan-card__features-toggle" type="button"
-                        :aria-expanded="isPlanExpanded(plan.id)" :aria-controls="`plan-features-${plan.id}`"
-                        @click="togglePlanFeatures(plan.id)">
-                  {{ isPlanExpanded(plan.id) ? 'Mostrar menos' : `Ver mais ${plan.features.length - 6} recursos` }}
-                  <ChevronDown :size="17" aria-hidden="true"/>
-                </button>
-                <p v-if="plan.note" class="plan-card__note">{{ plan.note }}</p>
-              </div>
               </article>
             </div>
-            <button class="plans-carousel-control plans-carousel-control--next" type="button" aria-label="Ver próximo plano" :disabled="!canScrollPlansForward" @click="scrollPlans(1)">
+            <button class="plans-carousel-control plans-carousel-control--next" type="button"
+                    aria-label="Ver próximo plano" :disabled="!canScrollPlansForward" @click="scrollPlans(1)">
               <ArrowRight :size="21" aria-hidden="true"/>
             </button>
           </div>
         </div>
       </section>
 
-      <section id="solucoes" class="site-container py-24 lg:py-32">
-        <div class="section-reveal max-w-3xl"><span class="site-label">Feito para quem vende de verdade</span>
-          <h2 class="site-title">O mesmo núcleo.<br>Diferentes negócios.</h2>
-          <p class="site-copy">Começamos perto das farmácias de manipulação e construímos uma plataforma capaz de
-            acompanhar muitos outros segmentos.</p></div>
-        <div
-            class="mt-12 grid gap-px overflow-hidden rounded-[24px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-          <article
-              v-for="item in [{i:Pill,t:'Farmácias de manipulação',d:'Catálogo especializado e venda direta.'},{i:Store,t:'Lojas especializadas',d:'Uma vitrine profissional para o seu nicho.'},{i:Building2,t:'Pequenos varejistas',d:'Comece no digital com estrutura.'},{i:LayoutTemplate,t:'Marcas próprias',d:'Presença digital sem depender de marketplaces.'}]"
-              :key="item.t" class="reveal-card segment-card bg-white p-7">
-            <component :is="item.i" :size="25" class="text-primary"/>
-            <h3 class="mt-8 text-sm font-bold">{{ item.t }}</h3>
-            <p class="mt-2 text-xs leading-5 text-muted-foreground">{{ item.d }}</p></article>
-        </div>
-      </section>
+      <section id="solucoes" class="segments-section py-24 lg:py-32">
+        <div class="site-container">
+          <div class="section-reveal segments-heading">
+            <div>
+              <span class="site-label">Feito para quem vende de verdade</span>
+              <h2 class="site-title motion-title">O mesmo núcleo.<br>Diferentes negócios.</h2>
+            </div>
+            <p class="site-copy">Começamos perto das farmácias de manipulação e construímos uma plataforma capaz de
+              acompanhar muitos outros segmentos.</p>
+          </div>
 
-      <section class="closing-cta py-16">
-        <div class="site-container flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-          <div><span class="text-xs font-semibold text-primary">Sua operação pode começar simples.</span>
-            <h2 class="mt-3 text-3xl font-semibold tracking-[-.045em] sm:text-4xl">Seu negócio já existe.<br>Agora ele
-              pode vender online.</h2></div>
-          <div>
-            <MarketingButton variant="solid" href="#planos">Criar minha loja
-              <template #icon>
-                <ArrowRight :size="15"/>
-              </template>
-            </MarketingButton>
-            <p class="mt-3 text-[10px] text-muted-foreground">Setup assistido e suporte de verdade.</p></div>
+          <div class="segments-stage">
+            <div class="segments-index" role="tablist" aria-label="Escolha um segmento" aria-orientation="vertical">
+              <p class="segments-index__label">Encontre o seu negócio</p>
+              <button
+                  v-for="(item, index) in segments"
+                  :id="`segment-tab-${index}`"
+                  :key="item.label"
+                  class="segments-index__item"
+                  :class="{'is-active': activeSegment === index}"
+                  type="button"
+                  role="tab"
+                  :aria-selected="activeSegment === index"
+                  :aria-controls="`segment-panel-${index}`"
+                  :tabindex="activeSegment === index ? 0 : -1"
+                  @click="selectSegment(index)"
+                  @keydown="handleSegmentKeydown($event, index)"
+              >
+                <span class="segments-index__icon"><component :is="item.icon" :size="21" aria-hidden="true"/></span>
+                <span>{{ item.label }}</span>
+                <ArrowRight :size="18" aria-hidden="true"/>
+              </button>
+            </div>
+
+            <div class="segments-panel-shell">
+              <div class="segments-panel-shell__topbar" aria-hidden="true">
+                <span><i></i> Estrutura Elínea</span>
+                <span>{{ selectedSegment.emphasis }}</span>
+              </div>
+              <Transition name="segment-panel" mode="out-in">
+                <article
+                    :id="`segment-panel-${activeSegment}`"
+                    :key="activeSegment"
+                    class="segments-panel"
+                    role="tabpanel"
+                    :aria-labelledby="`segment-tab-${activeSegment}`"
+                    tabindex="0"
+                >
+                  <div class="segments-panel__intro">
+                    <span class="segments-panel__icon"><component :is="selectedSegment.icon" :size="27"
+                                                                  aria-hidden="true"/></span>
+                    <p>{{ selectedSegment.label }}</p>
+                  </div>
+                  <h3>{{ selectedSegment.title }}</h3>
+                  <p class="segments-panel__description">{{ selectedSegment.description }}</p>
+                  <div class="segments-panel__highlights" role="list" aria-label="Destaques para este segmento">
+                    <div v-for="highlight in selectedSegment.highlights" :key="highlight" role="listitem">
+                      <CheckCircle2 :size="18" aria-hidden="true"/>
+                      <span>{{ highlight }}</span>
+                    </div>
+                  </div>
+                </article>
+              </Transition>
+              <div class="segments-core">
+                <span>Núcleo compartilhado</span>
+                <div>
+                  <Store :size="17" aria-hidden="true"/>
+                  Loja
+                </div>
+                <div>
+                  <PackageCheck :size="17" aria-hidden="true"/>
+                  Gestão
+                </div>
+                <div>
+                  <MessageCircle :size="17" aria-hidden="true"/>
+                  Relacionamento
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer id="rodape" class="site-footer border-t py-12">
-      <div class="site-container grid gap-10 md:grid-cols-[1.2fr_2fr_auto]">
-        <div><a href="#inicio" class="text-lg font-extrabold tracking-widest"><span class="text-primary">.</span>ELÍNEA</a>
+    <footer id="rodape" class="site-footer py-12">
+      <div class="site-container footer-grid grid gap-10 md:grid-cols-[1.2fr_2fr_auto]">
+        <div><a href="#inicio" class="footer-logo" aria-label="Elínea — início"><img :src="logoWhiteUrl" alt=""></a>
           <p class="mt-3 text-[10px] text-muted-foreground">Ecommerce simples para negócios reais.</p></div>
         <div class="grid grid-cols-2 gap-8 text-[10px] sm:grid-cols-4">
           <div><b>Produto</b><a class="mt-3 block text-muted-foreground" href="#jornada">Como funciona</a><a
@@ -840,12 +1111,12 @@ onBeforeUnmount(() => {
               class="mt-2 block text-muted-foreground" href="#">Contato</a><a class="mt-2 block text-muted-foreground"
                                                                               href="#">Privacidade</a></div>
         </div>
-        <div class="flex gap-3 text-muted-foreground">
+        <div class="flex gap-3 text-muted-foreground" aria-hidden="true">
           <MessageCircle :size="17"/>
           <Mail :size="17"/>
         </div>
       </div>
-      <div class="footer-wordmark mt-14 py-5 text-center" aria-hidden="true">ELÍNEA</div>
+      <div class="footer-wordmark mt-14 py-5" aria-hidden="true"><img :src="logoWhiteUrl" alt=""></div>
       <div class="site-container mt-8 text-right text-[9px] text-muted-foreground">© 2026 Elínea. Todos os direitos
         reservados.
       </div>

@@ -1,6 +1,6 @@
 # Elínea — Contexto visual e direção do site
 
-Atualizado em 12 de setembro de 2026. Este documento registra o alinhamento com o responsável pelo projeto e orienta as próximas alterações. A implementação atual é uma base em evolução, não uma aprovação automática de cada detalhe. Novas orientações explícitas do usuário prevalecem; incorporar aqui as decisões que mudarem a direção.
+Atualizado em 15 de setembro de 2026. Este documento registra o alinhamento com o responsável pelo projeto e orienta as próximas alterações. A implementação atual é uma base em evolução, não uma aprovação automática de cada detalhe. Novas orientações explícitas do usuário prevalecem; incorporar aqui as decisões que mudarem a direção.
 
 ## Produto e posicionamento
 
@@ -21,6 +21,7 @@ O usuário gostou da organização das seções e do conteúdo. Refinamentos vis
 Referências fornecidas pelo usuário:
 
 - A página do iPhone, da Apple, orientou o ritmo de apresentação, o foco no produto e os efeitos ligados ao scroll. É uma referência de intenção, não uma especificação para copiar a identidade da Apple.
+- O demo Orisa (`https://orisa-html-demo.pages.dev/`) passou a orientar, em 15 de setembro de 2026, a direção visual e de movimento de todo o conteúdo abaixo do hero. Apropriar seu ritmo editorial, a escala tipográfica, o espaço negativo, as revelações por linha, a profundidade dos painéis e a coreografia ligada ao scroll sem copiar a identidade de agência, a paleta laranja, o cursor customizado ou efeitos decorativos excessivos.
 - A imagem aprovada para o hero é uma cena profissional com notebook em primeiro plano à esquerda e uma empreendedora à direita, em um ambiente contemporâneo iluminado. O asset foi escolhido e aprovado pelo usuário em 12 de setembro de 2026. Ela substitui a cena anterior com dashboard em perspectiva.
 - O portfólio de Luiz Fernando Costa foi uma referência exploratória anterior. Em caso de conflito, prevalecem o hero mais recente e as decisões registradas aqui.
 
@@ -112,10 +113,18 @@ Os nomes, números, percentuais e estados de mockups não constituem dados reais
 
 GSAP e ScrollTrigger são parte da direção solicitada. Usar movimento para apresentar o produto e acompanhar a progressão da jornada: entrada coordenada do hero, parallax sutil da fotografia e transições entre cenas.
 
+O hero atual deve ser preservado enquanto a direção visual das demais seções evolui. Abaixo dele, tratar movimento como um sistema de narrativa, não como uma coleção de entradas iguais: títulos curtos podem ser revelados por linhas; elementos visuais não interativos podem se mover em velocidades diferentes; linhas, máscaras e escalas podem responder ao progresso do scroll; e alguns momentos editoriais podem usar pinning ou empilhamento no desktop quando houver conteúdo suficiente para justificar a permanência. Usar a referência Orisa para cadência e espacialidade, mantendo a identidade, o conteúdo e a clareza comercial da Elínea.
+
+- Reservar revelações tipográficas mais expressivas para títulos curtos. Parágrafos e controles devem permanecer estáveis e confortáveis para leitura.
+- Aplicar parallax apenas a camadas visuais ou decorativas, com deslocamentos contidos; não mover texto de leitura, botões ou outros alvos interativos durante o uso.
+- Alternar momentos de maior intensidade com trechos calmos e bastante espaço negativo. Não repetir o mesmo reveal em todas as seções.
+- Evitar smooth scrolling forçado, cursor customizado, rotações gratuitas e animações que transformem o site de produto em um portfólio de agência.
+- Preferir timelines e ScrollTriggers agrupados por seção, com `matchMedia` para limitar coreografias complexas ao desktop e versões simplificadas no mobile.
+
 - Preservar o scroll natural e manter links e controles utilizáveis durante as animações.
 - Priorizar `transform` e `opacity`; evitar alterações de layout a cada frame.
 - Concentrar os efeitos mais elaborados em poucos momentos, sem movimento contínuo em todos os elementos.
-- Pinning da jornada e parallax secundário ficam restritos ao desktop; considerar também a altura disponível para não prender conteúdo fora da tela.
+- A jornada “Uma venda movimenta tudo” não usa pinning nem progressão automática pelo scroll; suas etapas ficam sob controle direto por clique, toque e teclado. O parallax secundário permanece restrito ao desktop, considerando também a altura disponível para não prender conteúdo fora da tela.
 - Respeitar `prefers-reduced-motion`, mantendo todo o conteúdo acessível sem animação.
 - Limpar contextos GSAP, ScrollTriggers e listeners ao desmontar a página.
 - Não deixar conteúdo permanentemente invisível se uma animação ou carregamento falhar.
