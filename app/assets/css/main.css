@@ -141,7 +141,8 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 
 /* Operation */
 .operation { background: linear-gradient(90deg, #fafcfb 0%, #f5f9f6 100%); }
-.operation-title__line { display: block; overflow: hidden; padding-bottom: .07em; }
+.operation-title { font-size: clamp(3rem, 4.7vw, 4.6rem); }
+.operation-title__line { display: block; padding-block: .035em .07em; }
 .operation-title__text { display: block; white-space: nowrap; }
 .operation-title__char { display: inline-block; }
 .operation-title__text--muted { color: #61706b; font-weight: 450; }
@@ -221,6 +222,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
   .split-layout { grid-template-columns: .9fr 1.1fr; gap: 3rem; }
   .desktop-nav { display: none; }.login-link { margin-left: auto; }.menu-toggle { display: grid; }
   .site-title { font-size: clamp(3.2rem, 7.2vw, 5.4rem); }
+  .operation-title { font-size: clamp(3rem, 5.8vw, 4.6rem); }
   .sale-map { min-height: 580px; }.sale-note { display: none; }
   .ecosystem-module { min-width: 96px; min-height: 68px; }
   .operation-scene { min-height: 590px; }.metric-stack { right: 0; }
@@ -240,6 +242,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
   :root { --section-space: clamp(4.5rem, 20vw, 7rem); --gutter: 1.25rem; }
   .chapter { min-height: auto; align-items: stretch; }.split-layout { grid-template-columns: 1fr; gap: 3.5rem; }
   .site-title { font-size: clamp(2.8rem, 13vw, 4.5rem); line-height: .97; }.site-copy { font-size: 1rem; line-height: 1.65; }
+  .operation-title { font-size: clamp(2.35rem, 11.4vw, 4rem); }
   .premium-header { background: rgba(5,18,15,.22); backdrop-filter: blur(10px); }.premium-header.is-scrolled { background: rgba(255,255,255,.96); }
   .header-inner { min-height: 68px; }.site-logo { width: 114px; }.login-link, .header-cta { display: none !important; }.menu-toggle { margin-left: auto; }
   .hero-home, .hero-layout { min-height: max(760px, 100svh); }.hero-photo { object-position: 66% center; }.hero-overlay { background: linear-gradient(180deg, rgba(4,17,14,.88) 0%, rgba(4,17,14,.72) 58%, rgba(4,17,14,.48) 100%); }.hero-layout { align-items: flex-start; padding-top: clamp(9rem, 25vh, 13rem); }.hero-copy { width: 100%; }.hero-title { font-size: clamp(3.3rem, 15.5vw, 5rem); }.hero-support { max-width: 32rem; font-size: 1rem; }.hero-actions { align-items: flex-start; flex-direction: column; }
