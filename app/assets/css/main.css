@@ -155,6 +155,10 @@
         padding-bottom: .08em;
     }
 
+    .text-reveal-word {
+        will-change: opacity;
+    }
+
     .site-copy {
         @apply mt-5 max-w-xl text-[15px] leading-7 text-muted-foreground;
     }

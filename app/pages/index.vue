@@ -367,7 +367,33 @@ onMounted(async () => {
         .to('.hero-copy', {y: -64, opacity: .28, ease: 'none'}, 0)
         .to('.hero-photo', {scale: 1.06, y: 30, ease: 'none'}, 0)
 
-    root.querySelectorAll<HTMLElement>('main .site-title').forEach((title) => {
+    root.querySelectorAll<HTMLElement>('main .site-title').forEach((title, index) => {
+      const usesScrollFill = index % 2 === 1
+
+      if (usesScrollFill) {
+        const split = SplitText.create(title, {
+          type: 'words',
+          wordsClass: 'text-reveal-word',
+          aria: 'auto'
+        })
+        textSplits.push(split)
+
+        gsap.fromTo(split.words,
+            {opacity: .18},
+            {
+              opacity: 1,
+              stagger: .12,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: title,
+                start: 'top 84%',
+                end: 'bottom 44%',
+                scrub: .65
+              }
+            })
+        return
+      }
+
       const split = SplitText.create(title, {
         type: 'lines',
         mask: 'lines',
