@@ -71,7 +71,10 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 3. Fluxo visual da venda, conectado por uma linha progressiva.
 4. Ecossistema escuro com módulos orbitando o núcleo “ELÍNEA — Operação central”.
 5. Operação: comerciante e pequenos indicadores reais do produto.
-6. Product shot amplo para provar que existe um produto operacional.
+6. Central de controle ampla: painel editorial, imagem conceitual da operação e cards
+   narrativos para Pedidos, Catálogo, Clientes e WhatsApp. A imagem comunica controle
+   por meio de objetos comerciais conectados a um núcleo verde, sem telas ou mockups
+   de sistema.
 7. Segmentos em painéis editoriais expansíveis.
 8. Integrações separadas entre disponíveis e em evolução, sem promessas indevidas.
 9. Planos e valores reais da aplicação.
@@ -91,6 +94,8 @@ refinamentos, salvo nova orientação explícita.
 - A headline da seção de operação é preenchida caractere a caractere pela opacidade,
   vinculada ao progresso do scroll com GSAP, preservando a diferença visual entre
   “Você cuida do negócio” e “O Elínea cuida do digital”.
+- Na seção “Tudo sob controle”, os módulos operacionais aparecem progressivamente em
+  cards conforme o scroll; no mobile, permanecem no fluxo vertical da página.
 - A linha do fluxo de venda é desenhada durante o scroll e os estados entram em
   sequência.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards

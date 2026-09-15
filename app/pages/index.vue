@@ -108,8 +108,8 @@ onMounted(async () => {
       if (path) { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); gsap.to(path, { strokeDashoffset: 0, ease: 'none', scrollTrigger: { trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7 } }) }
       gsap.from('.sale-step', { opacity: 0, y: 18, scale: .97, stagger: .16, duration: .5, scrollTrigger: { trigger: '.sale-map', start: 'top 72%', once: true } })
       gsap.from('.ecosystem-node', { opacity: 0, stagger: .08, duration: .55, ease: 'power2.out', scrollTrigger: { trigger: '.ecosystem-orbit', start: 'top 72%', once: true } })
-      gsap.from('.product-chip', { y: 28, opacity: 0, stagger: .09, duration: .6, scrollTrigger: { trigger: '.product-frame', start: 'top 75%', once: true } })
-      gsap.to('.product-frame > img', { yPercent: -3, ease: 'none', scrollTrigger: { trigger: '.product-frame', start: 'top bottom', end: 'bottom top', scrub: .8 } })
+      gsap.from('.control-card', { y: 70, opacity: 0, scale: .97, stagger: .2, ease: 'none', scrollTrigger: { trigger: '.control-stage', start: 'top 76%', end: 'bottom 58%', scrub: .65 } })
+      gsap.to('.control-stage__visual img', { yPercent: -3, scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.control-stage', start: 'top bottom', end: 'bottom top', scrub: .8 } })
     })
   }, pageRoot.value)
   destroyMotion = () => { mm.revert(); context.revert() }
