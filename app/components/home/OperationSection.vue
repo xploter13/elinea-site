@@ -15,7 +15,16 @@ const metrics = [
     <div class="site-container split-layout">
       <div class="chapter-copy reveal-copy">
         <p class="site-label">Tecnologia a favor de quem faz acontecer</p>
-        <h2 class="site-title">Você cuida<br>do negócio.<br><span>O Elínea cuida<br>do digital.</span></h2>
+        <h2
+          class="site-title operation-title"
+          data-operation-title
+          aria-label="Você cuida do negócio. O Elínea cuida do digital."
+        >
+          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text" data-operation-line>Você cuida</span></span>
+          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text" data-operation-line>do negócio.</span></span>
+          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text operation-title__text--muted" data-operation-line>O Elínea cuida</span></span>
+          <span class="operation-title__line" aria-hidden="true"><span class="operation-title__text operation-title__text--muted" data-operation-line>do digital.</span></span>
+        </h2>
         <p class="site-copy">Uma estrutura profissional sem precisar contratar uma equipe técnica ou integrar várias ferramentas por conta própria.</p>
         <ul class="benefit-list">
           <li><Check :size="16" />Mais tempo para o que importa</li>

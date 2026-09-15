@@ -96,7 +96,14 @@ onMounted(async () => {
         .from('.hero-support, .hero-action', { y: 15, opacity: 0, duration: .55, stagger: .07 }, '-=.45')
         .from('.hero-photo', { opacity: 0, scale: 1.035, duration: 1.25 }, '-=1.15')
       gsap.to('.hero-photo', { yPercent: 4, scale: 1.04, ease: 'none', scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: .8 } })
-      gsap.utils.toArray<HTMLElement>('.reveal-copy').forEach(block => gsap.from(block.children, { opacity: 0, y: 34, duration: .75, stagger: .09, ease: 'power3.out', scrollTrigger: { trigger: block, start: 'top 82%', once: true } }))
+      gsap.utils.toArray<HTMLElement>('.reveal-copy').forEach((block) => {
+        const children = Array.from(block.children).filter(child => !child.matches('[data-operation-title]'))
+        gsap.from(children, { opacity: 0, y: 34, duration: .75, stagger: .09, ease: 'power3.out', scrollTrigger: { trigger: block, start: 'top 82%', once: true } })
+      })
+      const operationTitle = document.querySelector<HTMLElement>('[data-operation-title]')
+      if (operationTitle) {
+        gsap.from(operationTitle.querySelectorAll('[data-operation-line]'), { yPercent: 110, duration: .72, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: operationTitle, start: 'top 84%', once: true } })
+      }
       const path = document.querySelector<SVGPathElement>('[data-sale-path]')
       if (path) { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); gsap.to(path, { strokeDashoffset: 0, ease: 'none', scrollTrigger: { trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7 } }) }
       gsap.from('.sale-step', { opacity: 0, y: 18, scale: .97, stagger: .16, duration: .5, scrollTrigger: { trigger: '.sale-map', start: 'top 72%', once: true } })

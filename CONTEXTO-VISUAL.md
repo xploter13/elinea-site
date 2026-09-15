@@ -88,6 +88,8 @@ refinamentos, salvo nova orientação explícita.
 - GSAP e ScrollTrigger são carregados dinamicamente na Home.
 - O hero possui entrada editorial e parallax sutil.
 - Blocos de conteúdo usam reveals curtos de opacidade e deslocamento.
+- A headline da seção de operação possui reveal mascarado linha a linha, preservando a
+  diferença visual entre “Você cuida do negócio” e “O Elínea cuida do digital”.
 - A linha do fluxo de venda é desenhada durante o scroll e os estados entram em
   sequência.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
