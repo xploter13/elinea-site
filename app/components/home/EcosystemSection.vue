@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BarChart3, Bot, CreditCard, MessageCircle, Package, Pause, Play, ShoppingBag, Store, Users } from '@lucide/vue'
+import { ArrowRight, BarChart3, Bot, CreditCard, MessageCircle, Package, ShoppingBag, Store, Users } from '@lucide/vue'
 
 const outerModules = [
   { icon: Store, label: 'Loja virtual' },
@@ -16,10 +16,9 @@ const innerModules = [
 ]
 
 const orbitRoot = ref<HTMLElement | null>(null)
-const manuallyPaused = ref(false)
 const isVisible = ref(false)
 const pageIsHidden = ref(false)
-const orbitIsPaused = computed(() => manuallyPaused.value || !isVisible.value || pageIsHidden.value)
+const orbitIsPaused = computed(() => !isVisible.value || pageIsHidden.value)
 
 let observer: IntersectionObserver | undefined
 const updatePageVisibility = () => { pageIsHidden.value = document.hidden }
@@ -44,7 +43,10 @@ onBeforeUnmount(() => {
         <p class="site-label">Um ecossistema, sem limites</p>
         <h2 class="site-title">Tudo o que<br>você precisa,<br>trabalhando<br>junto.</h2>
         <p class="site-copy">Do catálogo ao pós-venda, o Elínea conecta as ferramentas essenciais da sua operação em um só lugar.</p>
-        <a class="text-cta text-cta--light" href="#produto">Explorar a plataforma <span aria-hidden="true">→</span></a>
+        <a class="text-cta text-cta--light" href="#produto">
+          Explorar a plataforma
+          <span class="text-cta__icon" aria-hidden="true"><ArrowRight :size="16" /></span>
+        </a>
       </div>
 
       <div ref="orbitRoot" class="ecosystem-orbit" :class="{ 'is-paused': orbitIsPaused }" aria-label="Módulos conectados à plataforma Elínea">
@@ -60,10 +62,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="ecosystem-core"><span>ELÍNEA</span><small>Operação central</small></div>
-        <button class="orbit-toggle" type="button" :aria-label="manuallyPaused ? 'Retomar movimento dos módulos' : 'Pausar movimento dos módulos'" :aria-pressed="manuallyPaused" @click="manuallyPaused = !manuallyPaused">
-          <Play v-if="manuallyPaused" :size="16" aria-hidden="true" /><Pause v-else :size="16" aria-hidden="true" />
-          <span>{{ manuallyPaused ? 'Retomar' : 'Pausar' }}</span>
-        </button>
       </div>
     </div>
   </section>
