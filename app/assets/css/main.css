@@ -750,7 +750,7 @@
 
 .ecosystem-section {
     overflow: hidden;
-    background: #fafbfc;
+    background: #f3f6f5;
 }
 
 .ecosystem-heading .site-title,
@@ -1007,7 +1007,7 @@
     overflow: clip;
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
-    background: #f7f8f9;
+    background: #fff;
 }
 
 .complexity-layout {
@@ -1267,7 +1267,7 @@
 }
 
 .segments-section {
-    background: #fafcfb;
+    background: #fff;
 }
 
 .segments-heading {
@@ -1553,7 +1553,7 @@
 .plans-section {
     overflow: hidden;
     border-block: 1px solid var(--border-color);
-    background: #f8faf9;
+    background: #f3f6f5;
 }
 
 .plans-heading {

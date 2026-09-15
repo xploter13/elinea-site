@@ -16,6 +16,8 @@ Falar em benefícios concretos para o lojista. Detalhes como `tenant_id`, separa
 
 Aparência premium, clara e profissional, com produto em destaque, respiro, tipografia expressiva, luz natural, materiais realistas e profundidade por sombras. A sensação desejada é de uma operação simples, confiável e bem cuidada.
 
+Abaixo do hero, alternar fundos para dar ritmo e separar os capítulos sem depender de ornamentos: Jornada, “Tecnologia sem peso” e Segmentos usam branco puro; Ecossistema e Planos usam uma superfície cinza-esverdeada muito suave. Preservar contraste discreto entre essas faixas e concentrar a profundidade nos painéis internos.
+
 O usuário gostou da organização das seções e do conteúdo. Refinamentos visuais devem partir dessa estrutura, sem reorganizar toda a home por iniciativa própria.
 
 Referências fornecidas pelo usuário:
