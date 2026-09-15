@@ -146,6 +146,15 @@
         will-change: transform;
     }
 
+    .text-reveal-line {
+        display: block !important;
+        will-change: transform, opacity;
+    }
+
+    .text-reveal-line--title {
+        padding-bottom: .08em;
+    }
+
     .site-copy {
         @apply mt-5 max-w-xl text-[15px] leading-7 text-muted-foreground;
     }

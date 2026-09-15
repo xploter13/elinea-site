@@ -346,6 +346,7 @@ onMounted(async () => {
   if (!root) return
 
   const media = gsap.matchMedia()
+  const textSplits: Array<{ revert: () => void }> = []
   const context = gsap.context(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduceMotion) return
@@ -366,66 +367,74 @@ onMounted(async () => {
         .to('.hero-copy', {y: -64, opacity: .28, ease: 'none'}, 0)
         .to('.hero-photo', {scale: 1.06, y: 30, ease: 'none'}, 0)
 
-
-    const journeyTitle = root.querySelector<HTMLElement>('.journey-title')
-    if (journeyTitle) {
-      const split = SplitText.create(journeyTitle, {
-        type: 'lines',
-        mask: 'lines',
-        linesClass: 'journey-title__line',
-        aria: 'auto'
-      })
-
-      gsap.from(split.lines, {
-        yPercent: 112,
-        rotate: 1.2,
-        transformOrigin: 'left bottom',
-        duration: .95,
-        stagger: .11,
-        ease: 'power4.out',
-        scrollTrigger: {trigger: journeyTitle, start: 'top 84%', once: true}
-      })
-    }
-
-    gsap.from('.journey-heading__support > *', {
-      opacity: 0,
-      y: 18,
-      duration: .65,
-      stagger: .1,
-      ease: 'power3.out',
-      scrollTrigger: {trigger: '.journey-heading__support', start: 'top 88%', once: true}
-    })
-
-    root.querySelectorAll<HTMLElement>('.motion-title').forEach((title) => {
+    root.querySelectorAll<HTMLElement>('main .site-title').forEach((title) => {
       const split = SplitText.create(title, {
         type: 'lines',
         mask: 'lines',
-        linesClass: 'motion-title__line',
+        linesClass: 'text-reveal-line text-reveal-line--title',
         aria: 'auto'
       })
+      textSplits.push(split)
 
       gsap.from(split.lines, {
         yPercent: 108,
         rotate: .8,
         transformOrigin: 'left bottom',
-        duration: .85,
-        stagger: .09,
+        duration: .9,
+        stagger: .1,
         ease: 'power4.out',
-        scrollTrigger: {trigger: title, start: 'top 88%', once: true}
+        scrollTrigger: {trigger: title, start: 'top 86%', once: true}
       })
     })
 
-    root.querySelectorAll<HTMLElement>('.section-reveal:not(.journey-heading)').forEach((section) => {
-      const supportingContent = section.querySelectorAll<HTMLElement>(
-          '.site-label, .site-copy, .complexity-principle, .complexity-intro > .marketing-button, .plans-heading__aside'
-      )
-      gsap.from(supportingContent, {
+    root.querySelectorAll<HTMLElement>('main .section-reveal .site-label').forEach((label) => {
+      const split = SplitText.create(label, {
+        type: 'lines',
+        mask: 'lines',
+        linesClass: 'text-reveal-line text-reveal-line--label',
+        aria: 'auto'
+      })
+      textSplits.push(split)
+
+      gsap.from(split.lines, {
+        yPercent: 105,
         opacity: 0,
-        y: 16,
         duration: .55,
-        stagger: .07,
+        ease: 'power3.out',
+        scrollTrigger: {trigger: label, start: 'top 90%', once: true}
+      })
+    })
+
+    root.querySelectorAll<HTMLElement>(
+        'main .section-reveal .site-copy, main .plans-heading__aside > p, main .complexity-principle p'
+    ).forEach((copy) => {
+      const split = SplitText.create(copy, {
+        type: 'lines',
+        mask: 'lines',
+        linesClass: 'text-reveal-line text-reveal-line--copy',
+        aria: 'auto'
+      })
+      textSplits.push(split)
+
+      gsap.from(split.lines, {
+        opacity: 0,
+        yPercent: 70,
+        duration: .62,
+        stagger: .075,
         ease: 'power2.out',
-        scrollTrigger: {trigger: section, start: 'top 86%', once: true}
+        scrollTrigger: {trigger: copy, start: 'top 90%', once: true}
+      })
+    })
+
+    root.querySelectorAll<HTMLElement>(
+        '.journey-heading__action, .complexity-intro > .marketing-button'
+    ).forEach((action) => {
+      gsap.from(action, {
+        opacity: 0,
+        y: 14,
+        duration: .5,
+        ease: 'power2.out',
+        scrollTrigger: {trigger: action, start: 'top 92%', once: true}
       })
     })
 
@@ -544,6 +553,7 @@ onMounted(async () => {
   destroyMotion = () => {
     media.revert();
     context.revert()
+    textSplits.forEach((split) => split.revert())
   }
 })
 
