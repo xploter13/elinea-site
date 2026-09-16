@@ -85,7 +85,7 @@ onBeforeUnmount(() => destroyMotion?.())
             <h1 class="platform-hero__title"><span>Venda com</span><span>simplicidade.</span><span>Cresça com estrutura.</span></h1>
             <p class="platform-hero__copy">Crie sua loja, organize produtos, acompanhe pedidos e mantenha clientes e conversas no mesmo ecossistema.</p>
             <div class="platform-hero__actions">
-              <MarketingButton variant="primary" href="/#planos">Criar minha loja<template #icon><ArrowRight :size="17" /></template></MarketingButton>
+              <MarketingButton variant="primary" href="/precos#planos">Criar minha loja<template #icon><ArrowRight :size="17" /></template></MarketingButton>
               <MarketingTextButton tone="light" href="#recursos">Conhecer os recursos</MarketingTextButton>
             </div>
           </div>
@@ -118,7 +118,7 @@ onBeforeUnmount(() => destroyMotion?.())
             <p class="site-label">Uma presença digital que parece sua</p>
             <h2 class="site-title">Sua marca<br>na frente.<br><span>A estrutura<br>por trás.</span></h2>
             <p class="site-copy">A experiência de compra permanece simples para o cliente enquanto catálogo, estoque e pedidos trabalham juntos nos bastidores.</p>
-            <MarketingTextButton class="chapter-text-cta" href="/#planos">Criar minha loja</MarketingTextButton>
+            <MarketingTextButton class="chapter-text-cta" href="/precos#planos">Criar minha loja</MarketingTextButton>
           </div>
           <div class="storefront-scene" aria-label="Representação de uma loja virtual responsiva">
             <div class="storefront-window">
@@ -171,7 +171,7 @@ onBeforeUnmount(() => destroyMotion?.())
             <h2 class="site-title">Comece simples.<br>Evolua com<br>continuidade.</h2>
             <p class="site-copy">Da primeira organização do catálogo a uma operação com loja, pagamentos, automações e atendimento, a Elínea cresce junto com a sua rotina.</p>
             <ul><li><Check :size="17" /> Planos para diferentes momentos</li><li><Check :size="17" /> Processos conectados</li><li><Check :size="17" /> Suporte próximo</li></ul>
-            <MarketingTextButton class="chapter-text-cta" href="/#planos">Conhecer os planos</MarketingTextButton>
+            <MarketingTextButton class="chapter-text-cta" href="/precos#planos">Conhecer os planos</MarketingTextButton>
           </div>
         </div>
       </section>
@@ -193,7 +193,7 @@ onBeforeUnmount(() => destroyMotion?.())
         <div class="site-container final-cta__inner" data-platform-reveal>
           <p class="site-label">Sua próxima estrutura começa aqui</p><h2 class="site-title">Uma plataforma.<br>Seu negócio<br>em movimento.</h2>
           <p>Venda com uma base organizada hoje e continue evoluindo amanhã.</p>
-          <div><MarketingButton variant="primary" href="/#planos">Criar minha loja<template #icon><ArrowRight :size="18" /></template></MarketingButton><a href="mailto:contato@elinea.com.br">Falar com especialista</a></div>
+          <div><MarketingButton variant="primary" href="/precos#planos">Criar minha loja<template #icon><ArrowRight :size="18" /></template></MarketingButton><a href="mailto:contato@elinea.com.br">Falar com especialista</a></div>
         </div>
       </section>
     </main>

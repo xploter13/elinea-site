@@ -20,7 +20,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', updateHeader))
 const navigation = [
   { label: 'Home', to: '/' },
   { label: 'Plataforma', to: '/plataforma' },
-  { label: 'Preços', to: '/#planos' },
+  { label: 'Preços', to: '/precos' },
   { label: 'Recursos', to: '/#produto' },
 ]
 </script>
@@ -37,7 +37,7 @@ const navigation = [
         <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
       </nav>
       <a class="login-link" href="https://admin.elinea.com.br">Entrar</a>
-      <MarketingButton class="header-cta" variant="solid" href="/#planos">Criar minha loja<template #icon><ArrowRight :size="15" /></template></MarketingButton>
+      <MarketingButton class="header-cta" variant="solid" href="/precos#planos">Criar minha loja<template #icon><ArrowRight :size="15" /></template></MarketingButton>
       <button class="menu-toggle" type="button" aria-label="Alternar menu" :aria-expanded="mobileMenuOpen" aria-controls="menu-mobile" @click="mobileMenuOpen = !mobileMenuOpen">
         <X v-if="mobileMenuOpen" :size="23" /><Menu v-else :size="23" />
       </button>

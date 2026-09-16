@@ -18,7 +18,7 @@ const config = useRuntimeConfig()
         </div>
       </div>
       <div class="footer-links">
-        <div><b>Produto</b><NuxtLink to="/#jornada">Como funciona</NuxtLink><NuxtLink to="/plataforma">Recursos</NuxtLink><NuxtLink to="/#planos">Preços</NuxtLink></div>
+        <div><b>Produto</b><NuxtLink to="/#jornada">Como funciona</NuxtLink><NuxtLink to="/plataforma">Recursos</NuxtLink><NuxtLink to="/precos">Preços</NuxtLink></div>
         <div><b>Plataforma</b><NuxtLink to="/plataforma#integracoes">Integrações</NuxtLink><NuxtLink to="/#solucoes">Segmentos</NuxtLink><NuxtLink to="/#ecossistema">Ecossistema</NuxtLink></div>
         <div><b>Empresa</b><a href="#">Sobre</a><a href="mailto:contato@elinea.com.br">Contato</a><a href="#">Privacidade</a></div>
       </div>

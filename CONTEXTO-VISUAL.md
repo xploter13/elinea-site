@@ -105,6 +105,23 @@ barra de rolagem nativa não deve ficar visível.
 O hero, o header e o footer preservam sua direção atual. Mudanças futuras devem ser
 refinamentos, salvo nova orientação explícita.
 
+## Página Preços
+
+A rota `/precos` concentra a decisão comercial sem duplicar os dados da Home. Sua
+narrativa usa uma página de preços de ecommerce como referência de hierarquia, sem
+copiar texto, promessas ou identidade de concorrentes:
+
+1. Hero escuro e editorial com preço inicial e leitura rápida da estrutura comercial.
+2. Seção de planos reutilizada integralmente da Home.
+3. Comparação dos recursos centrais em tabela semântica e rolável no mobile.
+4. Capítulo escuro que separa mensalidade, implantação e evolução do projeto.
+5. Perguntas frequentes baseadas somente nas condições comerciais já cadastradas.
+6. CTA final, checkout existente e footer institucional.
+
+Os valores e recursos vivem em `app/data/plans.ts`. A Home e a página Preços usam a
+mesma fonte e o mesmo `app/components/pricing/CheckoutModal.vue`; qualquer alteração
+comercial deve ser feita nessa fonte única e validada antes de publicação.
+
 ## Movimento e interação
 
 - GSAP e ScrollTrigger são carregados dinamicamente na Home.
@@ -151,9 +168,10 @@ Componentes específicos da narrativa da Home ficam em `app/components/home`:
 - `IntegrationsSection.vue`
 - `PricingSection.vue`
 
-O `app/pages/index.vue` coordena a página, o header/footer, os dados atuais dos planos,
-o modal de contratação e a animação global. Evite devolver para esse arquivo detalhes
-visuais que já pertencem às seções.
+O `app/pages/index.vue` coordena a página, o header/footer e a animação global. Os dados
+dos planos e o modal de contratação são compartilhados com a página Preços. Evite
+devolver para esse arquivo detalhes visuais ou comerciais que já pertencem às fontes
+compartilhadas.
 
 Componentes compartilháveis não devem ser duplicados no site. Eles pertencem ao
 pacote irmão `@elinea/ui`, conforme o domínio:

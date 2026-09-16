@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Check, ChevronDown } from '@lucide/vue'
 import { MarketingButton } from '@elinea/ui/marketing'
-
-type Plan = {
-  id: number; name: string; slug: string; description: string; monthly_amount: number | null;
-  implementation_amount: number | null; implementation_label: string; features: string[];
-  features_label?: string; note?: string; featured?: boolean; tone: 'neutral' | 'mint' | 'blue' | 'dark' | 'violet';
-}
+import type { Plan } from '~/data/plans'
 
 const props = defineProps<{ plans: Plan[] }>()
 const emit = defineEmits<{ select: [plan: Plan] }>()
