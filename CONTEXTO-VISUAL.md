@@ -81,6 +81,24 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
 
+## Página Plataforma
+
+A rota `/plataforma` aprofunda o produto sem repetir a Home. Sua narrativa aprovada é:
+
+1. Hero escuro com uma composição de operação construída em HTML/CSS.
+2. Loja virtual responsiva e identidade da marca.
+3. Fluxo que conecta venda, rotina, comunicação e decisão.
+4. Recursos apresentados em capítulos editoriais: loja, catálogo, pedidos, clientes e
+   WhatsApp/automações.
+5. Evolução da operação sem precisar recomeçar.
+6. Mapa de integrações reutilizado da Home.
+7. Três passos para começar e CTA final.
+
+A página usa a hierarquia de páginas de produto como referência conceitual, mas não
+replica conteúdo, claims, preços ou identidade de concorrentes. Header e footer ficam
+nos componentes compartilhados `app/components/site/SiteHeader.vue` e
+`app/components/site/SiteFooter.vue` e devem ser reutilizados pelas páginas públicas.
+
 O carrossel de planos permanece rolável por gesto, teclado e controles visuais, mas a
 barra de rolagem nativa não deve ficar visível.
 

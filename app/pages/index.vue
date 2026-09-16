@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import heroUrl from '~/assets/images/h3-slider-img-1.webp'
-import logoUrl from '~/assets/images/elinea-logo.svg'
-import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
 import SaleFlowSection from '~/components/home/SaleFlowSection.vue'
 import EcosystemSection from '~/components/home/EcosystemSection.vue'
 import OperationSection from '~/components/home/OperationSection.vue'
@@ -9,8 +7,8 @@ import ProductShotSection from '~/components/home/ProductShotSection.vue'
 import SegmentsSection from '~/components/home/SegmentsSection.vue'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import PricingSection from '~/components/home/PricingSection.vue'
-import {MarketingButton, MarketingSocialRail} from '@elinea/ui/marketing'
-import {ArrowRight, Menu, X} from '@lucide/vue'
+import {MarketingButton} from '@elinea/ui/marketing'
+import {ArrowRight, X} from '@lucide/vue'
 
 type Plan = {
   id: number; name: string; slug: string; description: string; monthly_amount: number | null;
@@ -22,8 +20,6 @@ type FormKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
 
 const config = useRuntimeConfig()
 const pageRoot = ref<HTMLElement | null>(null)
-const mobileMenuOpen = ref(false)
-const headerScrolled = ref(false)
 const checkoutOpen = ref(false)
 const checkoutDialog = ref<HTMLDialogElement | null>(null)
 const selectedPlan = ref<Plan | null>(null)
@@ -151,9 +147,6 @@ const submitCheckout = async () => {
 }
 
 let destroyMotion: (() => void) | undefined
-const updateHeader = () => {
-  headerScrolled.value = window.scrollY > 24
-}
 
 watch(checkoutOpen, async (isOpen) => {
   await nextTick()
@@ -166,8 +159,6 @@ watch(checkoutOpen, async (isOpen) => {
 })
 
 onMounted(async () => {
-  updateHeader();
-  window.addEventListener('scroll', updateHeader, {passive: true})
   const [{default: gsap}, {ScrollTrigger}] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
   gsap.registerPlugin(ScrollTrigger)
   if (!pageRoot.value) return
@@ -268,7 +259,6 @@ onMounted(async () => {
   }
 })
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', updateHeader);
   checkoutDialog.value?.close();
   destroyMotion?.()
 })
@@ -277,29 +267,7 @@ onBeforeUnmount(() => {
 <template>
   <div ref="pageRoot" class="page-shell">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <MarketingSocialRail :facebook-href="config.public.facebookUrl" :instagram-href="config.public.instagramUrl"/>
-    <header data-header class="premium-header" :class="{ 'is-scrolled': headerScrolled }">
-      <div class="site-container header-inner"><a href="#inicio" class="site-logo" aria-label="Elínea — início"><img
-          class="logo-white" :src="logoWhiteUrl" alt=""><img class="logo-color" :src="logoUrl" alt=""></a>
-        <nav class="desktop-nav" aria-label="Navegação principal"><a href="#inicio">Home</a><a href="#ecossistema">Plataforma</a><a
-            href="#planos">Preços</a><a href="#produto">Recursos</a></nav>
-        <a class="login-link" href="https://admin.elinea.com.br">Entrar</a>
-        <MarketingButton class="header-cta" variant="solid" href="#planos">Criar minha loja
-          <template #icon>
-            <ArrowRight :size="15"/>
-          </template>
-        </MarketingButton>
-        <button class="menu-toggle" type="button" aria-label="Alternar menu" :aria-expanded="mobileMenuOpen"
-                aria-controls="menu-mobile" @click="mobileMenuOpen = !mobileMenuOpen">
-          <X v-if="mobileMenuOpen" :size="23"/>
-          <Menu v-else :size="23"/>
-        </button>
-      </div>
-      <nav v-if="mobileMenuOpen" id="menu-mobile" class="mobile-nav" aria-label="Navegação móvel"><a
-          v-for="item in [{ l: 'Home', h: '#inicio' }, { l: 'Plataforma', h: '#ecossistema' }, { l: 'Recursos', h: '#produto' }, { l: 'Soluções', h: '#solucoes' }, { l: 'Preços', h: '#planos' }]"
-          :key="item.h" :href="item.h" @click="mobileMenuOpen = false">{{ item.l }}</a><a
-          href="https://admin.elinea.com.br">Entrar</a></nav>
-    </header>
+    <SiteHeader/>
     <main id="conteudo">
       <section id="inicio" class="hero-home"><img class="hero-photo" :src="heroUrl"
                                                   alt="Empreendedora trabalhando ao lado de um notebook"
@@ -345,32 +313,7 @@ onBeforeUnmount(() => {
         </div>
       </section>
     </main>
-    <footer id="rodape" class="site-footer">
-      <div class="site-container footer-grid">
-        <div class="footer-brand"><a href="#inicio" aria-label="Elínea — início"><img :src="logoWhiteUrl" alt="Elínea"></a>
-          <p>Ecommerce simples para negócios reais.</p>
-          <div class="footer-social"><a :href="config.public.facebookUrl" target="_blank" rel="noopener noreferrer"
-                                        aria-label="Facebook"><span aria-hidden="true">f</span></a><a
-              :href="config.public.instagramUrl" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><span
-              aria-hidden="true">ig</span></a><a href="mailto:contato@elinea.com.br" aria-label="E-mail"><span
-              aria-hidden="true">@</span></a></div>
-        </div>
-        <div class="footer-links">
-          <div><b>Produto</b><a href="#jornada">Como funciona</a><a href="#produto">Recursos</a><a
-              href="#planos">Preços</a></div>
-          <div><b>Plataforma</b><a href="#integracoes">Integrações</a><a href="#solucoes">Segmentos</a><a
-              href="#ecossistema">Ecossistema</a></div>
-          <div><b>Empresa</b><a href="#">Sobre</a><a href="mailto:contato@elinea.com.br">Contato</a><a href="#">Privacidade</a>
-          </div>
-        </div>
-        <div class="footer-news"><b>Receba novidades</b><a href="mailto:contato@elinea.com.br">Seu e-mail
-          <ArrowRight :size="16"/>
-        </a></div>
-      </div>
-      <div class="footer-wordmark" aria-hidden="true"><img :src="logoWhiteUrl" alt=""></div>
-      <div class="site-container footer-bottom"><span>© 2026 Elínea. Todos os direitos reservados.</span><span>Feita para negócios reais.</span>
-      </div>
-    </footer>
+    <SiteFooter/>
     <dialog ref="checkoutDialog" class="modal" @close="checkoutOpen = false" @click.self="closeCheckout">
       <section class="modal-box checkout-modal">
         <button class="modal-close" type="button" aria-label="Fechar" @click="closeCheckout">
