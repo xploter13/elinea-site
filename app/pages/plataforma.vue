@@ -46,6 +46,21 @@ onMounted(async () => {
       })
       gsap.from('.platform-workflow__line', { scaleX: 0, transformOrigin: 'left center', ease: 'none', scrollTrigger: { trigger: '.platform-workflow__track', start: 'top 78%', end: 'bottom 62%', scrub: .7 } })
       gsap.from('.platform-workflow__step', { y: 24, opacity: 0, stagger: .14, duration: .55, scrollTrigger: { trigger: '.platform-workflow__track', start: 'top 74%', once: true } })
+      const capabilitiesSection = pageRoot.value?.querySelector<HTMLElement>('.platform-capabilities')
+      const capabilitiesIntro = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__intro')
+      const firstCapability = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__card')
+      if (capabilitiesSection && capabilitiesIntro && firstCapability) {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: capabilitiesSection,
+            start: 'top 88%',
+            end: 'top 34%',
+            scrub: .55,
+          },
+        })
+          .fromTo(capabilitiesIntro.children, { y: 16, opacity: 0 }, { y: 0, opacity: 1, stagger: .035, ease: 'none' }, 0)
+          .fromTo(firstCapability.children, { y: 32, opacity: 0 }, { y: 0, opacity: 1, stagger: .035, ease: 'none' }, 0)
+      }
       gsap.to('.platform-console__float--orders', { y: -9, duration: 3.2, repeat: -1, yoyo: true, ease: 'sine.inOut' })
       gsap.to('.platform-console__float--stock', { y: 8, duration: 3.8, repeat: -1, yoyo: true, ease: 'sine.inOut' })
     })
@@ -134,7 +149,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
       <section id="recursos" class="chapter platform-capabilities">
         <div class="site-container platform-capabilities__layout">
-          <div class="platform-capabilities__intro" data-platform-reveal>
+          <div class="platform-capabilities__intro">
             <p class="site-label">Recursos que formam uma operação</p>
             <h2 class="site-title">Uma plataforma.<br>Muitos movimentos.</h2>
             <p class="site-copy">Comece com o que o seu negócio precisa agora e mantenha uma base preparada para o próximo passo.</p>
@@ -212,13 +227,14 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-workflow { background: var(--ink); color: white; }.platform-workflow__heading { display: grid; grid-template-columns: 1.2fr .6fr; gap: 4rem; align-items: end; }.platform-workflow .site-title { color: white; }.platform-workflow .site-copy { color: rgba(255,255,255,.55); }.platform-workflow__track { position: relative; display: grid; margin-top: clamp(4rem, 8vw, 7rem); grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }.platform-workflow__line { position: absolute; top: 30px; right: 8%; left: 8%; height: 1px; background: linear-gradient(90deg, var(--green), var(--green-bright)); }.platform-workflow__step { position: relative; z-index: 2; padding-right: 1rem; }.platform-workflow__step > span { display: grid; width: 60px; height: 60px; place-items: center; border: 1px solid rgba(92,221,164,.25); border-radius: 50%; background: var(--ink); color: var(--green-bright); }.platform-workflow__step > small { display: block; margin-top: 2rem; color: var(--green-bright); font-size: .65rem; font-weight: 800; }.platform-workflow__step h3 { margin-top: .65rem; color: white; font-size: 1.15rem; }.platform-workflow__step p { margin-top: .8rem; color: rgba(255,255,255,.52); font-size: .82rem; line-height: 1.65; }
 .platform-capabilities { overflow: visible; align-items: flex-start; background: #f3f7f4; }
 .platform-capabilities__layout { display: grid; grid-template-columns: .75fr 1.25fr; gap: clamp(4rem, 8vw, 9rem); }
-.platform-capabilities__intro { position: sticky; top: 50svh; align-self: start; transform: translateY(-50%); }
+.platform-capabilities__intro { position: sticky; top: calc(var(--section-space) + clamp(2.5rem, 5svh, 3.5rem)); align-self: start; }
 .platform-capabilities__list { position: relative; padding-bottom: clamp(4rem, 10vh, 8rem); }
-.platform-capabilities__card { position: sticky; top: clamp(7.5rem, 14svh, 9.5rem); z-index: 1; display: grid; min-height: min(64svh, 620px); padding: clamp(2.5rem, 5vw, 4.5rem); align-content: center; border: 1px solid var(--line); border-radius: 24px; background: #fbfdfc; box-shadow: 0 30px 70px -58px rgba(13,23,21,.55); }
-.platform-capabilities__card:nth-child(2) { top: calc(clamp(7.5rem, 14svh, 9.5rem) + 10px); z-index: 2; background: #f9fcfa; }
-.platform-capabilities__card:nth-child(3) { top: calc(clamp(7.5rem, 14svh, 9.5rem) + 20px); z-index: 3; background: #f7fbf9; }
-.platform-capabilities__card:nth-child(4) { top: calc(clamp(7.5rem, 14svh, 9.5rem) + 30px); z-index: 4; background: #f5faf7; }
-.platform-capabilities__card:nth-child(5) { top: calc(clamp(7.5rem, 14svh, 9.5rem) + 40px); z-index: 5; background: #f2f8f5; }
+.platform-capabilities__card { position: sticky; top: calc(50svh - 155px); z-index: 1; display: grid; min-height: 310px; padding: clamp(2rem, 4vw, 3.5rem) 0; align-content: center; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #f3f7f4; }
+.platform-capabilities__card + .platform-capabilities__card { margin-top: -1px; }
+.platform-capabilities__card:nth-child(2) { z-index: 2; }
+.platform-capabilities__card:nth-child(3) { z-index: 3; }
+.platform-capabilities__card:nth-child(4) { z-index: 4; }
+.platform-capabilities__card:nth-child(5) { z-index: 5; }
 .platform-capabilities__list article > div { display: flex; align-items: center; justify-content: space-between; }
 .platform-capabilities__list article > div > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 14px; background: var(--green-light); color: var(--green); }
 .platform-capabilities__list article > div > small { color: #9aa7a2; font-size: .65rem; font-weight: 800; }
@@ -227,7 +243,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-capabilities__list article > strong { max-width: 42rem; margin-top: 1.1rem; color: var(--muted); font-size: .95rem; font-weight: 500; line-height: 1.7; }
 .platform-scale { background: white; }.platform-scale__layout { grid-template-columns: 1.18fr .82fr; }.platform-scale__image { position: relative; min-height: 680px; }.platform-scale__image img { width: 100%; height: 680px; border-radius: 30px; object-fit: cover; object-position: 60% center; }.platform-scale__image > span { position: absolute; right: 1.5rem; bottom: 1.5rem; display: inline-flex; padding: .8rem 1rem; align-items: center; gap: .5rem; border-radius: 12px; background: white; color: var(--green); font-size: .7rem; font-weight: 800; box-shadow: var(--shadow); }.platform-section-copy ul { display: grid; gap: .7rem; margin: 1.6rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: .88rem; font-weight: 650; }.platform-section-copy li { display: flex; align-items: center; gap: .6rem; }.platform-section-copy li svg { color: var(--green); }
 .platform-start { background: #edf4f0; }.platform-start__heading { max-width: 900px; }.platform-start__steps { display: grid; margin-top: clamp(3.5rem, 7vw, 6rem); grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }.platform-start__steps article { min-height: 330px; padding: 2rem clamp(1.25rem, 3vw, 3rem); border-right: 1px solid var(--line); }.platform-start__steps article:last-child { border-right: 0; }.platform-start__steps span { color: #97a49f; font-size: .65rem; font-weight: 800; }.platform-start__steps svg { display: block; margin-top: 4rem; color: var(--green); }.platform-start__steps h3 { margin-top: 1.5rem; font-size: 1.25rem; }.platform-start__steps p { margin-top: .8rem; color: var(--muted); font-size: .85rem; line-height: 1.65; }.platform-final { min-height: 100svh; }
-@media (max-width: 1080px) { .platform-hero__layout { grid-template-columns: 1fr; padding-block: 3rem; }.platform-hero__content { max-width: 800px; }.platform-console { width: min(100%, 820px); margin-inline: auto; transform: none; }.platform-storefront__layout, .platform-scale__layout { grid-template-columns: 1fr; }.platform-section-copy { max-width: 780px; }.storefront-scene { width: min(100%, 820px); margin-inline: auto; }.platform-capabilities__layout { grid-template-columns: 1fr; }.platform-capabilities__intro { position: static; max-width: 800px; transform: none; }.platform-capabilities__list { display: grid; padding-bottom: 0; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }.platform-capabilities__list .platform-capabilities__card { position: static; top: auto; z-index: auto; min-height: 310px; padding: 2rem; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }.platform-scale__image { order: 2; } }
+@media (max-width: 1080px) { .platform-hero__layout { grid-template-columns: 1fr; padding-block: 3rem; }.platform-hero__content { max-width: 800px; }.platform-console { width: min(100%, 820px); margin-inline: auto; transform: none; }.platform-storefront__layout, .platform-scale__layout { grid-template-columns: 1fr; }.platform-section-copy { max-width: 780px; }.storefront-scene { width: min(100%, 820px); margin-inline: auto; }.platform-capabilities__layout { grid-template-columns: 1fr; }.platform-capabilities__intro { position: static; max-width: 800px; transform: none; }.platform-capabilities__list { display: grid; padding-bottom: 0; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }.platform-capabilities__list .platform-capabilities__card { position: static; top: auto; z-index: auto; min-height: 310px; margin-top: 0; padding: 2rem; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }.platform-scale__image { order: 2; } }
 @media (max-width: 767px) { .platform-hero { min-height: auto; padding-top: 8rem; }.platform-hero__layout { min-height: 0; gap: 4rem; }.platform-hero__title { font-size: clamp(3.1rem, 14vw, 4.7rem); }.platform-hero__actions { align-items: flex-start; flex-direction: column; }.platform-hero__rail { gap: 1rem; overflow: hidden; }.platform-hero__rail span:nth-child(even) { display: none; }.platform-console { min-height: 520px; border-radius: 18px; }.platform-console__body { padding: .8rem; grid-template-columns: 1fr; }.platform-console__orders { min-height: 220px; }.platform-console__chart { display: none; }.platform-console__float { display: none; }.platform-storefront__layout { gap: 3rem; }.storefront-scene { min-height: 520px; }.storefront-window { inset: 0 0 5% 0; }.storefront-window nav { display: none; }.storefront-window__hero { min-height: 230px; padding: 2rem 1.25rem; }.storefront-products { padding: .8rem; }.storefront-products article > i { height: 80px; }.storefront-products article:nth-child(3) { display: none; }.storefront-products { grid-template-columns: repeat(2, 1fr); }.storefront-phone { min-width: 135px; width: 38%; }.storefront-phone > div { min-height: 190px; }.storefront-scene > p { display: none; }.platform-workflow__heading { grid-template-columns: 1fr; gap: .5rem; }.platform-workflow__track { grid-template-columns: 1fr; gap: 2rem; }.platform-workflow__line { top: 5%; bottom: 5%; left: 30px; width: 1px; height: auto; transform: none !important; }.platform-workflow__step { min-height: 150px; padding-left: 85px; }.platform-workflow__step > span { position: absolute; left: 0; }.platform-workflow__step > small { margin-top: 0; }.platform-capabilities__list { grid-template-columns: 1fr; }.platform-capabilities__list article { min-height: 280px; padding: 2rem 0; border-right: 0; }.platform-scale__image, .platform-scale__image img { min-height: 480px; height: 480px; }.platform-start__steps { grid-template-columns: 1fr; }.platform-start__steps article { min-height: 250px; padding-inline: 0; border-right: 0; border-bottom: 1px solid var(--line); }.platform-start__steps svg { margin-top: 2.5rem; } }
 @media (prefers-reduced-motion: reduce) { .platform-console { transform: none; } }
 </style>
