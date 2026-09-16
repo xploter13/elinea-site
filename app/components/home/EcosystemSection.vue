@@ -26,8 +26,12 @@ const updatePageVisibility = () => { pageIsHidden.value = document.hidden }
 
 onMounted(() => {
   updatePageVisibility()
-  observer = new IntersectionObserver(([entry]) => { isVisible.value = Boolean(entry?.isIntersecting) }, { threshold: .12 })
-  if (orbitRoot.value) observer.observe(orbitRoot.value)
+  if ('IntersectionObserver' in window) {
+    observer = new IntersectionObserver(([entry]) => { isVisible.value = Boolean(entry?.isIntersecting) }, { threshold: 0 })
+    if (orbitRoot.value) observer.observe(orbitRoot.value)
+  } else {
+    isVisible.value = true
+  }
   document.addEventListener('visibilitychange', updatePageVisibility)
 })
 

@@ -132,7 +132,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 .orbit-track--inner .ecosystem-node { --orbit-radius: clamp(145px, 14vw, 196px); }
 .ecosystem-module { display: grid; min-width: 112px; min-height: 76px; place-content: center; gap: .45rem; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; background: #172522; color: rgba(255,255,255,.78); text-align: center; box-shadow: 0 22px 38px -30px #000; animation: orbit-counterclockwise 52s linear infinite; will-change: transform; }
 .orbit-track--inner .ecosystem-module { animation-name: orbit-clockwise; animation-duration: 38s; }
-.ecosystem-orbit.is-paused .orbit-track, .ecosystem-orbit.is-paused .ecosystem-module, .ecosystem-orbit:hover .orbit-track, .ecosystem-orbit:hover .ecosystem-module { animation-play-state: paused; }
+.ecosystem-orbit.is-paused .orbit-track, .ecosystem-orbit.is-paused .ecosystem-module { animation-play-state: paused; }
 .ecosystem-core { position: absolute; z-index: 4; inset: 37%; display: grid; place-content: center; border: 1px solid rgba(92,221,164,.35); border-radius: 24px; background: linear-gradient(145deg, #102c25, #071512); color: white; text-align: center; box-shadow: 0 0 80px rgba(7,148,94,.16); }
 .ecosystem-core span { font-family: var(--font-display); font-size: clamp(1.45rem, 2.8vw, 2.3rem); font-weight: 650; letter-spacing: -.06em; }
 .ecosystem-core small { margin-top: .35rem; color: rgba(255,255,255,.45); font-size: .65rem; }
@@ -140,6 +140,10 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 .ecosystem-module span { font-size: .72rem; font-weight: 650; }
 @keyframes orbit-clockwise { to { transform: rotate(360deg); } }
 @keyframes orbit-counterclockwise { to { transform: rotate(-360deg); } }
+
+@media (hover: hover) and (pointer: fine) {
+  .ecosystem-orbit:hover .orbit-track, .ecosystem-orbit:hover .ecosystem-module { animation-play-state: paused; }
+}
 
 /* Operation */
 .operation { background: linear-gradient(90deg, #fafcfb 0%, #f5f9f6 100%); }
