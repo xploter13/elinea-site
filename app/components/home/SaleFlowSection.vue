@@ -25,7 +25,7 @@ const mobileDots = ref<Point[]>([
 let resizeObserver: ResizeObserver | undefined
 let layoutFrame = 0
 
-const roundedPath = (points: Point[], radius = 14) => {
+const roundedPath = (points: Point[], radius: number) => {
   const first = points[0]
   if (!first) return ''
 
@@ -67,7 +67,8 @@ const updateMobilePath = () => {
   const [order, payment, stock, message, done] = cards
   if (!order || !payment || !stock || !message || !done) return
 
-  const finalApproachY = done.top - 14
+  const curveRadius = Math.min(34, Math.max(24, map.clientWidth * .08))
+  const finalApproachY = done.top - curveRadius * 1.5
   const connectors = [
     [
       { x: order.right, y: order.centerY },
@@ -93,12 +94,12 @@ const updateMobilePath = () => {
   ]
 
   mobileViewBox.value = `0 0 ${map.clientWidth} ${map.clientHeight}`
-  mobilePaths.value = connectors.map(points => roundedPath(points))
+  mobilePaths.value = connectors.map(points => roundedPath(points, curveRadius))
   mobileDots.value = [
     { x: payment.centerX, y: (order.centerY + payment.top) / 2 },
     { x: (payment.centerX + stock.right) / 2, y: stock.centerY },
     { x: message.centerX, y: (stock.centerY + message.top) / 2 },
-    { x: done.centerX, y: finalApproachY },
+    { x: (message.centerX + done.centerX) / 2, y: finalApproachY },
   ]
 
   nextTick(() => window.dispatchEvent(new CustomEvent('sale-flow:layout')))
