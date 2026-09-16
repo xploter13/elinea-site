@@ -25,8 +25,11 @@ let destroyMotion: (() => void) | undefined
 onMounted(async () => {
   const [{default: gsap}, {ScrollTrigger}] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
   gsap.registerPlugin(ScrollTrigger)
+  await nextTick()
   if (!pageRoot.value) return
   const mm = gsap.matchMedia()
+  const refreshSaleFlow = () => ScrollTrigger.refresh()
+  window.addEventListener('sale-flow:layout', refreshSaleFlow)
   const context = gsap.context(() => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({defaults: {ease: 'power3.out'}})
@@ -102,17 +105,22 @@ onMounted(async () => {
         ? '.sale-path--mobile'
         : '.sale-path--desktop'
       const pathSvg = pageRoot.value?.querySelector<SVGSVGElement>(pathSelector)
-      const path = pathSvg?.querySelector<SVGPathElement>('[data-sale-path]')
-      if (!pathSvg || !path) return
+      const paths = pathSvg?.querySelectorAll<SVGPathElement>('[data-sale-path]')
+      if (!pathSvg || !paths?.length) return
 
-      const length = path.getTotalLength()
-      gsap.fromTo(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length
-      }, {
-        strokeDashoffset: 0,
-        ease: 'none',
-        scrollTrigger: {trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7}
+      const lineTimeline = gsap.timeline({
+        scrollTrigger: {trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7, invalidateOnRefresh: true}
+      })
+      paths.forEach((path) => {
+        const getLength = () => path.getTotalLength()
+        lineTimeline.fromTo(path, {
+          strokeDasharray: getLength,
+          strokeDashoffset: getLength
+        }, {
+          strokeDashoffset: 0,
+          duration: 1,
+          ease: 'none'
+        })
       })
 
       const dots = pathSvg.querySelectorAll<SVGCircleElement>('[data-sale-dot]')
@@ -128,6 +136,7 @@ onMounted(async () => {
     })
   }, pageRoot.value)
   destroyMotion = () => {
+    window.removeEventListener('sale-flow:layout', refreshSaleFlow)
     mm.revert();
     context.revert()
   }
