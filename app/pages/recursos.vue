@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { MarketingButton, MarketingTextButton } from '@elinea/ui/marketing'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
+import { MarketingButton } from '@elinea/ui/marketing'
 import {
   ArrowRight,
   BarChart3,
@@ -103,8 +104,15 @@ onMounted(async () => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({ defaults: { ease: 'power3.out' } })
         .from('[data-header]', { y: -20, opacity: 0, duration: .6 })
-        .from('.resources-hero__eyebrow, .resources-hero__title span, .resources-hero__copy, .resources-hero__actions', { y: 26, opacity: 0, duration: .65, stagger: .07 }, '-=.2')
-        .from('.resources-overview', { y: 34, opacity: 0, scale: .98, duration: .8 }, '-=.7')
+        .from('.resources-hero__eyebrow, .resources-hero__title span, .resources-hero__copy', { y: 26, opacity: 0, duration: .65, stagger: .07 }, '-=.2')
+        .from('.resources-hero__photo', { opacity: 0, scale: 1.035, duration: 1.2 }, '-=1.1')
+
+      gsap.to('.resources-hero__photo', {
+        yPercent: 4,
+        scale: 1.04,
+        ease: 'none',
+        scrollTrigger: { trigger: '.resources-hero', start: 'top top', end: 'bottom top', scrub: true },
+      })
 
       gsap.utils.toArray<HTMLElement>('[data-resource-reveal]').forEach((block) => {
         gsap.from(block.children, {
@@ -144,33 +152,15 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="resources-hero">
+        <img class="resources-hero__photo" :src="resourcesHeroUrl" alt="Comerciante preparando pedidos de uma loja virtual" fetchpriority="high">
+        <div class="resources-hero__overlay"></div>
         <div class="site-container resources-hero__layout">
           <div class="resources-hero__content">
             <p class="resources-hero__eyebrow"><span></span>Recursos para uma operação conectada</p>
             <h1 class="resources-hero__title"><span>Venda.</span><span>Organize.</span><span>Evolua.</span></h1>
             <p class="resources-hero__copy">Da primeira visita ao pós-venda, a Elínea reúne recursos para sua loja trabalhar com menos fragmentação e mais contexto.</p>
-            <div class="resources-hero__actions">
-              <MarketingButton variant="primary" href="/precos#planos">Criar minha loja<template #icon><ArrowRight :size="17" /></template></MarketingButton>
-              <MarketingTextButton tone="light" href="#operacao">Explorar recursos</MarketingTextButton>
-            </div>
-          </div>
-
-          <div class="resources-overview" aria-label="Visão das áreas conectadas pela plataforma Elínea">
-            <div class="resources-overview__top"><span></span><span></span><span></span><small>Operação conectada</small><i>Online</i></div>
-            <div class="resources-overview__body">
-              <div class="overview-core"><strong>ELÍNEA</strong><small>Loja + operação</small></div>
-              <div class="overview-flow" aria-hidden="true"><i></i><i></i><i></i></div>
-              <div class="overview-modules">
-                <span><CreditCard :size="18" />Pagamento</span>
-                <span><Truck :size="18" />Entrega</span>
-                <span><Boxes :size="18" />Gestão</span>
-                <span><MessageCircle :size="18" />WhatsApp</span>
-              </div>
-              <div class="overview-event"><PackageCheck :size="18" /><span><small>Pedido #1482</small><strong>Fluxo atualizado</strong></span><Check :size="16" /></div>
-            </div>
           </div>
         </div>
-        <div class="site-container resources-hero__rail" aria-label="Áreas de recursos"><span>Pagamentos</span><span>Logística</span><span>Gestão</span><span>Atendimento</span><span>Dados</span></div>
       </section>
 
       <section id="operacao" class="chapter resources-core">
@@ -298,37 +288,16 @@ onBeforeUnmount(() => destroyMotion?.())
 
 <style scoped>
 .resources-page { overflow: hidden; background: var(--paper); }
-.resources-hero { position: relative; min-height: 100svh; overflow: hidden; padding: 8.5rem 0 2rem; background: radial-gradient(circle at 76% 38%, rgba(7,148,94,.2), transparent 28%), #071310; color: white; isolation: isolate; }
-.resources-hero::before { position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, black, transparent 90%); content: ''; }
-.resources-hero__layout { display: grid; min-height: calc(100svh - 13rem); grid-template-columns: .82fr 1.18fr; gap: clamp(3rem, 7vw, 7rem); align-items: center; }
-.resources-hero__content { position: relative; z-index: 2; }
+.resources-hero { position: relative; min-height: 100svh; overflow: hidden; background: #071310; color: white; isolation: isolate; }
+.resources-hero__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
+.resources-hero__overlay { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(4,17,14,.96) 0%, rgba(5,22,17,.87) 35%, rgba(4,17,14,.36) 62%, rgba(3,10,9,.08) 100%); }
+.resources-hero__layout { display: flex; min-height: 100svh; align-items: center; padding-top: 5rem; }
+.resources-hero__content { position: relative; z-index: 2; width: min(58vw, 810px); }
 .resources-hero__eyebrow { display: inline-flex; align-items: center; gap: .65rem; color: rgba(255,255,255,.66); font-size: .8rem; font-weight: 700; }
 .resources-hero__eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 16px rgba(92,221,164,.55); }
-.resources-hero__title { margin-top: 1.6rem; color: white; font-size: clamp(4rem, 7.1vw, 7.6rem); font-weight: 600; line-height: .89; letter-spacing: -.07em; }
+.resources-hero__title { margin-top: 1.6rem; color: white; font-size: clamp(4.4rem, 7.4vw, 8rem); font-weight: 600; line-height: .89; letter-spacing: -.07em; }
 .resources-hero__title span { display: block; }
-.resources-hero__copy { max-width: 38rem; margin-top: 1.7rem; color: rgba(255,255,255,.64); font-size: clamp(1rem, 1.18vw, 1.18rem); line-height: 1.7; }
-.resources-hero__actions { display: flex; margin-top: 2.1rem; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
-.resources-hero__rail { position: relative; display: grid; padding-top: 1.5rem; grid-template-columns: repeat(5, 1fr); border-top: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.42); font-size: .7rem; font-weight: 700; }
-
-.resources-overview { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.11); border-radius: 24px; background: #0d211c; box-shadow: 0 42px 90px -50px #000; }
-.resources-overview__top { display: flex; min-height: 52px; padding: 0 1.2rem; align-items: center; gap: .45rem; border-bottom: 1px solid rgba(255,255,255,.08); }
-.resources-overview__top > span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.17); }
-.resources-overview__top small { margin-left: .55rem; color: rgba(255,255,255,.54); font-size: .68rem; }
-.resources-overview__top i { margin-left: auto; color: var(--green-bright); font-size: .62rem; font-style: normal; font-weight: 700; }
-.resources-overview__body { position: relative; min-height: 520px; padding: 2rem; background: radial-gradient(circle at center, rgba(7,148,94,.17), transparent 34%); }
-.overview-core { position: absolute; z-index: 2; inset: 38% 35%; display: grid; place-content: center; border: 1px solid rgba(92,221,164,.35); border-radius: 20px; background: #071713; text-align: center; box-shadow: 0 0 70px rgba(7,148,94,.14); }
-.overview-core strong { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: -.05em; }
-.overview-core small { margin-top: .25rem; color: rgba(255,255,255,.42); font-size: .6rem; }
-.overview-flow { position: absolute; inset: 14% 13%; border: 1px solid rgba(92,221,164,.13); border-radius: 50%; }
-.overview-flow::before { position: absolute; inset: 18%; border: 1px solid rgba(92,221,164,.12); border-radius: inherit; content: ''; }
-.overview-flow i { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 16px rgba(92,221,164,.7); }
-.overview-flow i:nth-child(1) { left: 16%; top: 10%; }.overview-flow i:nth-child(2) { right: 5%; top: 46%; }.overview-flow i:nth-child(3) { bottom: 4%; left: 34%; }
-.overview-modules span { position: absolute; z-index: 2; display: flex; min-width: 132px; min-height: 66px; padding: .75rem; align-items: center; gap: .65rem; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; background: #142b25; color: rgba(255,255,255,.75); font-size: .68rem; font-weight: 700; box-shadow: 0 20px 45px -32px #000; }
-.overview-modules svg { color: var(--green-bright); }
-.overview-modules span:nth-child(1) { left: 5%; top: 13%; }.overview-modules span:nth-child(2) { right: 4%; top: 18%; }.overview-modules span:nth-child(3) { right: 7%; bottom: 14%; }.overview-modules span:nth-child(4) { left: 4%; bottom: 18%; }
-.overview-event { position: absolute; z-index: 3; right: 4%; bottom: 4%; display: flex; min-width: 210px; padding: .85rem 1rem; align-items: center; gap: .7rem; border-radius: 13px; background: white; color: var(--ink); box-shadow: 0 20px 55px -30px #000; }
-.overview-event > svg { color: var(--green); }.overview-event > svg:last-child { margin-left: auto; }
-.overview-event span { display: grid; gap: .1rem; }.overview-event small { color: var(--muted); font-size: .62rem; }.overview-event strong { font-size: .74rem; }
+.resources-hero__copy { max-width: 39rem; margin-top: 1.7rem; color: rgba(255,255,255,.7); font-size: clamp(1rem, 1.18vw, 1.18rem); line-height: 1.7; }
 
 .resources-core { background: #f6f9f7; }
 .resources-heading { display: grid; grid-template-columns: 1.15fr .65fr; gap: clamp(2rem, 6vw, 6rem); align-items: end; }
@@ -397,15 +366,11 @@ onBeforeUnmount(() => destroyMotion?.())
 .resources-final { background: radial-gradient(circle at 68% 38%, rgba(92,221,164,.16), transparent 28%), #071713; }
 
 @media (max-width: 1080px) {
-  .resources-hero__layout { grid-template-columns: 1fr; padding-top: 3rem; }
-  .resources-hero__content { max-width: 780px; }
-  .resources-overview { width: min(100%, 780px); margin-inline: auto; }
+  .resources-hero__content { width: min(67vw, 740px); }
   .resources-heading, .integrations-band { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 900px) {
-  .resources-hero { min-height: auto; padding-bottom: 2.5rem; }
-  .resources-hero__layout { min-height: auto; padding-block: 3rem 4rem; }
   .resources-grid, .intelligence-layout { grid-template-columns: 1fr; }
   .resource-card__visual { min-height: 430px; }
   .insight-grid { grid-template-columns: 1fr; }
@@ -416,14 +381,13 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 767px) {
-  .resources-hero { padding-top: 6.5rem; }
-  .resources-hero__layout { gap: 3rem; padding-top: 1rem; }
-  .resources-hero__title { font-size: clamp(3.7rem, 18vw, 5.2rem); }
-  .resources-hero__rail { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
-  .resources-overview__body { min-height: 430px; padding: 1rem; }
-  .overview-core { inset: 37% 29%; }.overview-flow { inset: 15% 7%; }
-  .overview-modules span { min-width: 106px; min-height: 56px; padding: .6rem; font-size: .58rem; }.overview-modules span:nth-child(1) { left: 1%; }.overview-modules span:nth-child(2) { right: 0; }.overview-modules span:nth-child(3) { right: 0; }.overview-modules span:nth-child(4) { left: 0; }
-  .overview-event { right: 2%; bottom: 2%; min-width: 180px; }
+  .resources-hero, .resources-hero__layout { min-height: max(760px, 100svh); }
+  .resources-hero__photo { object-position: 65% center; }
+  .resources-hero__overlay { background: linear-gradient(180deg, rgba(4,17,14,.9) 0%, rgba(4,17,14,.76) 52%, rgba(4,17,14,.56) 100%); }
+  .resources-hero__layout { align-items: flex-start; padding-top: clamp(9.5rem, 23vh, 12rem); }
+  .resources-hero__content { width: 100%; }
+  .resources-hero__title { font-size: clamp(3.65rem, 17.5vw, 5.1rem); }
+  .resources-hero__copy { max-width: 31rem; font-size: 1rem; }
   .resources-heading { gap: 1rem; }
   .resource-card__visual { min-height: 360px; }.resource-card__meta { align-items: flex-start; flex-direction: column; }.resource-card h3 { font-size: 1.8rem; }
   .resource-card--pagamentos .resource-card__visual { min-height: 430px; }
@@ -437,8 +401,6 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 420px) {
-  .resources-overview__body { min-height: 400px; }
-  .overview-event { min-width: 166px; padding: .7rem; }.overview-event strong { font-size: .67rem; }
   .resource-card__visual { min-height: 340px; }
   .payment-order { width: 86%; }.payment-method { width: 84%; }
   .whatsapp-scene { inset: 6%; }
@@ -446,5 +408,6 @@ onBeforeUnmount(() => destroyMotion?.())
 
 @media (prefers-reduced-motion: reduce) {
   .resources-page *, .resources-page *::before, .resources-page *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .resources-hero__photo { transform: none !important; }
 }
 </style>

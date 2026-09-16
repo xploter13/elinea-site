@@ -128,7 +128,9 @@ A rota `/recursos` detalha as capacidades da operação sem repetir a narrativa 
 página Plataforma. A página usa como referência a hierarquia de cards editoriais de
 plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
 
-1. Hero escuro com uma visão compacta da operação conectada.
+1. Hero fotográfico escuro, em uma única coluna de texto e sem botões, mostrando uma
+   operação real de venda e expedição ao fundo. O tratamento segue a linguagem do
+   hero da Home, com assunto visual à direita e área de leitura protegida à esquerda.
 2. Cards grandes para pagamentos, logística, ERP/fiscal e venda pelo WhatsApp, com
    ilustrações de produto construídas em HTML/CSS.
 3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
