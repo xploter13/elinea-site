@@ -13,6 +13,14 @@ const steps = [
 type Point = { x: number, y: number }
 
 const saleMap = ref<HTMLElement | null>(null)
+const desktopViewBox = ref('0 0 720 650')
+const desktopPaths = ref(['M208 55 H320 Q360 55 360 95 V124 Q360 162 322 162 H294 V236 H300 Q300 294 358 294 H468 Q510 294 510 316 H544 V353 H525 Q525 390 488 390 H342 Q286 390 248 422 H214 V496 H224 Q224 550 278 550 H456 Q496 550 496 590 V613 H620'])
+const desktopDots = ref<Point[]>([
+  { x: 360, y: 124 },
+  { x: 468, y: 294 },
+  { x: 488, y: 390 },
+  { x: 278, y: 550 },
+])
 const mobileViewBox = ref('0 0 720 650')
 const mobilePaths = ref(['M402 55 H500 Q540 55 540 95 V148 H560 V223 H540 V246 Q540 276 510 276 H430 Q392 276 392 314 H402 V354 H374 V382 Q374 414 406 414 H500 Q532 414 532 446 H560 V520 H532 V542 Q532 574 500 574 H250 Q214 574 214 610 V613 H112'])
 const mobileDots = ref<Point[]>([
@@ -52,7 +60,7 @@ const roundedPath = (points: Point[], radius: number) => {
   return `${path} L ${last.x} ${last.y}`
 }
 
-const updateMobilePath = () => {
+const updateSalePaths = () => {
   const map = saleMap.value
   if (!map) return
 
@@ -67,53 +75,89 @@ const updateMobilePath = () => {
   const [order, payment, stock, message, done] = cards
   if (!order || !payment || !stock || !message || !done) return
 
-  const curveRadius = Math.min(34, Math.max(24, map.clientWidth * .08))
-  const finalApproachY = done.top - curveRadius * 1.5
-  const connectors = [
-    [
-      { x: order.right, y: order.centerY },
-      { x: payment.centerX, y: order.centerY },
-      { x: payment.centerX, y: payment.top },
-    ],
-    [
-      { x: payment.centerX, y: payment.bottom },
-      { x: payment.centerX, y: stock.centerY },
-      { x: stock.right, y: stock.centerY },
-    ],
-    [
-      { x: stock.right, y: stock.centerY },
-      { x: message.centerX, y: stock.centerY },
-      { x: message.centerX, y: message.top },
-    ],
-    [
-      { x: message.centerX, y: message.bottom },
-      { x: message.centerX, y: finalApproachY },
-      { x: done.centerX, y: finalApproachY },
-      { x: done.centerX, y: done.top },
-    ],
-  ]
+  const curveRadius = Math.min(42, Math.max(26, map.clientWidth * .055))
+  const viewBox = `0 0 ${map.clientWidth} ${map.clientHeight}`
 
-  mobileViewBox.value = `0 0 ${map.clientWidth} ${map.clientHeight}`
-  mobilePaths.value = connectors.map(points => roundedPath(points, curveRadius))
-  mobileDots.value = [
-    { x: payment.centerX, y: (order.centerY + payment.top) / 2 },
-    { x: (payment.centerX + stock.right) / 2, y: stock.centerY },
-    { x: message.centerX, y: (stock.centerY + message.top) / 2 },
-    { x: (message.centerX + done.centerX) / 2, y: finalApproachY },
-  ]
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    const finalApproachY = done.top - curveRadius * 1.5
+    const connectors = [
+      [
+        { x: order.right, y: order.centerY },
+        { x: payment.centerX, y: order.centerY },
+        { x: payment.centerX, y: payment.top },
+      ],
+      [
+        { x: payment.centerX, y: payment.bottom },
+        { x: payment.centerX, y: stock.centerY },
+        { x: stock.right, y: stock.centerY },
+      ],
+      [
+        { x: stock.right, y: stock.centerY },
+        { x: message.centerX, y: stock.centerY },
+        { x: message.centerX, y: message.top },
+      ],
+      [
+        { x: message.centerX, y: message.bottom },
+        { x: message.centerX, y: finalApproachY },
+        { x: done.centerX, y: finalApproachY },
+        { x: done.centerX, y: done.top },
+      ],
+    ]
+
+    mobileViewBox.value = viewBox
+    mobilePaths.value = connectors.map(points => roundedPath(points, curveRadius))
+    mobileDots.value = [
+      { x: payment.centerX, y: (order.centerY + payment.top) / 2 },
+      { x: (payment.centerX + stock.right) / 2, y: stock.centerY },
+      { x: message.centerX, y: (stock.centerY + message.top) / 2 },
+      { x: (message.centerX + done.centerX) / 2, y: finalApproachY },
+    ]
+  } else {
+    const connectors = [
+      [
+        { x: order.right, y: order.centerY },
+        { x: payment.centerX, y: order.centerY },
+        { x: payment.centerX, y: payment.top },
+      ],
+      [
+        { x: payment.right, y: payment.centerY },
+        { x: stock.centerX, y: payment.centerY },
+        { x: stock.centerX, y: stock.top },
+      ],
+      [
+        { x: stock.left, y: stock.centerY },
+        { x: message.centerX, y: stock.centerY },
+        { x: message.centerX, y: message.top },
+      ],
+      [
+        { x: message.right, y: message.centerY },
+        { x: done.centerX, y: message.centerY },
+        { x: done.centerX, y: done.top },
+      ],
+    ]
+
+    desktopViewBox.value = viewBox
+    desktopPaths.value = connectors.map(points => roundedPath(points, curveRadius))
+    desktopDots.value = [
+      { x: payment.centerX, y: (order.centerY + payment.top) / 2 },
+      { x: stock.centerX, y: (payment.centerY + stock.top) / 2 },
+      { x: message.centerX, y: (stock.centerY + message.top) / 2 },
+      { x: done.centerX, y: (message.centerY + done.top) / 2 },
+    ]
+  }
 
   nextTick(() => window.dispatchEvent(new CustomEvent('sale-flow:layout')))
 }
 
-const scheduleMobilePathUpdate = () => {
+const scheduleSalePathsUpdate = () => {
   cancelAnimationFrame(layoutFrame)
-  layoutFrame = requestAnimationFrame(updateMobilePath)
+  layoutFrame = requestAnimationFrame(updateSalePaths)
 }
 
 onMounted(() => {
-  scheduleMobilePathUpdate()
+  scheduleSalePathsUpdate()
   if ('ResizeObserver' in window && saleMap.value) {
-    resizeObserver = new ResizeObserver(scheduleMobilePathUpdate)
+    resizeObserver = new ResizeObserver(scheduleSalePathsUpdate)
     resizeObserver.observe(saleMap.value)
     saleMap.value.querySelectorAll('.sale-step').forEach(card => resizeObserver?.observe(card))
   }
@@ -136,12 +180,9 @@ onBeforeUnmount(() => {
       </div>
 
       <div ref="saleMap" class="sale-map" aria-label="Fluxo integrado de uma venda">
-        <svg class="sale-path sale-path--desktop" viewBox="0 0 720 650" preserveAspectRatio="none" fill="none" aria-hidden="true">
-          <path data-sale-path d="M208 55 H320 Q360 55 360 95 V124 Q360 162 322 162 H294 V236 H300 Q300 294 358 294 H468 Q510 294 510 316 H544 V353 H525 Q525 390 488 390 H342 Q286 390 248 422 H214 V496 H224 Q224 550 278 550 H456 Q496 550 496 590 V613 H620" />
-          <circle data-sale-dot cx="360" cy="124" r="4" />
-          <circle data-sale-dot cx="468" cy="294" r="4" />
-          <circle data-sale-dot cx="488" cy="390" r="4" />
-          <circle data-sale-dot cx="278" cy="550" r="4" />
+        <svg class="sale-path sale-path--desktop" :viewBox="desktopViewBox" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <path v-for="(path, index) in desktopPaths" :key="index" data-sale-path :d="path" />
+          <circle v-for="(dot, index) in desktopDots" :key="index" data-sale-dot :cx="dot.x" :cy="dot.y" r="4" />
         </svg>
         <svg class="sale-path sale-path--mobile" :viewBox="mobileViewBox" preserveAspectRatio="none" fill="none" aria-hidden="true">
           <path v-for="(path, index) in mobilePaths" :key="index" data-sale-path :d="path" />

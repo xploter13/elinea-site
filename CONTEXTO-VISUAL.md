@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 15 de setembro de 2026. Este documento registra decisões aprovadas
+Atualizado em 16 de setembro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -144,9 +144,10 @@ comercial deve ser feita nessa fonte única e validada antes de publicação.
   assíncronos. No mobile, deixam a composição absoluta e passam ao fluxo da página
   ao redor do núcleo para preservar legibilidade e impedir overflow.
 - A linha do fluxo de venda é desenhada durante o scroll, conecta as bordas dos cards
-  com curvas ortogonais arredondadas e pequenos pontos de passagem, permanecendo
-  atrás dos estados. Os pontos surgem progressivamente com o avanço da linha. O
-  percurso se adapta à disposição alternada no mobile e alcança o estado final.
+  com curvas ortogonais amplas e pequenos pontos de passagem, permanecendo atrás dos
+  estados. Os pontos surgem progressivamente com o avanço da linha. Desktop e mobile
+  usam o mesmo tratamento responsivo: o percurso é calculado pelas posições reais dos
+  cards, adapta-se à composição de cada viewport e alcança o estado final.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
   legíveis. Não existe botão de pausa. A órbita pausa enquanto o cursor está sobre a
   composição e retoma ao sair; também pausa fora da viewport ou com a aba oculta.
