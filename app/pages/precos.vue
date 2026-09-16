@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import PricingSection from '~/components/home/PricingSection.vue'
 import CheckoutModal from '~/components/pricing/CheckoutModal.vue'
 import { plans, type Plan } from '~/data/plans'
@@ -44,13 +45,6 @@ const faqs = [
   },
 ]
 
-const money = (value: number) => new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  maximumFractionDigits: 0,
-}).format(value / 100)
-
-const startingPrice = Math.min(...plans.flatMap(plan => plan.monthly_amount === null ? [] : [plan.monthly_amount]))
 const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.plans.includes(plan.slug)
 const openCheckout = (plan: Plan) => {
   selectedPlan.value = plan
@@ -76,12 +70,13 @@ onMounted(async () => {
         .from('.pricing-hero__eyebrow', { y: 16, opacity: 0, duration: .5 }, '-=.2')
         .from('.pricing-hero__title span', { yPercent: 110, duration: .8, stagger: .08 }, '-=.15')
         .from('.pricing-hero__copy, .pricing-hero__actions', { y: 20, opacity: 0, duration: .55, stagger: .08 }, '-=.45')
-        .from('.pricing-index', { x: 36, opacity: 0, duration: .8 }, '-=.7')
+        .from('.pricing-hero__photo', { opacity: 0, scale: 1.035, duration: 1.2 }, '-=1.15')
 
-      gsap.to('.pricing-index', {
-        yPercent: -5,
+      gsap.to('.pricing-hero__photo', {
+        yPercent: 4,
+        scale: 1.04,
         ease: 'none',
-        scrollTrigger: { trigger: '.pricing-hero', start: 'top top', end: 'bottom top', scrub: .7 },
+        scrollTrigger: { trigger: '.pricing-hero', start: 'top top', end: 'bottom top', scrub: true },
       })
 
       gsap.utils.toArray<HTMLElement>('[data-pricing-reveal]').forEach((element) => {
@@ -112,6 +107,8 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="pricing-hero">
+        <img class="pricing-hero__photo" :src="pricingHeroUrl" alt="Comerciante analisando sua operação no notebook" fetchpriority="high">
+        <div class="pricing-hero__overlay"></div>
         <div class="site-container pricing-hero__layout">
           <div class="pricing-hero__content">
             <p class="pricing-hero__eyebrow"><span></span>Planos Elínea</p>
@@ -122,17 +119,6 @@ onBeforeUnmount(() => destroyMotion?.())
               <MarketingTextButton tone="light" href="#comparacao">Comparar recursos</MarketingTextButton>
             </div>
           </div>
-
-          <aside class="pricing-index" aria-label="Resumo dos planos Elínea">
-            <div class="pricing-index__top"><span>A partir de</span><small>01 — 05</small></div>
-            <strong>{{ money(startingPrice) }}</strong><em>por mês</em>
-            <div class="pricing-index__rows">
-              <p><span>Planos disponíveis</span><b>{{ plans.length }}</b></p>
-              <p><span>Mensalidade</span><b>Por plano</b></p>
-              <p><span>Implantação</span><b>Valor separado</b></p>
-              <p><span>Projetos especiais</span><b>Sob consulta</b></p>
-            </div>
-          </aside>
         </div>
         <div class="pricing-hero__marquee" aria-hidden="true"><span>Catálogo</span><i></i><span>WhatsApp</span><i></i><span>E-commerce</span><i></i><span>Operação completa</span></div>
       </section>
@@ -208,10 +194,11 @@ onBeforeUnmount(() => destroyMotion?.())
 
 <style scoped>
 .pricing-page { overflow: clip; }
-.pricing-hero { position: relative; min-height: 100svh; overflow: hidden; padding: 8rem 0 0; background: radial-gradient(circle at 76% 40%, rgba(7,148,94,.2), transparent 25%), #071310; color: white; isolation: isolate; }
-.pricing-hero::before { position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, black, transparent 88%); content: ''; }
-.pricing-hero__layout { display: grid; min-height: calc(100svh - 13rem); grid-template-columns: minmax(0, 1.2fr) minmax(320px, .68fr); gap: clamp(3rem, 7vw, 7rem); align-items: center; }
-.pricing-hero__content { min-width: 0; max-width: 900px; }
+.pricing-hero { position: relative; min-height: 100svh; overflow: hidden; background: #071310; color: white; isolation: isolate; }
+.pricing-hero__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
+.pricing-hero__overlay { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(4,17,14,.96) 0%, rgba(5,22,17,.84) 37%, rgba(4,17,14,.31) 64%, rgba(3,10,9,.08) 100%); }
+.pricing-hero__layout { display: flex; min-height: calc(100svh - 5rem); align-items: center; padding-top: 5rem; }
+.pricing-hero__content { min-width: 0; width: min(55vw, 800px); }
 .pricing-hero__eyebrow { display: inline-flex; align-items: center; gap: .65rem; color: rgba(255,255,255,.66); font-size: .8rem; font-weight: 700; }
 .pricing-hero__eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 16px rgba(92,221,164,.55); }
 .pricing-hero__title { margin-top: 1.75rem; color: white; font-size: clamp(3.7rem, 5.7vw, 6.5rem); font-weight: 600; line-height: .93; letter-spacing: -.072em; }
@@ -219,13 +206,6 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-hero__title i { display: block; font-style: normal; }
 .pricing-hero__copy { max-width: 42rem; margin-top: 1.8rem; color: rgba(255,255,255,.63); font-size: clamp(1rem, 1.2vw, 1.2rem); line-height: 1.7; }
 .pricing-hero__actions { display: flex; margin-top: 2.25rem; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
-.pricing-index { position: relative; padding: clamp(2rem, 3.5vw, 3.5rem) 0; border-top: 1px solid rgba(255,255,255,.18); border-bottom: 1px solid rgba(255,255,255,.18); }
-.pricing-index__top { display: flex; justify-content: space-between; color: rgba(255,255,255,.48); font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
-.pricing-index > strong { display: block; margin-top: clamp(2rem, 5vw, 4.5rem); color: white; font-family: var(--font-display); font-size: clamp(3.8rem, 6vw, 6.8rem); font-weight: 600; line-height: .9; letter-spacing: -.075em; }
-.pricing-index > em { display: block; margin-top: .7rem; color: var(--green-bright); font-size: .78rem; font-style: normal; font-weight: 750; }
-.pricing-index__rows { display: grid; margin-top: clamp(2.5rem, 5vw, 5rem); }
-.pricing-index__rows p { display: flex; min-height: 48px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.09); color: rgba(255,255,255,.52); font-size: .72rem; }
-.pricing-index__rows b { color: rgba(255,255,255,.83); font-size: .7rem; }
 .pricing-hero__marquee { display: flex; min-height: 5rem; align-items: center; justify-content: center; gap: clamp(1rem, 3vw, 3.5rem); border-top: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.34); font-size: clamp(.72rem, 1vw, .9rem); font-weight: 650; letter-spacing: .03em; }
 .pricing-hero__marquee i { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
 
@@ -274,24 +254,22 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-final .site-title { font-size: clamp(3.7rem, 8vw, 8rem); }
 
 @media (max-width: 1080px) {
-  .pricing-hero__layout { grid-template-columns: minmax(0, 1.1fr) minmax(290px, .7fr); gap: 3rem; }
+  .pricing-hero__content { width: min(62vw, 780px); }
   .pricing-comparison__heading, .pricing-value__heading { grid-template-columns: 1fr .75fr; }
   .pricing-faq__layout { grid-template-columns: .8fr 1.2fr; gap: 4rem; }
 }
 @media (max-width: 900px) {
-  .pricing-hero { min-height: auto; }
-  .pricing-hero__layout { min-height: 0; padding: 4rem 0 5rem; grid-template-columns: 1fr; }
-  .pricing-index { width: min(100%, 680px); }
   .pricing-comparison__heading, .pricing-value__heading, .pricing-faq__layout { grid-template-columns: 1fr; gap: 1rem; }
   .pricing-value__heading .site-copy { margin-top: 1.75rem; }
   .pricing-faq__intro { position: static; max-width: 720px; margin-bottom: 3rem; }
 }
 @media (max-width: 767px) {
-  .pricing-hero { padding-top: 7rem; }
-  .pricing-hero__layout { padding-top: 2.5rem; gap: 4rem; }
+  .pricing-hero__photo { object-position: 66% center; }
+  .pricing-hero__overlay { background: linear-gradient(180deg, rgba(4,17,14,.91) 0%, rgba(4,17,14,.77) 57%, rgba(4,17,14,.57) 100%); }
+  .pricing-hero__layout { min-height: max(760px, calc(100svh - 5rem)); align-items: flex-start; padding-top: clamp(9.5rem, 23vh, 12rem); padding-bottom: 4rem; }
+  .pricing-hero__content { width: 100%; }
   .pricing-hero__title { font-size: clamp(3.35rem, 14.5vw, 5rem); }
   .pricing-hero__actions { align-items: flex-start; flex-direction: column; }
-  .pricing-index > strong { font-size: clamp(3.5rem, 17vw, 5.5rem); }
   .pricing-hero__marquee { padding: 1.25rem; justify-content: flex-start; overflow: hidden; white-space: nowrap; }
   .pricing-hero__marquee span:last-child, .pricing-hero__marquee i:last-of-type { display: none; }
   .pricing-table-wrap { margin-right: calc(var(--gutter) * -1); padding-right: var(--gutter); }
@@ -300,5 +278,9 @@ onBeforeUnmount(() => destroyMotion?.())
   .pricing-value article h3 { margin-top: 3.5rem; }
   .pricing-faq summary { min-height: 100px; grid-template-columns: 2rem 1fr 20px; gap: .65rem; }
   .pricing-faq details > p { padding: 0 0 1.7rem 2.65rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-hero__photo { transform: none !important; }
 }
 </style>

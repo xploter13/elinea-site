@@ -26,6 +26,9 @@ genérico nem copiar outras marcas usadas como referência.
 - Bordas são sutis, raios moderados e sombras suaves, concentradas nas interfaces do
   produto.
 - Fotografias devem aproximar a tecnologia de comerciantes e negócios reais.
+- Imagens geradas com pessoas devem seguir uma direção documental e natural: textura
+  real de pele, assimetria, postura espontânea, luz imperfeita e ambientes com sinais
+  de uso. Evitar pele plástica, pose publicitária e acabamento excessivamente perfeito.
 - Evitar gradientes chamativos, glassmorphism excessivo, sombras pesadas, excesso de
   bordas e animações decorativas sem função narrativa.
 
@@ -111,7 +114,9 @@ A rota `/precos` concentra a decisão comercial sem duplicar os dados da Home. S
 narrativa usa uma página de preços de ecommerce como referência de hierarquia, sem
 copiar texto, promessas ou identidade de concorrentes:
 
-1. Hero escuro e editorial com preço inicial e leitura rápida da estrutura comercial.
+1. Hero fotográfico escuro, com texto e CTAs em uma única coluna. A imagem mostra um
+   pequeno negócio em momento de análise e crescimento, com o assunto à direita e a
+   leitura protegida à esquerda. Não utilizar card de preço nesse hero.
 2. Seção de planos reutilizada integralmente da Home.
 3. Comparação dos recursos centrais em tabela semântica e rolável no mobile.
 4. Capítulo escuro que separa mensalidade, implantação e evolução do projeto.
