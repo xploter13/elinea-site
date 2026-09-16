@@ -100,8 +100,10 @@ refinamentos, salvo nova orientação explícita.
 - Os cards do mapa de integrações flutuam continuamente com movimentos curtos e
   assíncronos. No mobile, deixam a composição absoluta e passam ao fluxo da página
   ao redor do núcleo para preservar legibilidade e impedir overflow.
-- A linha do fluxo de venda é desenhada durante o scroll e os estados entram em
-  sequência.
+- A linha do fluxo de venda é desenhada durante o scroll, conecta as bordas dos cards
+  com curvas ortogonais arredondadas e pequenos pontos de passagem, permanecendo
+  atrás dos estados. Os pontos surgem progressivamente com o avanço da linha. O
+  percurso se adapta à disposição alternada no mobile e alcança o estado final.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
   legíveis. Não existe botão de pausa. A órbita pausa enquanto o cursor está sobre a
   composição e retoma ao sair; também pausa fora da viewport ou com a aba oculta.

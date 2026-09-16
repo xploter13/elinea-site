@@ -207,11 +207,13 @@ onMounted(async () => {
           scrollTrigger: {trigger: operationTitle, start: 'top 88%', end: 'bottom 45%', scrub: .65}
         })
       }
-      const path = document.querySelector<SVGPathElement>('[data-sale-path]')
-      if (path) {
-        const length = path.getTotalLength();
-        gsap.set(path, {strokeDasharray: length, strokeDashoffset: length});
-        gsap.to(path, {
+      const paths = gsap.utils.toArray<SVGPathElement>('[data-sale-path]')
+      if (paths.length) {
+        paths.forEach((path) => {
+          const length = path.getTotalLength()
+          gsap.set(path, {strokeDasharray: length, strokeDashoffset: length})
+        })
+        gsap.to(paths, {
           strokeDashoffset: 0,
           ease: 'none',
           scrollTrigger: {trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7}
@@ -224,6 +226,18 @@ onMounted(async () => {
         stagger: .16,
         duration: .5,
         scrollTrigger: {trigger: '.sale-map', start: 'top 72%', once: true}
+      })
+      gsap.utils.toArray<SVGSVGElement>('.sale-path').forEach((pathSvg) => {
+        const dots = pathSvg.querySelectorAll<SVGCircleElement>('[data-sale-dot]')
+        gsap.fromTo(dots, {opacity: 0, scale: 0, transformOrigin: 'center'}, {
+          opacity: 1,
+          scale: 1,
+          duration: .08,
+          delay: .16,
+          stagger: .22,
+          ease: 'none',
+          scrollTrigger: {trigger: '.sale-map', start: 'top 76%', end: 'bottom 58%', scrub: .7}
+        })
       })
       gsap.from('.ecosystem-node', {
         opacity: 0,
