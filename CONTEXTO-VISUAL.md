@@ -115,6 +115,10 @@ refinamentos, salvo nova orientação explícita.
   “Você cuida do negócio” e “O Elínea cuida do digital”.
 - Na seção “Tudo sob controle”, os módulos operacionais aparecem progressivamente em
   cards conforme o scroll; no mobile, permanecem no fluxo vertical da página.
+- Na página Plataforma, os cards de “Recursos que formam uma operação” formam um
+  empilhamento sticky no desktop: cada recurso cobre diretamente o anterior enquanto
+  a coluna editorial permanece centralizada. Não há scrub ou transição interpolada;
+  em tablet e mobile, os recursos voltam ao fluxo natural.
 - Os cards do mapa de integrações flutuam continuamente com movimentos curtos e
   assíncronos. No mobile, deixam a composição absoluta e passam ao fluxo da página
   ao redor do núcleo para preservar legibilidade e impedir overflow.
