@@ -122,6 +122,26 @@ Os valores e recursos vivem em `app/data/plans.ts`. A Home e a página Preços u
 mesma fonte e o mesmo `app/components/pricing/CheckoutModal.vue`; qualquer alteração
 comercial deve ser feita nessa fonte única e validada antes de publicação.
 
+## Página Recursos
+
+A rota `/recursos` detalha as capacidades da operação sem repetir a narrativa da
+página Plataforma. A página usa como referência a hierarquia de cards editoriais de
+plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
+
+1. Hero escuro com uma visão compacta da operação conectada.
+2. Cards grandes para pagamentos, logística, ERP/fiscal e venda pelo WhatsApp, com
+   ilustrações de produto construídas em HTML/CSS.
+3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
+4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios.
+5. Estados de disponibilidade explícitos para evitar promessas indevidas.
+6. Migração apresentada como processo de diagnóstico, preparação, conexões e entrada
+   no ar, incluindo cuidados com dados e SEO.
+7. CTA final e componentes compartilhados de header e footer.
+
+WhatsApp é apresentado como disponível. Gateways variam conforme o plano; ERP,
+logística e emissão fiscal dependem de configuração ou projeto personalizado; Agente
+de IA, Google Analytics e Meta permanecem identificados como recursos em evolução.
+
 ## Movimento e interação
 
 - GSAP e ScrollTrigger são carregados dinamicamente na Home.

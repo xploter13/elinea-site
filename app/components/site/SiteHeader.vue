@@ -21,7 +21,7 @@ const navigation = [
   { label: 'Home', to: '/' },
   { label: 'Plataforma', to: '/plataforma' },
   { label: 'Preços', to: '/precos' },
-  { label: 'Recursos', to: '/#produto' },
+  { label: 'Recursos', to: '/recursos' },
 ]
 </script>
 
