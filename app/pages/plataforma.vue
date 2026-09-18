@@ -15,6 +15,12 @@ const capabilities = [
   { icon: MessageCircle, title: 'WhatsApp e automações', text: 'Conecte conversas, eventos de pedidos e jornadas automáticas sem separar atendimento e venda.', tag: 'Conversa que continua' },
 ]
 
+const startSteps = [
+  { icon: PanelsTopLeft, title: 'Escolha seu caminho', text: 'Encontre o plano que acompanha o momento atual do negócio.' },
+  { icon: Workflow, title: 'Organize a estrutura', text: 'Configure catálogo, identidade e os fluxos necessários para começar.' },
+  { icon: Sparkles, title: 'Venda e evolua', text: 'Coloque a operação no ar e amplie os recursos quando fizer sentido.' },
+]
+
 const workflow = [
   { icon: ShoppingBag, label: 'A venda entra', text: 'O pedido chega com os dados necessários para a operação começar.' },
   { icon: PackageCheck, label: 'A rotina responde', text: 'Pagamento, estoque e status avançam em uma sequência organizada.' },
@@ -34,6 +40,7 @@ onMounted(async () => {
   gsap.registerPlugin(ScrollTrigger)
   if (!pageRoot.value) return
   const mm = gsap.matchMedia()
+  const stepListenerCleanups: Array<() => void> = []
   const context = gsap.context(() => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({ defaults: { ease: 'power3.out' } })
@@ -46,6 +53,26 @@ onMounted(async () => {
       })
       gsap.from('.platform-workflow__line', { scaleX: 0, transformOrigin: 'left center', ease: 'none', scrollTrigger: { trigger: '.platform-workflow__track', start: 'top 78%', end: 'bottom 62%', scrub: .7 } })
       gsap.from('.platform-workflow__step', { y: 24, opacity: 0, stagger: .14, duration: .55, scrollTrigger: { trigger: '.platform-workflow__track', start: 'top 74%', once: true } })
+      gsap.from('.platform-start__steps article', { y: 28, opacity: 0, stagger: .12, duration: .6, scrollTrigger: { trigger: '.platform-start__steps', start: 'top 80%', once: true } })
+
+      const startStepEls = pageRoot.value?.querySelectorAll<HTMLElement>('.platform-start__steps article')
+      if (startStepEls?.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        startStepEls.forEach((step) => {
+          const indexEl = step.querySelector<HTMLElement>('.platform-start__index')
+          if (!indexEl) return
+          const moveX = gsap.quickTo(indexEl, 'x', { duration: .7, ease: 'power3.out' })
+          const moveY = gsap.quickTo(indexEl, 'y', { duration: .7, ease: 'power3.out' })
+          const onMove = (event: MouseEvent) => {
+            const rect = step.getBoundingClientRect()
+            moveX(((event.clientX - rect.left) / rect.width - .5) * 26)
+            moveY(((event.clientY - rect.top) / rect.height - .5) * 26)
+          }
+          const onLeave = () => { moveX(0); moveY(0) }
+          step.addEventListener('mousemove', onMove)
+          step.addEventListener('mouseleave', onLeave)
+          stepListenerCleanups.push(() => { step.removeEventListener('mousemove', onMove); step.removeEventListener('mouseleave', onLeave) })
+        })
+      }
       const capabilitiesSection = pageRoot.value?.querySelector<HTMLElement>('.platform-capabilities')
       const capabilitiesIntro = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__intro')
       const firstCapability = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__card')
@@ -66,7 +93,7 @@ onMounted(async () => {
     })
 
   }, pageRoot.value)
-  destroyMotion = () => { mm.revert(); context.revert() }
+  destroyMotion = () => { stepListenerCleanups.forEach((cleanup) => cleanup()); mm.revert(); context.revert() }
 })
 
 onBeforeUnmount(() => destroyMotion?.())
@@ -182,9 +209,12 @@ onBeforeUnmount(() => destroyMotion?.())
         <div class="site-container">
           <div class="platform-start__heading" data-platform-reveal><p class="site-label">Da ideia à operação</p><h2 class="site-title">Coloque seu negócio<br>em movimento.</h2></div>
           <div class="platform-start__steps">
-            <article><span>01</span><PanelsTopLeft :size="25" /><h3>Escolha seu caminho</h3><p>Encontre o plano que acompanha o momento atual do negócio.</p></article>
-            <article><span>02</span><Workflow :size="25" /><h3>Organize a estrutura</h3><p>Configure catálogo, identidade e os fluxos necessários para começar.</p></article>
-            <article><span>03</span><Sparkles :size="25" /><h3>Venda e evolua</h3><p>Coloque a operação no ar e amplie os recursos quando fizer sentido.</p></article>
+            <article v-for="(item, index) in startSteps" :key="item.title">
+              <span class="platform-start__index" aria-hidden="true">0{{ index + 1 }}</span>
+              <span class="platform-start__icon"><component :is="item.icon" :size="22" aria-hidden="true" /></span>
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.text }}</p>
+            </article>
           </div>
         </div>
       </section>
@@ -242,8 +272,8 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-capabilities__list h3 { margin-top: .5rem; font-size: clamp(2rem, 4vw, 4.5rem); letter-spacing: -.055em; }
 .platform-capabilities__list article > strong { max-width: 42rem; margin-top: 1.1rem; color: var(--muted); font-size: .95rem; font-weight: 500; line-height: 1.7; }
 .platform-scale { background: white; }.platform-scale__layout { grid-template-columns: 1.18fr .82fr; }.platform-scale__image { position: relative; min-height: 680px; }.platform-scale__image img { width: 100%; height: 680px; border-radius: 30px; object-fit: cover; object-position: 60% center; }.platform-scale__image > span { position: absolute; right: 1.5rem; bottom: 1.5rem; display: inline-flex; padding: .8rem 1rem; align-items: center; gap: .5rem; border-radius: 12px; background: white; color: var(--green); font-size: .7rem; font-weight: 800; box-shadow: var(--shadow); }.platform-section-copy ul { display: grid; gap: .7rem; margin: 1.6rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: .88rem; font-weight: 650; }.platform-section-copy li { display: flex; align-items: center; gap: .6rem; }.platform-section-copy li svg { color: var(--green); }
-.platform-start { background: #edf4f0; }.platform-start__heading { max-width: 900px; }.platform-start__steps { display: grid; margin-top: clamp(3.5rem, 7vw, 6rem); grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }.platform-start__steps article { min-height: 330px; padding: 2rem clamp(1.25rem, 3vw, 3rem); border-right: 1px solid var(--line); }.platform-start__steps article:last-child { border-right: 0; }.platform-start__steps span { color: #97a49f; font-size: .65rem; font-weight: 800; }.platform-start__steps svg { display: block; margin-top: 4rem; color: var(--green); }.platform-start__steps h3 { margin-top: 1.5rem; font-size: 1.25rem; }.platform-start__steps p { margin-top: .8rem; color: var(--muted); font-size: .85rem; line-height: 1.65; }.platform-final { min-height: 100svh; }
+.platform-start { background: #edf4f0; }.platform-start__heading { max-width: 900px; }.platform-start__steps { display: grid; margin-top: clamp(3.5rem, 7vw, 6rem); grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }.platform-start__steps article { position: relative; overflow: hidden; min-height: 340px; padding: 2rem clamp(1.25rem, 3vw, 3rem); border-right: 1px solid var(--line); }.platform-start__steps article:last-child { border-right: 0; }.platform-start__index { position: absolute; top: -.3em; right: -.08em; z-index: 0; font-family: var(--font-display); font-size: clamp(7rem, 10vw, 9.5rem); font-weight: 700; line-height: 1; letter-spacing: -.04em; color: rgba(7,148,94,.12); pointer-events: none; user-select: none; transition: color .4s ease; }.platform-start__steps article:hover .platform-start__index { color: rgba(7,148,94,.2); }.platform-start__icon { position: relative; z-index: 1; display: grid; width: 56px; height: 56px; place-items: center; border: 1px solid rgba(7,148,94,.22); border-radius: 50%; background: var(--paper); color: var(--green); }.platform-start__steps h3 { position: relative; z-index: 1; margin-top: 2rem; font-size: 1.25rem; }.platform-start__steps p { position: relative; z-index: 1; margin-top: .8rem; max-width: 30ch; color: var(--muted); font-size: .85rem; line-height: 1.65; }.platform-final { min-height: 100svh; }
 @media (max-width: 1080px) { .platform-hero__layout { grid-template-columns: 1fr; padding-block: 3rem; }.platform-hero__content { max-width: 800px; }.platform-console { width: min(100%, 820px); margin-inline: auto; transform: none; }.platform-storefront__layout, .platform-scale__layout { grid-template-columns: 1fr; }.platform-section-copy { max-width: 780px; }.storefront-scene { width: min(100%, 820px); margin-inline: auto; }.platform-capabilities__layout { grid-template-columns: 1fr; }.platform-capabilities__intro { position: static; max-width: 800px; transform: none; }.platform-capabilities__list { display: grid; padding-bottom: 0; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }.platform-capabilities__list .platform-capabilities__card { position: static; top: auto; z-index: auto; min-height: 310px; margin-top: 0; padding: 2rem; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }.platform-scale__image { order: 2; } }
-@media (max-width: 767px) { .platform-hero { min-height: auto; padding-top: 8rem; }.platform-hero__layout { min-height: 0; gap: 4rem; }.platform-hero__title { font-size: clamp(3.1rem, 14vw, 4.7rem); }.platform-hero__actions { align-items: flex-start; flex-direction: column; }.platform-hero__rail { gap: 1rem; overflow: hidden; }.platform-hero__rail span:nth-child(even) { display: none; }.platform-console { min-height: 520px; border-radius: 18px; }.platform-console__body { padding: .8rem; grid-template-columns: 1fr; }.platform-console__orders { min-height: 220px; }.platform-console__chart { display: none; }.platform-console__float { display: none; }.platform-storefront__layout { gap: 3rem; }.storefront-scene { min-height: 520px; }.storefront-window { inset: 0 0 5% 0; }.storefront-window nav { display: none; }.storefront-window__hero { min-height: 230px; padding: 2rem 1.25rem; }.storefront-products { padding: .8rem; }.storefront-products article > i { height: 80px; }.storefront-products article:nth-child(3) { display: none; }.storefront-products { grid-template-columns: repeat(2, 1fr); }.storefront-phone { min-width: 135px; width: 38%; }.storefront-phone > div { min-height: 190px; }.storefront-scene > p { display: none; }.platform-workflow__heading { grid-template-columns: 1fr; gap: .5rem; }.platform-workflow__track { grid-template-columns: 1fr; gap: 2rem; }.platform-workflow__line { top: 5%; bottom: 5%; left: 30px; width: 1px; height: auto; transform: none !important; }.platform-workflow__step { min-height: 150px; padding-left: 85px; }.platform-workflow__step > span { position: absolute; left: 0; }.platform-workflow__step > small { margin-top: 0; }.platform-capabilities__list { grid-template-columns: 1fr; }.platform-capabilities__list article { min-height: 280px; padding: 2rem 0; border-right: 0; }.platform-scale__image, .platform-scale__image img { min-height: 480px; height: 480px; }.platform-start__steps { grid-template-columns: 1fr; }.platform-start__steps article { min-height: 250px; padding-inline: 0; border-right: 0; border-bottom: 1px solid var(--line); }.platform-start__steps svg { margin-top: 2.5rem; } }
+@media (max-width: 767px) { .platform-hero { min-height: auto; padding-top: 8rem; }.platform-hero__layout { min-height: 0; gap: 4rem; }.platform-hero__title { font-size: clamp(3.1rem, 14vw, 4.7rem); }.platform-hero__actions { align-items: flex-start; flex-direction: column; }.platform-hero__rail { gap: 1rem; overflow: hidden; }.platform-hero__rail span:nth-child(even) { display: none; }.platform-console { min-height: 520px; border-radius: 18px; }.platform-console__body { padding: .8rem; grid-template-columns: 1fr; }.platform-console__orders { min-height: 220px; }.platform-console__chart { display: none; }.platform-console__float { display: none; }.platform-storefront__layout { gap: 3rem; }.storefront-scene { min-height: 520px; }.storefront-window { inset: 0 0 5% 0; }.storefront-window nav { display: none; }.storefront-window__hero { min-height: 230px; padding: 2rem 1.25rem; }.storefront-products { padding: .8rem; }.storefront-products article > i { height: 80px; }.storefront-products article:nth-child(3) { display: none; }.storefront-products { grid-template-columns: repeat(2, 1fr); }.storefront-phone { min-width: 135px; width: 38%; }.storefront-phone > div { min-height: 190px; }.storefront-scene > p { display: none; }.platform-workflow__heading { grid-template-columns: 1fr; gap: .5rem; }.platform-workflow__track { grid-template-columns: 1fr; gap: 2rem; }.platform-workflow__line { top: 5%; bottom: 5%; left: 30px; width: 1px; height: auto; transform: none !important; }.platform-workflow__step { min-height: 150px; padding-left: 85px; }.platform-workflow__step > span { position: absolute; left: 0; }.platform-workflow__step > small { margin-top: 0; }.platform-capabilities__list { grid-template-columns: 1fr; }.platform-capabilities__list article { min-height: 280px; padding: 2rem 0; border-right: 0; }.platform-scale__image, .platform-scale__image img { min-height: 480px; height: 480px; }.platform-start__steps { grid-template-columns: 1fr; }.platform-start__steps article { min-height: 250px; padding-inline: 0; border-right: 0; border-bottom: 1px solid var(--line); } }
 @media (prefers-reduced-motion: reduce) { .platform-console { transform: none; } }
 </style>
