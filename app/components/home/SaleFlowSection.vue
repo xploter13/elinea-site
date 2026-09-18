@@ -192,7 +192,6 @@ onBeforeUnmount(() => {
           <span class="sale-step__icon"><component :is="step.icon" :size="20" aria-hidden="true" /></span>
           <span><small>{{ step.label }}</small><strong>{{ step.value }}</strong></span>
         </article>
-        <p class="sale-note" aria-hidden="true">Mais vendas.<br>Menos trabalho.</p>
       </div>
     </div>
   </section>
