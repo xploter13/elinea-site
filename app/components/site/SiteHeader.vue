@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import logoUrl from '~/assets/images/elinea-logo.svg'
 import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
-import {MarketingButton, MarketingSocialRail} from '@elinea/ui/marketing'
+import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Menu, X, User} from '@lucide/vue'
 
-const config = useRuntimeConfig()
 const route = useRoute()
 const mobileMenuOpen = ref(false)
 const headerScrolled = ref(false)
@@ -30,7 +29,6 @@ const navigation = [
 </script>
 
 <template>
-  <MarketingSocialRail :facebook-href="config.public.facebookUrl" :instagram-href="config.public.instagramUrl"/>
   <header data-header class="premium-header" :class="{ 'is-scrolled': headerScrolled }">
     <div class="site-container header-inner">
       <NuxtLink to="/" class="site-logo" aria-label="Elínea — início">

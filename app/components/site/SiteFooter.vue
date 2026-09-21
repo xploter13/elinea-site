@@ -14,8 +14,17 @@ const config = useRuntimeConfig()
         <div class="footer-social">
           <a :href="config.public.facebookUrl" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><span
               aria-hidden="true">
-            <svg data-v-c827c228="" viewBox="0 0 24 24" aria-hidden="true">
-              <path data-v-c827c228="" d="M13.7 21v-8h2.8l.4-3.1h-3.2V8c0-.9.3-1.5 1.6-1.5H17V3.7c-.8-.1-1.6-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2v2.2H8v3.1h2.5v8h3.2Z"></path>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13.7 21v-8h2.8l.4-3.1h-3.2V8c0-.9.3-1.5 1.6-1.5H17V3.7c-.8-.1-1.6-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2v2.2H8v3.1h2.5v8h3.2Z"></path>
+            </svg>
+          </span>
+          </a>
+          <a :href="config.public.instagramUrl" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><span
+              aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.4" cy="6.8" r="1"></circle>
             </svg>
           </span>
           </a>
