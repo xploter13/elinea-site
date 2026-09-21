@@ -167,7 +167,7 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
 - A última linha do título do hero (“negócios reais.”) tem efeito de máquina de
   escrever: digita, pausa, apaga e digita a próxima frase, em loop contínuo, com
   cursor piscando. As frases do ciclo são “negócios reais.”, “lojas de verdade.” e
-  “quem vende de verdade.”, todas com o mesmo peso/tempo de exibição — “negócios
+  “vender mais.”, todas com o mesmo peso/tempo de exibição — “negócios
   reais.” é o slogan aprovado do hero, é a primeira frase exibida (inclusive sem
   JavaScript) e continua aparecendo normalmente a cada volta do ciclo, sem ficar de
   fora. O efeito só começa depois que a animação de entrada do hero termina, pausa
