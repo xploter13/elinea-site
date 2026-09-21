@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
+import paymentSceneUrl from '~/assets/images/elinea-payment-scene.jpg'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
   ArrowRight,
@@ -173,10 +174,7 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="resources-grid">
             <article v-for="card in resourceCards" :id="card.id" :key="card.id" class="resource-card" :class="`resource-card--${card.id}`">
               <div class="resource-card__visual" aria-hidden="true">
-                <div v-if="card.id === 'pagamentos'" class="payment-scene">
-                  <div class="payment-order"><small>Resumo do pedido</small><span><i></i><b>Produto selecionado</b><em>R$ 129,90</em></span><strong>Total <b>R$ 129,90</b></strong></div>
-                  <div class="payment-method"><span><CreditCard :size="17" />Forma de pagamento</span><span class="payment-option is-active">Pix <Check :size="14" /></span><span class="payment-option">Cartão</span><small>Gateway definido na implantação</small></div>
-                </div>
+                <img v-if="card.id === 'pagamentos'" class="payment-scene" :src="paymentSceneUrl" alt="" loading="lazy">
 
                 <div v-else-if="card.id === 'logistica'" class="shipping-scene">
                   <div class="shipping-route"><i></i><span class="route-dot route-dot--start"><Store :size="15" /></span><span class="route-dot route-dot--end"><PackageCheck :size="15" /></span></div>
@@ -312,11 +310,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .resource-card h3 { max-width: 32rem; margin-top: 1.3rem; font-size: clamp(1.7rem, 2.5vw, 2.55rem); line-height: 1.03; letter-spacing: -.05em; }
 .resource-card__content > p { max-width: 37rem; margin-top: 1rem; color: var(--muted); font-size: .9rem; line-height: 1.7; }
 
-.payment-scene { position: absolute; inset: 10% 7%; display: grid; grid-template-columns: .92fr 1.08fr; align-items: center; }
-.payment-order, .payment-method { position: relative; padding: 1.4rem; border-radius: 16px; background: white; box-shadow: 0 25px 55px -38px rgba(0,0,0,.5); }
-.payment-order { z-index: 1; transform: translateX(8%); }.payment-order > small, .payment-method > span { color: var(--muted); font-size: .68rem; font-weight: 700; }
-.payment-order > span { display: grid; margin-top: 1rem; padding: .8rem 0 .9rem 3.2rem; border-block: 1px solid var(--line); }.payment-order > span i { position: absolute; width: 38px; height: 46px; margin-left: -3.2rem; border-radius: 8px; background: linear-gradient(145deg, #dff4e9, #96d8b9); }.payment-order b { font-size: .72rem; }.payment-order em { margin-top: .18rem; color: var(--muted); font-size: .63rem; font-style: normal; }.payment-order > strong { display: flex; margin-top: 1rem; justify-content: space-between; font-size: .75rem; }.payment-order > strong b { font-size: .9rem; }
-.payment-method { z-index: 2; transform: translateX(-2%); }.payment-method > span:first-child { display: flex; align-items: center; gap: .45rem; }.payment-option { display: flex; width: 100%; min-height: 44px; margin-top: .65rem; padding: 0 .85rem; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-radius: 9px; background: white; color: var(--ink); font-size: .72rem; font-weight: 750; }.payment-option.is-active { border-color: rgba(7,148,94,.35); background: #effaf4; color: var(--green); }.payment-method > small { display: block; margin-top: .8rem; color: var(--muted); font-size: .55rem; }
+.payment-scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 
 .shipping-scene { position: absolute; inset: 0; background: linear-gradient(145deg, #e6f0eb, #f7faf8); }
 .shipping-route { position: absolute; inset: 16% 10%; border-radius: 46% 54% 50% 42%; border: 2px dashed rgba(7,148,94,.28); transform: rotate(-8deg); }.shipping-route i { position: absolute; top: 45%; left: 16%; width: 68%; height: 2px; background: var(--green); transform: rotate(14deg); transform-origin: left; }
@@ -391,7 +385,6 @@ onBeforeUnmount(() => destroyMotion?.())
   .resources-heading { gap: 1rem; }
   .resource-card__visual { min-height: 360px; }.resource-card__meta { align-items: flex-start; flex-direction: column; }.resource-card h3 { font-size: 1.8rem; }
   .resource-card--pagamentos .resource-card__visual { min-height: 430px; }
-  .payment-scene { inset: 7%; grid-template-columns: 1fr; }.payment-order { width: 78%; transform: none; }.payment-method { width: 76%; margin: -1rem 0 0 auto; transform: none; }
   .shipping-package { top: 10%; right: 4%; min-width: 185px; }.shipping-providers { bottom: 7%; left: 4%; }
   .erp-scene { padding: 1.2rem; grid-template-columns: 1fr; gap: .5rem; }.erp-connector { min-width: 0; min-height: 30px; margin-inline: auto; transform: rotate(90deg); }.erp-order, .erp-stack { width: 82%; }.erp-stack { margin-left: auto; }
   .whatsapp-scene { inset: 7%; }
@@ -402,7 +395,6 @@ onBeforeUnmount(() => destroyMotion?.())
 
 @media (max-width: 420px) {
   .resource-card__visual { min-height: 340px; }
-  .payment-order { width: 86%; }.payment-method { width: 84%; }
   .whatsapp-scene { inset: 6%; }
 }
 
