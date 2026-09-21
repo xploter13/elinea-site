@@ -2,7 +2,7 @@
 import logoUrl from '~/assets/images/elinea-logo.svg'
 import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
 import {MarketingButton, MarketingSocialRail} from '@elinea/ui/marketing'
-import {ArrowRight, Menu, X} from '@lucide/vue'
+import {ArrowRight, Menu, X, User} from '@lucide/vue'
 
 const config = useRuntimeConfig()
 const route = useRoute()
@@ -40,7 +40,7 @@ const navigation = [
       <nav class="desktop-nav" aria-label="Navegação principal">
         <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
       </nav>
-      <a class="login-link" href="https://admin.elinea.com.br">Entrar</a>
+      <a class="login-link" href="https://admin.elinea.com.br"><User :size="15"/>Entrar</a>
       <MarketingButton class="header-cta" variant="solid" href="/precos#planos">Criar minha loja
         <template #icon>
           <ArrowRight :size="15"/>
@@ -54,7 +54,7 @@ const navigation = [
     </div>
     <nav v-if="mobileMenuOpen" id="menu-mobile" class="mobile-nav" aria-label="Navegação móvel">
       <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
-      <a href="https://admin.elinea.com.br">Entrar</a>
+      <a class="mobile-login-link" href="https://admin.elinea.com.br"><User :size="16"/>Entrar</a>
     </nav>
   </header>
 </template>
