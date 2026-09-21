@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
+import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
+import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
 import {
@@ -10,11 +13,9 @@ import {
   CircleUserRound,
   MessageCircle,
   PackageCheck,
-  PanelsTopLeft,
   ShoppingBag,
   Sparkles,
-  Store,
-  Workflow
+  Store
 } from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
@@ -55,19 +56,25 @@ const capabilities = [
 
 const startSteps = [
   {
-    icon: PanelsTopLeft,
+    image: pricingHeroUrl,
+    imageAlt: 'Comerciante avaliando o crescimento do negócio',
     title: 'Escolha seu caminho',
-    text: 'Encontre o plano que acompanha o momento atual do negócio.'
+    text: 'Encontre o plano que acompanha o momento atual do negócio.',
+    cta: {href: '/precos#planos'}
   },
   {
-    icon: Workflow,
+    image: controlConceptUrl,
+    imageAlt: 'Composição conceitual representando a organização da operação',
     title: 'Organize a estrutura',
-    text: 'Configure catálogo, identidade e os fluxos necessários para começar.'
+    text: 'Configure catálogo, identidade e os fluxos necessários para começar.',
+    cta: {href: '/recursos'}
   },
   {
-    icon: Sparkles,
+    image: resourcesHeroUrl,
+    imageAlt: 'Comerciante preparando pedidos de uma loja virtual',
     title: 'Venda e evolua',
-    text: 'Coloque a operação no ar e amplie os recursos quando fizer sentido.'
+    text: 'Coloque a operação no ar e amplie os recursos quando fizer sentido.',
+    cta: {href: 'mailto:contato@elinea.com.br'}
   },
 ]
 
@@ -98,7 +105,6 @@ onMounted(async () => {
   gsap.registerPlugin(ScrollTrigger)
   if (!pageRoot.value) return
   const mm = gsap.matchMedia()
-  const stepListenerCleanups: Array<() => void> = []
   const context = gsap.context(() => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({defaults: {ease: 'power3.out'}})
@@ -134,7 +140,7 @@ onMounted(async () => {
         duration: .55,
         scrollTrigger: {trigger: '.platform-workflow__track', start: 'top 74%', once: true}
       })
-      gsap.from('.platform-start__steps article', {
+      gsap.from('.platform-start__card', {
         y: 28,
         opacity: 0,
         stagger: .12,
@@ -142,30 +148,6 @@ onMounted(async () => {
         scrollTrigger: {trigger: '.platform-start__steps', start: 'top 80%', once: true}
       })
 
-      const startStepEls = pageRoot.value?.querySelectorAll<HTMLElement>('.platform-start__steps article')
-      if (startStepEls?.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        startStepEls.forEach((step) => {
-          const indexEl = step.querySelector<HTMLElement>('.platform-start__index')
-          if (!indexEl) return
-          const moveX = gsap.quickTo(indexEl, 'x', {duration: .7, ease: 'power3.out'})
-          const moveY = gsap.quickTo(indexEl, 'y', {duration: .7, ease: 'power3.out'})
-          const onMove = (event: MouseEvent) => {
-            const rect = step.getBoundingClientRect()
-            moveX(((event.clientX - rect.left) / rect.width - .5) * 26)
-            moveY(((event.clientY - rect.top) / rect.height - .5) * 26)
-          }
-          const onLeave = () => {
-            moveX(0);
-            moveY(0)
-          }
-          step.addEventListener('mousemove', onMove)
-          step.addEventListener('mouseleave', onLeave)
-          stepListenerCleanups.push(() => {
-            step.removeEventListener('mousemove', onMove);
-            step.removeEventListener('mouseleave', onLeave)
-          })
-        })
-      }
       const capabilitiesSection = pageRoot.value?.querySelector<HTMLElement>('.platform-capabilities')
       const capabilitiesIntro = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__intro')
       const firstCapability = capabilitiesSection?.querySelector<HTMLElement>('.platform-capabilities__card')
@@ -187,7 +169,6 @@ onMounted(async () => {
 
   }, pageRoot.value)
   destroyMotion = () => {
-    stepListenerCleanups.forEach((cleanup) => cleanup());
     mm.revert();
     context.revert()
   }
@@ -276,7 +257,6 @@ onBeforeUnmount(() => destroyMotion?.())
             <div class="storefront-phone"><span></span>
               <div><i></i><strong>SUA MARCA</strong><small>Compre de onde estiver.</small></div>
             </div>
-            <p>Uma experiência consistente<br>em cada tela.</p>
           </div>
         </div>
       </section>
@@ -357,12 +337,18 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="platform-start__heading" data-platform-reveal><p class="site-label">Da ideia à operação</p>
             <h2 class="site-title">Coloque seu negócio<br>em movimento.</h2></div>
           <div class="platform-start__steps">
-            <article v-for="(item, index) in startSteps" :key="item.title">
-              <span class="platform-start__index" aria-hidden="true">0{{ index + 1 }}</span>
-              <span class="platform-start__icon"><component :is="item.icon" :size="22" aria-hidden="true"/></span>
-              <h3>{{ item.title }}</h3>
-              <p>{{ item.text }}</p>
-            </article>
+            <a v-for="item in startSteps" :key="item.title" class="platform-start__card" :href="item.cta.href">
+              <img class="platform-start__photo" :src="item.image" :alt="item.imageAlt" loading="lazy">
+              <div class="platform-start__scrim" aria-hidden="true"></div>
+
+              <div class="platform-start__body">
+                <div class="platform-start__text">
+                  <p>{{ item.text }}</p>
+                  <h3>{{ item.title }}</h3>
+                </div>
+                <span class="platform-start__arrow" aria-hidden="true"><ArrowRight :size="18"/></span>
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -1117,70 +1103,115 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-start__steps {
   display: grid;
   margin-top: clamp(3.5rem, 7vw, 6rem);
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
-.platform-start__steps article {
+.platform-start__card {
   position: relative;
+  display: block;
   overflow: hidden;
-  min-height: 340px;
-  padding: 2rem clamp(1.25rem, 3vw, 3rem);
-  border-right: 1px solid var(--line);
+  min-height: 460px;
+  border-radius: 20px;
+  isolation: isolate;
+  color: white;
 }
 
-.platform-start__steps article:last-child {
-  border-right: 0;
-}
-
-.platform-start__index {
+.platform-start__photo {
   position: absolute;
-  top: -.3em;
-  right: -.08em;
-  z-index: 0;
-  font-family: var(--font-display);
-  font-size: clamp(7rem, 10vw, 9.5rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -.04em;
-  color: rgba(7, 148, 94, .12);
-  pointer-events: none;
-  user-select: none;
-  transition: color .4s ease;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform .5s ease;
 }
 
-.platform-start__steps article:hover .platform-start__index {
-  color: rgba(7, 148, 94, .2);
+.platform-start__card:hover .platform-start__photo,
+.platform-start__card:focus-visible .platform-start__photo {
+  transform: scale(1.05);
 }
 
-.platform-start__icon {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  width: 56px;
-  height: 56px;
-  place-items: center;
-  border: 1px solid rgba(7, 148, 94, .22);
-  border-radius: 50%;
-  background: var(--paper);
-  color: var(--green);
+.platform-start__scrim {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 17, 14, .1) 0%, rgba(4, 17, 14, .18) 45%, rgba(4, 17, 14, .88) 100%);
+  transition: background .35s ease;
 }
 
-.platform-start__steps h3 {
-  position: relative;
-  z-index: 1;
-  margin-top: 2rem;
-  font-size: 1.25rem;
+.platform-start__card:hover .platform-start__scrim,
+.platform-start__card:focus-visible .platform-start__scrim {
+  background: linear-gradient(180deg, rgba(4, 17, 14, .22) 0%, rgba(4, 17, 14, .3) 40%, rgba(4, 17, 14, .93) 100%);
 }
 
-.platform-start__steps p {
-  position: relative;
-  z-index: 1;
-  margin-top: .8rem;
-  max-width: 30ch;
-  color: var(--muted);
+.platform-start__body {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.platform-start__text p {
+  max-height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: rgba(255, 255, 255, .78);
   font-size: .85rem;
-  line-height: 1.65;
+  line-height: 1.55;
+  transition: max-height .35s ease, opacity .3s ease, margin-bottom .35s ease;
+}
+
+.platform-start__card:hover .platform-start__text p,
+.platform-start__card:focus-visible .platform-start__text p {
+  max-height: 5rem;
+  margin-bottom: .6rem;
+  opacity: 1;
+}
+
+.platform-start__text h3 {
+  color: white;
+  font-size: 1.3rem;
+  letter-spacing: -.02em;
+}
+
+.platform-start__arrow {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: white;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(6px) scale(.85);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.platform-start__card:hover .platform-start__arrow,
+.platform-start__card:focus-visible .platform-start__arrow {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (hover: none) {
+  .platform-start__text p {
+    max-height: none;
+    margin-bottom: .6rem;
+    opacity: 1;
+  }
+
+  .platform-start__arrow {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .platform-final {
@@ -1406,11 +1437,8 @@ onBeforeUnmount(() => destroyMotion?.())
     grid-template-columns: 1fr;
   }
 
-  .platform-start__steps article {
-    min-height: 250px;
-    padding-inline: 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+  .platform-start__card {
+    min-height: 380px;
   }
 }
 
