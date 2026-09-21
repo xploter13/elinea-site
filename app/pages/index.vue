@@ -8,7 +8,7 @@ import SegmentsSection from '~/components/home/SegmentsSection.vue'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import PricingSection from '~/components/home/PricingSection.vue'
 import CheckoutModal from '~/components/pricing/CheckoutModal.vue'
-import { plans, type Plan } from '~/data/plans'
+import {plans, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight} from '@lucide/vue'
 
@@ -110,8 +110,8 @@ onMounted(async () => {
       if (!mediaContext.conditions?.motionAllowed) return
 
       const pathSelector = mediaContext.conditions.mobile
-        ? '.sale-path--mobile'
-        : '.sale-path--desktop'
+          ? '.sale-path--mobile'
+          : '.sale-path--desktop'
       const pathSvg = pageRoot.value?.querySelector<SVGSVGElement>(pathSelector)
       const paths = pathSvg?.querySelectorAll<SVGPathElement>('[data-sale-path]')
       if (!pathSvg || !paths?.length) return
@@ -189,8 +189,10 @@ onBeforeUnmount(() => {
       <IntegrationsSection/>
       <PricingSection :plans="plans" @select="openCheckout"/>
       <section class="chapter final-cta">
-        <div class="site-container final-cta__inner reveal-copy"><p class="site-label">Pronto para o próximo
-          movimento?</p>
+        <div class="site-container final-cta__inner reveal-copy">
+          <p class="site-label">
+            Pronto para o próximo movimento?
+          </p>
           <h2 class="site-title">Seu negócio<br>pode vender<br>melhor.</h2>
           <p>Comece com uma estrutura simples hoje e evolua sem trocar de plataforma amanhã.</p>
           <div>
@@ -204,6 +206,6 @@ onBeforeUnmount(() => {
       </section>
     </main>
     <SiteFooter/>
-    <CheckoutModal v-model:open="checkoutOpen" :plan="selectedPlan" />
+    <CheckoutModal v-model:open="checkoutOpen" :plan="selectedPlan"/>
   </div>
 </template>
