@@ -39,10 +39,18 @@ onMounted(async () => {
           .from('.hero-support, .hero-action', {y: 15, opacity: 0, duration: .55, stagger: .07}, '-=.45')
           .from('.hero-photo', {opacity: 0, scale: 1.035, duration: 1.25}, '-=1.15')
       gsap.to('.hero-photo', {
-        yPercent: 4,
-        scale: 1.04,
+        yPercent: 8,
+        scale: 1.1,
+        opacity: 0,
         ease: 'none',
-        scrollTrigger: {trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: .8}
+        immediateRender: false,
+        scrollTrigger: {trigger: '#inicio', start: 'top top', end: '72% top', scrub: .8}
+      })
+      gsap.to('.hero-copy', {
+        yPercent: -32,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {trigger: '#inicio', start: 'top top', end: '40% top', scrub: .7}
       })
       gsap.utils.toArray<HTMLElement>('.reveal-copy').forEach((block) => {
         const children = Array.from(block.children).filter(child => !child.matches('[data-operation-title]'))
