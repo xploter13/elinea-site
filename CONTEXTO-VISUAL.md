@@ -66,6 +66,11 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
   horizontal.
 - Use `svh` em experiências de viewport para reduzir problemas causados pelas barras
   móveis do navegador.
+- Em telas de altura reduzida no desktop (notebooks 14"/15", `max-height: 860px`), o
+  hero da Home compacta paddings e margens verticais (`padding-top` do layout, margens
+  do título, do texto de apoio e das ações) para evitar que os CTAs fiquem espremidos
+  contra o fim da seção. O ajuste é só de espaçamento; hierarquia e alinhamento
+  permanecem os mesmos do desktop padrão.
 
 ## Estrutura narrativa da Home
 
@@ -153,6 +158,12 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
 
 - GSAP e ScrollTrigger são carregados dinamicamente na Home.
 - O hero possui entrada editorial e parallax sutil.
+- Ao rolar para fora do hero, o conteúdo desaparece em camadas com scrub do GSAP: o
+  texto (`.hero-copy`) sobe e some primeiro, mais rápido; a foto de fundo
+  (`.hero-photo`) sobe mais devagar, ganha um zoom leve e some por último, criando
+  sensação de profundidade. A animação de saída usa `immediateRender: false` na foto
+  para não conflitar com a animação de entrada (ambas afetam `opacity` no mesmo
+  elemento).
 - Blocos de conteúdo usam reveals curtos de opacidade e deslocamento.
 - A headline da seção de operação é preenchida caractere a caractere pela opacidade,
   vinculada ao progresso do scroll com GSAP, preservando a diferença visual entre

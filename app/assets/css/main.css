@@ -268,6 +268,13 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
   .control-stage { display: block; min-height: 0; overflow: hidden; background: #edf3ef; }.control-stage__intro { min-height: 400px; }.control-stage__visual { height: 440px; }.control-cards { position: relative; right: auto; bottom: auto; left: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 1rem; }.control-card { min-height: 250px; }
 }
 
+@media (max-height: 860px) and (min-width: 768px) {
+  .hero-layout { padding-top: 48px; }
+  .hero-title { margin-top: clamp(.75rem, 1.5vw, 1.25rem); font-size: clamp(3rem, 6vw, 5.5rem); }
+  .hero-support { margin-top: 1rem; }
+  .hero-actions { margin-top: 1.25rem; }
+}
+
 @media (max-width: 767px) {
   :root { --section-space: clamp(4.5rem, 20vw, 7rem); --gutter: 1.25rem; }
   .chapter { min-height: auto; align-items: stretch; }.split-layout { grid-template-columns: 1fr; gap: 3.5rem; }
