@@ -103,6 +103,9 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 .hero-title { margin-top: clamp(1.5rem, 3vw, 2.5rem); color: white; font-size: clamp(4rem, 7.25vw, 7.25rem); font-weight: 600; line-height: .91; letter-spacing: -.07em; }
 .hero-title > span { display: block; overflow: hidden; padding-bottom: .07em; }
 .hero-line { display: block; font-style: normal; }
+.hero-line--typed { white-space: nowrap; }
+.hero-cursor { display: inline-block; width: 3px; height: .74em; margin-left: .1em; background: currentColor; vertical-align: -.05em; animation: hero-cursor-blink 1s step-end infinite; }
+@keyframes hero-cursor-blink { 50% { opacity: 0; } }
 .hero-support { max-width: 600px; margin-top: 1.8rem; color: rgba(255,255,255,.7); font-size: clamp(1rem, 1.15vw, 1.18rem); line-height: 1.72; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.3rem; margin-top: 2.25rem; }
 .hero-secondary { display: inline-flex; min-height: 48px; align-items: center; gap: .7rem; color: white; font-size: .88rem; font-weight: 700; }
@@ -307,4 +310,5 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
   .hero-photo, .control-stage__visual img { transform: none !important; }
   .orbit-track, .ecosystem-module { animation: none !important; }
   .integration-node { animation: none !important; }
+  .hero-cursor { display: none; }
 }

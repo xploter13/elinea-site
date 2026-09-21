@@ -164,6 +164,18 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
   sensação de profundidade. A animação de saída usa `immediateRender: false` na foto
   para não conflitar com a animação de entrada (ambas afetam `opacity` no mesmo
   elemento).
+- A última linha do título do hero (“negócios reais.”) tem efeito de máquina de
+  escrever: digita, pausa, apaga e digita a próxima frase, em loop contínuo, com
+  cursor piscando. As frases do ciclo são “negócios reais.”, “lojas de verdade.” e
+  “quem vende de verdade.”, todas com o mesmo peso/tempo de exibição — “negócios
+  reais.” é o slogan aprovado do hero, é a primeira frase exibida (inclusive sem
+  JavaScript) e continua aparecendo normalmente a cada volta do ciclo, sem ficar de
+  fora. O efeito só começa depois que a animação de entrada do hero termina, pausa
+  quando o hero sai da viewport ou a aba fica oculta, e não roda com
+  `prefers-reduced-motion` (a frase original permanece fixa e sem cursor). Um texto
+  fixo e acessível com a frase completa existe para leitores de tela, e a fonte da
+  linha animada se ajusta automaticamente para nunca quebrar linha nem estourar a
+  largura do hero-copy.
 - Blocos de conteúdo usam reveals curtos de opacidade e deslocamento.
 - A headline da seção de operação é preenchida caractere a caractere pela opacidade,
   vinculada ao progresso do scroll com GSAP, preservando a diferença visual entre

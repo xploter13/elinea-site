@@ -13,6 +13,7 @@ import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
+const heroRoot = ref<HTMLElement | null>(null)
 const checkoutOpen = ref(false)
 const selectedPlan = ref<Plan | null>(null)
 const openCheckout = (plan: Plan) => {
@@ -20,7 +21,73 @@ const openCheckout = (plan: Plan) => {
   checkoutOpen.value = true
 }
 
+const TYPED_PHRASES = ['negócios reais.', 'lojas de verdade.', 'vender mais.']
+const typedWord = ref(TYPED_PHRASES[0])
+const typedLineWrap = ref<HTMLElement | null>(null)
+const typedLineEl = ref<HTMLElement | null>(null)
+
 let destroyMotion: (() => void) | undefined
+let typewriterTimer: ReturnType<typeof setTimeout> | undefined
+let typewriterObserver: IntersectionObserver | undefined
+let heroInView = false
+let pageHidden = false
+
+const canType = () => heroInView && !pageHidden
+
+function fitTypedLine() {
+  const wrap = typedLineWrap.value
+  const el = typedLineEl.value
+  if (!wrap || !el) return
+  const style = getComputedStyle(el)
+  const longest = TYPED_PHRASES.reduce((a, b) => (b.length > a.length ? b : a))
+  const probe = document.createElement('span')
+  probe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; left:-9999px; top:0;'
+  probe.style.fontFamily = style.fontFamily
+  probe.style.fontWeight = style.fontWeight
+  probe.style.fontSize = style.fontSize
+  probe.style.letterSpacing = style.letterSpacing
+  probe.textContent = longest
+  document.body.appendChild(probe)
+  const natural = probe.scrollWidth
+  document.body.removeChild(probe)
+  const available = wrap.clientWidth
+  el.style.fontSize = natural > available ? `${(parseFloat(style.fontSize) * available / natural) * .97}px` : ''
+}
+
+function typeLoop() {
+  let phraseIndex = 0
+  let phrase = TYPED_PHRASES[0] ?? ''
+  let charIndex = phrase.length
+  const step = (mode: 'hold' | 'deleting' | 'typing', delay: number) => {
+    typewriterTimer = setTimeout(() => {
+      if (!canType()) {
+        step(mode, 300)
+        return
+      }
+      if (mode === 'hold') {
+        step('deleting', 35)
+        return
+      }
+      if (mode === 'deleting') {
+        charIndex--
+        typedWord.value = phrase.slice(0, charIndex)
+        if (charIndex === 0) {
+          phraseIndex = (phraseIndex + 1) % TYPED_PHRASES.length
+          phrase = TYPED_PHRASES[phraseIndex] ?? ''
+          step('typing', 55)
+        } else {
+          step('deleting', 35)
+        }
+        return
+      }
+      charIndex++
+      typedWord.value = phrase.slice(0, charIndex)
+      const wordDone = charIndex === phrase.length
+      step(wordDone ? 'hold' : 'typing', wordDone ? 2000 : 55)
+    }, delay)
+  }
+  step('hold', 2000)
+}
 
 onMounted(async () => {
   const [{default: gsap}, {ScrollTrigger}] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
@@ -30,9 +97,31 @@ onMounted(async () => {
   const mm = gsap.matchMedia()
   const refreshSaleFlow = () => ScrollTrigger.refresh()
   window.addEventListener('sale-flow:layout', refreshSaleFlow)
+  if ('IntersectionObserver' in window && heroRoot.value) {
+    typewriterObserver = new IntersectionObserver(([entry]) => {
+      heroInView = Boolean(entry?.isIntersecting)
+    }, {threshold: 0})
+    typewriterObserver.observe(heroRoot.value)
+  } else {
+    heroInView = true
+  }
+  const updatePageVisibility = () => {
+    pageHidden = document.hidden
+  }
+  updatePageVisibility()
+  document.addEventListener('visibilitychange', updatePageVisibility)
+  const handleTypedResize = () => fitTypedLine()
+  window.addEventListener('resize', handleTypedResize)
   const context = gsap.context(() => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.timeline({defaults: {ease: 'power3.out'}})
+      gsap.timeline({
+        defaults: {ease: 'power3.out'},
+        onComplete: () => {
+          fitTypedLine()
+          document.fonts?.ready?.then(fitTypedLine)
+          typeLoop()
+        }
+      })
           .from('[data-header]', {y: -20, opacity: 0, duration: .65})
           .from('.hero-kicker', {y: 12, opacity: 0, duration: .5}, '-=.2')
           .from('.hero-line', {yPercent: 115, duration: .9, stagger: .09}, '-=.25')
@@ -145,6 +234,10 @@ onMounted(async () => {
   }, pageRoot.value)
   destroyMotion = () => {
     window.removeEventListener('sale-flow:layout', refreshSaleFlow)
+    document.removeEventListener('visibilitychange', updatePageVisibility)
+    window.removeEventListener('resize', handleTypedResize)
+    typewriterObserver?.disconnect()
+    if (typewriterTimer) clearTimeout(typewriterTimer)
     mm.revert();
     context.revert()
   }
@@ -159,14 +252,18 @@ onBeforeUnmount(() => {
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <SiteHeader/>
     <main id="conteudo">
-      <section id="inicio" class="hero-home"><img class="hero-photo" :src="heroUrl"
-                                                  alt="Empreendedora trabalhando ao lado de um notebook"
-                                                  fetchpriority="high">
+      <section id="inicio" ref="heroRoot" class="hero-home"><img class="hero-photo" :src="heroUrl"
+                                                                 alt="Empreendedora trabalhando ao lado de um notebook"
+                                                                 fetchpriority="high">
         <div class="hero-overlay"></div>
         <div class="site-container hero-layout">
           <div class="hero-copy"><p class="hero-kicker"><span></span>Sua operação digital, bem resolvida</p>
-            <h1 class="hero-title"><span><i class="hero-line">Ecommerce</i></span><span><i class="hero-line">simples para</i></span><span><i
-                class="hero-line">negócios reais.</i></span></h1>
+            <h1 class="hero-title"><span class="sr-only">Ecommerce simples para negócios reais.</span><span
+                aria-hidden="true"><i class="hero-line">Ecommerce</i></span><span aria-hidden="true"><i
+                class="hero-line">simples para</i></span><span
+                ref="typedLineWrap" aria-hidden="true"><i ref="typedLineEl"
+                                                          class="hero-line hero-line--typed">{{ typedWord }}<span
+                class="hero-cursor"></span></i></span></h1>
             <p class="hero-support">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com
               mais vendas e menos complicação.</p>
             <div class="hero-actions">
