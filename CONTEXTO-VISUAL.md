@@ -52,6 +52,9 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 
 - Display: Outfit, pesos 500–700, com desenho geométrico e cantos levemente arredondados.
 - Corpo e interface: Manrope, pesos 400–800.
+- Títulos auxiliares em cards e módulos usam `1rem`; descrições curtas usam `.9rem`.
+  Textos de abertura dos capítulos podem ser maiores. Rótulos, estados e valores
+  compactos seguem a escala própria da interface.
 - As fontes são carregadas pelo `head` do Nuxt via Google Fonts.
 - Grandes títulos usam `clamp()`, line-height compacto próximo de `0.9–1.05` e
   tracking negativo suave, em geral entre `-0.04em` e `-0.02em`, para preservar
@@ -92,6 +95,10 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 8. Integrações separadas entre disponíveis e em evolução, sem promessas indevidas.
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
+
+O rodapé compartilhado usa fundo verde escuro (`#07110f`), logotipo no topo,
+quatro colunas de navegação e uma faixa inferior com contato, redes sociais e
+direitos reservados. A navegação aponta apenas para páginas e seções existentes.
 
 ## Página Plataforma
 

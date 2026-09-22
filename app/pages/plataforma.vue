@@ -728,13 +728,13 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-workflow__step h3 {
   margin-top: .65rem;
   color: white;
-  font-size: 1.15rem;
+  font-size: var(--aux-title-size);
 }
 
 .platform-workflow__step p {
   margin-top: .8rem;
   color: rgba(255, 255, 255, .52);
-  font-size: .82rem;
+  font-size: var(--description-size);
   line-height: 1.65;
 }
 
@@ -833,7 +833,7 @@ onBeforeUnmount(() => destroyMotion?.())
   max-width: 42rem;
   margin-top: 1.1rem;
   color: var(--muted);
-  font-size: .95rem;
+  font-size: var(--description-size);
   font-weight: 500;
   line-height: 1.7;
 }
@@ -882,7 +882,7 @@ onBeforeUnmount(() => destroyMotion?.())
   padding: 0;
   list-style: none;
   color: var(--muted);
-  font-size: .88rem;
+  font-size: var(--description-size);
   font-weight: 650;
 }
 
@@ -967,21 +967,21 @@ onBeforeUnmount(() => destroyMotion?.())
   overflow: hidden;
   opacity: 0;
   color: rgba(255, 255, 255, .78);
-  font-size: .85rem;
+  font-size: var(--description-size);
   line-height: 1.55;
   transition: max-height .35s ease, opacity .3s ease, margin-bottom .35s ease;
 }
 
 .platform-start__card:hover .platform-start__text p,
 .platform-start__card:focus-visible .platform-start__text p {
-  max-height: 5rem;
+  max-height: 9rem;
   margin-bottom: .6rem;
   opacity: 1;
 }
 
 .platform-start__text h3 {
   color: white;
-  font-size: 1.3rem;
+  font-size: var(--aux-title-size);
   letter-spacing: -.005em;
 }
 

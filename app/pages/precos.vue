@@ -476,8 +476,8 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-value article p {
   max-width: 24rem;
   margin-top: 1.1rem;
-  color: rgba(255, 255, 255, .5);
-  font-size: .88rem;
+  color: rgba(255, 255, 255, .74);
+  font-size: var(--description-size);
   line-height: 1.7;
 }
 
@@ -564,7 +564,7 @@ onBeforeUnmount(() => destroyMotion?.())
   max-width: 44rem;
   padding: 0 3rem 2rem 4rem;
   color: var(--muted);
-  font-size: .9rem;
+  font-size: var(--description-size);
   line-height: 1.72;
 }
 
