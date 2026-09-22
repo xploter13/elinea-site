@@ -100,6 +100,8 @@ A rota `/plataforma` aprofunda o produto sem repetir a Home. Sua narrativa aprov
 1. Hero escuro com fotografia documental de uma pessoa real à frente de um pequeno
    ecommerce, conferindo pedidos no celular enquanto prepara uma embalagem. A cena deve
    parecer espontânea e vivida, sem pose publicitária ou aparência de banco de imagens.
+   O tratamento aprovado usa cores naturais, contraste suave, luz de janela plausível,
+   textura real de pele e retoque editorial discreto, sem gradação cinematográfica forte.
 2. Loja virtual responsiva e identidade da marca.
 3. Fluxo que conecta venda, rotina, comunicação e decisão.
 4. Recursos apresentados em capítulos editoriais: loja, catálogo, pedidos, clientes e
