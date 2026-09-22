@@ -60,6 +60,7 @@ const resourceCards = [
 const insightCards = [
   {
     icon: BarChart3,
+    kind: 'measurement',
     title: 'Medição e campanhas',
     text: 'Prepare eventos e conversões para ferramentas como Google Analytics e Meta Pixel, com implementação validada para cada operação.',
     tags: ['Google Analytics', 'Meta Pixel'],
@@ -67,6 +68,7 @@ const insightCards = [
   },
   {
     icon: Search,
+    kind: 'seo',
     title: 'Base técnica para SEO',
     text: 'Organize títulos, descrições, URLs e conteúdo com uma estrutura rastreável, responsiva e pronta para evoluir com o catálogo.',
     tags: ['Metadados', 'URLs', 'Performance'],
@@ -74,6 +76,7 @@ const insightCards = [
   },
   {
     icon: FileText,
+    kind: 'reports',
     title: 'Relatórios para agir',
     text: 'Acompanhe vendas, pedidos e operação com relatórios compatíveis com o plano e amplie a leitura em projetos personalizados.',
     tags: ['Vendas', 'Pedidos', 'Operação'],
@@ -285,10 +288,40 @@ onBeforeUnmount(() => destroyMotion?.())
           </div>
 
           <div class="insight-grid" data-resource-reveal>
-            <article v-for="item in insightCards" :key="item.title" class="insight-card">
-              <div class="insight-card__top"><span><component :is="item.icon" :size="22" aria-hidden="true" /></span><small>{{ item.status }}</small></div>
-              <h3>{{ item.title }}</h3><p>{{ item.text }}</p>
-              <div><span v-for="tag in item.tags" :key="tag">{{ tag }}</span></div>
+            <article v-for="item in insightCards" :key="item.title" class="insight-card" :class="`insight-card--${item.kind}`">
+              <header class="insight-card__top">
+                <span><component :is="item.icon" :size="22" aria-hidden="true" /></span>
+                <small><i aria-hidden="true"></i>{{ item.status }}</small>
+              </header>
+
+              <div class="insight-card__visual" aria-hidden="true">
+                <div v-if="item.kind === 'measurement'" class="measurement-signal">
+                  <svg viewBox="0 0 520 240" preserveAspectRatio="none">
+                    <path d="M8 184 C72 184 96 112 160 104 C224 96 252 154 314 150 C378 146 390 70 444 58 C474 51 492 70 512 78" />
+                    <path class="is-soft" d="M8 210 C74 210 104 166 168 164 C232 162 264 199 330 196 C398 193 426 132 512 130" />
+                  </svg>
+                  <span class="signal-node signal-node--one"></span>
+                  <span class="signal-node signal-node--two"></span>
+                  <span class="signal-node signal-node--three"></span>
+                  <div class="signal-caption"><span>Visita</span><span>Evento</span><span>Conversão</span></div>
+                </div>
+
+                <div v-else-if="item.kind === 'seo'" class="seo-preview">
+                  <div class="seo-preview__bar"><i></i><i></i><i></i><span></span></div>
+                  <small>sua-loja.com/produto</small>
+                  <strong>Uma página clara para pessoas e buscas</strong>
+                  <p>Informação organizada desde o título até a descrição.</p>
+                </div>
+
+                <div v-else class="report-preview">
+                  <div><span>Vendas</span><i><b></b></i></div>
+                  <div><span>Pedidos</span><i><b></b></i></div>
+                  <div><span>Operação</span><i><b></b></i></div>
+                </div>
+              </div>
+
+              <div class="insight-card__body"><h3>{{ item.title }}</h3><p>{{ item.text }}</p></div>
+              <div class="insight-card__tags"><span v-for="tag in item.tags" :key="tag">{{ tag }}</span></div>
             </article>
           </div>
         </div>
@@ -417,11 +450,19 @@ onBeforeUnmount(() => destroyMotion?.())
 .agent-answer { display: flex; max-width: 86%; margin-top: .8rem; padding: 1rem; align-items: flex-start; gap: .75rem; border: 1px solid rgba(7,148,94,.14); border-radius: 3px 14px 14px 14px; background: white; }.agent-answer span { display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border-radius: 9px; background: var(--green-light); color: var(--green); }.agent-answer p { color: #44554f; font-size: .7rem; line-height: 1.55; }
 .agent-context { display: grid; margin-top: 1rem; grid-template-columns: repeat(3, 1fr); gap: .6rem; }.agent-context span { display: flex; min-height: 54px; padding: .65rem; align-items: center; gap: .45rem; border-radius: 9px; background: #edf4f0; color: #52615c; font-size: .57rem; font-weight: 750; }.agent-context svg { color: var(--green); }
 
-.resources-insights { background: white; }
-.insight-grid { display: grid; margin-top: clamp(3rem, 5vw, 5rem); grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.insight-card { min-height: 350px; padding: clamp(1.4rem, 2.5vw, 2.2rem); border-top: 1px solid var(--ink); background: #f5f8f6; }
-.insight-card__top { display: flex; align-items: center; justify-content: space-between; }.insight-card__top > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 12px; background: white; color: var(--green); }.insight-card__top small { color: var(--muted); font-size: .6rem; font-weight: 750; }
-.insight-card h3 { margin-top: 3.5rem; font-size: clamp(1.4rem, 2vw, 2rem); letter-spacing: -.02em; }.insight-card > p { margin-top: 1rem; color: var(--muted); font-size: .82rem; line-height: 1.65; }.insight-card > div:last-child { display: flex; margin-top: 1.5rem; flex-wrap: wrap; gap: .45rem; }.insight-card > div:last-child span { padding: .42rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: white; color: #53645e; font-size: .57rem; font-weight: 700; }
+.resources-insights { background: #f4f7f5; }
+.insight-grid { display: grid; overflow: hidden; margin-top: clamp(3.5rem, 6vw, 6rem); padding: 1px; grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr); grid-template-rows: repeat(2, minmax(280px, 1fr)); gap: 1px; border-radius: 28px; background: #cbd7d1; box-shadow: 0 36px 80px -62px rgba(13,35,28,.55); }
+.insight-card { display: grid; min-width: 0; padding: clamp(1.5rem, 2.8vw, 2.5rem); grid-template-rows: auto minmax(0, 1fr) auto auto; background: white; color: var(--ink); }
+.insight-card--measurement { grid-row: 1 / 3; min-height: 620px; background: #10251e; color: white; }
+.insight-card:not(.insight-card--measurement) { grid-template-columns: minmax(0, 1fr) minmax(150px, .72fr); grid-template-rows: auto minmax(0, 1fr) auto; column-gap: clamp(1rem, 2.5vw, 2rem); }.insight-card:not(.insight-card--measurement) .insight-card__top { grid-column: 1 / -1; }.insight-card:not(.insight-card--measurement) .insight-card__visual { grid-row: 2 / 4; grid-column: 2; margin: 1.35rem 0 0; }.insight-card:not(.insight-card--measurement) .insight-card__body { grid-row: 2; grid-column: 1; align-self: end; }.insight-card:not(.insight-card--measurement) .insight-card__tags { grid-row: 3; grid-column: 1; }
+.insight-card__top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }.insight-card__top > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 14px; background: #e5eee9; color: var(--green); }.insight-card__top small { display: inline-flex; padding: .48rem .64rem; align-items: center; gap: .45rem; border: 1px solid #d8e1dd; border-radius: 999px; color: #607169; font-size: .58rem; font-weight: 750; }.insight-card__top small i { width: 6px; height: 6px; border-radius: 50%; background: #8c9d95; }
+.insight-card--measurement .insight-card__top > span { border: 1px solid rgba(92,221,164,.2); background: rgba(92,221,164,.1); color: var(--green-bright); }.insight-card--measurement .insight-card__top small { border-color: rgba(255,255,255,.18); color: rgba(255,255,255,.82); }.insight-card--measurement .insight-card__top small i { background: var(--green-bright); }
+.insight-card__visual { position: relative; min-height: 128px; margin: 1.5rem 0; }
+.insight-card__body h3 { font-size: clamp(1.55rem, 2.4vw, 2.45rem); line-height: 1.03; letter-spacing: -.025em; }.insight-card__body p { max-width: 40rem; margin-top: .85rem; color: #61726a; font-size: .8rem; line-height: 1.65; }.insight-card--measurement .insight-card__body h3 { color: white; }.insight-card--measurement .insight-card__body p { max-width: 34rem; color: rgba(255,255,255,.76); }
+.insight-card__tags { display: flex; margin-top: 1.35rem; flex-wrap: wrap; gap: .42rem; }.insight-card__tags span { padding: .42rem .58rem; border: 1px solid #d9e2de; border-radius: 999px; background: #f7faf8; color: #52645c; font-size: .56rem; font-weight: 720; }.insight-card--measurement .insight-card__tags span { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.065); color: rgba(255,255,255,.82); }
+.measurement-signal { position: absolute; inset: 0; overflow: hidden; border: 1px solid rgba(92,221,164,.13); border-radius: 19px; background-image: linear-gradient(rgba(92,221,164,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(92,221,164,.065) 1px, transparent 1px); background-size: 44px 44px; }.measurement-signal svg { position: absolute; inset: 8% 4% 16%; width: 92%; height: 76%; overflow: visible; }.measurement-signal path { fill: none; stroke: var(--green-bright); stroke-linecap: round; stroke-width: 2; vector-effect: non-scaling-stroke; }.measurement-signal path.is-soft { opacity: .32; stroke-dasharray: 4 7; }.signal-node { position: absolute; width: 9px; height: 9px; border: 2px solid #15362b; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 0 6px rgba(92,221,164,.09); transform: translate(-50%, -50%); }.signal-node--one { top: 59.93%; left: 33.72%; }.signal-node--two { top: 55.5%; left: 59.55%; }.signal-node--three { top: 26.37%; left: 82.55%; }.signal-caption { position: absolute; right: 1rem; bottom: .75rem; left: 1rem; display: flex; justify-content: space-between; color: rgba(255,255,255,.62); font-size: .54rem; font-weight: 700; }
+.seo-preview { min-height: 100%; padding: 1rem; border: 1px solid #dce4e0; border-radius: 15px; background: #f8faf9; box-shadow: 0 18px 35px -32px rgba(13,35,28,.4); }.seo-preview__bar { display: flex; padding-bottom: .65rem; align-items: center; gap: .28rem; border-bottom: 1px solid #e1e8e4; }.seo-preview__bar i { width: 5px; height: 5px; border-radius: 50%; background: #bcc9c3; }.seo-preview__bar span { width: 42%; height: 5px; margin-left: .35rem; border-radius: 999px; background: #e0e7e3; }.seo-preview > small { display: block; margin-top: .8rem; color: #4f7b67; font-size: .52rem; }.seo-preview > strong { display: block; max-width: 18rem; margin-top: .32rem; color: #214f3a; font-size: .74rem; line-height: 1.35; }.seo-preview > p { max-width: 18rem; margin-top: .35rem; color: #7a8982; font-size: .56rem; line-height: 1.5; }
+.report-preview { display: grid; min-height: 100%; padding: .9rem 1rem; align-content: center; gap: .9rem; border-radius: 15px; background: #e5f2eb; }.report-preview > div { display: grid; grid-template-columns: 4.6rem 1fr; gap: .6rem; align-items: center; }.report-preview span { color: #557067; font-size: .55rem; font-weight: 750; }.report-preview i { display: grid; height: 8px; grid-template-columns: 1fr .65fr .45fr; gap: 3px; }.report-preview i::before, .report-preview i::after, .report-preview b { display: block; border-radius: 999px; background: rgba(7,148,94,.22); content: ''; }.report-preview b { background: var(--green); }
 
 .resources-integrations { padding: clamp(5rem, 9vw, 9rem) 0; overflow: hidden; background: #091713; color: white; }
 .resources-integrations .site-label { color: var(--green-bright); }
@@ -467,8 +508,9 @@ onBeforeUnmount(() => destroyMotion?.())
 @media (max-width: 900px) {
   .resources-grid, .intelligence-layout { grid-template-columns: 1fr; }
   .resource-card__visual { min-height: 430px; }
-  .insight-grid { grid-template-columns: 1fr; }
-  .insight-card { min-height: 0; }.insight-card h3 { margin-top: 2.2rem; }
+  .insight-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .insight-card--measurement { grid-row: auto; min-height: 570px; }
+  .insight-card { min-height: 360px; }
   .integrations-board { grid-template-columns: 1fr; }
   .integrations-hub { min-height: 390px; }
   .integrations-hub__network { width: min(55%, 235px); }
@@ -491,6 +533,8 @@ onBeforeUnmount(() => destroyMotion?.())
   .erp-scene { padding: 1.2rem; grid-template-columns: 1fr; gap: .5rem; }.erp-connector { min-width: 0; min-height: 30px; margin-inline: auto; transform: rotate(90deg); }.erp-order, .erp-stack { width: 82%; }.erp-stack { margin-left: auto; }
   .whatsapp-scene { inset: 7%; }
   .agent-context { grid-template-columns: 1fr; }.agent-prompt { width: 82%; }
+  .insight-grid { margin-inline: calc(var(--gutter) * -.35); border-radius: 22px; }
+  .insight-card { min-height: 0; padding: 1.25rem; }.insight-card--measurement { min-height: 520px; }.insight-card:not(.insight-card--measurement) { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }.insight-card:not(.insight-card--measurement) .insight-card__top, .insight-card:not(.insight-card--measurement) .insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__body, .insight-card:not(.insight-card--measurement) .insight-card__tags { grid-row: auto; grid-column: 1; }.insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__visual { min-height: 170px; margin-block: 1.35rem; }.insight-card__body h3 { font-size: 1.65rem; }
   .resources-integrations { padding-block: 5rem; }
   .integrations-heading h2 { font-size: clamp(2.6rem, 12vw, 4.1rem); }
   .integrations-board { margin-inline: calc(var(--gutter) * -.35); padding: .5rem; border-radius: 25px; }

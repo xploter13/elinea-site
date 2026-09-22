@@ -155,7 +155,9 @@ plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
    pequeno negócio); logística, ERP/fiscal e WhatsApp continuam com ilustrações de
    produto construídas em HTML/CSS.
 3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
-4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios.
+4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios. A seção
+   usa uma única moldura técnica assimétrica com três instrumentos visuais: fluxo de
+   eventos, prévia de busca e camadas de relatório, sem métricas fictícias.
 5. Estados de disponibilidade explícitos para evitar promessas indevidas. A seção de
    integrações usa fundo escuro contínuo (`#091713`) e um painel de conexões: um núcleo
    representa a operação Elínea e cards horizontais distinguem WhatsApp, pagamentos,
