@@ -134,6 +134,21 @@ onMounted(async () => {
         ease: 'power3.out',
         scrollTrigger: { trigger: '.resources-grid', start: 'top 78%', once: true },
       })
+
+      gsap.from('.migration-track__line', {
+        scaleX: 0,
+        transformOrigin: 'left center',
+        ease: 'none',
+        scrollTrigger: { trigger: '.migration-track', start: 'top 78%', end: 'bottom 62%', scrub: .7 },
+      })
+
+      gsap.from('.migration-step', {
+        y: 24,
+        opacity: 0,
+        stagger: .14,
+        duration: .55,
+        scrollTrigger: { trigger: '.migration-track', start: 'top 74%', once: true },
+      })
     })
   }, pageRoot.value)
 
@@ -261,8 +276,9 @@ onBeforeUnmount(() => destroyMotion?.())
             <h2 class="site-title">Mudar de plataforma<br>sem improvisar o caminho.</h2>
             <p class="site-copy">Cada migração começa pelo que já existe. O escopo é validado antes da execução para proteger dados, integrações e decisões de SEO.</p>
           </div>
-          <div class="migration-track" data-resource-reveal>
-            <article v-for="(step, index) in migrationSteps" :key="step.title">
+          <div class="migration-track">
+            <span class="migration-track__line" aria-hidden="true"></span>
+            <article v-for="(step, index) in migrationSteps" :key="step.title" class="migration-step">
               <span>0{{ index + 1 }}</span><component :is="step.icon" :size="23" aria-hidden="true" /><h3>{{ step.title }}</h3><p>{{ step.text }}</p>
             </article>
           </div>
@@ -354,7 +370,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .resources-migration { background: #f9fbfa; }
 .migration-heading { max-width: 58rem; }.migration-heading .site-title { margin-top: 1.2rem; }.migration-heading .site-copy { max-width: 44rem; }
 .migration-track { position: relative; display: grid; margin-top: clamp(3.5rem, 6vw, 6rem); grid-template-columns: repeat(4, 1fr); }
-.migration-track::before { position: absolute; top: 25px; right: 10%; left: 10%; height: 1px; background: #bfd0c7; content: ''; }
+.migration-track__line { position: absolute; top: 25px; right: calc(25% - 25px); left: 25px; height: 1px; background: linear-gradient(90deg, var(--green), var(--green-bright)); }
 .migration-track article { position: relative; padding-right: clamp(1rem, 3vw, 3rem); }.migration-track article > span { position: relative; z-index: 1; display: grid; width: 50px; height: 50px; place-items: center; border: 1px solid #bfd0c7; border-radius: 50%; background: #f9fbfa; color: var(--green); font-size: .67rem; font-weight: 800; }.migration-track article > svg { margin-top: 2rem; color: var(--green); }.migration-track h3 { margin-top: 1rem; font-size: 1.1rem; }.migration-track p { max-width: 15rem; margin-top: .65rem; color: var(--muted); font-size: .76rem; line-height: 1.6; }
 .migration-note { display: flex; max-width: 820px; margin-top: clamp(3rem, 5vw, 5rem); padding: 1.2rem 1.4rem; align-items: flex-start; gap: .8rem; border-left: 3px solid var(--green); background: #edf5f1; color: var(--muted); font-size: .76rem; line-height: 1.65; }.migration-note svg { flex: 0 0 auto; color: var(--green); }.migration-note strong { color: var(--ink); }
 .resources-final { background: radial-gradient(circle at 68% 38%, rgba(92,221,164,.16), transparent 28%), #071713; }
@@ -371,7 +387,7 @@ onBeforeUnmount(() => destroyMotion?.())
   .insight-card { min-height: 0; }.insight-card h3 { margin-top: 2.2rem; }
   .integration-statuses, .migration-track { grid-template-columns: repeat(2, 1fr); }
   .integration-statuses > span:nth-child(2) { border-right: 0; }
-  .migration-track::before { display: none; }.migration-track { gap: 2.5rem 1rem; }
+  .migration-track__line { display: none; }.migration-track { gap: 2.5rem 1rem; }
 }
 
 @media (max-width: 767px) {

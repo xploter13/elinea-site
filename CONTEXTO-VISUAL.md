@@ -209,6 +209,10 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
   estados. Os pontos surgem progressivamente com o avanço da linha. Desktop e mobile
   usam o mesmo tratamento responsivo: o percurso é calculado pelas posições reais dos
   cards, adapta-se à composição de cada viewport e alcança o estado final.
+- Na seção “Migração com método” da página Recursos, a linha dos passos nasce no centro
+  do primeiro marcador, termina no centro do último e é desenhada progressivamente no
+  scroll, seguindo o tratamento do fluxo da página Plataforma. Em tablet e mobile, a
+  linha permanece oculta para preservar a leitura das colunas reduzidas.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
   legíveis. Não existe botão de pausa. A órbita pausa enquanto o cursor está sobre a
   composição e retoma ao sair; também pausa fora da viewport ou com a aba oculta.
