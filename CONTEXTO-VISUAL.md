@@ -156,7 +156,10 @@ plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
    produto construídas em HTML/CSS.
 3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
 4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios.
-5. Estados de disponibilidade explícitos para evitar promessas indevidas.
+5. Estados de disponibilidade explícitos para evitar promessas indevidas. A seção de
+   integrações usa um painel de conexões: um núcleo escuro representa a operação Elínea
+   e cards horizontais distinguem WhatsApp, pagamentos, logística, ERP/fiscal e dados
+   por texto, ícone, superfície e indicador de estado.
 6. Migração apresentada como processo de diagnóstico, preparação, conexões e entrada
    no ar, incluindo cuidados com dados e SEO.
 7. CTA final e componentes compartilhados de header e footer.
