@@ -97,7 +97,9 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 
 A rota `/plataforma` aprofunda o produto sem repetir a Home. Sua narrativa aprovada é:
 
-1. Hero escuro com uma composição de operação construída em HTML/CSS.
+1. Hero escuro com uma imagem conceitual de natureza-morta tecnológica: embalagem,
+   pagamento, pedido, loja e conversa conectados por um núcleo verde, sem telas,
+   textos ou logos dentro da imagem.
 2. Loja virtual responsiva e identidade da marca.
 3. Fluxo que conecta venda, rotina, comunicação e decisão.
 4. Recursos apresentados em capítulos editoriais: loja, catálogo, pedidos, clientes e
@@ -293,6 +295,7 @@ Os assets da Home ficam em `app/assets/images`:
 - composição visual do comerciante/operação.
 - composição conceitual de embalagens para o segmento de marcas próprias.
 - fotografia do card de pagamentos na página Recursos (cliente pagando na maquininha).
+- composição conceitual da operação conectada no hero da página Plataforma.
 
 Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente atende à
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens

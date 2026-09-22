@@ -2,6 +2,7 @@
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
+import platformConceptUrl from '~/assets/images/elinea-platform-concept.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
@@ -163,8 +164,6 @@ onMounted(async () => {
             .fromTo(capabilitiesIntro.children, {y: 16, opacity: 0}, {y: 0, opacity: 1, stagger: .035, ease: 'none'}, 0)
             .fromTo(firstCapability.children, {y: 32, opacity: 0}, {y: 0, opacity: 1, stagger: .035, ease: 'none'}, 0)
       }
-      gsap.to('.platform-console__float--orders', {y: -9, duration: 3.2, repeat: -1, yoyo: true, ease: 'sine.inOut'})
-      gsap.to('.platform-console__float--stock', {y: 8, duration: 3.8, repeat: -1, yoyo: true, ease: 'sine.inOut'})
     })
 
   }, pageRoot.value)
@@ -197,38 +196,15 @@ onBeforeUnmount(() => destroyMotion?.())
                   <ArrowRight :size="17"/>
                 </template>
               </MarketingButton>
-              <MarketingTextButton tone="light" href="#recursos">Conhecer os recursos</MarketingTextButton>
+              <MarketingTextButton tone="light" href="#recursos">Falar com consultores</MarketingTextButton>
             </div>
           </div>
 
-          <div class="platform-console" aria-label="Representação da operação centralizada na Elínea">
-            <div class="platform-console__top"><span></span><span></span><span></span><small>Operação Elínea</small><i>Online</i>
-            </div>
-            <div class="platform-console__body">
-              <div class="platform-console__summary">
-                <small>Visão da operação</small><strong>Tudo em movimento.</strong>
-                <div><span><i></i> Loja ativa</span><span><i></i> Estoque sincronizado</span></div>
-              </div>
-              <div class="platform-console__orders">
-                <header><span>Pedidos recentes</span><small>Agora</small></header>
-                <div><b>#1482</b><span>Pagamento aprovado</span><em>Pix</em></div>
-                <div><b>#1481</b><span>Separação iniciada</span><em>Pedido</em></div>
-                <div><b>#1480</b><span>Cliente notificado</span><em>WhatsApp</em></div>
-              </div>
-              <div class="platform-console__chart"><small>Ritmo de vendas</small>
-                <div><i v-for="height in [32, 49, 42, 65, 55, 78, 70, 92]" :key="height"
-                        :style="{ height: `${height}%` }"></i></div>
-              </div>
-            </div>
-            <div class="platform-console__float platform-console__float--orders">
-              <ShoppingBag :size="18"/>
-              <span><small>Novo pedido</small><strong>Recebido</strong></span></div>
-            <div class="platform-console__float platform-console__float--stock">
-              <Boxes :size="18"/>
-              <span><small>Catálogo</small><strong>Atualizado</strong></span></div>
-          </div>
-        </div>
-        <div class="site-container platform-hero__rail" aria-label="Áreas da plataforma"><span>Loja virtual</span><span>Catálogo</span><span>Pedidos</span><span>Clientes</span><span>WhatsApp</span>
+          <figure class="platform-console">
+            <img :src="platformConceptUrl" width="1536" height="1024" loading="eager" fetchpriority="high"
+                 decoding="async"
+                 alt="Composição conceitual de uma operação de ecommerce conectando loja, embalagem, pagamento, pedido e conversa"/>
+          </figure>
         </div>
       </section>
 
@@ -468,203 +444,32 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .platform-console {
   position: relative;
-  min-height: 610px;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .1);
-  border-radius: 24px;
-  background: #f5f8f6;
-  color: var(--ink);
+  border-radius: 26px;
+  background: var(--ink);
   box-shadow: 0 55px 100px -45px rgba(0, 0, 0, .75);
   transform: perspective(1200px) rotateY(-3deg);
+  isolation: isolate;
 }
 
-.platform-console__top {
-  display: flex;
-  height: 58px;
-  padding: 0 1.25rem;
-  align-items: center;
-  gap: .45rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.platform-console__top > span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #c9d2ce;
-}
-
-.platform-console__top small {
-  margin-left: .5rem;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.platform-console__top i {
-  margin-left: auto;
-  color: var(--green);
-  font-size: .65rem;
-  font-style: normal;
-  font-weight: 800;
-}
-
-.platform-console__body {
-  display: grid;
-  height: calc(100% - 58px);
-  padding: clamp(1.25rem, 3vw, 2.4rem);
-  grid-template-columns: 1fr .8fr;
-  grid-template-rows: auto 1fr;
-  gap: 1rem;
-}
-
-.platform-console__summary {
-  padding: clamp(1.4rem, 2.5vw, 2.2rem);
-  grid-column: 1 / -1;
-  border-radius: 18px;
-  background: var(--ink);
-  color: white;
-}
-
-.platform-console__summary > small {
-  color: rgba(255, 255, 255, .45);
-}
-
-.platform-console__summary > strong {
-  display: block;
-  margin-top: .5rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
-  letter-spacing: -.025em;
-}
-
-.platform-console__summary > div {
-  display: flex;
-  margin-top: 1.6rem;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.platform-console__summary span {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  color: rgba(255, 255, 255, .65);
-  font-size: .7rem;
-}
-
-.platform-console__summary i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green-bright);
-}
-
-.platform-console__orders, .platform-console__chart {
-  padding: 1.15rem;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: white;
-}
-
-.platform-console__orders header {
-  display: flex;
-  justify-content: space-between;
-  font-size: .7rem;
-}
-
-.platform-console__orders header small {
-  color: var(--muted);
-}
-
-.platform-console__orders > div {
-  display: grid;
-  padding: .85rem 0;
-  grid-template-columns: .55fr 1.3fr .6fr;
-  gap: .5rem;
-  border-bottom: 1px solid var(--line);
-  font-size: .62rem;
-}
-
-.platform-console__orders > div:last-child {
-  border-bottom: 0;
-}
-
-.platform-console__orders span {
-  color: var(--muted);
-}
-
-.platform-console__orders em {
-  color: var(--green);
-  font-style: normal;
-  text-align: right;
-}
-
-.platform-console__chart {
-  display: flex;
-  flex-direction: column;
-}
-
-.platform-console__chart > small {
-  color: var(--muted);
-  font-size: .7rem;
-}
-
-.platform-console__chart > div {
-  display: flex;
-  min-height: 160px;
-  margin-top: auto;
-  align-items: end;
-  gap: .35rem;
-}
-
-.platform-console__chart i {
+.platform-console img {
   width: 100%;
-  border-radius: 5px 5px 2px 2px;
-  background: #bde8d2;
+  height: 100%;
+  object-fit: cover;
 }
 
-.platform-console__chart i:nth-child(n+6) {
-  background: var(--green);
-}
-
-.platform-console__float {
+.platform-console::after {
   position: absolute;
-  z-index: 3;
-  display: flex;
-  min-width: 150px;
-  padding: .8rem .9rem;
-  align-items: center;
-  gap: .65rem;
-  border: 1px solid rgba(255, 255, 255, .8);
-  border-radius: 13px;
-  background: rgba(255, 255, 255, .96);
-  box-shadow: var(--shadow);
-}
-
-.platform-console__float svg {
-  color: var(--green);
-}
-
-.platform-console__float span {
-  display: grid;
-}
-
-.platform-console__float small {
-  color: var(--muted);
-  font-size: .58rem;
-}
-
-.platform-console__float strong {
-  font-size: .72rem;
-}
-
-.platform-console__float--orders {
-  top: 17%;
-  right: -7%;
-}
-
-.platform-console__float--stock {
-  bottom: 12%;
-  left: -8%;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: inherit;
+  box-shadow: inset 0 0 55px rgba(4, 17, 14, .18);
+  pointer-events: none;
+  content: '';
 }
 
 .platform-storefront {
@@ -1314,25 +1119,8 @@ onBeforeUnmount(() => destroyMotion?.())
   }
 
   .platform-console {
-    min-height: 520px;
+    aspect-ratio: 4 / 3;
     border-radius: 18px;
-  }
-
-  .platform-console__body {
-    padding: .8rem;
-    grid-template-columns: 1fr;
-  }
-
-  .platform-console__orders {
-    min-height: 220px;
-  }
-
-  .platform-console__chart {
-    display: none;
-  }
-
-  .platform-console__float {
-    display: none;
   }
 
   .platform-storefront__layout {
