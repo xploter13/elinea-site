@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import { Mail } from '@lucide/vue'
-import Recursos from "~/pages/recursos.vue";
 
 const config = useRuntimeConfig()
 </script>
@@ -22,17 +21,17 @@ const config = useRuntimeConfig()
         </div>
         <div class="footer-links__group">
           <h2>Operação</h2>
-          <NuxtLink to="/recursos#pagamentos">Pagamentos</NuxtLink>
-          <NuxtLink to="/recursos#logistica">Frete e logística</NuxtLink>
-          <NuxtLink to="/recursos#gestao">Gestão e ERP</NuxtLink>
-          <NuxtLink to="/recursos#whatsapp">WhatsApp</NuxtLink>
-          <NuxtLink to="/recursos#dados">Dados e crescimento</NuxtLink>
+          <NuxtLink to="/operacao/pagamentos">Pagamentos</NuxtLink>
+          <NuxtLink to="/operacao/frete-e-logistica">Frete e logística</NuxtLink>
+          <NuxtLink to="/operacao/gestao-e-erp">Gestão e ERP</NuxtLink>
+          <NuxtLink to="/operacao/whatsapp">WhatsApp</NuxtLink>
+          <NuxtLink to="/operacao/dados-e-crescimento">Dados e crescimento</NuxtLink>
         </div>
         <div class="footer-links__group">
           <h2>Ecossistema</h2>
-          <NuxtLink to="/#ecossistema">Visão geral</NuxtLink>
-          <NuxtLink to="/recursos#integracoes">Integrações</NuxtLink>
-          <NuxtLink to="/recursos#migracao">Migração</NuxtLink>
+          <NuxtLink to="/ecossistema/visao-geral">Visão geral</NuxtLink>
+          <NuxtLink to="/ecossistema/integracoes">Integrações</NuxtLink>
+          <NuxtLink to="/ecossistema/migracao">Migração</NuxtLink>
         </div>
         <div class="footer-links__group">
           <h2>Atendimento</h2>
