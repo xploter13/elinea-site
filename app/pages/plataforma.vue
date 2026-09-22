@@ -2,7 +2,7 @@
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
-import platformMerchantUrl from '~/assets/images/elinea-platform-merchant-v2.png'
+import platformMerchantUrl from '~/assets/images/elinea-platform-merchant-v3.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
