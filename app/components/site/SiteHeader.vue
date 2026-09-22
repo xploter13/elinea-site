@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import logoUrl from '~/assets/images/elinea-logo.svg'
-import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
+import logoUrl from '~/assets/images/logo-elinea-dark.svg'
+import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Menu, X, User} from '@lucide/vue'
 

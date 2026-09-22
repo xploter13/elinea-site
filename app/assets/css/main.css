@@ -41,7 +41,7 @@
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --radius: clamp(1rem, 1.6vw, 1.5rem);
   --shadow: 0 30px 80px -48px rgba(7, 25, 20, .42);
-  --font-display: "Sora", "Manrope", sans-serif;
+  --font-display: "Outfit", "Manrope", sans-serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
 }
 
@@ -78,7 +78,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
 .premium-header { position: fixed; z-index: 50; inset: 0 0 auto; color: white; transition: background .3s, box-shadow .3s, color .3s; }
 .premium-header.is-scrolled { background: rgba(255,255,255,.94); color: var(--ink); box-shadow: 0 14px 40px -28px rgba(0,0,0,.48); backdrop-filter: blur(16px); }
 .header-inner { display: flex; min-height: 76px; align-items: center; gap: clamp(1rem, 2.5vw, 2.5rem); }
-.site-logo { position: relative; width: 132px; height: 29px; flex: 0 0 auto; }
+.site-logo { position: relative; width: 132px; height: 36px; flex: 0 0 auto; }
 .site-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: left center; transition: opacity .25s; }
 .logo-color, .is-scrolled .logo-white { opacity: 0; }
 .is-scrolled .logo-color { opacity: 1; }
@@ -282,7 +282,7 @@ h1, h2, h3 { color: var(--ink); font-family: var(--font-display); }
   .chapter { min-height: auto; align-items: stretch; }.split-layout { grid-template-columns: 1fr; gap: 3.5rem; }
   .site-title { font-size: clamp(2.8rem, 13vw, 4.5rem); line-height: .97; }.site-copy { font-size: 1rem; line-height: 1.65; }
   .premium-header { background: rgba(5,18,15,.22); backdrop-filter: blur(10px); }.premium-header.is-scrolled { background: rgba(255,255,255,.96); }
-  .header-inner { min-height: 68px; }.site-logo { width: 114px; }.login-link, .header-cta { display: none !important; }.menu-toggle { margin-left: auto; }
+  .header-inner { min-height: 68px; }.site-logo { width: 114px; height: 31px; }.login-link, .header-cta { display: none !important; }.menu-toggle { margin-left: auto; }
   .hero-home, .hero-layout { min-height: max(760px, 100svh); }.hero-photo { object-position: 66% center; }.hero-overlay { background: linear-gradient(180deg, rgba(4,17,14,.88) 0%, rgba(4,17,14,.72) 58%, rgba(4,17,14,.48) 100%); }.hero-layout { align-items: flex-start; padding-top: clamp(9rem, 25vh, 13rem); }.hero-copy { width: 100%; }.hero-title { font-size: clamp(3.3rem, 15.5vw, 5rem); }.hero-support { max-width: 32rem; font-size: 1rem; }.hero-actions { align-items: flex-start; flex-direction: column; }
   .sale-map { min-height: 620px; }.sale-path--desktop { visibility: hidden; }.sale-path--mobile { visibility: visible; }.sale-step { min-width: 188px; padding: .8rem; }.sale-step--order { left: 0; }.sale-step--payment { left: auto; right: 0; top: 23%; }.sale-step--stock { left: 0; right: auto; top: 43%; }.sale-step--message { left: auto; right: 0; top: 64%; }.sale-step--done { left: 5%; right: auto; }
   .ecosystem-orbit { width: 100%; min-height: 0; }.ecosystem-core { inset: 35%; }.ecosystem-node { --orbit-radius: 128px; }.orbit-track--inner .ecosystem-node { --orbit-radius: 92px; }.ecosystem-module { min-width: 76px; min-height: 54px; padding: .3rem; }.ecosystem-module span { font-size: .56rem; }

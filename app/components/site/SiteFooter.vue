@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logoWhiteUrl from '~/assets/images/elinea-logo-white.svg'
+import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import {ArrowRight} from '@lucide/vue'
 
 const config = useRuntimeConfig()

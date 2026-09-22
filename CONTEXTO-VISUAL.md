@@ -21,6 +21,9 @@ genérico nem copiar outras marcas usadas como referência.
 - Hierarquia tipográfica forte e seções tratadas como capítulos de uma narrativa.
 - Alternância deliberada entre superfícies claras e escuras.
 - Preto profundo, branco/off-white e verde Elínea como base; cinzas são discretos.
+- O site usa os logotipos oficiais `logo-elinea-dark.svg` em superfícies claras e
+  `logo-elinea-white.svg` em superfícies escuras, preservando suas proporções. A cor
+  principal da versão dark acompanha o token `--ink` (`#0d1715`).
 - Cards aparecem quando representam produto, estado ou informação real. Evitar grades
   de pequenos cards usadas apenas como decoração.
 - Bordas são sutis, raios moderados e sombras suaves, concentradas nas interfaces do
@@ -47,7 +50,7 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 | Verde luminoso | `--green-bright` | `#5cdda4` |
 | Texto secundário | `--muted` | `#62716b` |
 
-- Display: Sora, pesos 500–700.
+- Display: Outfit, pesos 500–700, com desenho geométrico e cantos levemente arredondados.
 - Corpo e interface: Manrope, pesos 400–800.
 - As fontes são carregadas pelo `head` do Nuxt via Google Fonts.
 - Grandes títulos usam `clamp()`, line-height compacto próximo de `0.9–1.05` e
