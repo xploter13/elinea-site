@@ -2,7 +2,7 @@
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
-import platformConceptUrl from '~/assets/images/elinea-platform-concept.png'
+import platformMerchantUrl from '~/assets/images/elinea-platform-merchant-v1.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
@@ -201,9 +201,9 @@ onBeforeUnmount(() => destroyMotion?.())
           </div>
 
           <figure class="platform-console">
-            <img :src="platformConceptUrl" width="1536" height="1024" loading="eager" fetchpriority="high"
+            <img :src="platformMerchantUrl" width="1536" height="1024" loading="eager" fetchpriority="high"
                  decoding="async"
-                 alt="Composição conceitual de uma operação de ecommerce conectando loja, embalagem, pagamento, pedido e conversa"/>
+                 alt="Empreendedora conferindo pedidos no celular enquanto prepara uma embalagem em sua loja"/>
           </figure>
         </div>
       </section>
@@ -452,7 +452,6 @@ onBeforeUnmount(() => destroyMotion?.())
   border-radius: 26px;
   background: var(--ink);
   box-shadow: 0 55px 100px -45px rgba(0, 0, 0, .75);
-  transform: perspective(1200px) rotateY(-3deg);
   isolation: isolate;
 }
 
@@ -1230,9 +1229,4 @@ onBeforeUnmount(() => destroyMotion?.())
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .platform-console {
-    transform: none;
-  }
-}
 </style>
