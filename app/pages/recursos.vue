@@ -263,19 +263,43 @@ onBeforeUnmount(() => destroyMotion?.())
 
       <section class="chapter resources-intelligence">
         <div class="site-container intelligence-layout">
-          <div class="intelligence-copy" data-resource-reveal>
-            <p class="site-label">Automação que entende o contexto</p>
-            <h2 class="site-title">Uma operação que aprende a responder.</h2>
-            <p>O Agente de IA está em evolução para apoiar atendimento, consulta de pedidos e tarefas repetitivas usando o contexto real da operação.</p>
-            <span class="intelligence-status"><i></i> Recurso em evolução</span>
-          </div>
+          <header class="intelligence-heading" data-resource-reveal>
+            <div class="intelligence-heading__top">
+              <p class="site-label">Automação que entende o contexto</p>
+              <span class="intelligence-status"><i aria-hidden="true"></i> Agente de IA em evolução</span>
+            </div>
+            <div class="intelligence-heading__body">
+              <h2>O contexto vem antes da resposta.</h2>
+              <p>O Agente de IA está em evolução para apoiar o atendimento com informações da operação, preparar respostas e reduzir tarefas repetitivas.</p>
+            </div>
+          </header>
 
-          <div class="agent-console" aria-label="Conceito do Agente de IA da Elínea">
-            <header><span><Bot :size="20" />Agente Elínea</span><small>Contexto da operação</small></header>
-            <div class="agent-prompt"><small>Cliente</small><p>Quando meu pedido chega?</p></div>
-            <div class="agent-thinking"><i></i><i></i><i></i><span>Consultando pedido e rastreio</span></div>
-            <div class="agent-answer"><span><Bot :size="17" /></span><p>O pedido #1482 já está em transporte. A previsão atual pode ser enviada junto com o link de acompanhamento.</p></div>
-            <div class="agent-context"><span><PackageCheck :size="17" />Pedido localizado</span><span><MessageCircle :size="17" />Resposta preparada</span><span><ShieldCheck :size="17" />Revisão humana</span></div>
+          <div class="agent-flow" role="group" aria-label="Exemplo ilustrativo de atendimento com o Agente de IA" data-resource-reveal>
+            <div class="agent-flow__question">
+              <span class="agent-flow__step">01 <span aria-hidden="true">/</span> A pergunta</span>
+              <div class="agent-flow__question-body">
+                <MessageCircle :size="28" :stroke-width="1.6" aria-hidden="true" />
+                <blockquote>Quando meu pedido chega?</blockquote>
+              </div>
+              <p>Uma dúvida simples, com uma resposta que depende do pedido certo.</p>
+            </div>
+
+            <div class="agent-flow__context">
+              <span class="agent-flow__step">02 <span aria-hidden="true">/</span> O contexto</span>
+              <p class="agent-flow__context-intro">A resposta considera informações ligadas à venda.</p>
+              <ul>
+                <li><PackageCheck :size="19" aria-hidden="true" /><span>Pedido localizado</span></li>
+                <li><Truck :size="19" aria-hidden="true" /><span>Entrega consultada</span></li>
+                <li><MessageCircle :size="19" aria-hidden="true" /><span>Conversa preservada</span></li>
+              </ul>
+            </div>
+
+            <div class="agent-flow__response">
+              <div class="agent-flow__response-top"><span class="agent-flow__step">03 <span aria-hidden="true">/</span> A sugestão</span><Bot :size="25" :stroke-width="1.6" aria-hidden="true" /></div>
+              <p>Seu pedido está em transporte. Quer receber o link de acompanhamento?</p>
+              <div class="agent-flow__review"><ShieldCheck :size="19" aria-hidden="true" /><span>Resposta preparada para revisão humana</span></div>
+            </div>
+            <p class="agent-flow__disclaimer">Fluxo ilustrativo. O Agente de IA ainda está em evolução.</p>
           </div>
         </div>
       </section>
@@ -437,15 +461,36 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .resources-intelligence { color: white; background: linear-gradient(135deg, #034f36 0%, #078759 48%, #29b879 100%); }
 .resources-intelligence::before { position: absolute; inset: 0; background: radial-gradient(circle at 75% 35%, rgba(255,255,255,.15), transparent 28%); content: ''; pointer-events: none; }
-.intelligence-layout { position: relative; display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(3rem, 8vw, 8rem); align-items: center; }
-.intelligence-copy .site-label, .intelligence-copy .site-title { color: white; }.intelligence-copy .site-title { margin-top: 1.3rem; }.intelligence-copy > p:last-of-type { max-width: 35rem; margin-top: 1.5rem; color: rgba(255,255,255,.72); line-height: 1.7; }
-.intelligence-status { display: inline-flex; margin-top: 1.7rem; padding: .55rem .75rem; align-items: center; gap: .5rem; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; color: rgba(255,255,255,.78); font-size: .68rem; font-weight: 750; }.intelligence-status i { width: 7px; height: 7px; border-radius: 50%; background: #c8ffe5; }
-.agent-console { position: relative; padding: clamp(1.2rem, 2vw, 2rem); border: 1px solid rgba(255,255,255,.17); border-radius: 24px; background: #f8fbf9; color: var(--ink); box-shadow: 0 45px 100px -55px rgba(2,39,25,.8); }
-.agent-console header { display: flex; padding-bottom: 1rem; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }.agent-console header span { display: flex; align-items: center; gap: .6rem; font-weight: 800; }.agent-console header span svg { color: var(--green); }.agent-console header small { color: var(--muted); font-size: .62rem; }
-.agent-prompt { width: 64%; margin: 1.2rem 0 0 auto; padding: .85rem 1rem; border-radius: 13px 13px 3px 13px; background: var(--ink); color: white; }.agent-prompt small { color: rgba(255,255,255,.46); font-size: .55rem; }.agent-prompt p { margin-top: .2rem; font-size: .72rem; }
-.agent-thinking { display: flex; margin-top: 1rem; align-items: center; gap: .3rem; color: var(--muted); font-size: .58rem; }.agent-thinking i { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }.agent-thinking span { margin-left: .35rem; }
-.agent-answer { display: flex; max-width: 86%; margin-top: .8rem; padding: 1rem; align-items: flex-start; gap: .75rem; border: 1px solid rgba(7,148,94,.14); border-radius: 3px 14px 14px 14px; background: white; }.agent-answer span { display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border-radius: 9px; background: var(--green-light); color: var(--green); }.agent-answer p { color: #44554f; font-size: .7rem; line-height: 1.55; }
-.agent-context { display: grid; margin-top: 1rem; grid-template-columns: repeat(3, 1fr); gap: .6rem; }.agent-context span { display: flex; min-height: 54px; padding: .65rem; align-items: center; gap: .45rem; border-radius: 9px; background: #edf4f0; color: #52615c; font-size: .57rem; font-weight: 750; }.agent-context svg { color: var(--green); }
+.intelligence-layout { position: relative; }
+.intelligence-heading__top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.intelligence-heading .site-label { margin: 0; color: #e0ffe8; }
+.intelligence-status { display: inline-flex; padding: .62rem .8rem; align-items: center; gap: .55rem; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: #064d36; color: white; font-size: .7rem; font-weight: 750; white-space: nowrap; }
+.intelligence-status i { width: 7px; height: 7px; border-radius: 50%; background: #ddffe9; box-shadow: 0 0 0 4px rgba(221,255,233,.15); }
+.intelligence-heading__body { display: grid; margin-top: clamp(2.3rem, 5vw, 5rem); grid-template-columns: minmax(0, 1.5fr) minmax(230px, .5fr); gap: clamp(2rem, 6vw, 6rem); align-items: end; }
+.intelligence-heading h2 { max-width: 14ch; color: white; font-size: clamp(3.5rem, 6.4vw, 7rem); font-weight: 600; line-height: .94; letter-spacing: -.045em; text-wrap: balance; }
+.intelligence-heading__body > p { max-width: 23rem; padding: 1.1rem 1.25rem; border-left: 2px solid #bbefcd; background: #075e40; color: #f0fff3; font-size: clamp(.98rem, 1.15vw, 1.15rem); line-height: 1.7; }
+.agent-flow { display: grid; overflow: hidden; margin-top: clamp(3.5rem, 6vw, 6rem); grid-template-columns: minmax(0, .9fr) minmax(0, .7fr) minmax(0, 1.1fr); border: 1px solid rgba(255,255,255,.28); border-radius: 26px; background: #f5faf5; box-shadow: 0 42px 90px -62px rgba(0,36,23,.55); color: #10291c; }
+.agent-flow__question, .agent-flow__context, .agent-flow__response { display: flex; min-width: 0; min-height: 400px; padding: clamp(1.65rem, 3vw, 3.5rem); flex-direction: column; }
+.agent-flow__step { color: #467b5d; font-size: .72rem; font-weight: 800; }
+.agent-flow__step span { margin-inline: .3rem; opacity: .5; }
+.agent-flow__question { justify-content: space-between; background: #073e2e; color: white; }
+.agent-flow__question .agent-flow__step { color: #aee9c3; }
+.agent-flow__question-body { margin-block: auto; padding-block: 2rem; }
+.agent-flow__question-body svg { color: #aee9c3; }
+.agent-flow__question blockquote { max-width: 10ch; margin: 1.5rem 0 0; font-family: var(--font-display); font-size: clamp(2.1rem, 3vw, 3.6rem); font-weight: 550; line-height: 1.04; letter-spacing: -.035em; }
+.agent-flow__question > p { max-width: 21rem; color: #b5d9c2; font-size: .88rem; line-height: 1.6; }
+.agent-flow__context { position: relative; background: #e8f3e8; }
+.agent-flow__context-intro { max-width: 14rem; margin-top: auto; color: #345743; font-size: 1.15rem; font-weight: 650; line-height: 1.3; }
+.agent-flow__context ul { margin: 1.4rem 0 0; padding: 0; list-style: none; }
+.agent-flow__context li { display: flex; padding: .8rem 0; align-items: center; gap: .7rem; border-top: 1px solid #cbded0; color: #2f5941; font-size: .76rem; font-weight: 750; }
+.agent-flow__context li svg { flex: 0 0 auto; color: #168353; }
+.agent-flow__response { background: #f7fbf7; }
+.agent-flow__response-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.agent-flow__response-top svg { color: #168353; }
+.agent-flow__response > p { max-width: 27ch; margin-block: auto; padding-block: 2rem; color: #163725; font-family: var(--font-display); font-size: clamp(1.7rem, 1.95vw, 2.25rem); font-weight: 500; line-height: 1.2; letter-spacing: -.025em; }
+.agent-flow__review { display: flex; padding-top: 1rem; align-items: center; gap: .65rem; border-top: 1px solid #d4e5d8; color: #3e6950; font-size: .78rem; font-weight: 750; }
+.agent-flow__review svg { flex: 0 0 auto; color: #168353; }
+.agent-flow__disclaimer { grid-column: 1 / -1; padding: .85rem clamp(1.65rem, 3vw, 3.5rem); background: #f7fbf7; color: #5d7666; font-size: .75rem; line-height: 1.5; }
 
 .resources-insights { background: #f4f7f5; }
 .insight-grid { display: grid; overflow: hidden; margin-top: clamp(3.5rem, 6vw, 6rem); padding: 1px; grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr); grid-template-rows: repeat(2, minmax(280px, 1fr)); gap: 1px; border-radius: 28px; background: #cbd7d1; box-shadow: 0 36px 80px -62px rgba(13,35,28,.55); }
@@ -506,6 +551,8 @@ onBeforeUnmount(() => destroyMotion?.())
   .operation-feature { grid-template-columns: 42px minmax(0, 1fr); }
   .operation-feature > small { grid-column: 2; justify-self: start; text-align: left; }
   .operation-editorial__image { min-height: 680px; }
+  .intelligence-heading__body { grid-template-columns: 1fr; gap: 1.5rem; }
+  .intelligence-heading__body > p { max-width: 38rem; }
 }
 
 @media (max-width: 900px) {
@@ -514,7 +561,10 @@ onBeforeUnmount(() => destroyMotion?.())
   .operation-editorial__content { padding: clamp(2rem, 5vw, 4rem); }
   .operation-editorial__image { min-height: 0; height: clamp(450px, 75vw, 680px); }
   .operation-editorial__image img { object-position: center 52%; }
-  .intelligence-layout { grid-template-columns: 1fr; }
+  .agent-flow { grid-template-columns: 1fr 1fr; }
+  .agent-flow__question, .agent-flow__context { min-height: 390px; }
+  .agent-flow__response { grid-column: 1 / -1; min-height: 310px; }
+  .agent-flow__response > p { max-width: 34ch; }
   .insight-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
   .insight-card--measurement { grid-row: auto; min-height: 570px; }
   .insight-card { min-height: 360px; }
@@ -545,7 +595,18 @@ onBeforeUnmount(() => destroyMotion?.())
   .operation-feature { gap: .8rem; }
   .operation-editorial__image { height: clamp(390px, 110vw, 580px); }
   .operation-editorial__image figcaption { right: 1.35rem; bottom: 1.35rem; left: 1.35rem; }
-  .agent-context { grid-template-columns: 1fr; }.agent-prompt { width: 82%; }
+  .intelligence-heading__top { align-items: flex-start; flex-direction: column; }
+  .intelligence-heading__body { margin-top: 2.5rem; }
+  .intelligence-heading h2 { font-size: clamp(3.1rem, 11vw, 5rem); }
+  .agent-flow { margin-top: 3rem; grid-template-columns: 1fr; border-radius: 19px; }
+  .agent-flow__question, .agent-flow__context, .agent-flow__response { min-height: 0; padding: 1.7rem; }
+  .agent-flow__question-body { padding-block: 2.5rem; }
+  .agent-flow__question blockquote { font-size: clamp(2.25rem, 8vw, 3.25rem); }
+  .agent-flow__context { min-height: 330px; }
+  .agent-flow__context-intro { margin-top: 2.5rem; }
+  .agent-flow__response { grid-column: 1; min-height: 330px; }
+  .agent-flow__response > p { padding-block: 2.5rem; font-size: clamp(1.7rem, 6.5vw, 2.35rem); }
+  .agent-flow__disclaimer { padding-inline: 1.7rem; }
   .insight-grid { margin-inline: calc(var(--gutter) * -.35); border-radius: 22px; }
   .insight-card { min-height: 0; padding: 1.25rem; }.insight-card--measurement { min-height: 520px; }.insight-card:not(.insight-card--measurement) { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }.insight-card:not(.insight-card--measurement) .insight-card__top, .insight-card:not(.insight-card--measurement) .insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__body, .insight-card:not(.insight-card--measurement) .insight-card__tags { grid-row: auto; grid-column: 1; }.insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__visual { min-height: 170px; margin-block: 1.35rem; }.insight-card__body h3 { font-size: 1.65rem; }
   .resources-integrations { padding-block: 5rem; }

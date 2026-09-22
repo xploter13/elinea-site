@@ -150,10 +150,10 @@ plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
 1. Hero fotográfico escuro, em uma única coluna de texto e sem botões, mostrando uma
    operação real de venda e expedição ao fundo. O tratamento segue a linguagem do
    hero da Home, com assunto visual à direita e área de leitura protegida à esquerda.
-2. A seção “A operação por inteiro” usa uma composição editorial aberta: rótulo
-   discreto, headline monumental deslocada para a direita, imagem conceitual à
-   esquerda e dois blocos de conteúdo à direita. Pagamentos, logística, ERP/fiscal e
-   WhatsApp aparecem em uma lista objetiva, sem grade de cards ou mockups de sistema.
+2. A seção “A operação por inteiro” usa título amplo sobre fundo claro e um painel
+   escuro abaixo. O painel apresenta as quatro frentes da operação em uma lista à
+   esquerda, com estado de disponibilidade explícito, e a imagem conceitual vertical
+   à direita. O título interno do painel é claro para manter contraste.
 3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
 4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios. A seção
    usa uma única moldura técnica assimétrica com três instrumentos visuais: fluxo de
