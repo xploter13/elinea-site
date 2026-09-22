@@ -216,6 +216,9 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
   do primeiro marcador, termina no centro do último e é desenhada progressivamente no
   scroll, seguindo o tratamento do fluxo da página Plataforma. Em tablet e mobile, a
   linha permanece oculta para preservar a leitura das colunas reduzidas.
+- No núcleo do painel de integrações da página Recursos, os cinco pontos percorrem a
+  órbita lentamente, com durações e sentidos alternados. O movimento pausa no hover e
+  é removido quando `prefers-reduced-motion` está ativo.
 - Os módulos do ecossistema orbitam continuamente em dois sentidos, mantendo os cards
   legíveis. Não existe botão de pausa. A órbita pausa enquanto o cursor está sobre a
   composição e retoma ao sair; também pausa fora da viewport ou com a aba oculta.
