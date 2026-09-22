@@ -54,7 +54,8 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 - Corpo e interface: Manrope, pesos 400–800.
 - As fontes são carregadas pelo `head` do Nuxt via Google Fonts.
 - Grandes títulos usam `clamp()`, line-height compacto próximo de `0.9–1.05` e
-  tracking negativo controlado.
+  tracking negativo suave, em geral entre `-0.04em` e `-0.02em`, para preservar
+  legibilidade e respiro entre as letras.
 - Não substituir as famílias sem uma decisão explícita de identidade.
 
 ## Layout e responsividade

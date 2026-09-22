@@ -432,7 +432,7 @@ onBeforeUnmount(() => destroyMotion?.())
   font-size: clamp(3.8rem, 6.4vw, 7rem);
   font-weight: 600;
   line-height: .93;
-  letter-spacing: -.068em;
+  letter-spacing: -.04em;
 }
 
 .platform-hero__title span {
@@ -533,7 +533,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: .5rem;
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3vw, 2.6rem);
-  letter-spacing: -.05em;
+  letter-spacing: -.025em;
 }
 
 .platform-console__summary > div {
@@ -750,7 +750,7 @@ onBeforeUnmount(() => destroyMotion?.())
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3.8rem);
   line-height: .97;
-  letter-spacing: -.06em;
+  letter-spacing: -.03em;
 }
 
 .storefront-window__hero i {
@@ -1022,7 +1022,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-capabilities__list h3 {
   margin-top: .5rem;
   font-size: clamp(2rem, 4vw, 4.5rem);
-  letter-spacing: -.055em;
+  letter-spacing: -.03em;
 }
 
 .platform-capabilities__list article > strong {
@@ -1178,7 +1178,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-start__text h3 {
   color: white;
   font-size: 1.3rem;
-  letter-spacing: -.02em;
+  letter-spacing: -.005em;
 }
 
 .platform-start__arrow {

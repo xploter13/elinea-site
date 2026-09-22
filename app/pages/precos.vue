@@ -294,7 +294,7 @@ onBeforeUnmount(() => destroyMotion?.())
   font-size: clamp(3.7rem, 5.7vw, 6.5rem);
   font-weight: 600;
   line-height: .93;
-  letter-spacing: -.072em;
+  letter-spacing: -.04em;
 }
 
 .pricing-hero__title span {
@@ -470,7 +470,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: clamp(4rem, 7vw, 7rem);
   color: white;
   font-size: clamp(1.7rem, 2.6vw, 2.7rem);
-  letter-spacing: -.05em;
+  letter-spacing: -.025em;
 }
 
 .pricing-value article p {
@@ -532,7 +532,7 @@ onBeforeUnmount(() => destroyMotion?.())
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 1.5vw, 1.35rem);
   font-weight: 600;
-  letter-spacing: -.025em;
+  letter-spacing: -.01em;
 }
 
 .pricing-faq summary i {
