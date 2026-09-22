@@ -150,10 +150,10 @@ plataformas de ecommerce, sem copiar identidade, textos, imagens ou promessas:
 1. Hero fotográfico escuro, em uma única coluna de texto e sem botões, mostrando uma
    operação real de venda e expedição ao fundo. O tratamento segue a linguagem do
    hero da Home, com assunto visual à direita e área de leitura protegida à esquerda.
-2. Cards grandes para pagamentos, logística, ERP/fiscal e venda pelo WhatsApp. O card
-   de pagamentos usa uma fotografia documental (cliente pagando na maquininha em um
-   pequeno negócio); logística, ERP/fiscal e WhatsApp continuam com ilustrações de
-   produto construídas em HTML/CSS.
+2. A seção “A operação por inteiro” usa uma composição editorial aberta: rótulo
+   discreto, headline monumental deslocada para a direita, imagem conceitual à
+   esquerda e dois blocos de conteúdo à direita. Pagamentos, logística, ERP/fiscal e
+   WhatsApp aparecem em uma lista objetiva, sem grade de cards ou mockups de sistema.
 3. Capítulo em degradê verde dedicado a automação e ao Agente de IA.
 4. Recursos de dados e crescimento: Analytics, Meta Pixel, SEO e relatórios. A seção
    usa uma única moldura técnica assimétrica com três instrumentos visuais: fluxo de

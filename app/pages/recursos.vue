@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
-import paymentSceneUrl from '~/assets/images/elinea-payment-scene.jpg'
+import operationMachineUrl from '~/assets/images/elinea-operation-machine.png'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
   ArrowRight,
   BarChart3,
   Bot,
   Boxes,
-  Check,
   CreditCard,
   FileText,
   MessageCircle,
@@ -25,32 +24,40 @@ let destroyMotion: (() => void) | undefined
 const resourceCards = [
   {
     id: 'pagamentos',
+    stage: 'Receber',
     icon: CreditCard,
     eyebrow: 'Checkout e pagamentos',
+    summary: 'Pix, cartão e gateways integrados ao fluxo do pedido.',
     title: 'Venda com os meios que fazem sentido para o cliente.',
     description: 'Pix, cartão e gateways entram no mesmo fluxo de pedidos. A configuração varia conforme o plano, o provedor escolhido e o escopo da implantação.',
     status: 'Conforme plano',
   },
   {
     id: 'logistica',
+    stage: 'Entregar',
     icon: Truck,
     eyebrow: 'Frete e logística',
+    summary: 'Regras de frete, etiquetas e rastreio organizados.',
     title: 'Do cálculo do frete ao acompanhamento da entrega.',
     description: 'Estruture regras de envio e conecte a operação a soluções como Melhor Envio e Correios conforme a necessidade e a validação técnica do projeto.',
     status: 'Sob configuração',
   },
   {
     id: 'gestao',
+    stage: 'Sincronizar',
     icon: Boxes,
     eyebrow: 'ERP e documentos fiscais',
+    summary: 'Estoque, faturamento e documentos compartilhando dados.',
     title: 'Pedido, estoque e faturamento falando a mesma língua.',
     description: 'Projetos personalizados podem conectar ERPs, como o Bling, e fluxos de emissão fiscal para reduzir digitação repetida e manter os dados consistentes.',
     status: 'Projeto personalizado',
   },
   {
     id: 'whatsapp',
+    stage: 'Relacionar',
     icon: MessageCircle,
     eyebrow: 'Venda pelo WhatsApp',
+    summary: 'Atendimento, histórico e automações na mesma rotina.',
     title: 'A conversa continua conectada à operação.',
     description: 'Centralize contatos, histórico, pedidos, campanhas e automações para transformar atendimento em uma rotina comercial organizada e mensurável.',
     status: 'Disponível',
@@ -167,13 +174,12 @@ onMounted(async () => {
         })
       })
 
-      gsap.from('.resource-card', {
-        y: 32,
+      gsap.from('.operation-editorial__stage', {
+        y: 36,
         opacity: 0,
-        duration: .7,
-        stagger: .1,
+        duration: .85,
         ease: 'power3.out',
-        scrollTrigger: { trigger: '.resources-grid', start: 'top 78%', once: true },
+        scrollTrigger: { trigger: '.operation-editorial__stage', start: 'top 82%', once: true },
       })
 
       gsap.from('.migration-track__line', {
@@ -221,42 +227,36 @@ onBeforeUnmount(() => destroyMotion?.())
       </section>
 
       <section id="operacao" class="chapter resources-core">
-        <div class="site-container">
-          <div class="resources-heading" data-resource-reveal>
-            <div><p class="site-label">A operação por inteiro</p><h2 class="site-title">Recursos que trabalham<br>depois do clique.</h2></div>
-            <p class="site-copy">Cada bloco representa uma parte real da rotina. O que entra em cada projeto depende do plano, dos provedores e das necessidades da operação.</p>
-          </div>
+        <div class="site-container operation-editorial">
+          <header class="operation-editorial__header" data-resource-reveal>
+            <p class="operation-editorial__label"><span aria-hidden="true"></span>A operação por inteiro</p>
+            <h2><span>Venda confirmada.</span><span>Operação conectada.</span></h2>
+            <p class="operation-editorial__lead">O pedido é só o começo. A partir dele, cada parte da operação precisa saber o que fazer.</p>
+          </header>
 
-          <div class="resources-grid">
-            <article v-for="card in resourceCards" :id="card.id" :key="card.id" class="resource-card" :class="`resource-card--${card.id}`">
-              <div class="resource-card__visual" aria-hidden="true">
-                <img v-if="card.id === 'pagamentos'" class="payment-scene" :src="paymentSceneUrl" alt="" loading="lazy">
-
-                <div v-else-if="card.id === 'logistica'" class="shipping-scene">
-                  <div class="shipping-route"><i></i><span class="route-dot route-dot--start"><Store :size="15" /></span><span class="route-dot route-dot--end"><PackageCheck :size="15" /></span></div>
-                  <div class="shipping-package"><Boxes :size="30" /><span><small>Pedido pronto</small><strong>Etiqueta e rastreio</strong></span></div>
-                  <div class="shipping-providers"><span>Melhor Envio</span><span>Correios</span><small>conforme escopo</small></div>
-                </div>
-
-                <div v-else-if="card.id === 'gestao'" class="erp-scene">
-                  <div class="erp-order"><small>Pedido #1482</small><strong>Pagamento aprovado</strong><span><i></i> Pronto para sincronizar</span></div>
-                  <div class="erp-connector"><i></i><span><ArrowRight :size="17" /></span><i></i></div>
-                  <div class="erp-stack"><div><Boxes :size="18" /><span><small>ERP</small><strong>Bling</strong></span></div><div><FileText :size="18" /><span><small>Documento</small><strong>NF-e</strong></span></div><em>Sob configuração</em></div>
-                </div>
-
-                <div v-else class="whatsapp-scene">
-                  <div class="whatsapp-head"><MessageCircle :size="18" /><span><strong>Atendimento</strong><small>online</small></span><i></i></div>
-                  <p>Olá! Meu pedido já foi enviado?</p><p class="is-reply">Sim. Acabamos de atualizar o rastreio para você.</p>
-                  <div class="whatsapp-order"><PackageCheck :size="17" /><span><small>Pedido #1482</small><strong>Em transporte</strong></span><Check :size="15" /></div>
-                </div>
+          <div class="operation-editorial__stage">
+            <div class="operation-editorial__content">
+              <div class="operation-editorial__intro">
+                <p class="operation-editorial__overline"><PackageCheck :size="18" aria-hidden="true" />Depois da venda</p>
+                <h3>Um pedido.<br>Várias frentes em movimento.</h3>
+                <p>Pagamento, entrega, gestão e relacionamento seguem o mesmo contexto para a rotina avançar com clareza.</p>
               </div>
 
-              <div class="resource-card__content">
-                <div class="resource-card__meta"><span><component :is="card.icon" :size="19" aria-hidden="true" />{{ card.eyebrow }}</span><small>{{ card.status }}</small></div>
-                <h3>{{ card.title }}</h3>
-                <p>{{ card.description }}</p>
-              </div>
-            </article>
+              <ul class="operation-features" aria-label="Frentes da operação">
+                <li v-for="card in resourceCards" :id="card.id" :key="card.id" class="operation-feature">
+                  <span class="operation-feature__icon"><component :is="card.icon" :size="20" :stroke-width="1.8" aria-hidden="true" /></span>
+                  <div class="operation-feature__text"><strong>{{ card.stage }}</strong><p>{{ card.summary }}</p></div>
+                  <small>{{ card.status }}</small>
+                </li>
+              </ul>
+
+              <p class="operation-editorial__note">Recursos e conexões variam conforme plano, provedores e escopo de implantação.</p>
+            </div>
+
+            <figure class="operation-editorial__image">
+              <img :src="operationMachineUrl" alt="Pedido central ligado visualmente a pagamento, expedição, gestão e atendimento" loading="lazy" width="1024" height="1536">
+              <figcaption><span aria-hidden="true"></span>Uma venda ativa toda a estrutura ao redor.</figcaption>
+            </figure>
           </div>
         </div>
       </section>
@@ -407,36 +407,33 @@ onBeforeUnmount(() => destroyMotion?.())
 .resources-hero__title span { display: block; }
 .resources-hero__copy { max-width: 39rem; margin-top: 1.7rem; color: rgba(255,255,255,.7); font-size: clamp(1rem, 1.18vw, 1.18rem); line-height: 1.7; }
 
-.resources-core { background: #f6f9f7; }
+.resources-core { padding-block: clamp(5.5rem, 9vw, 9rem); background: #f6f8f5; color: #10251d; }
+.operation-editorial__header { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(240px, .5fr); column-gap: clamp(2rem, 8vw, 8rem); align-items: end; }
+.operation-editorial__label { display: flex; grid-column: 1 / -1; align-items: center; gap: .65rem; margin-bottom: clamp(2.3rem, 4.5vw, 4.5rem); color: #426454; font-size: .78rem; font-weight: 750; }
+.operation-editorial__label span { width: 18px; height: 2px; background: #148858; }
+.operation-editorial__header h2 { font-size: clamp(3.4rem, 5.5vw, 6.7rem); font-weight: 600; line-height: .92; letter-spacing: -.055em; }
+.operation-editorial__header h2 span { display: block; }
+.operation-editorial__header h2 span:last-child { color: #178757; }
+.operation-editorial__lead { max-width: 20rem; padding-bottom: .5rem; color: #526a5e; font-size: clamp(.96rem, 1.17vw, 1.12rem); line-height: 1.65; }
+.operation-editorial__stage { display: grid; overflow: hidden; margin-top: clamp(3rem, 5.5vw, 5.5rem); grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); border-radius: 26px; background: #0d2119; color: #f8fbf7; }
+.operation-editorial__content { display: flex; min-width: 0; padding: clamp(2rem, 4.2vw, 4.75rem); flex-direction: column; }
+.operation-editorial__overline { display: inline-flex; align-items: center; gap: .7rem; color: #95d7b2; font-size: .8rem; font-weight: 700; }
+.operation-editorial__intro h3 { max-width: 36rem; margin-top: 1.45rem; color: #f8fbf7; font-size: clamp(2rem, 3.25vw, 3.8rem); font-weight: 550; line-height: 1.04; letter-spacing: -.04em; }
+.operation-editorial__intro > p:last-child { max-width: 31rem; margin-top: 1.3rem; color: #b6c9be; font-size: .96rem; line-height: 1.7; }
+.operation-features { margin: clamp(2.5rem, 4vw, 4rem) 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(216,244,225,.2); }
+.operation-feature { display: grid; padding: 1rem 0; grid-template-columns: 42px minmax(0, 1fr) auto; gap: 1rem; align-items: center; border-bottom: 1px solid rgba(216,244,225,.2); }
+.operation-feature__icon { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(132,219,167,.24); border-radius: 12px; color: #86dbac; }
+.operation-feature__text strong { display: block; font-size: .98rem; font-weight: 750; }
+.operation-feature__text p { margin-top: .2rem; color: #aabeb2; font-size: .77rem; line-height: 1.5; }
+.operation-feature > small { justify-self: end; color: #a7d6b8; font-size: .65rem; font-weight: 700; text-align: right; }
+.operation-editorial__note { max-width: 30rem; margin-top: auto; padding-top: 2rem; color: #8da79a; font-size: .7rem; line-height: 1.6; }
+.operation-editorial__image { position: relative; min-width: 0; min-height: 720px; margin: 0; overflow: hidden; background: #172f24; }
+.operation-editorial__image::after { position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(4,17,12,.78)); content: ''; pointer-events: none; }
+.operation-editorial__image img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 49%; }
+.operation-editorial__image figcaption { position: absolute; z-index: 1; right: 2rem; bottom: 2rem; left: 2rem; display: flex; align-items: center; gap: .8rem; color: #f1f9f3; font-size: .82rem; font-weight: 650; line-height: 1.4; }
+.operation-editorial__image figcaption span { width: 22px; height: 1px; flex: 0 0 auto; background: #9ee5b8; }
 .resources-heading { display: grid; grid-template-columns: 1.15fr .65fr; gap: clamp(2rem, 6vw, 6rem); align-items: end; }
 .resources-heading .site-copy { margin-bottom: .5rem; }
-.resources-grid { display: grid; margin-top: clamp(3rem, 6vw, 5.5rem); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
-.resource-card { overflow: hidden; border: 1px solid rgba(13,23,21,.08); border-radius: 22px; background: white; box-shadow: 0 28px 65px -52px rgba(0,0,0,.55); }
-.resource-card__visual { position: relative; min-height: 390px; overflow: hidden; background: #eaf2ed; }
-.resource-card__content { padding: clamp(1.5rem, 2.6vw, 2.4rem); }
-.resource-card__meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.resource-card__meta > span { display: flex; align-items: center; gap: .55rem; color: var(--green); font-size: .72rem; font-weight: 800; }
-.resource-card__meta > small { padding: .38rem .58rem; border-radius: 999px; background: var(--warm-white); color: var(--muted); font-size: .58rem; font-weight: 800; }
-.resource-card h3 { max-width: 32rem; margin-top: 1.3rem; font-size: clamp(1.7rem, 2.5vw, 2.55rem); line-height: 1.03; letter-spacing: -.025em; }
-.resource-card__content > p { max-width: 37rem; margin-top: 1rem; color: var(--muted); font-size: .9rem; line-height: 1.7; }
-
-.payment-scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-
-.shipping-scene { position: absolute; inset: 0; background: linear-gradient(145deg, #e6f0eb, #f7faf8); }
-.shipping-route { position: absolute; inset: 16% 10%; border-radius: 46% 54% 50% 42%; border: 2px dashed rgba(7,148,94,.28); transform: rotate(-8deg); }.shipping-route i { position: absolute; top: 45%; left: 16%; width: 68%; height: 2px; background: var(--green); transform: rotate(14deg); transform-origin: left; }
-.route-dot { position: absolute; display: grid; width: 42px; height: 42px; place-items: center; border: 5px solid rgba(223,244,233,.9); border-radius: 50%; background: var(--green); color: white; }.route-dot--start { top: 29%; left: 9%; }.route-dot--end { right: 8%; bottom: 22%; }
-.shipping-package { position: absolute; z-index: 2; top: 13%; right: 9%; display: flex; min-width: 205px; padding: 1rem; align-items: center; gap: .8rem; border-radius: 14px; background: white; color: var(--green); box-shadow: 0 22px 50px -35px #000; }.shipping-package span { display: grid; }.shipping-package small { color: var(--muted); font-size: .6rem; }.shipping-package strong { color: var(--ink); font-size: .76rem; }
-.shipping-providers { position: absolute; z-index: 2; bottom: 10%; left: 8%; display: flex; padding: .65rem; flex-wrap: wrap; gap: .45rem; border-radius: 12px; background: white; box-shadow: 0 22px 50px -35px #000; }.shipping-providers span { padding: .5rem .65rem; border-radius: 8px; background: var(--warm-white); color: var(--ink); font-size: .63rem; font-weight: 800; }.shipping-providers small { width: 100%; padding-left: .15rem; color: var(--muted); font-size: .53rem; }
-
-.erp-scene { position: absolute; inset: 0; display: grid; padding: 2rem; grid-template-columns: 1fr auto 1fr; align-items: center; background: #12241f; }
-.erp-order, .erp-stack { padding: 1.25rem; border: 1px solid rgba(255,255,255,.08); border-radius: 15px; background: #1a3029; color: white; box-shadow: 0 28px 60px -40px #000; }.erp-order { display: grid; gap: .7rem; }.erp-order small { color: rgba(255,255,255,.42); font-size: .62rem; }.erp-order strong { font-size: .86rem; }.erp-order span { color: var(--green-bright); font-size: .62rem; }.erp-order span i { display: inline-block; width: 7px; height: 7px; margin-right: .35rem; border-radius: 50%; background: var(--green-bright); }
-.erp-connector { display: flex; min-width: 74px; align-items: center; color: var(--green-bright); }.erp-connector i { height: 1px; flex: 1; background: rgba(92,221,164,.35); }.erp-connector span { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(92,221,164,.3); border-radius: 50%; }
-.erp-stack { display: grid; gap: .65rem; }.erp-stack > div { display: flex; padding: .75rem; align-items: center; gap: .7rem; border-radius: 10px; background: rgba(255,255,255,.05); }.erp-stack svg { color: var(--green-bright); }.erp-stack span { display: grid; }.erp-stack small { color: rgba(255,255,255,.42); font-size: .55rem; }.erp-stack strong { font-size: .72rem; }.erp-stack em { color: rgba(255,255,255,.45); font-size: .55rem; font-style: normal; }
-
-.whatsapp-scene { position: absolute; inset: 9% 17%; padding: 1.1rem; border-radius: 17px; background: white; box-shadow: 0 28px 65px -45px #000; }
-.whatsapp-head { display: flex; padding-bottom: .8rem; align-items: center; gap: .65rem; border-bottom: 1px solid var(--line); color: var(--green); }.whatsapp-head span { display: grid; }.whatsapp-head strong { color: var(--ink); font-size: .72rem; }.whatsapp-head small { color: var(--green); font-size: .55rem; }.whatsapp-head i { width: 7px; height: 7px; margin-left: auto; border-radius: 50%; background: var(--green); }
-.whatsapp-scene > p { width: 73%; margin-top: .8rem; padding: .65rem .75rem; border-radius: 10px 10px 10px 2px; background: #f0f3f2; color: #52615c; font-size: .62rem; line-height: 1.45; }.whatsapp-scene > p.is-reply { margin-left: auto; border-radius: 10px 10px 2px 10px; background: var(--green-light); color: #076b47; }
-.whatsapp-order { display: flex; margin-top: .9rem; padding: .75rem; align-items: center; gap: .65rem; border: 1px solid rgba(7,148,94,.15); border-radius: 11px; color: var(--green); }.whatsapp-order span { display: grid; }.whatsapp-order small { color: var(--muted); font-size: .55rem; }.whatsapp-order strong { color: var(--ink); font-size: .68rem; }.whatsapp-order > svg:last-child { margin-left: auto; }
 
 .resources-intelligence { color: white; background: linear-gradient(135deg, #034f36 0%, #078759 48%, #29b879 100%); }
 .resources-intelligence::before { position: absolute; inset: 0; background: radial-gradient(circle at 75% 35%, rgba(255,255,255,.15), transparent 28%); content: ''; pointer-events: none; }
@@ -503,11 +500,21 @@ onBeforeUnmount(() => destroyMotion?.())
   .resources-hero__content { width: min(67vw, 740px); }
   .resources-heading, .integrations-heading { grid-template-columns: 1fr; }
   .integrations-heading { gap: 1.2rem; }
+  .operation-editorial__header { grid-template-columns: 1fr; }
+  .operation-editorial__lead { max-width: 38rem; margin-top: 1.6rem; }
+  .operation-editorial__stage { grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); }
+  .operation-feature { grid-template-columns: 42px minmax(0, 1fr); }
+  .operation-feature > small { grid-column: 2; justify-self: start; text-align: left; }
+  .operation-editorial__image { min-height: 680px; }
 }
 
 @media (max-width: 900px) {
-  .resources-grid, .intelligence-layout { grid-template-columns: 1fr; }
-  .resource-card__visual { min-height: 430px; }
+  .operation-editorial__header h2 { font-size: clamp(3.5rem, 8vw, 5.7rem); }
+  .operation-editorial__stage { grid-template-columns: 1fr; }
+  .operation-editorial__content { padding: clamp(2rem, 5vw, 4rem); }
+  .operation-editorial__image { min-height: 0; height: clamp(450px, 75vw, 680px); }
+  .operation-editorial__image img { object-position: center 52%; }
+  .intelligence-layout { grid-template-columns: 1fr; }
   .insight-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
   .insight-card--measurement { grid-row: auto; min-height: 570px; }
   .insight-card { min-height: 360px; }
@@ -527,11 +534,17 @@ onBeforeUnmount(() => destroyMotion?.())
   .resources-hero__title { font-size: clamp(3.65rem, 17.5vw, 5.1rem); }
   .resources-hero__copy { max-width: 31rem; font-size: 1rem; }
   .resources-heading { gap: 1rem; }
-  .resource-card__visual { min-height: 360px; }.resource-card__meta { align-items: flex-start; flex-direction: column; }.resource-card h3 { font-size: 1.8rem; }
-  .resource-card--pagamentos .resource-card__visual { min-height: 430px; }
-  .shipping-package { top: 10%; right: 4%; min-width: 185px; }.shipping-providers { bottom: 7%; left: 4%; }
-  .erp-scene { padding: 1.2rem; grid-template-columns: 1fr; gap: .5rem; }.erp-connector { min-width: 0; min-height: 30px; margin-inline: auto; transform: rotate(90deg); }.erp-order, .erp-stack { width: 82%; }.erp-stack { margin-left: auto; }
-  .whatsapp-scene { inset: 7%; }
+  .resources-core { padding-block: 5rem; }
+  .operation-editorial__label { margin-bottom: 2.25rem; }
+  .operation-editorial__header h2 { font-size: clamp(3rem, 11.5vw, 4.7rem); }
+  .operation-editorial__lead { margin-top: 1.4rem; }
+  .operation-editorial__stage { margin-top: 2.5rem; border-radius: 19px; }
+  .operation-editorial__content { padding: 2rem 1.35rem; }
+  .operation-editorial__intro h3 { font-size: clamp(2rem, 8vw, 3rem); }
+  .operation-features { margin-top: 2.5rem; }
+  .operation-feature { gap: .8rem; }
+  .operation-editorial__image { height: clamp(390px, 110vw, 580px); }
+  .operation-editorial__image figcaption { right: 1.35rem; bottom: 1.35rem; left: 1.35rem; }
   .agent-context { grid-template-columns: 1fr; }.agent-prompt { width: 82%; }
   .insight-grid { margin-inline: calc(var(--gutter) * -.35); border-radius: 22px; }
   .insight-card { min-height: 0; padding: 1.25rem; }.insight-card--measurement { min-height: 520px; }.insight-card:not(.insight-card--measurement) { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }.insight-card:not(.insight-card--measurement) .insight-card__top, .insight-card:not(.insight-card--measurement) .insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__body, .insight-card:not(.insight-card--measurement) .insight-card__tags { grid-row: auto; grid-column: 1; }.insight-card__visual, .insight-card:not(.insight-card--measurement) .insight-card__visual { min-height: 170px; margin-block: 1.35rem; }.insight-card__body h3 { font-size: 1.65rem; }
@@ -542,11 +555,6 @@ onBeforeUnmount(() => destroyMotion?.())
   .integrations-hub__network { width: min(68%, 210px); }.integrations-hub__network > i { width: 62px; height: 62px; border-radius: 18px; }
   .integration-card { min-height: 0; padding: 1.15rem; grid-template-columns: 46px minmax(0, 1fr); gap: .8rem 1rem; border-radius: 17px; }.integration-card__icon { width: 46px; height: 46px; border-radius: 14px; }.integration-card__status { grid-column: 2; justify-self: start; }.integration-card__content p { font-size: .73rem; }
   .migration-track { grid-template-columns: 1fr; }.migration-track article { display: grid; grid-template-columns: 50px 32px 1fr; column-gap: .8rem; align-items: center; }.migration-track article > svg, .migration-track h3 { margin-top: 0; }.migration-track p { max-width: none; margin: .7rem 0 0 82px; grid-column: 1 / -1; }
-}
-
-@media (max-width: 420px) {
-  .resource-card__visual { min-height: 340px; }
-  .whatsapp-scene { inset: 6%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
