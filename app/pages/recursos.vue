@@ -423,10 +423,11 @@ onBeforeUnmount(() => destroyMotion?.())
 .insight-card__top { display: flex; align-items: center; justify-content: space-between; }.insight-card__top > span { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 12px; background: white; color: var(--green); }.insight-card__top small { color: var(--muted); font-size: .6rem; font-weight: 750; }
 .insight-card h3 { margin-top: 3.5rem; font-size: clamp(1.4rem, 2vw, 2rem); letter-spacing: -.02em; }.insight-card > p { margin-top: 1rem; color: var(--muted); font-size: .82rem; line-height: 1.65; }.insight-card > div:last-child { display: flex; margin-top: 1.5rem; flex-wrap: wrap; gap: .45rem; }.insight-card > div:last-child span { padding: .42rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: white; color: #53645e; font-size: .57rem; font-weight: 700; }
 
-.resources-integrations { padding: clamp(5rem, 9vw, 9rem) 0; overflow: hidden; background: #dfe9e4; }
+.resources-integrations { padding: clamp(5rem, 9vw, 9rem) 0; overflow: hidden; background: #091713; color: white; }
+.resources-integrations .site-label { color: var(--green-bright); }
 .integrations-heading { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, .55fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; }
-.integrations-heading h2 { max-width: 58rem; margin-top: 1rem; font-size: clamp(2.7rem, 5vw, 5.4rem); line-height: .94; letter-spacing: -.035em; }
-.integrations-heading > p { max-width: 34rem; color: #4f625a; font-size: .92rem; line-height: 1.75; }
+.integrations-heading h2 { max-width: 58rem; margin-top: 1rem; color: white; font-size: clamp(2.7rem, 5vw, 5.4rem); line-height: .94; letter-spacing: -.035em; }
+.integrations-heading > p { max-width: 34rem; color: rgba(255,255,255,.62); font-size: .92rem; line-height: 1.75; }
 .integrations-board { display: grid; margin-top: clamp(3rem, 6vw, 5.5rem); padding: .75rem; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); gap: .75rem; border-radius: 32px; background: #091713; box-shadow: 0 42px 90px -62px rgba(3, 22, 15, .75); }
 .integrations-hub { position: relative; display: flex; overflow: hidden; min-height: 650px; padding: clamp(1.5rem, 3vw, 2.5rem); flex-direction: column; border-radius: 24px; background: radial-gradient(circle at 50% 46%, rgba(92, 221, 164, .18), transparent 30%), #10271f; color: white; isolation: isolate; }
 .integrations-hub::before { position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 42px 42px; content: ''; mask-image: linear-gradient(to bottom, black, transparent 82%); }
