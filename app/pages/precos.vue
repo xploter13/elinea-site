@@ -421,7 +421,7 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-value {
-  background: linear-gradient(110deg, #081411 0%, #0b3023 52%, #0b5139 100%);
+  background: linear-gradient(90deg, #05462f 0%, #07945e 50%, #055c3c 100%);
 }
 
 .pricing-value__layout {
@@ -446,6 +446,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-value__intro .site-copy {
   max-width: 30rem;
   margin-top: clamp(2rem, 4vw, 3.5rem);
+  color: rgba(255, 255, 255, .9);
 }
 
 .pricing-value__breakdown {
@@ -470,7 +471,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .pricing-value__breakdown p {
   max-width: 25rem;
-  color: rgba(255, 255, 255, .74);
+  color: rgba(255, 255, 255, .9);
   font-size: var(--description-size);
   line-height: 1.7;
 }
@@ -596,7 +597,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 @media (max-width: 900px) {
   .pricing-value {
-    background: linear-gradient(180deg, #081411 0%, #0b5139 100%);
+    background: linear-gradient(180deg, #05462f 0%, #07945e 46%, #055c3c 100%);
   }
 
   .pricing-comparison__heading, .pricing-faq__layout {

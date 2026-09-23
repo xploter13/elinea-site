@@ -140,7 +140,10 @@ copiar texto, promessas ou identidade de concorrentes:
    leitura protegida à esquerda. Não utilizar card de preço nesse hero.
 2. Seção de planos reutilizada integralmente da Home.
 3. Comparação dos recursos centrais em tabela semântica e rolável no mobile.
-4. Capítulo escuro que separa mensalidade, implantação e evolução do projeto.
+4. Capítulo com gradiente linear baseado no verde Elínea (`#07945e`) que separa
+   mensalidade, implantação e evolução do projeto. A abertura editorial fica em uma
+   coluna e as três partes do investimento aparecem em linhas com divisórias na outra;
+   no mobile, seguem em fluxo vertical.
 5. Perguntas frequentes baseadas somente nas condições comerciais já cadastradas.
 6. CTA final, checkout existente e footer institucional.
 
