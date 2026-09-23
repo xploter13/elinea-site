@@ -133,19 +133,28 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="pricing-comparison__heading" data-pricing-reveal>
             <div><p class="site-label">Compare os planos</p>
               <h2 class="site-title">O que cada<br>momento pede.</h2></div>
-            <p class="site-copy">Uma leitura direta dos recursos centrais. Abra os detalhes de cada plano acima para
-              consultar a lista completa.</p>
+            <p class="site-copy">Compare os recursos principais de cada plano. Para ver a lista completa, consulte os
+              detalhes dos planos acima.</p>
           </div>
 
-          <div class="pricing-table-wrap" tabindex="0"
-               aria-label="Tabela comparativa de planos; deslize horizontalmente em telas menores">
+          <div class="pricing-comparison__guide">
+            <p class="pricing-comparison__scroll-hint">Deslize para ver todos os planos <ArrowRight :size="16" aria-hidden="true"/></p>
+            <div class="pricing-comparison__legend" aria-label="Legenda da comparação">
+              <span><span class="pricing-table__status pricing-table__status--included"><Check :size="15" aria-hidden="true"/></span>Incluído</span>
+              <span><span class="pricing-table__status pricing-table__status--absent"><Minus :size="15" aria-hidden="true"/></span>Não incluído</span>
+            </div>
+          </div>
+
+          <div class="pricing-table-wrap" role="region" tabindex="0"
+               aria-label="Comparação dos recursos dos planos; deslize horizontalmente em telas menores">
             <table class="pricing-table">
+              <caption class="sr-only">Recursos principais incluídos em cada plano Elínea</caption>
               <thead>
               <tr>
                 <th scope="col">Recurso</th>
-                <th v-for="plan in plans" :key="plan.id" scope="col" :class="{ featured: plan.featured }">{{
-                    plan.name
-                  }}
+                <th v-for="plan in plans" :key="plan.id" scope="col" :class="{ featured: plan.featured }">
+                  <span class="pricing-table__plan-name">{{ plan.name }}</span>
+                  <span v-if="plan.featured" class="pricing-table__featured-label">Em destaque</span>
                 </th>
               </tr>
               </thead>
@@ -153,9 +162,11 @@ onBeforeUnmount(() => destroyMotion?.())
               <tr v-for="row in comparisonRows" :key="row.label">
                 <th scope="row">{{ row.label }}</th>
                 <td v-for="plan in plans" :key="plan.id" :class="{ featured: plan.featured }">
-                  <span class="sr-only">{{ hasFeature(row, plan) ? 'Incluído' : 'Não incluído' }}</span>
-                  <Check v-if="hasFeature(row, plan)" class="is-included" :size="19" aria-hidden="true"/>
-                  <Minus v-else :size="17" aria-hidden="true"/>
+                  <span class="pricing-table__status" :class="hasFeature(row, plan) ? 'pricing-table__status--included' : 'pricing-table__status--absent'">
+                    <span class="sr-only">{{ hasFeature(row, plan) ? 'Incluído' : 'Não incluído' }}</span>
+                    <Check v-if="hasFeature(row, plan)" :size="17" aria-hidden="true"/>
+                    <Minus v-else :size="17" aria-hidden="true"/>
+                  </span>
                 </td>
               </tr>
               </tbody>
@@ -345,75 +356,148 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-comparison {
-  background: #fbfcfb;
+  background: var(--paper);
 }
 
 .pricing-comparison__heading {
   display: grid;
-  grid-template-columns: 1.05fr .55fr;
-  gap: 4rem;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, .48fr);
+  gap: clamp(2rem, 6vw, 7rem);
   align-items: end;
 }
 
 .pricing-comparison__heading .site-copy {
-  margin-bottom: .7rem;
+  max-width: 25rem;
+  margin: 0 0 .6rem;
+}
+
+.pricing-comparison__guide {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: clamp(3.5rem, 6vw, 6rem);
+  margin-bottom: 1rem;
+}
+
+.pricing-comparison__scroll-hint {
+  display: none;
+  align-items: center;
+  gap: .5rem;
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 650;
+}
+
+.pricing-comparison__legend {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 650;
+}
+
+.pricing-comparison__legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
 }
 
 .pricing-table-wrap {
-  margin-top: clamp(3.5rem, 7vw, 6.5rem);
   overflow-x: auto;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: white;
   overscroll-behavior-inline: contain;
 }
 
 .pricing-table {
   width: 100%;
-  min-width: 960px;
-  border-collapse: collapse;
+  min-width: 1010px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
   color: var(--ink);
 }
 
 .pricing-table th, .pricing-table td {
-  height: 72px;
-  padding: 0 1rem;
+  height: 76px;
+  padding: 1rem;
   border-bottom: 1px solid var(--line);
   text-align: center;
 }
 
 .pricing-table thead th {
-  height: 82px;
-  color: var(--muted);
-  font-size: .74rem;
-  font-weight: 800;
+  height: 104px;
+  background: #f3f7f4;
+  color: var(--ink);
+  font-size: .85rem;
+  font-weight: 700;
 }
 
 .pricing-table thead th:first-child, .pricing-table tbody th {
-  width: 28%;
-  padding-left: 0;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 26%;
+  padding-left: clamp(1.25rem, 2vw, 2rem);
   text-align: left;
+  box-shadow: inset -1px 0 0 var(--line);
+}
+
+.pricing-table thead th:first-child {
+  z-index: 3;
+  color: var(--muted);
+  font-size: .8rem;
 }
 
 .pricing-table tbody th {
-  font-size: .82rem;
+  background: white;
+  font-size: .9rem;
   font-weight: 650;
+  line-height: 1.45;
 }
 
-.pricing-table td svg {
-  margin-inline: auto;
-  color: #a9b4b0;
+.pricing-table__plan-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
 }
 
-.pricing-table td svg.is-included {
-  color: var(--green);
+.pricing-table__featured-label {
+  display: inline-block;
+  margin-top: .4rem;
+  color: #046b45;
+  font-size: .67rem;
+  font-weight: 800;
+}
+
+.pricing-table__status {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.pricing-table__status--included {
+  background: var(--green-light);
+  color: #046b45;
+}
+
+.pricing-table__status--absent {
+  background: #f0f3f1;
+  color: #687771;
 }
 
 .pricing-table .featured {
-  background: rgba(7, 148, 94, .045);
+  background: #eef8f2;
 }
 
 .pricing-table thead .featured {
-  color: var(--green);
+  box-shadow: inset 0 3px 0 var(--green);
 }
 
 .pricing-table tr:last-child th, .pricing-table tr:last-child td {
@@ -580,6 +664,15 @@ onBeforeUnmount(() => destroyMotion?.())
     grid-template-columns: 1fr .75fr;
   }
 
+  .pricing-comparison__scroll-hint {
+    display: inline-flex;
+  }
+
+  .pricing-comparison__guide {
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
   .pricing-value__layout {
     gap: clamp(2.5rem, 5vw, 4rem);
   }
@@ -603,6 +696,10 @@ onBeforeUnmount(() => destroyMotion?.())
   .pricing-comparison__heading, .pricing-faq__layout {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .pricing-comparison__heading .site-copy {
+    margin-top: 1rem;
   }
 
   .pricing-value__layout {
@@ -659,7 +756,25 @@ onBeforeUnmount(() => destroyMotion?.())
 
   .pricing-table-wrap {
     margin-right: calc(var(--gutter) * -1);
-    padding-right: var(--gutter);
+    border-right: 0;
+    border-radius: 1rem 0 0 1rem;
+  }
+
+  .pricing-comparison__guide {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-top: 3rem;
+  }
+
+  .pricing-table thead th:first-child, .pricing-table tbody th {
+    width: 188px;
+    padding-left: 1.1rem;
+  }
+
+  .pricing-table th, .pricing-table td {
+    padding-right: .75rem;
+    padding-left: .75rem;
   }
 
   .pricing-value__breakdown article {
