@@ -391,7 +391,7 @@ onBeforeUnmount(() => destroyMotion?.())
   gap: .65rem;
   color: rgba(255, 255, 255, .66);
   font-size: .8rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .platform-hero__eyebrow span {
@@ -406,7 +406,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: 1.75rem;
   color: white;
   font-size: clamp(3.8rem, 6.4vw, 7rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: .93;
   letter-spacing: -.04em;
 }
@@ -439,7 +439,7 @@ onBeforeUnmount(() => destroyMotion?.())
   border-top: 1px solid rgba(255, 255, 255, .1);
   color: rgba(255, 255, 255, .4);
   font-size: .68rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .platform-console {
@@ -488,7 +488,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .platform-section-copy .site-title span {
   color: #65736e;
-  font-weight: 450;
+  font-weight: 700;
 }
 
 .storefront-scene {
@@ -543,7 +543,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .storefront-window__hero span {
   color: var(--green);
   font-size: .7rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .storefront-window__hero strong {
@@ -722,7 +722,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: 2rem;
   color: var(--green-bright);
   font-size: .65rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .platform-workflow__step h3 {
@@ -813,14 +813,14 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-capabilities__list article > div > small {
   color: #9aa7a2;
   font-size: .65rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .platform-capabilities__list article > p {
   margin-top: 2rem;
   color: var(--green);
   font-size: .7rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .platform-capabilities__list h3 {
@@ -834,7 +834,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: 1.1rem;
   color: var(--muted);
   font-size: var(--description-size);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.7;
 }
 
@@ -871,7 +871,7 @@ onBeforeUnmount(() => destroyMotion?.())
   background: white;
   color: var(--green);
   font-size: .7rem;
-  font-weight: 800;
+  font-weight: 500;
   box-shadow: var(--shadow);
 }
 
@@ -883,7 +883,7 @@ onBeforeUnmount(() => destroyMotion?.())
   list-style: none;
   color: var(--muted);
   font-size: var(--description-size);
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .platform-section-copy li {

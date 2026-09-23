@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 16 de setembro de 2026. Este documento registra decisões aprovadas
+Atualizado em 23 de setembro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -50,8 +50,8 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 | Verde luminoso | `--green-bright` | `#5cdda4` |
 | Texto secundário | `--muted` | `#62716b` |
 
-- Display: Outfit, pesos 500–700, com desenho geométrico e cantos levemente arredondados.
-- Corpo e interface: Manrope, pesos 400–800.
+- Tipografia da aplicação: Inter. Regular 400 para textos, Medium 500 para elementos
+  de interface, SemiBold 600 para subtítulos e Bold 700 para títulos e destaques.
 - Títulos auxiliares em cards e módulos usam `1rem`; descrições curtas usam `.9rem`.
   Textos de abertura dos capítulos podem ser maiores. Rótulos, estados e valores
   compactos seguem a escala própria da interface.
@@ -59,7 +59,7 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 - Grandes títulos usam `clamp()`, line-height compacto próximo de `0.9–1.05` e
   tracking negativo suave, em geral entre `-0.04em` e `-0.02em`, para preservar
   legibilidade e respiro entre as letras.
-- Não substituir as famílias sem uma decisão explícita de identidade.
+- Manter a Inter como família única até uma nova decisão explícita de identidade.
 
 ## Layout e responsividade
 

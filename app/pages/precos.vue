@@ -288,7 +288,7 @@ onBeforeUnmount(() => destroyMotion?.())
   gap: .65rem;
   color: rgba(255, 255, 255, .66);
   font-size: .8rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .pricing-hero__eyebrow span {
@@ -303,7 +303,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: 1.75rem;
   color: white;
   font-size: clamp(3.7rem, 5.7vw, 6.5rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: .93;
   letter-spacing: -.04em;
 }
@@ -344,7 +344,7 @@ onBeforeUnmount(() => destroyMotion?.())
   border-top: 1px solid rgba(255, 255, 255, .08);
   color: rgba(255, 255, 255, .34);
   font-size: clamp(.72rem, 1vw, .9rem);
-  font-weight: 650;
+  font-weight: 500;
   letter-spacing: .03em;
 }
 
@@ -384,7 +384,7 @@ onBeforeUnmount(() => destroyMotion?.())
   gap: .5rem;
   color: var(--muted);
   font-size: .8rem;
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .pricing-comparison__legend {
@@ -393,7 +393,7 @@ onBeforeUnmount(() => destroyMotion?.())
   gap: 1.5rem;
   color: var(--muted);
   font-size: .78rem;
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .pricing-comparison__legend > span {
@@ -431,7 +431,7 @@ onBeforeUnmount(() => destroyMotion?.())
   background: #f3f7f4;
   color: var(--ink);
   font-size: .85rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .pricing-table thead th:first-child, .pricing-table tbody th {
@@ -453,7 +453,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-table tbody th {
   background: white;
   font-size: .9rem;
-  font-weight: 650;
+  font-weight: 500;
   line-height: 1.45;
 }
 
@@ -470,7 +470,7 @@ onBeforeUnmount(() => destroyMotion?.())
   margin-top: .4rem;
   color: #046b45;
   font-size: .67rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .pricing-table__status {
@@ -549,7 +549,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-value__breakdown h3 {
   color: white;
   font-size: clamp(1.55rem, 2.15vw, 2.35rem);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -.03em;
 }
 
@@ -603,7 +603,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-faq summary span {
   color: #99a7a1;
   font-size: .67rem;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .pricing-faq summary strong {
