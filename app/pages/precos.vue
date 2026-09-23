@@ -165,23 +165,23 @@ onBeforeUnmount(() => destroyMotion?.())
       </section>
 
       <section class="chapter chapter--dark pricing-value">
-        <div class="site-container">
-          <div class="pricing-value__heading" data-pricing-reveal>
+        <div class="site-container pricing-value__layout">
+          <div class="pricing-value__intro" data-pricing-reveal>
             <p class="site-label">Clareza desde a escolha</p>
             <h2 class="site-title">Preço claro.<br>Estrutura de verdade.</h2>
             <p class="site-copy">Cada parte do investimento aparece no lugar certo para você entender o que entra agora
               e o que acompanha a operação.</p>
           </div>
-          <div class="pricing-value__grid" data-pricing-reveal>
-            <article><small>01</small>
+          <div class="pricing-value__breakdown" data-pricing-reveal>
+            <article>
               <h3>Mensalidade</h3>
               <p>O valor recorrente da plataforma é apresentado em cada plano, com visualização mensal ou anual.</p>
             </article>
-            <article><small>02</small>
+            <article>
               <h3>Implantação</h3>
               <p>A preparação inicial aparece separada da mensalidade, inclusive quando a implantação é gratuita.</p>
             </article>
-            <article><small>03</small>
+            <article>
               <h3>Evolução</h3>
               <p>Quando a operação exige regras próprias, o plano Personalizado é analisado de acordo com o escopo.</p>
             </article>
@@ -421,61 +421,55 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-value {
-  background: radial-gradient(circle at 83% 25%, rgba(7, 148, 94, .13), transparent 24%), #081411;
+  background: linear-gradient(110deg, #081411 0%, #0b3023 52%, #0b5139 100%);
 }
 
-.pricing-value__heading {
+.pricing-value__layout {
   display: grid;
-  grid-template-columns: 1fr .7fr;
-  column-gap: 4rem;
-  align-items: end;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: clamp(4rem, 8vw, 9rem);
+  align-items: center;
 }
 
-.pricing-value__heading .site-label {
-  grid-column: 1 / -1;
+.pricing-value__intro {
+  max-width: 39rem;
 }
 
-.pricing-value__heading .site-copy {
-  margin: 0 0 .7rem;
-}
-
-.pricing-value__grid {
-  display: grid;
-  margin-top: clamp(4rem, 9vw, 8rem);
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid rgba(255, 255, 255, .14);
-}
-
-.pricing-value article {
-  min-height: 320px;
-  padding: 2rem clamp(1.5rem, 3vw, 3rem) 2rem 0;
-  border-right: 1px solid rgba(255, 255, 255, .1);
-}
-
-.pricing-value article + article {
-  padding-left: clamp(1.5rem, 3vw, 3rem);
-}
-
-.pricing-value article:last-child {
-  border-right: 0;
-}
-
-.pricing-value article small {
+.pricing-value__intro .site-label {
   color: var(--green-bright);
-  font-size: .67rem;
-  font-weight: 800;
 }
 
-.pricing-value article h3 {
-  margin-top: clamp(4rem, 7vw, 7rem);
+.pricing-value__intro .site-title {
+  font-size: clamp(3.4rem, 5.5vw, 6rem);
+}
+
+.pricing-value__intro .site-copy {
+  max-width: 30rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.pricing-value__breakdown {
+  border-top: 1px solid rgba(255, 255, 255, .22);
+}
+
+.pricing-value__breakdown article {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: baseline;
+  padding: clamp(2rem, 3.6vw, 3.5rem) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .22);
+}
+
+.pricing-value__breakdown h3 {
   color: white;
-  font-size: clamp(1.7rem, 2.6vw, 2.7rem);
-  letter-spacing: -.025em;
+  font-size: clamp(1.55rem, 2.15vw, 2.35rem);
+  font-weight: 500;
+  letter-spacing: -.03em;
 }
 
-.pricing-value article p {
-  max-width: 24rem;
-  margin-top: 1.1rem;
+.pricing-value__breakdown p {
+  max-width: 25rem;
   color: rgba(255, 255, 255, .74);
   font-size: var(--description-size);
   line-height: 1.7;
@@ -581,8 +575,17 @@ onBeforeUnmount(() => destroyMotion?.())
     width: min(62vw, 780px);
   }
 
-  .pricing-comparison__heading, .pricing-value__heading {
+  .pricing-comparison__heading {
     grid-template-columns: 1fr .75fr;
+  }
+
+  .pricing-value__layout {
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .pricing-value__breakdown article {
+    grid-template-columns: 1fr;
+    gap: .8rem;
   }
 
   .pricing-faq__layout {
@@ -592,13 +595,18 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 900px) {
-  .pricing-comparison__heading, .pricing-value__heading, .pricing-faq__layout {
+  .pricing-value {
+    background: linear-gradient(180deg, #081411 0%, #0b5139 100%);
+  }
+
+  .pricing-comparison__heading, .pricing-faq__layout {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .pricing-value__heading .site-copy {
-    margin-top: 1.75rem;
+  .pricing-value__layout {
+    grid-template-columns: 1fr;
+    gap: clamp(3.5rem, 8vw, 5rem);
   }
 
   .pricing-faq__intro {
@@ -653,19 +661,8 @@ onBeforeUnmount(() => destroyMotion?.())
     padding-right: var(--gutter);
   }
 
-  .pricing-value__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pricing-value article, .pricing-value article + article {
-    min-height: 250px;
-    padding: 1.8rem 0;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, .1);
-  }
-
-  .pricing-value article h3 {
-    margin-top: 3.5rem;
+  .pricing-value__breakdown article {
+    padding: 1.65rem 0;
   }
 
   .pricing-faq summary {
