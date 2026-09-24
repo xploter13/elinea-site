@@ -2,23 +2,10 @@
 import { ArrowRight, Check } from '@lucide/vue'
 import { MarketingButton, MarketingTextButton } from '@elinea/ui/marketing'
 import { footerPages, footerPagePath, type FooterPage } from '~/data/footerPages'
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero--.webp'
-import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
-import merchantHeroUrl from '~/assets/images/elinea-platform-merchant-v3.png'
 
 const props = defineProps<{ page: FooterPage }>()
 const sectionLabel = computed(() => props.page.section === 'operacao' ? 'Operação' : 'Ecossistema')
 const related = computed(() => footerPages.filter(item => item.section === props.page.section && item.slug !== props.page.slug))
-const heroPhoto = computed(() => {
-  if (['frete-e-logistica', 'migracao', 'visao-geral'].includes(props.page.slug)) {
-    return { src: resourcesHeroUrl, alt: 'Comerciante preparando uma encomenda em sua loja' }
-  }
-  if (['whatsapp', 'integracoes'].includes(props.page.slug)) {
-    return { src: merchantHeroUrl, alt: 'Comerciante consultando o celular enquanto prepara produtos para envio' }
-  }
-  return { src: pricingHeroUrl, alt: 'Empreendedora analisando a operação de sua loja no computador' }
-})
-
 useSeoMeta({
   title: () => `${props.page.label} | ${sectionLabel.value} Elínea`,
   description: () => props.page.intro,
@@ -30,19 +17,21 @@ useSeoMeta({
 <template>
   <div class="page-shell detail-page" :class="`detail-page--${page.section}`">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <SiteHeader />
+    <SiteHeader light />
     <main id="conteudo">
-      <section class="detail-hero" :class="`detail-hero--${page.slug}`" :aria-labelledby="`${page.slug}-title`">
-        <img class="detail-hero__photo" :src="heroPhoto.src" :alt="heroPhoto.alt" fetchpriority="high" />
-        <div class="detail-hero__overlay" aria-hidden="true"></div>
+      <section class="detail-hero" :aria-labelledby="`${page.slug}-title`">
         <div class="site-container detail-hero__layout">
-          <div class="detail-hero__copy">
-            <p class="detail-kicker"><span class="detail-kicker__mark" aria-hidden="true"></span>{{ sectionLabel }} / {{ page.label }}</p>
+          <div class="detail-hero__rail">
+            <p class="detail-hero__category">{{ sectionLabel }}</p>
+            <p class="detail-hero__subject">{{ page.label }}</p>
+            <div class="detail-hero__availability"><span>Disponibilidade</span><strong>{{ page.status }}</strong></div>
+          </div>
+          <div class="detail-hero__content">
             <h1 :id="`${page.slug}-title`">{{ page.title }}</h1>
             <p class="detail-lead">{{ page.intro }}</p>
             <div class="detail-hero__actions">
               <MarketingButton variant="primary" href="/precos#planos">Conhecer os planos<template #icon><ArrowRight :size="17" aria-hidden="true" /></template></MarketingButton>
-              <MarketingTextButton tone="light" href="#como-funciona">Entenda o fluxo</MarketingTextButton>
+              <MarketingTextButton tone="dark" href="#como-funciona">Entenda o fluxo</MarketingTextButton>
             </div>
           </div>
         </div>
@@ -94,18 +83,18 @@ useSeoMeta({
 <style scoped>
 .detail-page { --detail-ink: var(--ink-2); --detail-line: #d4e3dd; color: var(--detail-ink); background: var(--paper); }
 .detail-wrap { width: min(100% - 2 * var(--gutter), 1280px); margin-inline: auto; }
-.detail-hero { position: relative; min-height: min(100svh, 900px); overflow: hidden; background: #071310; color: white; isolation: isolate; }
-.detail-hero__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.detail-hero__overlay { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(4, 17, 14, .97) 0%, rgba(5, 22, 17, .89) 34%, rgba(4, 17, 14, .37) 67%, rgba(3, 10, 9, .08) 100%); }
-.detail-hero--whatsapp .detail-hero__photo, .detail-hero--integracoes .detail-hero__photo { object-position: 68% center; }
-.detail-hero--whatsapp .detail-hero__overlay, .detail-hero--integracoes .detail-hero__overlay { background: linear-gradient(90deg, rgba(4, 17, 14, .97) 0%, rgba(5, 22, 17, .9) 40%, rgba(4, 17, 14, .38) 76%, rgba(3, 10, 9, .12) 100%); }
-.detail-hero__layout { display: flex; min-height: min(100svh, 900px); align-items: center; padding-block: 8.5rem 5rem; }
-.detail-hero__copy { position: relative; z-index: 1; width: min(59vw, 790px); }
-.detail-kicker { display: inline-flex; align-items: center; gap: .65rem; color: rgba(255, 255, 255, .68); font-size: .8rem; font-weight: 500; }
-.detail-kicker__mark { width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 16px rgba(92, 221, 164, .55); }
-.detail-hero h1 { margin-top: 1.75rem; color: white; font-size: clamp(3.6rem, 6.1vw, 7rem); font-weight: 700; line-height: .93; letter-spacing: -.04em; text-wrap: balance; }
-.detail-lead { max-width: 39rem; margin-top: 1.75rem; color: rgba(255, 255, 255, .7); font-size: clamp(1rem, 1.18vw, 1.18rem); line-height: 1.7; }
-.detail-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 2.2rem; }
+.detail-hero { display: flex; min-height: min(82svh, 800px); border-bottom: 1px solid #dce6e0; background: #fbfcfa; color: var(--detail-ink); }
+.detail-hero__layout { display: grid; min-height: min(82svh, 800px); padding-block: clamp(10rem, 19vh, 13rem) clamp(5rem, 9vh, 7rem); grid-template-columns: minmax(160px, .23fr) minmax(0, 1fr); gap: clamp(3rem, 8vw, 9rem); align-items: start; }
+.detail-hero__rail { padding-top: 1.2rem; border-top: 2px solid #157d54; }
+.detail-hero__category { color: #13724e; font-size: .83rem; font-weight: 600; }
+.detail-hero__subject { margin-top: .65rem; color: var(--ink); font-size: clamp(1.15rem, 1.5vw, 1.5rem); font-weight: 600; letter-spacing: -.025em; }
+.detail-hero__availability { display: grid; gap: .35rem; margin-top: clamp(3rem, 8vh, 6rem); padding-top: 1rem; border-top: 1px solid #dce6e0; }
+.detail-hero__availability span { color: #667a70; font-size: .76rem; }
+.detail-hero__availability strong { color: #276b4c; font-size: .84rem; font-weight: 600; line-height: 1.45; }
+.detail-hero__content { min-width: 0; }
+.detail-hero h1 { max-width: 1000px; color: var(--ink); font-size: clamp(3.5rem, 5.4vw, 6.2rem); font-weight: 700; line-height: 1.03; letter-spacing: -.05em; text-wrap: balance; }
+.detail-lead { max-width: 45rem; margin-top: clamp(2rem, 5vh, 3.5rem); padding-top: 1.5rem; border-top: 1px solid #cbdcd2; color: #496057; font-size: clamp(1rem, 1.18vw, 1.18rem); line-height: 1.7; }
+.detail-hero__actions { display: flex; margin-top: 2rem; flex-wrap: wrap; align-items: center; gap: 1.5rem; }
 .detail-story, .detail-focus, .detail-next { padding-block: clamp(5rem, 9vw, 9rem); }
 .detail-story__grid, .detail-focus__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: clamp(3rem, 9vw, 9rem); }
 .detail-section-name { color: #217453; font-size: .82rem; font-weight: 500; }
@@ -134,18 +123,19 @@ useSeoMeta({
 .detail-next__links a:hover { border-color: #25845e; transform: translateY(-2px); }
 .detail-next__links svg { flex: 0 0 auto; color: #28815e; }
 @media (max-width: 900px) {
-  .detail-hero__copy { width: min(78vw, 690px); }
-  .detail-hero__overlay { background: linear-gradient(90deg, rgba(4, 17, 14, .96) 0%, rgba(4, 17, 14, .83) 52%, rgba(4, 17, 14, .32) 100%); }
-  .detail-hero--whatsapp .detail-hero__overlay, .detail-hero--integracoes .detail-hero__overlay { background: linear-gradient(90deg, rgba(4, 17, 14, .96) 0%, rgba(4, 17, 14, .83) 52%, rgba(4, 17, 14, .32) 100%); }
+  .detail-hero__layout { grid-template-columns: minmax(130px, .22fr) minmax(0, 1fr); gap: 2.5rem; }
+  .detail-hero h1 { font-size: clamp(3.2rem, 6vw, 5rem); }
   .detail-story__grid, .detail-focus__grid { grid-template-columns: 1fr; gap: 3rem; }
 }
 @media (max-width: 600px) {
   .detail-hero, .detail-hero__layout { min-height: 0; }
-  .detail-hero__layout { padding-block: 10rem 5rem; }
-  .detail-hero__copy { width: 100%; }
-  .detail-hero__photo { object-position: 65% center; }
-  .detail-hero__overlay, .detail-hero--whatsapp .detail-hero__overlay, .detail-hero--integracoes .detail-hero__overlay { background: linear-gradient(90deg, rgba(4, 17, 14, .94), rgba(4, 17, 14, .72)), linear-gradient(0deg, rgba(4, 17, 14, .85), transparent 90%); }
+  .detail-hero__layout { padding-block: 8.5rem 4.5rem; grid-template-columns: 1fr; gap: 3rem; }
+  .detail-hero__rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: .35rem 1rem; }
+  .detail-hero__category { grid-column: 1 / -1; }
+  .detail-hero__subject { margin-top: 0; }
+  .detail-hero__availability { margin-top: 0; padding-top: 0; border-top: 0; text-align: right; }
   .detail-hero h1 { font-size: clamp(3rem, 11.5vw, 4.5rem); }
+  .detail-hero__actions { align-items: flex-start; flex-direction: column; }
   .detail-lead { font-size: 1rem; }
   .detail-next__heading { align-items: flex-start; flex-direction: column; gap: 1rem; }
   .detail-next__links { grid-template-columns: 1fr; }

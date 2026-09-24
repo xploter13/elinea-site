@@ -5,6 +5,7 @@ import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Menu, X, User} from '@lucide/vue'
 
 const route = useRoute()
+defineProps<{ light?: boolean }>()
 const mobileMenuOpen = ref(false)
 const headerScrolled = ref(false)
 const updateHeader = () => {
@@ -29,7 +30,7 @@ const navigation = [
 </script>
 
 <template>
-  <header data-header class="premium-header" :class="{ 'is-scrolled': headerScrolled }">
+  <header data-header class="premium-header" :class="{ 'is-scrolled': headerScrolled, 'is-light': light }">
     <div class="site-container header-inner">
       <NuxtLink to="/" class="site-logo" aria-label="Elínea — início">
         <img class="logo-white" :src="logoWhiteUrl" alt="">
