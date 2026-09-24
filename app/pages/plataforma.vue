@@ -2,7 +2,6 @@
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
-import platformMerchantUrl from '~/assets/images/elinea-platform-merchant-v3.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero--.webp'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
@@ -110,13 +109,12 @@ onMounted(async () => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({defaults: {ease: 'power3.out'}})
           .from('[data-header]', {y: -20, opacity: 0, duration: .6})
-          .from('.platform-hero__eyebrow, .platform-hero__title span, .platform-hero__copy, .platform-hero__actions', {
+          .from('.platform-hero__eyebrow, .platform-hero__title span, .platform-hero__bottom, .platform-hero__scope', {
             y: 28,
             opacity: 0,
             duration: .65,
             stagger: .08
           }, '-=.2')
-          .from('.platform-console', {y: 36, opacity: 0, scale: .975, duration: .85}, '-=.75')
 
       gsap.utils.toArray<HTMLElement>('[data-platform-reveal]').forEach((block) => {
         gsap.from(block.children, {
@@ -187,24 +185,23 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="platform-hero__content">
             <p class="platform-hero__eyebrow"><span></span>Uma base para toda a sua operação</p>
             <h1 class="platform-hero__title">
-              <span>Venda com</span><span>simplicidade.</span><span>Cresça com estrutura.</span></h1>
-            <p class="platform-hero__copy">Crie sua loja, organize produtos, acompanhe pedidos e mantenha clientes e
-              conversas no mesmo ecossistema.</p>
-            <div class="platform-hero__actions">
-              <MarketingButton variant="primary" href="/precos#planos">Criar minha loja
-                <template #icon>
-                  <ArrowRight :size="17"/>
-                </template>
-              </MarketingButton>
-              <MarketingTextButton tone="light" href="#recursos">Falar com consultores</MarketingTextButton>
+              <span>Venda com simplicidade.</span><span>Cresça com estrutura.</span></h1>
+            <div class="platform-hero__bottom">
+              <p class="platform-hero__copy">Crie sua loja, organize produtos, acompanhe pedidos e mantenha clientes e
+                conversas no mesmo ecossistema.</p>
+              <div class="platform-hero__actions">
+                <MarketingButton variant="primary" href="/precos#planos">Criar minha loja
+                  <template #icon>
+                    <ArrowRight :size="17"/>
+                  </template>
+                </MarketingButton>
+                <MarketingTextButton tone="light" href="mailto:contato@elinea.com.br">Falar com consultores</MarketingTextButton>
+              </div>
             </div>
           </div>
-
-          <figure class="platform-console">
-            <img :src="platformMerchantUrl" width="1536" height="1024" loading="eager" fetchpriority="high"
-                 decoding="async"
-                 alt="Empreendedora conferindo pedidos no celular enquanto prepara uma embalagem em sua loja"/>
-          </figure>
+          <ul class="platform-hero__scope" aria-label="Áreas da plataforma">
+            <li>Loja virtual</li><li>Operação</li><li>Relacionamento</li>
+          </ul>
         </div>
       </section>
 
@@ -357,32 +354,39 @@ onBeforeUnmount(() => destroyMotion?.())
   position: relative;
   min-height: 100svh;
   overflow: hidden;
-  padding: 8.5rem 0 2rem;
-  background: radial-gradient(circle at 76% 42%, rgba(7, 148, 94, .18), transparent 27%), #071310;
+  padding: clamp(8rem, 15vh, 11rem) 0 2.25rem;
+  background: radial-gradient(ellipse at 82% 68%, #123b2b 0%, #0b2119 32%, #071310 72%);
   color: white;
 }
 
 .platform-hero::before {
   position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(to bottom, black, transparent 88%);
+  top: 0;
+  right: 12%;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(127, 223, 166, .17) 28%, rgba(127, 223, 166, .17) 72%, transparent);
   content: '';
+  pointer-events: none;
 }
 
 .platform-hero__layout {
   position: relative;
-  display: grid;
-  min-height: calc(100svh - 13rem);
-  grid-template-columns: .88fr 1.12fr;
-  gap: clamp(3rem, 7vw, 7rem);
-  align-items: center;
+  display: flex;
+  min-height: calc(100svh - clamp(8rem, 15vh, 11rem) - 2.25rem);
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .platform-hero__content {
   position: relative;
   z-index: 2;
+  display: flex;
+  min-height: 0;
+  padding-block: clamp(2rem, 8vh, 6rem);
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .platform-hero__eyebrow {
@@ -399,75 +403,70 @@ onBeforeUnmount(() => destroyMotion?.())
   height: 7px;
   border-radius: 50%;
   background: var(--green-bright);
-  box-shadow: 0 0 16px rgba(92, 221, 164, .55);
 }
 
 .platform-hero__title {
-  margin-top: 1.75rem;
+  margin-top: clamp(2rem, 4.5vh, 3.75rem);
   color: white;
-  font-size: clamp(3.8rem, 6.4vw, 7rem);
+  font-size: clamp(4.6rem, 7.35vw, 7.5rem);
   font-weight: 700;
-  line-height: .93;
-  letter-spacing: -.04em;
+  line-height: .98;
+  letter-spacing: -.055em;
 }
 
 .platform-hero__title span {
   display: block;
+  text-wrap: balance;
+}
+
+.platform-hero__title span:last-child {
+  color: #a8edc4;
+}
+
+.platform-hero__bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  margin-top: clamp(2.5rem, 6vh, 4.5rem);
 }
 
 .platform-hero__copy {
-  max-width: 38rem;
-  margin-top: 1.75rem;
-  color: rgba(255, 255, 255, .64);
+  max-width: 36rem;
+  color: rgba(255, 255, 255, .72);
   font-size: clamp(1rem, 1.18vw, 1.18rem);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .platform-hero__actions {
   display: flex;
-  margin-top: 2.2rem;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(1rem, 2vw, 2rem);
 }
 
-.platform-hero__rail {
+.platform-hero__scope {
   position: relative;
   display: flex;
-  padding-top: 1.4rem;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, .1);
-  color: rgba(255, 255, 255, .4);
-  font-size: .68rem;
-  font-weight: 500;
-}
-
-.platform-console {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 2;
   margin: 0;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .1);
-  border-radius: 26px;
-  background: var(--ink);
-  box-shadow: 0 55px 100px -45px rgba(0, 0, 0, .75);
-  isolation: isolate;
+  padding: 1.35rem 0 0;
+  flex-wrap: wrap;
+  gap: .65rem clamp(1.5rem, 5vw, 5rem);
+  border-top: 1px solid rgba(255, 255, 255, .22);
+  color: rgba(255, 255, 255, .62);
+  font-size: .78rem;
+  font-weight: 500;
+  list-style: none;
 }
 
-.platform-console img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.platform-console::after {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(255, 255, 255, .08);
-  border-radius: inherit;
-  box-shadow: inset 0 0 55px rgba(4, 17, 14, .18);
-  pointer-events: none;
+.platform-hero__scope li::before {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: .7rem;
+  border-radius: 50%;
+  background: var(--green-bright);
+  vertical-align: middle;
   content: '';
 }
 
@@ -1023,19 +1022,13 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 1080px) {
-  .platform-hero__layout {
+  .platform-hero__title {
+    font-size: clamp(3.8rem, 7.2vw, 6rem);
+  }
+
+  .platform-hero__bottom {
     grid-template-columns: 1fr;
-    padding-block: 3rem;
-  }
-
-  .platform-hero__content {
-    max-width: 800px;
-  }
-
-  .platform-console {
-    width: min(100%, 820px);
-    margin-inline: auto;
-    transform: none;
+    align-items: start;
   }
 
   .platform-storefront__layout, .platform-scale__layout {
@@ -1091,16 +1084,26 @@ onBeforeUnmount(() => destroyMotion?.())
 @media (max-width: 767px) {
   .platform-hero {
     min-height: auto;
-    padding-top: 8rem;
+    padding: 7.75rem 0 2.4rem;
   }
 
   .platform-hero__layout {
     min-height: 0;
-    gap: 4rem;
+  }
+
+  .platform-hero__content {
+    padding: 2rem 0 3.5rem;
   }
 
   .platform-hero__title {
-    font-size: clamp(3.1rem, 14vw, 4.7rem);
+    margin-top: 2.2rem;
+    font-size: clamp(3.1rem, 13.5vw, 5.5rem);
+    line-height: .98;
+  }
+
+  .platform-hero__bottom {
+    margin-top: 2.5rem;
+    gap: 1.7rem;
   }
 
   .platform-hero__actions {
@@ -1108,18 +1111,8 @@ onBeforeUnmount(() => destroyMotion?.())
     flex-direction: column;
   }
 
-  .platform-hero__rail {
-    gap: 1rem;
-    overflow: hidden;
-  }
-
-  .platform-hero__rail span:nth-child(even) {
-    display: none;
-  }
-
-  .platform-console {
-    aspect-ratio: 4 / 3;
-    border-radius: 18px;
+  .platform-hero__scope {
+    gap: .8rem 1.2rem;
   }
 
   .platform-storefront__layout {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import heroUrl from '~/assets/images/h3-slider-img-1.webp'
+import heroUrl from '~/assets/images/elinea-hero.png'
 import SaleFlowSection from '~/components/home/SaleFlowSection.vue'
 import EcosystemSection from '~/components/home/EcosystemSection.vue'
 import OperationSection from '~/components/home/OperationSection.vue'
