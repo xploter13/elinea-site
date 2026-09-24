@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-2.png'
-import operationMachineUrl from '~/assets/images/elinea-operation-machine.png'
+import operationMachineUrl from '~/assets/images/portrait-woman-arranging-flowers-shop.jpg'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
   ArrowRight,

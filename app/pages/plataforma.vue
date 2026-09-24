@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
+import merchantUrl from '~/assets/images/elinea-merchant-operation.jpg'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.png'
@@ -275,9 +275,9 @@ onBeforeUnmount(() => destroyMotion?.())
 
       <section class="chapter platform-scale">
         <div class="site-container platform-scale__layout">
-          <div class="platform-scale__image"><img :src="merchantUrl"
-                                                  alt="Comerciante acompanhando sua operação digital em um tablet"
-                                                  loading="lazy" width="1672" height="941"><span><Sparkles :size="18"/> Estrutura que acompanha o negócio</span>
+          <div class="platform-scale__image">
+            <img :src="merchantUrl" alt="Comerciante acompanhando sua operação digital em um tablet" loading="lazy" width="1672" height="941">
+            <span><Sparkles :size="18"/> Estrutura que acompanha o negócio</span>
           </div>
           <div class="platform-section-copy" data-platform-reveal>
             <p class="site-label">Evolução sem recomeçar</p>
@@ -860,7 +860,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .platform-scale__image > span {
   position: absolute;
-  right: 1.5rem;
+  left: 1.5rem;
   bottom: 1.5rem;
   display: inline-flex;
   padding: .8rem 1rem;

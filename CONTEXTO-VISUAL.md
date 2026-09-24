@@ -96,6 +96,8 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
    de sistema.
 7. Segmentos em painéis editoriais expansíveis. “Marcas próprias” usa uma natureza-morta
    conceitual de embalagens fictícias unificadas pelo verde, sem logos ou textos.
+   Manter a composição expansível: cada fotografia tem largura e ponto focal ajustáveis
+   individualmente para destacar o assunto principal mesmo nos painéis estreitos.
 8. Integrações separadas entre disponíveis e em evolução, sem promessas indevidas.
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
