@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import PricingSection from '~/components/home/PricingSection.vue'
 import CheckoutModal from '~/components/pricing/CheckoutModal.vue'
 import {plans, type Plan} from '~/data/plans'
-import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
+import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
@@ -69,20 +68,12 @@ onMounted(async () => {
           .from('[data-header]', {y: -20, opacity: 0, duration: .6})
           .from('.pricing-hero__eyebrow', {y: 16, opacity: 0, duration: .5}, '-=.2')
           .from('.pricing-hero__title span', {yPercent: 110, duration: .8, stagger: .08}, '-=.15')
-          .from('.pricing-hero__copy, .pricing-hero__actions', {
+          .from('.pricing-hero__copy, .pricing-hero__guide', {
             y: 20,
             opacity: 0,
             duration: .55,
             stagger: .08
           }, '-=.45')
-          .from('.pricing-hero__photo', {opacity: 0, scale: 1.035, duration: 1.2}, '-=1.15')
-
-      gsap.to('.pricing-hero__photo', {
-        yPercent: 4,
-        scale: 1.04,
-        ease: 'none',
-        scrollTrigger: {trigger: '.pricing-hero', start: 'top top', end: 'bottom top', scrub: true},
-      })
 
       gsap.utils.toArray<HTMLElement>('[data-pricing-reveal]').forEach((element) => {
         gsap.from(element.children, {
@@ -112,17 +103,24 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="pricing-hero">
-        <img class="pricing-hero__photo" :src="pricingHeroUrl" alt="Comerciante analisando sua operação no notebook"
-             fetchpriority="high">
-        <div class="pricing-hero__overlay"></div>
         <div class="site-container pricing-hero__layout">
           <div class="pricing-hero__content">
-            <p class="pricing-hero__eyebrow"><span></span>Planos Elínea</p>
+            <p class="pricing-hero__eyebrow">Planos Elínea</p>
             <h1 class="pricing-hero__title"><span><i>Para crescer</i></span><span><i>sem recomeçar.</i></span>
             </h1>
             <p class="pricing-hero__copy">Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a
               operação evoluir.</p>
           </div>
+          <aside class="pricing-hero__guide" aria-label="O que observar ao comparar os planos">
+            <p class="pricing-hero__guide-label">Sua escolha, com clareza</p>
+            <h2>O que vale olhar<br>em cada plano.</h2>
+            <dl>
+              <div><dt>Mensalidade</dt><dd>O valor recorrente para usar a plataforma.</dd></div>
+              <div><dt>Implantação</dt><dd>A preparação inicial para colocar sua operação no ar.</dd></div>
+              <div><dt>Recursos</dt><dd>O que cada estrutura oferece para a sua rotina.</dd></div>
+            </dl>
+            <a href="#planos">Explorar os planos <ArrowRight :size="18" aria-hidden="true" /></a>
+          </aside>
         </div>
       </section>
 
@@ -242,76 +240,44 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-hero {
-  position: relative;
-  min-height: 50svh;
-  overflow: hidden;
-  background: #071310;
+  display: flex;
+  min-height: 78svh;
+  padding-block: clamp(9rem, 17vh, 12rem) clamp(5rem, 9vh, 7rem);
+  background: #08764e;
   color: white;
-  isolation: isolate;
-  padding-top: 50px;
-  padding-bottom: 60px;
-}
-
-.pricing-hero__photo {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  will-change: transform;
-}
-
-.pricing-hero__overlay {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(4, 17, 14, .96) 0%, rgba(5, 22, 17, .84) 37%, rgba(4, 17, 14, .31) 64%, rgba(3, 10, 9, .08) 100%);
 }
 
 .pricing-hero__layout {
-  display: flex;
-  min-height: calc(50svh - 5rem);
+  display: grid;
+  width: min(100% - (var(--gutter) * 2), 1440px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(350px, .85fr);
+  gap: clamp(3rem, 7vw, 8rem);
   align-items: center;
-  padding-top: 5rem;
 }
 
 .pricing-hero__content {
   min-width: 0;
-  width: min(55vw, 800px);
 }
 
 .pricing-hero__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: .65rem;
-  color: rgba(255, 255, 255, .66);
-  font-size: .8rem;
-  font-weight: 500;
-}
-
-.pricing-hero__eyebrow span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green-bright);
-  box-shadow: 0 0 16px rgba(92, 221, 164, .55);
+  color: #d2f2df;
+  font-size: .86rem;
+  font-weight: 600;
 }
 
 .pricing-hero__title {
-  margin-top: 1.75rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
   color: white;
-  font-size: clamp(3.7rem, 5.7vw, 6.5rem);
+  font-size: clamp(4.25rem, 6.4vw, 7.3rem);
   font-weight: 700;
-  line-height: .93;
-  letter-spacing: -.04em;
+  line-height: .96;
+  letter-spacing: -.06em;
 }
 
 .pricing-hero__title span {
   display: block;
   overflow: hidden;
-  padding-bottom: .07em;
+  padding-bottom: .08em;
 }
 
 .pricing-hero__title i {
@@ -320,39 +286,32 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-hero__copy {
-  max-width: 42rem;
-  margin-top: 1.8rem;
-  color: rgba(255, 255, 255, .63);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 4rem);
+  color: #e0f4e9;
   font-size: clamp(1rem, 1.2vw, 1.2rem);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
-.pricing-hero__actions {
-  display: flex;
-  margin-top: 2.25rem;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.5rem;
+.pricing-hero__guide {
+  min-width: 0;
+  padding: clamp(2rem, 3.2vw, 3.4rem);
+  background: #f8fcf8;
+  color: var(--ink);
 }
 
-.pricing-hero__marquee {
-  display: flex;
-  min-height: 5rem;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(1rem, 3vw, 3.5rem);
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  color: rgba(255, 255, 255, .34);
-  font-size: clamp(.72rem, 1vw, .9rem);
-  font-weight: 500;
-  letter-spacing: .03em;
-}
+.pricing-hero__guide-label { color: #287350; font-size: .8rem; font-weight: 600; }
+.pricing-hero__guide h2 { margin-top: 1.5rem; color: var(--ink); font-size: clamp(2.15rem, 2.75vw, 3.25rem); font-weight: 700; line-height: 1.06; letter-spacing: -.05em; }
+.pricing-hero__guide dl { margin: clamp(2rem, 4vw, 3.25rem) 0 0; }
+.pricing-hero__guide dl > div { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 1rem; padding-block: 1.05rem; border-top: 1px solid #d4e5da; }
+.pricing-hero__guide dt { color: #135f3e; font-size: .94rem; font-weight: 700; }
+.pricing-hero__guide dd { margin: 0; color: #52675a; font-size: .88rem; line-height: 1.55; }
+.pricing-hero__guide a { display: inline-flex; min-height: 48px; margin-top: 1.2rem; align-items: center; gap: .65rem; color: #075c3b; font-size: .9rem; font-weight: 700; }
+.pricing-hero__guide a svg { transition: transform .2s ease; }
+.pricing-hero__guide a:hover svg, .pricing-hero__guide a:focus-visible svg { transform: translateX(4px); }
 
-.pricing-hero__marquee i {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--green);
+@media (prefers-reduced-motion: reduce) {
+  .pricing-hero__guide a svg { transition: none; }
 }
 
 .pricing-comparison {
@@ -656,8 +615,13 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 1080px) {
-  .pricing-hero__content {
-    width: min(62vw, 780px);
+  .pricing-hero__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, .85fr);
+    gap: 3rem;
+  }
+
+  .pricing-hero__title {
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
   }
 
   .pricing-comparison__heading {
@@ -689,6 +653,9 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 900px) {
+  .pricing-hero__layout { grid-template-columns: 1fr; }
+  .pricing-hero__guide { width: min(100%, 720px); }
+
   .pricing-value {
     background: linear-gradient(180deg, #05462f 0%, #07945e 46%, #055c3c 100%);
   }
@@ -715,44 +682,14 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 767px) {
-  .pricing-hero__photo {
-    object-position: 66% center;
-  }
-
-  .pricing-hero__overlay {
-    background: linear-gradient(180deg, rgba(4, 17, 14, .91) 0%, rgba(4, 17, 14, .77) 57%, rgba(4, 17, 14, .57) 100%);
-  }
-
-  .pricing-hero__layout {
-    min-height: max(380px, calc(50svh - 5rem));
-    align-items: flex-start;
-    padding-top: clamp(9.5rem, 23vh, 12rem);
-    padding-bottom: 6rem;
-  }
-
-  .pricing-hero__content {
-    width: 100%;
-  }
+  .pricing-hero { min-height: 0; padding-block: 8.5rem 4.5rem; }
+  .pricing-hero__layout { gap: 3.25rem; }
 
   .pricing-hero__title {
-    font-size: clamp(3.35rem, 14.5vw, 5rem);
+    font-size: clamp(3.35rem, 12vw, 5rem);
   }
 
-  .pricing-hero__actions {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .pricing-hero__marquee {
-    padding: 1.25rem;
-    justify-content: flex-start;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .pricing-hero__marquee span:last-child, .pricing-hero__marquee i:last-of-type {
-    display: none;
-  }
+  .pricing-hero__guide dl > div { grid-template-columns: 1fr; gap: .4rem; }
 
   .pricing-table-wrap {
     margin-right: calc(var(--gutter) * -1);
@@ -792,9 +729,4 @@ onBeforeUnmount(() => destroyMotion?.())
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .pricing-hero__photo {
-    transform: none !important;
-  }
-}
 </style>
