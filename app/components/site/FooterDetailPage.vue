@@ -2,7 +2,7 @@
 import { ArrowRight, Check } from '@lucide/vue'
 import { MarketingButton, MarketingTextButton } from '@elinea/ui/marketing'
 import { footerPages, footerPagePath, type FooterPage } from '~/data/footerPages'
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero--.webp'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
 import merchantHeroUrl from '~/assets/images/elinea-platform-merchant-v3.png'
 

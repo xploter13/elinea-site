@@ -142,7 +142,7 @@ onMounted(async () => {
         scrollTrigger: {trigger: '#inicio', start: 'top top', end: '40% top', scrub: .7}
       })
       gsap.utils.toArray<HTMLElement>('.reveal-copy').forEach((block) => {
-        const children = Array.from(block.children).filter(child => !child.matches('[data-operation-title]'))
+        const children = Array.from(block.children)
         gsap.from(children, {
           opacity: 0,
           y: 34,
@@ -152,16 +152,6 @@ onMounted(async () => {
           scrollTrigger: {trigger: block, start: 'top 82%', once: true}
         })
       })
-      const operationTitle = document.querySelector<HTMLElement>('[data-operation-title]')
-      if (operationTitle) {
-        gsap.fromTo(operationTitle.querySelectorAll('[data-operation-char]'), {opacity: .14}, {
-          opacity: 1,
-          duration: 1,
-          stagger: .035,
-          ease: 'none',
-          scrollTrigger: {trigger: operationTitle, start: 'top 88%', end: 'bottom 45%', scrub: .65}
-        })
-      }
       gsap.from('.sale-step', {
         opacity: 0,
         y: 18,

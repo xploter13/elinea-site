@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 23 de setembro de 2026. Este documento registra decisões aprovadas
+Atualizado em 24 de setembro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -85,7 +85,11 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 2. Hero fotográfico escuro com a mensagem “Ecommerce simples para negócios reais.”
 3. Fluxo visual da venda, conectado por uma linha progressiva.
 4. Ecossistema escuro com módulos orbitando o núcleo “ELÍNEA — Operação central”.
-5. Operação: comerciante e pequenos indicadores reais do produto.
+5. Operação: seção “Tecnologia a favor de quem faz acontecer” com abertura tipográfica
+   “Seu negócio em primeiro lugar.” sobre fundo verde claro e um painel verde escuro
+   que apresenta loja, rotina conectada e suporte. A composição aprovada não usa
+   fotografia nem indicadores numéricos ilustrativos. O CTA “Criar minha loja” aponta
+   para os planos.
 6. Central de controle ampla: painel editorial, imagem conceitual da operação e cards
    narrativos para Pedidos, Catálogo, Clientes e WhatsApp. A imagem comunica controle
    por meio de objetos comerciais conectados a um núcleo verde, sem telas ou mockups
@@ -203,9 +207,8 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
   linha animada se ajusta automaticamente para nunca quebrar linha nem estourar a
   largura do hero-copy.
 - Blocos de conteúdo usam reveals curtos de opacidade e deslocamento.
-- A headline da seção de operação é preenchida caractere a caractere pela opacidade,
-  vinculada ao progresso do scroll com GSAP, preservando a diferença visual entre
-  “Você cuida do negócio” e “O Elínea cuida do digital”.
+- A abertura da seção de operação usa o reveal curto dos blocos de conteúdo da Home;
+  não há preenchimento caractere a caractere no título.
 - Na seção “Tudo sob controle”, os módulos operacionais aparecem progressivamente em
   cards conforme o scroll; no mobile, permanecem no fluxo vertical da página.
 - Na página Plataforma, os blocos de “Recursos que formam uma operação” preservam a
