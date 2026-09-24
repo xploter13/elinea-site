@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import heroUrl from '~/assets/images/h3-slider-img-1.webp'
+import heroUrl from '~/assets/images/eline-loja-especializada.png'
 import merchantUrl from '~/assets/images/elinea-merchant-operation.png'
-import privateLabelUrl from '~/assets/images/elinea-private-label-concept.png'
+import varejoUrl from '~/assets/images/elinea-varejo.png'
+import privateLabelUrl from '~/assets/images/elinea-marcas-proprias.png'
 import { Building2, LayoutTemplate, Pill, Store } from '@lucide/vue'
 
 const active = ref(0)
 const segments = [
   { icon: Pill, title: 'Farmácias de manipulação', note: 'Catálogo claro e atendimento conectado.', image: merchantUrl },
   { icon: Store, title: 'Lojas especializadas', note: 'Uma vitrine à altura da sua curadoria.', image: heroUrl },
-  { icon: Building2, title: 'Pequenos varejistas', note: 'Estrutura digital sem pesar na rotina.', image: merchantUrl },
+  { icon: Building2, title: 'Pequenos varejistas', note: 'Estrutura digital sem pesar na rotina.', image: varejoUrl },
   { icon: LayoutTemplate, title: 'Marcas próprias', note: 'Sua identidade conduz toda a experiência.', image: privateLabelUrl },
 ]
 </script>

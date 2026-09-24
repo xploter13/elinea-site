@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.webp'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.png'
 import operationMachineUrl from '~/assets/images/elinea-operation-machine.png'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
