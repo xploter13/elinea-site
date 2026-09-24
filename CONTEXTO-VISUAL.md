@@ -151,11 +151,25 @@ copiar texto, promessas ou identidade de concorrentes:
    coluna e as três partes do investimento aparecem em linhas com divisórias na outra;
    no mobile, seguem em fluxo vertical.
 5. Perguntas frequentes baseadas somente nas condições comerciais já cadastradas.
-6. CTA final, checkout existente e footer institucional.
+6. CTA final para conhecer os planos e footer institucional.
 
 Os valores e recursos vivem em `app/data/plans.ts`. A Home e a página Preços usam a
-mesma fonte e o mesmo `app/components/pricing/CheckoutModal.vue`; qualquer alteração
-comercial deve ser feita nessa fonte única e validada antes de publicação.
+mesma fonte. Os botões de escolha do plano levam a `/criar-loja?plano=<slug>`;
+qualquer alteração comercial deve ser feita nessa fonte única e validada antes de
+publicação.
+
+## Página Criar loja
+
+A rota `/criar-loja` concentra o início da contratação. Mostra o plano escolhido, a
+mensalidade, a implantação e os dados necessários para criar a solicitação. Os CTAs
+“Criar minha loja” apontam para essa página; os links “Conhecer os planos” continuam
+na comparação de preços. A composição usa resumo escuro do plano e formulário claro,
+em colunas no desktop e em fluxo vertical no mobile.
+
+Antes de iniciar o pagamento, a página confere o plano ativo e os valores pela API.
+Planos sem implantação paga oferecem contato com a equipe, pois o endpoint atual de
+checkout exige uma implantação configurada. O pagamento da implantação ocorre na
+Stripe; após a confirmação, a API provisiona a loja para onboarding.
 
 ## Página Recursos
 
@@ -258,8 +272,8 @@ Componentes específicos da narrativa da Home ficam em `app/components/home`:
 - `PricingSection.vue`
 
 O `app/pages/index.vue` coordena a página, o header/footer e a animação global. Os dados
-dos planos e o modal de contratação são compartilhados com a página Preços. Evite
-devolver para esse arquivo detalhes visuais ou comerciais que já pertencem às fontes
+dos planos são compartilhados com a página Preços; ambas levam à página de criação
+da loja. Evite devolver para esse arquivo detalhes visuais ou comerciais das fontes
 compartilhadas.
 
 Componentes compartilháveis não devem ser duplicados no site. Eles pertencem ao

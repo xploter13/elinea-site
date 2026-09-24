@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import PricingSection from '~/components/home/PricingSection.vue'
-import CheckoutModal from '~/components/pricing/CheckoutModal.vue'
 import {plans, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
-const checkoutOpen = ref(false)
-const selectedPlan = ref<Plan | null>(null)
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
@@ -45,10 +42,7 @@ const faqs = [
 ]
 
 const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.plans.includes(plan.slug)
-const openCheckout = (plan: Plan) => {
-  selectedPlan.value = plan
-  checkoutOpen.value = true
-}
+const openCheckout = (plan: Plan) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug } })
 
 useSeoMeta({
   title: 'Planos e preços Elínea — Escolha a estrutura do seu negócio',
@@ -230,7 +224,6 @@ onBeforeUnmount(() => destroyMotion?.())
     </main>
 
     <SiteFooter/>
-    <CheckoutModal v-model:open="checkoutOpen" :plan="selectedPlan"/>
   </div>
 </template>
 

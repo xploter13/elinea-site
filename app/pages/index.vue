@@ -7,19 +7,13 @@ import ProductShotSection from '~/components/home/ProductShotSection.vue'
 import SegmentsSection from '~/components/home/SegmentsSection.vue'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import PricingSection from '~/components/home/PricingSection.vue'
-import CheckoutModal from '~/components/pricing/CheckoutModal.vue'
 import {plans, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
 const heroRoot = ref<HTMLElement | null>(null)
-const checkoutOpen = ref(false)
-const selectedPlan = ref<Plan | null>(null)
-const openCheckout = (plan: Plan) => {
-  selectedPlan.value = plan
-  checkoutOpen.value = true
-}
+const openCheckout = (plan: Plan) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug } })
 
 const TYPED_PHRASES = ['negócios reais.', 'lojas de verdade.', 'vender mais.']
 const typedWord = ref(TYPED_PHRASES[0])
@@ -257,7 +251,7 @@ onBeforeUnmount(() => {
             <p class="hero-support">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com
               mais vendas e menos complicação.</p>
             <div class="hero-actions">
-              <MarketingButton class="hero-action" variant="primary" href="#planos">Criar minha loja
+              <MarketingButton class="hero-action" variant="primary" href="/criar-loja">Criar minha loja
                 <template #icon>
                   <ArrowRight :size="17"/>
                 </template>
@@ -283,7 +277,7 @@ onBeforeUnmount(() => {
           <h2 class="site-title">Seu negócio<br>pode vender<br>melhor.</h2>
           <p>Comece com uma estrutura simples hoje e evolua sem trocar de plataforma amanhã.</p>
           <div>
-            <MarketingButton variant="primary" href="#planos">Criar minha loja
+            <MarketingButton variant="primary" href="/criar-loja">Criar minha loja
               <template #icon>
                 <ArrowRight :size="18"/>
               </template>
@@ -293,6 +287,5 @@ onBeforeUnmount(() => {
       </section>
     </main>
     <SiteFooter/>
-    <CheckoutModal v-model:open="checkoutOpen" :plan="selectedPlan"/>
   </div>
 </template>

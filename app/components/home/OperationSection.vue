@@ -28,7 +28,7 @@ const essentials = [
         <h2 id="operation-heading" class="operation-heading">Seu negócio<br>em primeiro<br>lugar.</h2>
         <div class="operation-intro__footer">
           <p>Você conhece o seu negócio. A Elínea reúne a estrutura digital para você vender e cuidar da operação com mais clareza.</p>
-          <a class="operation-cta" href="#planos">Criar minha loja <ArrowUpRight :size="19" aria-hidden="true" /></a>
+          <a class="operation-cta" href="/criar-loja">Criar minha loja <ArrowUpRight :size="19" aria-hidden="true" /></a>
         </div>
       </div>
 

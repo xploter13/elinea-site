@@ -40,7 +40,7 @@ const navigation = [
         <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
       </nav>
       <a class="login-link" href="https://admin.elinea.com.br"><User :size="15"/>Entrar</a>
-      <MarketingButton class="header-cta" variant="solid" href="/precos#planos">Criar minha loja
+      <MarketingButton class="header-cta" variant="solid" href="/criar-loja">Criar minha loja
         <template #icon>
           <ArrowRight :size="15"/>
         </template>
@@ -53,6 +53,7 @@ const navigation = [
     </div>
     <nav v-if="mobileMenuOpen" id="menu-mobile" class="mobile-nav" aria-label="Navegação móvel">
       <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
+      <NuxtLink to="/criar-loja">Criar minha loja</NuxtLink>
       <a class="mobile-login-link" href="https://admin.elinea.com.br"><User :size="16"/>Entrar</a>
     </nav>
   </header>

@@ -190,7 +190,7 @@ onBeforeUnmount(() => destroyMotion?.())
               <p class="platform-hero__copy">Crie sua loja, organize produtos, acompanhe pedidos e mantenha clientes e
                 conversas no mesmo ecossistema.</p>
               <div class="platform-hero__actions">
-                <MarketingButton variant="primary" href="/precos#planos">Criar minha loja
+                <MarketingButton variant="primary" href="/criar-loja">Criar minha loja
                   <template #icon>
                     <ArrowRight :size="17"/>
                   </template>
@@ -212,7 +212,7 @@ onBeforeUnmount(() => destroyMotion?.())
             <h2 class="site-title">Sua marca<br>na frente.<br><span>A estrutura<br>por trás.</span></h2>
             <p class="site-copy">A experiência de compra permanece simples para o cliente enquanto catálogo, estoque e
               pedidos trabalham juntos nos bastidores.</p>
-            <MarketingTextButton class="chapter-text-cta" href="/precos#planos">Criar minha loja</MarketingTextButton>
+            <MarketingTextButton class="chapter-text-cta" href="/criar-loja">Criar minha loja</MarketingTextButton>
           </div>
           <div class="storefront-scene" aria-label="Representação de uma loja virtual responsiva">
             <div class="storefront-window">
@@ -332,7 +332,7 @@ onBeforeUnmount(() => destroyMotion?.())
           <h2 class="site-title">Uma plataforma.<br>Seu negócio<br>em movimento.</h2>
           <p>Venda com uma base organizada hoje e continue evoluindo amanhã.</p>
           <div>
-            <MarketingButton variant="primary" href="/precos#planos">Criar minha loja
+            <MarketingButton variant="primary" href="/criar-loja">Criar minha loja
               <template #icon>
                 <ArrowRight :size="18"/>
               </template>
