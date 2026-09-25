@@ -1,30 +1,33 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Check, LockKeyhole } from '@lucide/vue'
-import { plans, type Plan } from '~/data/plans'
+import { formatPlanMoney, type BillingInterval, type Plan } from '~/data/plans'
 
 type Field = 'owner_name' | 'owner_email' | 'phone' | 'store_name' | 'segment'
-type ApiPlan = { id: number, slug: string, monthly_amount: number | null, implementation_amount: number | null, is_active: boolean }
 type CheckoutResponse = { checkout_url: string }
 
 const route = useRoute()
 const config = useRuntimeConfig()
+const { data: plans, pending: plansPending, error: plansError, refresh: refreshPlans } = usePublicPlans()
 const selectedSlug = ref('')
-const selectedPlan = computed<Plan | undefined>(() => plans.find(plan => plan.slug === selectedSlug.value))
-const canCheckout = computed(() => !!selectedPlan.value && (selectedPlan.value.implementation_amount ?? 0) > 0)
+const selectedInterval = ref<BillingInterval>('monthly')
+const selectedPlan = computed<Plan | undefined>(() => plans.value.find(plan => plan.slug === selectedSlug.value))
+const canCheckout = computed(() => !!selectedPlan.value && (selectedInterval.value === 'yearly' ? selectedPlan.value.can_checkout_yearly : selectedPlan.value.can_checkout_monthly))
+const recurringAmount = computed(() => selectedInterval.value === 'yearly' ? selectedPlan.value?.yearly_amount : selectedPlan.value?.monthly_amount)
+const firstPayment = computed(() => (recurringAmount.value ?? 0) + (selectedPlan.value?.implementation_amount ?? 0))
 const form = reactive({ owner_name: '', owner_email: '', phone: '', store_name: '', segment: '' })
 const errors = reactive<Partial<Record<Field, string>>>({})
 const submitting = ref(false)
 const submitError = ref('')
 const errorSummary = ref<HTMLElement | null>(null)
 
-onMounted(() => {
-  const requestedPlan = typeof route.query.plano === 'string' ? route.query.plano : ''
-  if (plans.some(plan => plan.slug === requestedPlan)) selectedSlug.value = requestedPlan
-})
+watch(() => route.query.plano, value => {
+  selectedSlug.value = typeof value === 'string' ? value : ''
+}, { immediate: true })
+watch(() => route.query.periodo, value => {
+  selectedInterval.value = value === 'yearly' ? 'yearly' : 'monthly'
+}, { immediate: true })
 
-const money = (value: number) => new Intl.NumberFormat('pt-BR', {
-  style: 'currency', currency: 'BRL', maximumFractionDigits: 0,
-}).format(value / 100)
+const money = (value: number, currency = 'brl') => formatPlanMoney(value, currency)
 
 const requiredMessages: Partial<Record<Field, string>> = {
   owner_name: 'Informe seu nome.', owner_email: 'Informe o e-mail.', store_name: 'Informe o nome da loja.', segment: 'Informe o segmento.',
@@ -52,12 +55,16 @@ async function submitCheckout() {
 
   submitting.value = true
   try {
-    const response = await $fetch<{ data: ApiPlan[] }>(`${config.public.apiBase}/plans`, {
-      query: { search: plan.slug },
-    })
-    const apiPlan = response.data.find(item => item.slug === plan.slug && item.is_active)
-    if (!apiPlan || apiPlan.implementation_amount !== plan.implementation_amount || apiPlan.monthly_amount !== plan.monthly_amount) {
-      submitError.value = 'Este plano não está disponível para contratação online agora. Confira os planos ou fale com a equipe Elínea.'
+    await refreshPlans()
+    if (plansError.value) {
+      submitError.value = 'Não foi possível confirmar os valores agora. Tente novamente.'
+      return
+    }
+    const currentPlan = plans.value.find(item => item.id === plan.id)
+    const currentAmount = selectedInterval.value === 'yearly' ? currentPlan?.yearly_amount : currentPlan?.monthly_amount
+    const displayedAmount = selectedInterval.value === 'yearly' ? plan.yearly_amount : plan.monthly_amount
+    if (!currentPlan || currentAmount !== displayedAmount || currentPlan.implementation_amount !== plan.implementation_amount || !canCheckout.value) {
+      submitError.value = 'O plano foi atualizado. Confira os valores antes de continuar.'
       return
     }
 
@@ -65,14 +72,15 @@ async function submitCheckout() {
     const checkout = await $fetch<CheckoutResponse>(`${config.public.apiBase}/implementation-checkouts`, {
       method: 'POST',
       body: {
-        plan_id: apiPlan.id,
+        plan_id: currentPlan.id,
+        interval: selectedInterval.value,
         owner_name: form.owner_name.trim(),
         owner_email: form.owner_email.trim(),
         phone: form.phone.trim() || null,
         store_name: form.store_name.trim(),
         segment: form.segment.trim(),
         success_url: `${origin}/compra-concluida`,
-        cancel_url: `${origin}/criar-loja?plano=${encodeURIComponent(plan.slug)}`,
+        cancel_url: `${origin}/criar-loja?plano=${encodeURIComponent(plan.slug)}&periodo=${selectedInterval.value}`,
       },
     })
     window.location.assign(checkout.checkout_url)
@@ -108,25 +116,26 @@ useSeoMeta({
           <div class="create-store-summary__top">
             <p>Seu plano</p>
             <label for="create-store-plan">Selecione o plano</label>
-            <select id="create-store-plan" v-model="selectedSlug" @change="submitError = ''">
+            <select id="create-store-plan" v-model="selectedSlug" :disabled="plansPending" @change="submitError = ''">
               <option value="">Escolha um plano</option>
               <option v-for="plan in plans" :key="plan.slug" :value="plan.slug">{{ plan.name }}</option>
             </select>
           </div>
+          <p v-if="plansPending" class="create-store-summary__empty" role="status">Carregando planos...</p>
+          <p v-else-if="plansError" class="create-store-summary__empty" role="alert">Não foi possível carregar os planos. <button type="button" @click="() => refreshPlans()">Tentar novamente</button></p>
           <template v-if="selectedPlan">
             <h2>{{ selectedPlan.name }}</h2>
-            <p class="create-store-summary__description">{{ selectedPlan.description }}</p>
+            <p v-if="selectedPlan.description" class="create-store-summary__description">{{ selectedPlan.description }}</p>
             <dl class="create-store-values">
-              <div><dt>Mensalidade</dt><dd>{{ selectedPlan.monthly_amount === null ? 'Sob consulta' : `${money(selectedPlan.monthly_amount)} / mês` }}</dd></div>
-              <div><dt>Implantação</dt><dd>{{ selectedPlan.implementation_label }}</dd></div>
+              <div><dt>{{ selectedInterval === 'yearly' ? 'Anualidade' : 'Mensalidade' }}</dt><dd>{{ recurringAmount == null ? 'Sob consulta' : `${money(recurringAmount, selectedPlan.currency)} / ${selectedInterval === 'yearly' ? 'ano' : 'mês'}` }}</dd></div>
+              <div><dt>Implantação</dt><dd>{{ selectedPlan.implementation_amount === null ? 'Sob consulta' : selectedPlan.implementation_amount === 0 ? 'Grátis' : money(selectedPlan.implementation_amount, selectedPlan.currency) }}</dd></div>
             </dl>
-            <p class="create-store-summary__includes">{{ selectedPlan.features_label || 'O plano inclui' }}</p>
+            <p class="create-store-summary__includes">Módulos e recursos cadastrados</p>
             <ul>
               <li v-for="feature in selectedPlan.features.slice(0, 4)" :key="feature"><Check :size="16" aria-hidden="true" />{{ feature }}</li>
             </ul>
-            <p v-if="selectedPlan.note" class="create-store-summary__note">{{ selectedPlan.note }}</p>
           </template>
-          <p v-else class="create-store-summary__empty">Os valores e recursos do plano escolhido aparecem aqui.</p>
+          <p v-else-if="!plansPending && !plansError" class="create-store-summary__empty">Os valores e recursos do plano escolhido aparecem aqui.</p>
           <NuxtLink to="/precos#planos" class="create-store-compare">Comparar planos <ArrowRight :size="16" aria-hidden="true" /></NuxtLink>
         </aside>
 
@@ -134,14 +143,16 @@ useSeoMeta({
           <div class="create-store-form-heading">
             <p class="create-store-step">Seus dados</p>
             <h2 id="create-store-form-title">Conte sobre a sua loja.</h2>
-            <p v-if="canCheckout">Essas informações iniciam a solicitação de implantação. A loja é preparada após a confirmação do pagamento.</p>
+            <p v-if="canCheckout">A primeira cobrança inclui {{ selectedPlan?.implementation_amount ? 'a implantação e ' : '' }}{{ selectedInterval === 'yearly' ? 'a primeira anuidade' : 'a primeira mensalidade' }}. A loja e seu acesso são preparados após a confirmação do pagamento.</p>
             <p v-else>Escolha um plano para ver como dar o próximo passo.</p>
           </div>
 
-          <div v-if="!selectedPlan" class="create-store-notice">Selecione um plano no resumo para continuar.</div>
+          <div v-if="plansPending" class="create-store-notice" role="status">Carregando os planos disponíveis...</div>
+          <div v-else-if="plansError" class="create-store-notice" role="alert">Não foi possível consultar os planos. <button type="button" @click="() => refreshPlans()">Tentar novamente</button></div>
+          <div v-else-if="!selectedPlan" class="create-store-notice">Selecione um plano no resumo para continuar.</div>
           <div v-else-if="!canCheckout" class="create-store-notice">
             <h3>Vamos conversar sobre este plano.</h3>
-            <p>Este plano não possui contratação online de implantação. Entre em contato para conhecer o próximo passo.</p>
+            <p>Este plano não possui contratação online para o período escolhido. Entre em contato para conhecer o próximo passo.</p>
             <a :href="`mailto:contato@elinea.com.br?subject=${encodeURIComponent(`Interesse no plano ${selectedPlan.name}`)}`" class="create-store-contact">Falar com a equipe <ArrowRight :size="17" aria-hidden="true" /></a>
           </div>
           <form v-else class="create-store-form" novalidate @submit.prevent="submitCheckout">
@@ -159,7 +170,7 @@ useSeoMeta({
             <p v-if="submitError" class="create-store-submit-error" role="alert">{{ submitError }} <a href="mailto:contato@elinea.com.br">Falar com a equipe</a></p>
             <div class="create-store-submit">
               <button type="submit" :disabled="submitting" :aria-busy="submitting">
-                {{ submitting ? 'Preparando pagamento...' : `Continuar para pagamento · ${money(selectedPlan.implementation_amount || 0)}` }}
+                {{ submitting ? 'Preparando pagamento...' : `Continuar para pagamento · ${money(firstPayment, selectedPlan.currency)}` }}
                 <ArrowRight v-if="!submitting" :size="19" aria-hidden="true" />
               </button>
               <p><LockKeyhole :size="15" aria-hidden="true" /> O pagamento é concluído em uma página segura da Stripe.</p>

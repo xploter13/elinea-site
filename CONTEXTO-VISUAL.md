@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 24 de setembro de 2026. Este documento registra decisões aprovadas
+Atualizado em 25 de setembro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -153,10 +153,11 @@ copiar texto, promessas ou identidade de concorrentes:
 5. Perguntas frequentes baseadas somente nas condições comerciais já cadastradas.
 6. CTA final para conhecer os planos e footer institucional.
 
-Os valores e recursos vivem em `app/data/plans.ts`. A Home e a página Preços usam a
-mesma fonte. Os botões de escolha do plano levam a `/criar-loja?plano=<slug>`;
-qualquer alteração comercial deve ser feita nessa fonte única e validada antes de
-publicação.
+Os planos ativos, preços, períodos de cobrança e módulos exibidos na Home e em Preços
+vêm de `GET /api/v1/plans`. `app/data/plans.ts` mantém apenas tipos, formatação e
+tratamento visual. Preços anuais aparecem somente quando cadastrados na API. Os botões
+de escolha levam a `/criar-loja?plano=<slug>&periodo=<intervalo>`. Alterações
+comerciais são feitas na Gestão e validadas na API antes de publicação.
 
 ## Página Criar loja
 
@@ -166,10 +167,13 @@ mensalidade, a implantação e os dados necessários para criar a solicitação.
 na comparação de preços. A composição usa resumo escuro do plano e formulário claro,
 em colunas no desktop e em fluxo vertical no mobile.
 
-Antes de iniciar o pagamento, a página confere o plano ativo e os valores pela API.
-Planos sem implantação paga oferecem contato com a equipe, pois o endpoint atual de
-checkout exige uma implantação configurada. O pagamento da implantação ocorre na
-Stripe; após a confirmação, a API provisiona a loja para onboarding.
+A página usa os mesmos dados de planos da API e os atualiza antes de iniciar o
+pagamento. Planos sem preços Stripe completos para o período escolhido oferecem
+contato com a equipe. Nos planos configurados, o Checkout da Stripe inclui a primeira
+mensalidade ou anuidade e a implantação quando ela é paga. Após o webhook de pagamento,
+a API cria a loja e o administrador, registra a assinatura e envia um email de
+boas-vindas com o link para criar a senha. A página de conclusão acompanha o estado da
+solicitação pelo identificador público.
 
 ## Página Recursos
 
@@ -313,9 +317,8 @@ Configurações públicas vêm de:
 - `NUXT_PUBLIC_INSTAGRAM_URL`
 
 O fluxo de contratação envia dados para `POST /implementation-checkouts` e redireciona
-para a URL de checkout devolvida pela API. Não alterar os IDs, valores ou regras dos
-planos sem validar a fonte comercial. Não inventar preços nem disponibilidade de
-integrações.
+para a URL de checkout devolvida pela API. A API é a fonte dos IDs, valores e regras
+comerciais dos planos. Não inventar preços nem disponibilidade de integrações.
 
 ## Acessibilidade, SEO e performance
 

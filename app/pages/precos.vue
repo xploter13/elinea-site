@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import PricingSection from '~/components/home/PricingSection.vue'
-import {plans, type Plan} from '~/data/plans'
+import type {BillingInterval, Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
+const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
-  {label: 'Catálogo e estoque', plans: ['catalogo', 'whatsapp', 'e-commerce', 'completo', 'personalizado']},
-  {label: 'Carrinho e checkout', plans: ['e-commerce', 'completo', 'personalizado']},
-  {label: 'Pagamentos online', plans: ['e-commerce', 'completo', 'personalizado']},
-  {label: 'Gestão de pedidos', plans: ['whatsapp', 'e-commerce', 'completo', 'personalizado']},
-  {label: 'Atendimento pelo WhatsApp', plans: ['whatsapp', 'completo', 'personalizado']},
-  {label: 'Automações comerciais', plans: ['whatsapp', 'completo', 'personalizado']},
-  {label: 'Relatórios comerciais completos', plans: ['e-commerce', 'completo', 'personalizado']},
-  {label: 'Integrações personalizadas', plans: ['personalizado']},
+  {label: 'Produtos e estoque', modules: ['products', 'inventory']},
+  {label: 'Vendas e pedidos', modules: ['orders']},
+  {label: 'Clientes', modules: ['customers']},
+  {label: 'Campanhas', modules: ['marketing']},
+  {label: 'Automações', modules: ['automations']},
+  {label: 'Atendimento por WhatsApp', modules: ['messaging']},
+  {label: 'Relatórios', modules: ['reports']},
+  {label: 'Integrações', modules: ['integrations']},
 ]
 
 const faqs = [
@@ -24,16 +25,8 @@ const faqs = [
     answer: 'A mensalidade corresponde ao uso recorrente da plataforma. A implantação cobre a preparação inicial indicada para cada plano e aparece separadamente nos cards.',
   },
   {
-    question: 'O valor anual possui desconto?',
-    answer: 'O seletor anual apresenta o equivalente a doze mensalidades. Nenhum desconto adicional é aplicado ou prometido nesta página.',
-  },
-  {
     question: 'Posso começar com um plano e evoluir depois?',
     answer: 'Os planos representam diferentes momentos da operação. Para definir a evolução mais adequada entre eles, a equipe Elínea pode avaliar sua estrutura e as necessidades do negócio.',
-  },
-  {
-    question: 'Como funciona o plano Personalizado?',
-    answer: 'Esse plano é analisado individualmente e pode envolver implantação, desenvolvimento e mensalidade. O escopo pode incluir integrações, automações e regras comerciais próprias.',
   },
   {
     question: 'O uso do WhatsApp pode gerar custos adicionais?',
@@ -41,8 +34,8 @@ const faqs = [
   },
 ]
 
-const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.plans.includes(plan.slug)
-const openCheckout = (plan: Plan) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug } })
+const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.modules.every(module => plan.modules.includes(module))
+const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug, periodo: interval } })
 
 useSeoMeta({
   title: 'Planos e preços Elínea — Escolha a estrutura do seu negócio',
@@ -118,9 +111,9 @@ onBeforeUnmount(() => destroyMotion?.())
         </div>
       </section>
 
-      <PricingSection :plans="plans" @select="openCheckout"/>
+      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
 
-      <section id="comparacao" class="chapter pricing-comparison">
+      <section v-if="plans.length" id="comparacao" class="chapter pricing-comparison">
         <div class="site-container">
           <div class="pricing-comparison__heading" data-pricing-reveal>
             <div><p class="site-label">Compare os planos</p>
@@ -178,11 +171,11 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="pricing-value__breakdown" data-pricing-reveal>
             <article>
               <h3>Mensalidade</h3>
-              <p>O valor recorrente da plataforma é apresentado em cada plano, com visualização mensal ou anual.</p>
+              <p>O valor recorrente da plataforma aparece conforme os períodos cadastrados para cada plano.</p>
             </article>
             <article>
               <h3>Implantação</h3>
-              <p>A preparação inicial aparece separada da mensalidade, inclusive quando a implantação é gratuita.</p>
+              <p>A preparação inicial aparece separada da mensalidade quando há uma taxa de implantação cadastrada.</p>
             </article>
             <article>
               <h3>Evolução</h3>

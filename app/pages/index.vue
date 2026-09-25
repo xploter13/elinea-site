@@ -7,13 +7,14 @@ import ProductShotSection from '~/components/home/ProductShotSection.vue'
 import SegmentsSection from '~/components/home/SegmentsSection.vue'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import PricingSection from '~/components/home/PricingSection.vue'
-import {plans, type Plan} from '~/data/plans'
+import type {BillingInterval, Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
 const heroRoot = ref<HTMLElement | null>(null)
-const openCheckout = (plan: Plan) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug } })
+const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
+const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug, periodo: interval } })
 
 const TYPED_PHRASES = ['negócios reais.', 'lojas de verdade.', 'vender mais.']
 const typedWord = ref(TYPED_PHRASES[0])
@@ -268,7 +269,7 @@ onBeforeUnmount(() => {
       <ProductShotSection/>
       <SegmentsSection/>
       <IntegrationsSection/>
-      <PricingSection :plans="plans" @select="openCheckout"/>
+      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
       <section class="chapter final-cta">
         <div class="site-container final-cta__inner reveal-copy">
           <p class="site-label">
