@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import heroUrl from '~/assets/images/elinea-hero.png'
+import heroUrl from '~/assets/images/elinea-hero.webp'
 import SaleFlowSection from '~/components/home/SaleFlowSection.vue'
 import EcosystemSection from '~/components/home/EcosystemSection.vue'
 import OperationSection from '~/components/home/OperationSection.vue'
@@ -237,9 +237,8 @@ onBeforeUnmount(() => {
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <SiteHeader/>
     <main id="conteudo">
-      <section id="inicio" ref="heroRoot" class="hero-home"><img class="hero-photo" :src="heroUrl"
-                                                                 alt="Empreendedora trabalhando ao lado de um notebook"
-                                                                 fetchpriority="high">
+      <section id="inicio" ref="heroRoot" class="hero-home">
+        <img class="hero-photo" :src="heroUrl" alt="Empreendedora trabalhando ao lado de um notebook" fetchpriority="high">
         <div class="hero-overlay"></div>
         <div class="site-container hero-layout">
           <div class="hero-copy"><p class="hero-kicker"><span></span>Sua operação digital, bem resolvida</p>
