@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import productShotUrl from '~/assets/images/elinea-worktable-documental.png'
+import productShotUrl from '~/assets/images/elinea-worktable-documental.webp'
 import { CheckCircle2, MessageCircle, Package, ShoppingBag, Users } from '@lucide/vue'
 
 const controls = [
