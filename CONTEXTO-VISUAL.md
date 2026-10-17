@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 25 de setembro de 2026. Este documento registra decisões aprovadas
+Atualizado em 16 de outubro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -29,6 +29,8 @@ genérico nem copiar outras marcas usadas como referência.
 - Bordas são sutis, raios moderados e sombras suaves, concentradas nas interfaces do
   produto.
 - Fotografias devem aproximar a tecnologia de comerciantes e negócios reais.
+- `elinea-hero-documental.png` é a referência aprovada de qualidade fotográfica para
+  as demais páginas: cena de trabalho crível, luz natural, textura e composição editorial.
 - Imagens geradas com pessoas devem seguir uma direção documental e natural: textura
   real de pele, assimetria, postura espontânea, luz imperfeita e ambientes com sinais
   de uso. Evitar pele plástica, pose publicitária e acabamento excessivamente perfeito.

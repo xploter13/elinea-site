@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import heroUrl from '~/assets/images/elinea-hero.webp'
+import heroUrl from '~/assets/images/elinea-hero-documental.png'
 import SaleFlowSection from '~/components/home/SaleFlowSection.vue'
 import EcosystemSection from '~/components/home/EcosystemSection.vue'
 import OperationSection from '~/components/home/OperationSection.vue'
@@ -238,7 +238,7 @@ onBeforeUnmount(() => {
     <SiteHeader/>
     <main id="conteudo">
       <section id="inicio" ref="heroRoot" class="hero-home">
-        <img class="hero-photo" :src="heroUrl" alt="Empreendedora trabalhando ao lado de um notebook" fetchpriority="high">
+        <img class="hero-photo" :src="heroUrl" alt="Comerciante preparando um pedido em sua loja de roupas" fetchpriority="high">
         <div class="hero-overlay"></div>
         <div class="site-container hero-layout">
           <div class="hero-copy"><p class="hero-kicker"><span></span>Sua operação digital, bem resolvida</p>

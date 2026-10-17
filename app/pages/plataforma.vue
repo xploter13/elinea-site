@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import merchantUrl from '~/assets/images/elinea-merchant-operation.jpg'
-import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-natural.webp'
-import controlConceptUrl from '~/assets/images/elinea-control-concept.png'
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero.png'
+import merchantUrl from '~/assets/images/elinea-platform-operation-documental.png'
+import platformHeroUrl from '~/assets/images/elinea-platform-hero-documental.png'
+import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-documental.png'
+import controlConceptUrl from '~/assets/images/elinea-worktable-documental.png'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-documental.png'
 import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
 import {
@@ -64,7 +65,7 @@ const startSteps = [
   },
   {
     image: controlConceptUrl,
-    imageAlt: 'Composição conceitual representando a organização da operação',
+    imageAlt: 'Mesa de trabalho com embalagens, etiquetas e computador para organizar pedidos',
     title: 'Organize a estrutura',
     text: 'Configure catálogo, identidade e os fluxos necessários para começar.',
     cta: {href: '/recursos'}
@@ -181,6 +182,8 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="platform-hero">
+        <img class="platform-hero__photo" :src="platformHeroUrl" alt="Comerciante conferindo pedidos no celular enquanto prepara uma encomenda" fetchpriority="high" width="1672" height="941">
+        <div class="platform-hero__overlay"></div>
         <div class="site-container platform-hero__layout">
           <div class="platform-hero__content">
             <p class="platform-hero__eyebrow"><span></span>Uma base para toda a sua operação</p>
@@ -276,7 +279,7 @@ onBeforeUnmount(() => destroyMotion?.())
       <section class="chapter platform-scale">
         <div class="site-container platform-scale__layout">
           <div class="platform-scale__image">
-            <img :src="merchantUrl" alt="Comerciante acompanhando sua operação digital em um tablet" loading="lazy" width="1672" height="941">
+            <img :src="merchantUrl" alt="Comerciante conferindo pedidos em um tablet entre as embalagens da loja" loading="lazy" width="1672" height="941">
             <span><Sparkles :size="18"/> Estrutura que acompanha o negócio</span>
           </div>
           <div class="platform-section-copy" data-platform-reveal>
@@ -355,19 +358,26 @@ onBeforeUnmount(() => destroyMotion?.())
   min-height: 100svh;
   overflow: hidden;
   padding: clamp(8rem, 15vh, 11rem) 0 2.25rem;
-  background: radial-gradient(ellipse at 82% 68%, #123b2b 0%, #0b2119 32%, #071310 72%);
+  background: #071310;
   color: white;
+  isolation: isolate;
 }
 
-.platform-hero::before {
+.platform-hero__photo {
   position: absolute;
-  top: 0;
-  right: 12%;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(127, 223, 166, .17) 28%, rgba(127, 223, 166, .17) 72%, transparent);
-  content: '';
-  pointer-events: none;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.platform-hero__overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(4,17,14,.94) 0%, rgba(4,17,14,.77) 37%, rgba(4,17,14,.28) 68%, rgba(4,17,14,.08) 100%);
 }
 
 .platform-hero__layout {
@@ -406,9 +416,10 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .platform-hero__title {
+  max-width: min(64vw, 940px);
   margin-top: clamp(2rem, 4.5vh, 3.75rem);
   color: white;
-  font-size: clamp(4.6rem, 7.35vw, 7.5rem);
+  font-size: clamp(4rem, 5.8vw, 6.4rem);
   font-weight: 700;
   line-height: .98;
   letter-spacing: -.055em;
@@ -425,9 +436,10 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .platform-hero__bottom {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: end;
+  max-width: min(60vw, 780px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 2rem);
+  align-items: start;
   margin-top: clamp(2.5rem, 6vh, 4.5rem);
 }
 
@@ -1023,12 +1035,12 @@ onBeforeUnmount(() => destroyMotion?.())
 
 @media (max-width: 1080px) {
   .platform-hero__title {
+    max-width: 68vw;
     font-size: clamp(3.8rem, 7.2vw, 6rem);
   }
 
   .platform-hero__bottom {
-    grid-template-columns: 1fr;
-    align-items: start;
+    max-width: 68vw;
   }
 
   .platform-storefront__layout, .platform-scale__layout {
@@ -1087,6 +1099,9 @@ onBeforeUnmount(() => destroyMotion?.())
     padding: 7.75rem 0 2.4rem;
   }
 
+  .platform-hero__photo { object-position: 78% center; }
+  .platform-hero__overlay { background: linear-gradient(180deg, rgba(4,17,14,.9) 0%, rgba(4,17,14,.78) 58%, rgba(4,17,14,.55) 100%); }
+
   .platform-hero__layout {
     min-height: 0;
   }
@@ -1096,12 +1111,14 @@ onBeforeUnmount(() => destroyMotion?.())
   }
 
   .platform-hero__title {
+    max-width: 100%;
     margin-top: 2.2rem;
     font-size: clamp(3.1rem, 13.5vw, 5.5rem);
     line-height: .98;
   }
 
   .platform-hero__bottom {
+    max-width: 100%;
     margin-top: 2.5rem;
     gap: 1.7rem;
   }

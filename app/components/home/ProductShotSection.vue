@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import productShotUrl from '~/assets/images/elinea-control-concept.webp'
+import productShotUrl from '~/assets/images/elinea-worktable-documental.png'
 import { CheckCircle2, MessageCircle, Package, ShoppingBag, Users } from '@lucide/vue'
 
 const controls = [
@@ -28,7 +28,7 @@ const controls = [
         </aside>
 
         <div class="control-stage__visual">
-          <img :src="productShotUrl" alt="Objetos de uma operação comercial conectados a um núcleo central verde" loading="lazy" width="1672" height="941">
+          <img :src="productShotUrl" alt="Mesa de expedição com encomendas, etiquetas, produtos e computador" loading="lazy" width="1774" height="887">
         </div>
 
         <div class="control-cards">

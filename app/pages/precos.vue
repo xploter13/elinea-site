@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-documental.png'
 import PricingSection from '~/components/home/PricingSection.vue'
 import type {BillingInterval, Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
@@ -55,7 +56,7 @@ onMounted(async () => {
           .from('[data-header]', {y: -20, opacity: 0, duration: .6})
           .from('.pricing-hero__eyebrow', {y: 16, opacity: 0, duration: .5}, '-=.2')
           .from('.pricing-hero__title span', {yPercent: 110, duration: .8, stagger: .08}, '-=.15')
-          .from('.pricing-hero__copy, .pricing-hero__guide', {
+          .from('.pricing-hero__copy, .pricing-hero__link', {
             y: 20,
             opacity: 0,
             duration: .55,
@@ -90,6 +91,8 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="pricing-hero">
+        <img class="pricing-hero__photo" :src="pricingHeroUrl" alt="Comerciante analisando o crescimento da loja no computador" fetchpriority="high" width="1672" height="941">
+        <div class="pricing-hero__overlay"></div>
         <div class="site-container pricing-hero__layout">
           <div class="pricing-hero__content">
             <p class="pricing-hero__eyebrow">Planos Elínea</p>
@@ -97,8 +100,16 @@ onBeforeUnmount(() => destroyMotion?.())
             </h1>
             <p class="pricing-hero__copy">Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a
               operação evoluir.</p>
+            <a class="pricing-hero__link" href="#planos">Explorar os planos <ArrowRight :size="18" aria-hidden="true" /></a>
           </div>
-          <aside class="pricing-hero__guide" aria-label="O que observar ao comparar os planos">
+        </div>
+      </section>
+
+      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
+
+      <section class="pricing-guide" aria-label="O que observar ao comparar os planos">
+        <div class="site-container pricing-guide__layout" data-pricing-reveal>
+          <div class="pricing-hero__guide">
             <p class="pricing-hero__guide-label">Sua escolha, com clareza</p>
             <h2>O que vale olhar<br>em cada plano.</h2>
             <dl>
@@ -106,12 +117,9 @@ onBeforeUnmount(() => destroyMotion?.())
               <div><dt>Implantação</dt><dd>A preparação inicial para colocar sua operação no ar.</dd></div>
               <div><dt>Recursos</dt><dd>O que cada estrutura oferece para a sua rotina.</dd></div>
             </dl>
-            <a href="#planos">Explorar os planos <ArrowRight :size="18" aria-hidden="true" /></a>
-          </aside>
+          </div>
         </div>
       </section>
-
-      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
 
       <section v-if="plans.length" id="comparacao" class="chapter pricing-comparison">
         <div class="site-container">
@@ -226,23 +234,42 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-hero {
+  position: relative;
   display: flex;
-  min-height: 78svh;
+  min-height: 100svh;
+  overflow: hidden;
   padding-block: clamp(9rem, 17vh, 12rem) clamp(5rem, 9vh, 7rem);
-  background: #08764e;
+  background: #071310;
   color: white;
+  isolation: isolate;
+}
+
+.pricing-hero__photo {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.pricing-hero__overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(4,17,14,.93) 0%, rgba(4,17,14,.76) 38%, rgba(4,17,14,.22) 69%, rgba(4,17,14,.04) 100%);
 }
 
 .pricing-hero__layout {
-  display: grid;
+  display: flex;
   width: min(100% - (var(--gutter) * 2), 1440px);
-  grid-template-columns: minmax(0, 1.15fr) minmax(350px, .85fr);
-  gap: clamp(3rem, 7vw, 8rem);
   align-items: center;
 }
 
 .pricing-hero__content {
   min-width: 0;
+  width: min(56vw, 760px);
 }
 
 .pricing-hero__eyebrow {
@@ -279,8 +306,26 @@ onBeforeUnmount(() => destroyMotion?.())
   line-height: 1.65;
 }
 
+.pricing-hero__link {
+  display: inline-flex;
+  min-height: 48px;
+  margin-top: 2.25rem;
+  align-items: center;
+  gap: .7rem;
+  color: white;
+  font-size: .95rem;
+  font-weight: 600;
+}
+
+.pricing-hero__link svg { transition: transform .2s ease; }
+.pricing-hero__link:hover svg, .pricing-hero__link:focus-visible svg { transform: translateX(4px); }
+
+.pricing-guide { padding-block: clamp(4rem, 7vw, 7rem); background: var(--paper); }
+.pricing-guide__layout { display: grid; justify-items: end; }
+
 .pricing-hero__guide {
   min-width: 0;
+  width: min(100%, 760px);
   padding: clamp(2rem, 3.2vw, 3.4rem);
   background: #f8fcf8;
   color: var(--ink);
@@ -292,12 +337,9 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-hero__guide dl > div { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 1rem; padding-block: 1.05rem; border-top: 1px solid #d4e5da; }
 .pricing-hero__guide dt { color: #135f3e; font-size: .94rem; font-weight: 700; }
 .pricing-hero__guide dd { margin: 0; color: #52675a; font-size: .88rem; line-height: 1.55; }
-.pricing-hero__guide a { display: inline-flex; min-height: 48px; margin-top: 1.2rem; align-items: center; gap: .65rem; color: #075c3b; font-size: .9rem; font-weight: 700; }
-.pricing-hero__guide a svg { transition: transform .2s ease; }
-.pricing-hero__guide a:hover svg, .pricing-hero__guide a:focus-visible svg { transform: translateX(4px); }
 
 @media (prefers-reduced-motion: reduce) {
-  .pricing-hero__guide a svg { transition: none; }
+  .pricing-hero__link svg { transition: none; }
 }
 
 .pricing-comparison {
@@ -601,11 +643,6 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 1080px) {
-  .pricing-hero__layout {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, .85fr);
-    gap: 3rem;
-  }
-
   .pricing-hero__title {
     font-size: clamp(3.5rem, 6vw, 5.5rem);
   }
@@ -639,8 +676,7 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 900px) {
-  .pricing-hero__layout { grid-template-columns: 1fr; }
-  .pricing-hero__guide { width: min(100%, 720px); }
+  .pricing-hero__content { width: min(72vw, 720px); }
 
   .pricing-value {
     background: linear-gradient(180deg, #05462f 0%, #07945e 46%, #055c3c 100%);
@@ -668,8 +704,10 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 @media (max-width: 767px) {
-  .pricing-hero { min-height: 0; padding-block: 8.5rem 4.5rem; }
-  .pricing-hero__layout { gap: 3.25rem; }
+  .pricing-hero { min-height: max(760px, 100svh); padding-block: 8.5rem 4.5rem; }
+  .pricing-hero__photo { object-position: 78% center; }
+  .pricing-hero__overlay { background: linear-gradient(180deg, rgba(4,17,14,.9) 0%, rgba(4,17,14,.76) 55%, rgba(4,17,14,.52) 100%); }
+  .pricing-hero__content { width: 100%; }
 
   .pricing-hero__title {
     font-size: clamp(3.35rem, 12vw, 5rem);

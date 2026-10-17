@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-2.png'
+import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-documental.png'
 import operationMachineUrl from '~/assets/images/portrait-woman-arranging-flowers-shop.jpg'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
@@ -254,7 +254,7 @@ onBeforeUnmount(() => destroyMotion?.())
             </div>
 
             <figure class="operation-editorial__image">
-              <img :src="operationMachineUrl" alt="Pedido central ligado visualmente a pagamento, expedição, gestão e atendimento" loading="lazy" width="1024" height="1536">
+              <img :src="operationMachineUrl" alt="Florista organizando flores na bancada da própria loja" loading="lazy" width="1024" height="1536">
               <figcaption><span aria-hidden="true"></span>Uma venda ativa toda a estrutura ao redor.</figcaption>
             </figure>
           </div>
@@ -577,7 +577,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 @media (max-width: 767px) {
   .resources-hero, .resources-hero__layout { min-height: max(760px, 100svh); }
-  .resources-hero__photo { object-position: 65% center; }
+  .resources-hero__photo { object-position: 78% center; }
   .resources-hero__overlay { background: linear-gradient(180deg, rgba(4,17,14,.9) 0%, rgba(4,17,14,.76) 52%, rgba(4,17,14,.56) 100%); }
   .resources-hero__layout { align-items: flex-start; padding-top: clamp(9.5rem, 23vh, 12rem); }
   .resources-hero__content { width: 100%; }
