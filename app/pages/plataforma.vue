@@ -94,6 +94,14 @@ const workflow = [
   {icon: BarChart3, label: 'Você decide melhor', text: 'A operação reunida cria contexto para o próximo movimento.'},
 ]
 
+const storefrontStatement = 'A experiência de compra permanece simples para o cliente enquanto catálogo, estoque e pedidos trabalham juntos nos bastidores.'
+
+const storefrontPillars = [
+  {label: 'Vitrine', text: 'Responsiva e com a identidade da sua marca, em qualquer tela.'},
+  {label: 'Catálogo e estoque', text: 'Produtos, variações e disponibilidade organizados no mesmo lugar.'},
+  {label: 'Pedidos', text: 'Cada venda acompanhada da entrada à conclusão.'},
+]
+
 useSeoMeta({
   title: 'Plataforma Elínea — Loja, pedidos e operação em um só lugar',
   description: 'Conheça a plataforma Elínea para criar sua loja virtual e centralizar catálogo, pedidos, clientes, pagamentos e WhatsApp.',
@@ -126,6 +134,27 @@ onMounted(async () => {
           ease: 'power3.out',
           scrollTrigger: {trigger: block, start: 'top 82%', once: true}
         })
+      })
+      gsap.fromTo('.platform-storefront__word', {opacity: .16}, {
+        opacity: 1,
+        stagger: .12,
+        ease: 'none',
+        scrollTrigger: {trigger: '.platform-storefront__statement', start: 'top 82%', end: 'bottom 48%', scrub: .6}
+      })
+      gsap.from('.platform-storefront__rule', {
+        scaleX: 0,
+        duration: 1,
+        stagger: .15,
+        ease: 'power3.out',
+        scrollTrigger: {trigger: '.platform-storefront__pillars', start: 'top 82%', once: true}
+      })
+      gsap.from('.platform-storefront__pillars li > :not(.platform-storefront__rule)', {
+        y: 24,
+        opacity: 0,
+        duration: .7,
+        stagger: .06,
+        ease: 'power3.out',
+        scrollTrigger: {trigger: '.platform-storefront__pillars', start: 'top 80%', once: true}
       })
       gsap.from('.platform-workflow__line', {
         scaleX: 0,
@@ -209,31 +238,23 @@ onBeforeUnmount(() => destroyMotion?.())
       </section>
 
       <section class="chapter platform-storefront">
-        <div class="site-container platform-storefront__layout">
-          <div class="platform-section-copy" data-platform-reveal>
+        <div class="site-container platform-storefront__inner">
+          <div class="platform-storefront__head" data-platform-reveal>
             <p class="site-label">Uma presença digital que parece sua</p>
-            <h2 class="site-title">Sua marca<br>na frente.<br><span>A estrutura<br>por trás.</span></h2>
-            <p class="site-copy">A experiência de compra permanece simples para o cliente enquanto catálogo, estoque e
-              pedidos trabalham juntos nos bastidores.</p>
-            <MarketingTextButton class="chapter-text-cta" href="/criar-loja">Criar minha loja</MarketingTextButton>
+            <h2 class="site-title">Sua marca na frente.<br><span>A estrutura por trás.</span></h2>
           </div>
-          <div class="storefront-scene" aria-label="Representação de uma loja virtual responsiva">
-            <div class="storefront-window">
-              <header><strong>SUA MARCA</strong>
-                <nav><span>Novidades</span><span>Produtos</span><span>Contato</span></nav>
-                <ShoppingBag :size="18"/>
-              </header>
-              <div class="storefront-window__hero"><span>Nova coleção</span><strong>Feita para<br>o seu
-                momento.</strong><i></i></div>
-              <div class="storefront-products">
-                <article v-for="tone in ['green', 'sand', 'ink']" :key="tone"><i :class="`is-${tone}`"></i><small>Produto
-                  selecionado</small><b>Pronto para vender</b></article>
-              </div>
-            </div>
-            <div class="storefront-phone"><span></span>
-              <div><i></i><strong>SUA MARCA</strong><small>Compre de onde estiver.</small></div>
-            </div>
-          </div>
+          <p class="platform-storefront__statement" :aria-label="storefrontStatement">
+            <span v-for="(word, index) in storefrontStatement.split(' ')" :key="index" class="platform-storefront__word" aria-hidden="true">{{ word }}</span>
+          </p>
+          <ul class="platform-storefront__pillars">
+            <li v-for="(pillar, index) in storefrontPillars" :key="pillar.label">
+              <i class="platform-storefront__rule"></i>
+              <small>0{{ index + 1 }}</small>
+              <b>{{ pillar.label }}</b>
+              <p>{{ pillar.text }}</p>
+            </li>
+          </ul>
+          <MarketingTextButton class="chapter-text-cta" href="/criar-loja">Criar minha loja</MarketingTextButton>
         </div>
       </section>
 
@@ -502,176 +523,98 @@ onBeforeUnmount(() => destroyMotion?.())
   font-weight: 700;
 }
 
-.storefront-scene {
-  position: relative;
-  min-height: 690px;
-}
-
-.storefront-window {
-  position: absolute;
-  inset: 3% 5% 7% 0;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: white;
-  box-shadow: 0 45px 90px -55px rgba(0, 0, 0, .5);
-}
-
-.storefront-window header {
-  display: flex;
-  height: 66px;
-  padding: 0 1.5rem;
-  align-items: center;
-  border-bottom: 1px solid var(--line);
-}
-
-.storefront-window header strong {
-  font-family: var(--font-display);
-  font-size: .8rem;
-}
-
-.storefront-window nav {
-  display: flex;
-  margin-left: auto;
-  align-items: center;
-  gap: 1.4rem;
-  color: var(--muted);
-  font-size: .62rem;
-}
-
-.storefront-window header svg {
-  margin-left: 1.4rem;
-}
-
-.storefront-window__hero {
-  position: relative;
-  min-height: 300px;
-  padding: 3rem;
-  overflow: hidden;
-  background: #dceee5;
-}
-
-.storefront-window__hero span {
-  color: var(--green);
-  font-size: .7rem;
-  font-weight: 500;
-}
-
-.storefront-window__hero strong {
-  position: relative;
-  z-index: 2;
-  display: block;
-  margin-top: .8rem;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.8rem);
-  line-height: .97;
-  letter-spacing: -.03em;
-}
-
-.storefront-window__hero i {
-  position: absolute;
-  right: 7%;
-  bottom: -34%;
-  width: 45%;
-  aspect-ratio: 1;
-  border: 45px solid rgba(7, 148, 94, .2);
-  border-radius: 50%;
-}
-
-.storefront-products {
+.platform-storefront__inner {
   display: grid;
-  padding: 1.25rem;
+  width: min(100% - (var(--gutter) * 2), 1440px);
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+}
+
+.platform-storefront__head .site-title {
+  max-width: 14ch;
+  margin-inline: auto;
+}
+
+.platform-storefront__head .site-title span {
+  color: #65736e;
+}
+
+.platform-storefront__word {
+  display: inline-block;
+  margin-right: .26em;
+}
+
+.platform-storefront__word:last-child {
+  margin-right: 0;
+}
+
+.platform-storefront__statement {
+  max-width: 1040px;
+  margin: clamp(3rem, 6vw, 5.5rem) 0 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.1vw, 3rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+.platform-storefront__pillars {
+  display: grid;
+  width: 100%;
+  max-width: 1080px;
+  margin: clamp(3.5rem, 7vw, 6.5rem) 0 0;
+  padding: 0;
   grid-template-columns: repeat(3, 1fr);
-  gap: .8rem;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  list-style: none;
+  text-align: left;
 }
 
-.storefront-products article {
+.platform-storefront__pillars li {
+  position: relative;
   display: grid;
-  gap: .35rem;
+  padding-top: 1.6rem;
+  align-content: start;
+  gap: .5rem;
 }
 
-.storefront-products article > i {
-  height: 115px;
-  border-radius: 12px;
-  background: #dbece4;
-}
-
-.storefront-products article > i.is-sand {
-  background: #e8e2d7;
-}
-
-.storefront-products article > i.is-ink {
-  background: #1b2b27;
-}
-
-.storefront-products small {
-  color: var(--muted);
-  font-size: .52rem;
-}
-
-.storefront-products b {
-  font-size: .65rem;
-}
-
-.storefront-phone {
+.platform-storefront__rule {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 30%;
-  min-width: 180px;
-  padding: .6rem;
-  border: 6px solid var(--ink);
-  border-radius: 28px;
-  background: white;
-  box-shadow: 0 30px 70px -35px #000;
-}
-
-.storefront-phone > span {
-  display: block;
-  width: 30%;
-  height: 4px;
-  margin: 0 auto .5rem;
-  border-radius: 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
   background: var(--ink);
+  transform-origin: left center;
+  opacity: .85;
 }
 
-.storefront-phone > div {
-  display: grid;
-  min-height: 250px;
-  padding: 1rem;
-  place-content: end start;
-  border-radius: 18px;
-  background: #dceee5;
+.platform-storefront__pillars small {
+  color: var(--green);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .08em;
 }
 
-.storefront-phone i {
-  display: block;
-  width: 70px;
-  height: 70px;
-  margin-bottom: 2rem;
-  border: 16px solid rgba(7, 148, 94, .22);
-  border-radius: 50%;
+.platform-storefront__pillars b {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
 }
 
-.storefront-phone strong {
-  font-size: .72rem;
-}
-
-.storefront-phone small {
-  margin-top: .4rem;
+.platform-storefront__pillars p {
+  max-width: 22rem;
+  margin: 0;
   color: var(--muted);
-  font-size: .55rem;
+  font-size: .95rem;
+  line-height: 1.6;
 }
 
-.storefront-scene > p {
-  position: absolute;
-  top: 1%;
-  right: 0;
-  color: #819089;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-style: italic;
-  transform: rotate(4deg);
+.platform-storefront .chapter-text-cta {
+  margin-top: clamp(3rem, 6vw, 5rem);
 }
 
 .platform-workflow {
@@ -1051,11 +994,6 @@ onBeforeUnmount(() => destroyMotion?.())
     max-width: 780px;
   }
 
-  .storefront-scene {
-    width: min(100%, 820px);
-    margin-inline: auto;
-  }
-
   .platform-capabilities__layout {
     grid-template-columns: 1fr;
   }
@@ -1132,54 +1070,9 @@ onBeforeUnmount(() => destroyMotion?.())
     gap: .8rem 1.2rem;
   }
 
-  .platform-storefront__layout {
-    gap: 3rem;
-  }
-
-  .storefront-scene {
-    min-height: 520px;
-  }
-
-  .storefront-window {
-    inset: 0 0 5% 0;
-  }
-
-  .storefront-window nav {
-    display: none;
-  }
-
-  .storefront-window__hero {
-    min-height: 230px;
-    padding: 2rem 1.25rem;
-  }
-
-  .storefront-products {
-    padding: .8rem;
-  }
-
-  .storefront-products article > i {
-    height: 80px;
-  }
-
-  .storefront-products article:nth-child(3) {
-    display: none;
-  }
-
-  .storefront-products {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .storefront-phone {
-    min-width: 135px;
-    width: 38%;
-  }
-
-  .storefront-phone > div {
-    min-height: 190px;
-  }
-
-  .storefront-scene > p {
-    display: none;
+  .platform-storefront__pillars {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .platform-workflow__heading {
