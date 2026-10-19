@@ -141,20 +141,26 @@ onMounted(async () => {
         ease: 'none',
         scrollTrigger: {trigger: '.platform-storefront__statement', start: 'top 82%', end: 'bottom 48%', scrub: .6}
       })
-      gsap.from('.platform-storefront__rule', {
-        scaleX: 0,
-        duration: 1,
-        stagger: .15,
-        ease: 'power3.out',
-        scrollTrigger: {trigger: '.platform-storefront__pillars', start: 'top 82%', once: true}
-      })
-      gsap.from('.platform-storefront__pillars li > :not(.platform-storefront__rule)', {
-        y: 24,
-        opacity: 0,
-        duration: .7,
-        stagger: .06,
-        ease: 'power3.out',
-        scrollTrigger: {trigger: '.platform-storefront__pillars', start: 'top 80%', once: true}
+      gsap.utils.toArray<HTMLElement>('.platform-storefront__pillars li').forEach((row) => {
+        gsap.from(row.querySelectorAll('small, p'), {
+          y: 28,
+          opacity: 0,
+          duration: .8,
+          stagger: .12,
+          ease: 'power3.out',
+          scrollTrigger: {trigger: row, start: 'top 88%', once: true}
+        })
+        gsap.from(row.querySelector('b'), {
+          y: 28,
+          duration: .8,
+          ease: 'power3.out',
+          scrollTrigger: {trigger: row, start: 'top 88%', once: true}
+        })
+        gsap.fromTo(row.querySelector('b'), {opacity: .25}, {
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {trigger: row, start: 'top 85%', end: 'top 55%', scrub: .5}
+        })
       })
       gsap.from('.platform-workflow__line', {
         scaleX: 0,
@@ -328,27 +334,6 @@ onBeforeUnmount(() => destroyMotion?.())
       </section>
 
       <IntegrationsSection/>
-
-      <section class="chapter platform-start">
-        <div class="site-container">
-          <div class="platform-start__heading" data-platform-reveal><p class="site-label">Da ideia à operação</p>
-            <h2 class="site-title">Coloque seu negócio<br>em movimento.</h2></div>
-          <div class="platform-start__steps">
-            <a v-for="item in startSteps" :key="item.title" class="platform-start__card" :href="item.cta.href">
-              <img class="platform-start__photo" :src="item.image" :alt="item.imageAlt" loading="lazy">
-              <div class="platform-start__scrim" aria-hidden="true"></div>
-
-              <div class="platform-start__body">
-                <div class="platform-start__text">
-                  <p>{{ item.text }}</p>
-                  <h3>{{ item.title }}</h3>
-                </div>
-                <span class="platform-start__arrow" aria-hidden="true"><ArrowRight :size="18"/></span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
 
       <section class="chapter final-cta platform-final">
         <div class="site-container final-cta__inner" data-platform-reveal>
@@ -562,13 +547,10 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .platform-storefront__pillars {
-  display: grid;
   width: 100%;
-  max-width: 1080px;
+  max-width: 1180px;
   margin: clamp(3.5rem, 7vw, 6.5rem) 0 0;
   padding: 0;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
   list-style: none;
   text-align: left;
 }
@@ -576,40 +558,54 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-storefront__pillars li {
   position: relative;
   display: grid;
-  padding-top: 1.6rem;
-  align-content: start;
-  gap: .5rem;
+  padding: clamp(1.6rem, 3vw, 2.6rem) 0;
+  grid-template-columns: clamp(3.5rem, 7vw, 6rem) minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: baseline;
+  gap: clamp(1rem, 3vw, 3rem);
+  border-bottom: 1px solid rgba(13, 23, 21, .12);
 }
 
 .platform-storefront__rule {
   position: absolute;
-  top: 0;
+  bottom: -1px;
   left: 0;
   width: 100%;
   height: 1px;
-  background: var(--ink);
+  background: var(--green);
+  transform: scaleX(0);
   transform-origin: left center;
-  opacity: .85;
+  transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.platform-storefront__pillars li:hover .platform-storefront__rule {
+  transform: scaleX(1);
 }
 
 .platform-storefront__pillars small {
   color: var(--green);
-  font-size: .75rem;
+  font-size: .8rem;
   font-weight: 600;
-  letter-spacing: .08em;
+  letter-spacing: .1em;
 }
 
 .platform-storefront__pillars b {
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: -.01em;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.035em;
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+.platform-storefront__pillars li:hover b {
+  transform: translateX(.6rem);
 }
 
 .platform-storefront__pillars p {
-  max-width: 22rem;
+  max-width: 24rem;
   margin: 0;
   color: var(--muted);
-  font-size: .95rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -1070,9 +1066,13 @@ onBeforeUnmount(() => destroyMotion?.())
     gap: .8rem 1.2rem;
   }
 
-  .platform-storefront__pillars {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  .platform-storefront__pillars li {
+    grid-template-columns: 2.4rem 1fr;
+    gap: .6rem 1rem;
+  }
+
+  .platform-storefront__pillars p {
+    grid-column: 2;
   }
 
   .platform-workflow__heading {
