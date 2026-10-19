@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 16 de outubro de 2026. Este documento registra decisões aprovadas
+Atualizado em 19 de outubro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -118,7 +118,13 @@ A rota `/plataforma` aprofunda o produto sem repetir a Home. Sua narrativa aprov
    O tratamento aprovado segue uma captura profissional limpa: cores naturais, contraste
    suave, luz de janela clara, anatomia facial convincente, textura sutil de pele e
    retoque discreto, sem exagerar imperfeições ou aplicar gradação cinematográfica forte.
-2. Loja virtual responsiva e identidade da marca.
+2. Loja virtual responsiva e identidade da marca. A seção “Sua marca na frente. A
+   estrutura por trás.” é puramente tipográfica, sem telas, mockups ou fotografia:
+   abertura centralizada, frase de destaque grande e três linhas editoriais em largura
+   total (Vitrine, Catálogo e estoque, Pedidos) com número, título grande e descrição,
+   separadas por fios finos. Os textos repetem apenas o que a página já afirma. As
+   alternativas rejeitadas foram o mockup de navegador com celular e o painel “Nos
+   bastidores”.
 3. Fluxo que conecta venda, rotina, comunicação e decisão.
 4. Recursos apresentados em capítulos editoriais: loja, catálogo, pedidos, clientes e
    WhatsApp/automações.
@@ -241,6 +247,13 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
 - A entrada dessa seção respeita o `padding` padrão dos capítulos e usa fade com
   parallax curto entre a coluna editorial e o primeiro recurso. O movimento existe
   apenas na entrada, sem alterar o empilhamento, e respeita redução de movimento.
+- Na seção “Sua marca na frente” da página Plataforma, as palavras da frase de destaque
+  acendem uma a uma com scrub do GSAP (cada palavra é um `inline-block` com margem
+  própria, porque o Vue remove o espaço entre spans). Cada linha editorial revela
+  número e descrição com fade curto, e o título passa de cinza claro a tinta no scroll.
+  No hover, um traço verde preenche o fio da linha e o título desliza levemente. O
+  hover é apenas acabamento. Sem `prefers-reduced-motion: no-preference`, tudo
+  permanece visível e estático.
 - Os cards do mapa de integrações flutuam continuamente com movimentos curtos e
   assíncronos. No mobile, deixam a composição absoluta e passam ao fluxo da página
   ao redor do núcleo para preservar legibilidade e impedir overflow.

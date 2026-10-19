@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-documental.png'
 import PricingSection from '~/components/home/PricingSection.vue'
 import type {BillingInterval, Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
@@ -35,6 +34,8 @@ const faqs = [
   },
 ]
 
+const heroStatement = 'Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a operação evoluir.'
+
 const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.modules.every(module => plan.modules.includes(module))
 const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug, periodo: interval } })
 
@@ -56,12 +57,15 @@ onMounted(async () => {
           .from('[data-header]', {y: -20, opacity: 0, duration: .6})
           .from('.pricing-hero__eyebrow', {y: 16, opacity: 0, duration: .5}, '-=.2')
           .from('.pricing-hero__title span', {yPercent: 110, duration: .8, stagger: .08}, '-=.15')
-          .from('.pricing-hero__copy, .pricing-hero__link', {
-            y: 20,
-            opacity: 0,
-            duration: .55,
-            stagger: .08
-          }, '-=.45')
+          .from('.pricing-hero__word', {opacity: .16, duration: .5, stagger: .06, ease: 'none'}, '-=.35')
+          .from('.pricing-hero__link', {y: 20, opacity: 0, duration: .55}, '-=.3')
+
+      gsap.to('.pricing-hero__content', {
+        yPercent: -14,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {trigger: '.pricing-hero', start: 'top top', end: 'bottom 30%', scrub: true}
+      })
 
       gsap.utils.toArray<HTMLElement>('[data-pricing-reveal]').forEach((element) => {
         gsap.from(element.children, {
@@ -91,35 +95,19 @@ onBeforeUnmount(() => destroyMotion?.())
 
     <main id="conteudo">
       <section class="pricing-hero">
-        <img class="pricing-hero__photo" :src="pricingHeroUrl" alt="Comerciante analisando o crescimento da loja no computador" fetchpriority="high" width="1672" height="941">
-        <div class="pricing-hero__overlay"></div>
         <div class="site-container pricing-hero__layout">
           <div class="pricing-hero__content">
             <p class="pricing-hero__eyebrow">Planos Elínea</p>
-            <h1 class="pricing-hero__title"><span><i>Para crescer</i></span><span><i>sem recomeçar.</i></span>
-            </h1>
-            <p class="pricing-hero__copy">Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a
-              operação evoluir.</p>
+            <h1 class="pricing-hero__title"><span><i>Para crescer</i></span><span><i>sem recomeçar.</i></span></h1>
+            <p class="pricing-hero__copy" :aria-label="heroStatement">
+              <span v-for="(word, index) in heroStatement.split(' ')" :key="index" class="pricing-hero__word" aria-hidden="true">{{ word }}</span>
+            </p>
             <a class="pricing-hero__link" href="#planos">Explorar os planos <ArrowRight :size="18" aria-hidden="true" /></a>
           </div>
         </div>
       </section>
 
       <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
-
-      <section class="pricing-guide" aria-label="O que observar ao comparar os planos">
-        <div class="site-container pricing-guide__layout" data-pricing-reveal>
-          <div class="pricing-hero__guide">
-            <p class="pricing-hero__guide-label">Sua escolha, com clareza</p>
-            <h2>O que vale olhar<br>em cada plano.</h2>
-            <dl>
-              <div><dt>Mensalidade</dt><dd>O valor recorrente para usar a plataforma.</dd></div>
-              <div><dt>Implantação</dt><dd>A preparação inicial para colocar sua operação no ar.</dd></div>
-              <div><dt>Recursos</dt><dd>O que cada estrutura oferece para a sua rotina.</dd></div>
-            </dl>
-          </div>
-        </div>
-      </section>
 
       <section v-if="plans.length" id="comparacao" class="chapter pricing-comparison">
         <div class="site-container">
@@ -239,52 +227,60 @@ onBeforeUnmount(() => destroyMotion?.())
   min-height: 100svh;
   overflow: hidden;
   padding-block: clamp(9rem, 17vh, 12rem) clamp(5rem, 9vh, 7rem);
-  background: #071310;
+  background: var(--ink);
   color: white;
   isolation: isolate;
 }
 
-.pricing-hero__photo {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.pricing-hero__overlay {
+.pricing-hero::before,
+.pricing-hero::after {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, rgba(4,17,14,.93) 0%, rgba(4,17,14,.76) 38%, rgba(4,17,14,.22) 69%, rgba(4,17,14,.04) 100%);
+  pointer-events: none;
+  content: '';
+}
+
+.pricing-hero::before {
+  background: radial-gradient(ellipse 60% 55% at 50% 42%, rgba(7, 148, 94, .16) 0%, rgba(7, 148, 94, .05) 45%, transparent 75%);
+}
+
+.pricing-hero::after {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 96px 96px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 0%, transparent 78%);
 }
 
 .pricing-hero__layout {
   display: flex;
   width: min(100% - (var(--gutter) * 2), 1440px);
   align-items: center;
+  justify-content: center;
 }
 
 .pricing-hero__content {
   min-width: 0;
-  width: min(56vw, 760px);
+  max-width: 1080px;
+  text-align: center;
 }
 
 .pricing-hero__eyebrow {
-  color: #d2f2df;
+  color: var(--green-bright);
   font-size: .86rem;
   font-weight: 600;
 }
 
 .pricing-hero__title {
-  margin-top: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(1.6rem, 3vw, 2.6rem);
   color: white;
-  font-size: clamp(4.25rem, 6.4vw, 7.3rem);
+  font-size: clamp(3.4rem, 8vw, 8.6rem);
   font-weight: 700;
   line-height: .96;
-  letter-spacing: -.06em;
+  letter-spacing: -.05em;
 }
 
 .pricing-hero__title span {
@@ -299,11 +295,22 @@ onBeforeUnmount(() => destroyMotion?.())
 }
 
 .pricing-hero__copy {
-  max-width: 34rem;
-  margin-top: clamp(2rem, 5vw, 4rem);
-  color: #e0f4e9;
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
-  line-height: 1.65;
+  max-width: 44rem;
+  margin: clamp(2rem, 4.5vw, 3.6rem) auto 0;
+  color: rgba(255, 255, 255, .78);
+  font-size: clamp(1.1rem, 1.7vw, 1.6rem);
+  line-height: 1.5;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+
+.pricing-hero__word {
+  display: inline-block;
+  margin-right: .26em;
+}
+
+.pricing-hero__word:last-child {
+  margin-right: 0;
 }
 
 .pricing-hero__link {
@@ -317,8 +324,12 @@ onBeforeUnmount(() => destroyMotion?.())
   font-weight: 600;
 }
 
-.pricing-hero__link svg { transition: transform .2s ease; }
-.pricing-hero__link:hover svg, .pricing-hero__link:focus-visible svg { transform: translateX(4px); }
+.pricing-hero__link svg { color: var(--green-bright); transform: rotate(90deg); transition: transform .2s ease; }
+.pricing-hero__link:hover svg, .pricing-hero__link:focus-visible svg { transform: rotate(90deg) translateX(4px); }
+
+@media (max-width: 767px) {
+  .pricing-hero { min-height: auto; padding-block: 8rem 4.5rem; }
+}
 
 .pricing-guide { padding-block: clamp(4rem, 7vw, 7rem); background: var(--paper); }
 .pricing-guide__layout { display: grid; justify-items: end; }
