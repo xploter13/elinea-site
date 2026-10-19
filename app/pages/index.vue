@@ -19,7 +19,6 @@ const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ pat
 const TYPED_PHRASES = ['negócios reais.', 'lojas de verdade.', 'vender mais.']
 const typedWord = ref(TYPED_PHRASES[0])
 const typedLineWrap = ref<HTMLElement | null>(null)
-const typedLineEl = ref<HTMLElement | null>(null)
 
 let destroyMotion: (() => void) | undefined
 let typewriterTimer: ReturnType<typeof setTimeout> | undefined
@@ -31,9 +30,11 @@ const canType = () => heroInView && !pageHidden
 
 function fitTypedLine() {
   const wrap = typedLineWrap.value
-  const el = typedLineEl.value
-  if (!wrap || !el) return
-  const style = getComputedStyle(el)
+  const title = wrap?.parentElement
+  if (!wrap || !title) return
+  title.style.fontSize = ''
+  const style = getComputedStyle(title)
+  const baseSize = parseFloat(style.fontSize)
   const longest = TYPED_PHRASES.reduce((a, b) => (b.length > a.length ? b : a))
   const probe = document.createElement('span')
   probe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; left:-9999px; top:0;'
@@ -43,10 +44,11 @@ function fitTypedLine() {
   probe.style.letterSpacing = style.letterSpacing
   probe.textContent = longest
   document.body.appendChild(probe)
-  const natural = probe.scrollWidth
+  const cursor = baseSize * .1 + 3
+  const natural = probe.getBoundingClientRect().width + cursor
   document.body.removeChild(probe)
   const available = wrap.clientWidth
-  el.style.fontSize = natural > available ? `${(parseFloat(style.fontSize) * available / natural) * .97}px` : ''
+  if (natural > available) title.style.fontSize = `${baseSize * available / natural * .97}px`
 }
 
 function typeLoop() {
@@ -107,6 +109,12 @@ onMounted(async () => {
   document.addEventListener('visibilitychange', updatePageVisibility)
   const handleTypedResize = () => fitTypedLine()
   window.addEventListener('resize', handleTypedResize)
+  window.addEventListener('load', handleTypedResize)
+  document.fonts?.addEventListener?.('loadingdone', handleTypedResize)
+  document.fonts?.ready?.then(handleTypedResize)
+  const typedResizeObserver = 'ResizeObserver' in window && typedLineWrap.value ? new ResizeObserver(handleTypedResize) : undefined
+  if (typedLineWrap.value) typedResizeObserver?.observe(typedLineWrap.value)
+  handleTypedResize()
   const context = gsap.context(() => {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({
@@ -221,6 +229,9 @@ onMounted(async () => {
     window.removeEventListener('sale-flow:layout', refreshSaleFlow)
     document.removeEventListener('visibilitychange', updatePageVisibility)
     window.removeEventListener('resize', handleTypedResize)
+    window.removeEventListener('load', handleTypedResize)
+    document.fonts?.removeEventListener?.('loadingdone', handleTypedResize)
+    typedResizeObserver?.disconnect()
     typewriterObserver?.disconnect()
     if (typewriterTimer) clearTimeout(typewriterTimer)
     mm.revert();
@@ -245,8 +256,7 @@ onBeforeUnmount(() => {
             <h1 class="hero-title"><span class="sr-only">Ecommerce simples para negócios reais.</span><span
                 aria-hidden="true"><i class="hero-line">Ecommerce</i></span><span aria-hidden="true"><i
                 class="hero-line">simples para</i></span><span
-                ref="typedLineWrap" aria-hidden="true"><i ref="typedLineEl"
-                                                          class="hero-line hero-line--typed">{{ typedWord }}<span
+                ref="typedLineWrap" aria-hidden="true"><i class="hero-line hero-line--typed">{{ typedWord }}<span
                 class="hero-cursor"></span></i></span></h1>
             <p class="hero-support">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com
               mais vendas e menos complicação.</p>
