@@ -354,15 +354,18 @@ Os 12 assets utilizados ficam em `app/assets/images`. O inventário completo de
 arquivos, locais de uso, dimensões e otimização está em [docs/imagens.md](docs/imagens.md).
 
 - logos oficiais dark e white em SVG;
-- hero documental da Home e quatro fotografias de segmentos em WebP sem perdas;
+- hero documental da Home e quatro fotografias de segmentos em WebP de alta qualidade;
 - mesa de expedição da Home em WebP;
 - hero documental da Plataforma e comerciante em WebP;
 - hero documental de Recursos e fotografia da florista em WebP.
 
-Na otimização de 20 de outubro de 2026, os sete PNGs foram convertidos sem perdas.
-As fotografias do comerciante e da florista foram convertidas para WebP de alta
-qualidade, em 2400 × 1602 e 1800 × 2700, respectivamente, com comparação visual
-antes/depois. Versões antigas e arquivos sem uso foram removidos.
+O refinamento aprovado em 20 de outubro de 2026 usa WebP de alta qualidade
+(qualidade 92) nas nove fotografias maiores, priorizando qualidade visual no site.
+As sete fotografias de hero e segmentos mantêm suas dimensões; comerciante e
+florista usam 2400 × 1602 e 1800 × 2700, respectivamente. As versões foram
+comparadas visualmente antes/depois, incluindo detalhes em resolução nativa nas
+sete fotografias refinadas por último. A mesa já tem 75 KB e foi preservada, assim
+como os SVGs oficiais já otimizados. Versões antigas e arquivos sem uso foram removidos.
 
 Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente atende à
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens
