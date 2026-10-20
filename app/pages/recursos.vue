@@ -389,8 +389,10 @@ onBeforeUnmount(() => destroyMotion?.())
                 </div>
               </div>
 
-              <div class="insight-card__body"><h3>{{ item.title }}</h3>
-                <p>{{ item.text }}</p></div>
+              <div class="insight-card__body">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.text }}</p>
+              </div>
               <div class="insight-card__tags"><span v-for="tag in item.tags" :key="tag">{{ tag }}</span></div>
             </article>
           </div>

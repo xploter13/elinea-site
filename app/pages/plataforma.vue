@@ -556,7 +556,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .platform-storefront__pillars small {
   color: var(--green);
-  font-size: .8rem;
+  font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: .1em;
 }
@@ -644,7 +644,7 @@ onBeforeUnmount(() => destroyMotion?.())
   display: block;
   margin-top: 2rem;
   color: var(--green-bright);
-  font-size: .65rem;
+  font-size: .9rem;
   font-weight: 500;
 }
 
@@ -742,7 +742,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .platform-capabilities__list article > p {
   margin-top: 2rem;
   color: var(--green);
-  font-size: .7rem;
+  font-size: .9rem;
   font-weight: 500;
 }
 
