@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import merchantUrl from '~/assets/images/elinea-merchant-operation.jpg'
-import platformHeroUrl from '~/assets/images/elinea-platform-hero-documental.png'
-import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-documental.png'
-import controlConceptUrl from '~/assets/images/elinea-worktable-documental.png'
-import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-documental.png'
+import platformHeroUrl from '~/assets/images/elinea-platform-hero-documental.webp'
 import IntegrationsSection from '~/components/site/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
 import {
@@ -52,30 +49,6 @@ const capabilities = [
     title: 'WhatsApp e automações',
     text: 'Conecte conversas, eventos de pedidos e jornadas automáticas sem separar atendimento e venda.',
     tag: 'Conversa que continua'
-  },
-]
-
-const startSteps = [
-  {
-    image: pricingHeroUrl,
-    imageAlt: 'Comerciante avaliando o crescimento do negócio',
-    title: 'Escolha seu caminho',
-    text: 'Encontre o plano que acompanha o momento atual do negócio.',
-    cta: {href: '/precos#planos'}
-  },
-  {
-    image: controlConceptUrl,
-    imageAlt: 'Mesa de trabalho com embalagens, etiquetas e computador para organizar pedidos',
-    title: 'Organize a estrutura',
-    text: 'Configure catálogo, identidade e os fluxos necessários para começar.',
-    cta: {href: '/recursos'}
-  },
-  {
-    image: resourcesHeroUrl,
-    imageAlt: 'Comerciante preparando pedidos de uma loja virtual',
-    title: 'Venda e evolua',
-    text: 'Coloque a operação no ar e amplie os recursos quando fizer sentido.',
-    cta: {href: 'mailto:contato@elinea.com.br'}
   },
 ]
 

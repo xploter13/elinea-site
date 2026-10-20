@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 19 de outubro de 2026. Este documento registra decisões aprovadas
+Atualizado em 20 de outubro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -29,7 +29,7 @@ genérico nem copiar outras marcas usadas como referência.
 - Bordas são sutis, raios moderados e sombras suaves, concentradas nas interfaces do
   produto.
 - Fotografias devem aproximar a tecnologia de comerciantes e negócios reais.
-- `elinea-hero-documental.png` é a referência aprovada de qualidade fotográfica para
+- `elinea-hero-documental.webp` é a referência aprovada de qualidade fotográfica para
   as demais páginas: cena de trabalho crível, luz natural, textura e composição editorial.
 - Imagens geradas com pessoas devem seguir uma direção documental e natural: textura
   real de pele, assimetria, postura espontânea, luz imperfeita e ambientes com sinais
@@ -350,14 +350,17 @@ comerciais dos planos. Não inventar preços nem disponibilidade de integraçõe
 
 ## Assets atuais
 
-Os assets da Home ficam em `app/assets/images`:
+Os 12 assets utilizados ficam em `app/assets/images`. O inventário completo de
+arquivos, locais de uso, dimensões e otimização está em [docs/imagens.md](docs/imagens.md).
 
-- logos colorida e branca da Elínea;
-- fotografia principal do hero;
-- composição visual do comerciante/operação.
-- composição conceitual de embalagens para o segmento de marcas próprias.
-- fotografia do card de pagamentos na página Recursos (cliente pagando na maquininha).
-- fotografia documental da empreendedora no hero da página Plataforma.
+- logos oficiais dark e white em SVG;
+- hero documental da Home e quatro fotografias de segmentos em WebP sem perdas;
+- mesa de expedição da Home em WebP;
+- hero documental da Plataforma em WebP e comerciante em JPEG;
+- hero documental de Recursos em WebP e fotografia da florista em JPEG.
+
+A limpeza e otimização de 20 de outubro de 2026 preserva dimensões, cores e pixels
+das imagens exibidas. Versões antigas e arquivos sem uso foram removidos.
 
 Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente atende à
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import heroUrl from '~/assets/images/elinea-loja-especializada-documental.png'
-import merchantUrl from '~/assets/images/elinea-farmacia-documental.png'
-import varejoUrl from '~/assets/images/elinea-varejo-documental.png'
-import privateLabelUrl from '~/assets/images/elinea-marcas-proprias-documental.png'
+import heroUrl from '~/assets/images/elinea-loja-especializada-documental.webp'
+import merchantUrl from '~/assets/images/elinea-farmacia-documental.webp'
+import varejoUrl from '~/assets/images/elinea-varejo-documental.webp'
+import privateLabelUrl from '~/assets/images/elinea-marcas-proprias-documental.webp'
 import { Building2, LayoutTemplate, Pill, Store } from '@lucide/vue'
 
 const active = ref(0)
