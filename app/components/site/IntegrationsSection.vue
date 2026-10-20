@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import { BarChart3, CreditCard, MessageCircle, Network, Radio, Share2 } from '@lucide/vue'
 
 const integrations = [
@@ -21,7 +22,7 @@ const integrations = [
       </div>
       <div class="integration-map" aria-label="Mapa de integrações e seus estados">
         <svg viewBox="0 0 700 620" aria-hidden="true"><path d="M350 310 L110 115 M350 310 L585 105 M350 310 L620 330 M350 310 L510 535 M350 310 L110 500" /></svg>
-        <div class="integration-core"><Network :size="30" /><strong>ELÍNEA</strong><small>Núcleo preparado</small></div>
+        <div class="integration-core"><Network :size="30" aria-hidden="true" /><img :src="logoWhiteUrl" alt="Elínea" width="994" height="272"><small>Núcleo preparado</small></div>
         <article v-for="item in integrations" :key="item.name" class="integration-node" :class="[`integration-node--${item.pos}`, { 'is-available': item.available }]">
           <component :is="item.icon" :size="20" aria-hidden="true" /><span><strong>{{ item.name }}</strong><small>{{ item.status }}</small></span>
         </article>

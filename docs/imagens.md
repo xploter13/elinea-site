@@ -27,7 +27,7 @@ não o download de uma única página.
 | [elinea-resources-hero-documental.webp](../app/assets/images/elinea-resources-hero-documental.webp) | 1536 × 1024 | 1.901,4 KiB | 150,3 KiB | `/recursos` — hero (`app/pages/recursos.vue`) |
 | [portrait-woman-arranging-flowers-shop.webp](../app/assets/images/portrait-woman-arranging-flowers-shop.webp) | 1800 × 2700 | 16.071,4 KiB | 697 KiB | `/recursos` — A operação por inteiro (`app/pages/recursos.vue`) |
 | [logo-elinea-dark.svg](../app/assets/images/logo-elinea-dark.svg) | viewBox 993,67 × 272,4 (vetorial) | 5 KiB | 4,8 KiB | Header compartilhado (`SiteHeader.vue`) e manual de marca |
-| [logo-elinea-white.svg](../app/assets/images/logo-elinea-white.svg) | viewBox 993,67 × 272,4 (vetorial) | 5 KiB | 4,8 KiB | Header e footer compartilhados (`SiteHeader.vue`, `SiteFooter.vue`) e manual de marca |
+| [logo-elinea-white.svg](../app/assets/images/logo-elinea-white.svg) | viewBox 993,67 × 272,4 (vetorial) | 5 KiB | 4,8 KiB | Header e footer compartilhados (`SiteHeader.vue`, `SiteFooter.vue`), núcleos do ecossistema (`EcosystemSection.vue`) e integrações (`IntegrationsSection.vue`) e manual de marca |
 
 ## Critério de otimização
 

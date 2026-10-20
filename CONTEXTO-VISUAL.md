@@ -24,6 +24,9 @@ genérico nem copiar outras marcas usadas como referência.
 - O site usa os logotipos oficiais `logo-elinea-dark.svg` em superfícies claras e
   `logo-elinea-white.svg` em superfícies escuras, preservando suas proporções. A cor
   principal da versão dark acompanha o token `--ink` (`#0d1715`).
+- Os núcleos “Operação central” do ecossistema e “Núcleo preparado” das integrações
+  usam `logo-elinea-white.svg` no lugar do nome digitado, com os subtítulos abaixo
+  e proporções originais do logotipo preservadas.
 - Cards aparecem quando representam produto, estado ou informação real. Evitar grades
   de pequenos cards usadas apenas como decoração.
 - Bordas são sutis, raios moderados e sombras suaves, concentradas nas interfaces do

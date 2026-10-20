@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import { BarChart3, Bot, CreditCard, MessageCircle, Package, ShoppingBag, Store, Users } from '@lucide/vue'
 import { MarketingTextButton } from '@elinea/ui/marketing'
 
@@ -63,7 +64,7 @@ onBeforeUnmount(() => {
             <div class="ecosystem-module"><component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span></div>
           </div>
         </div>
-        <div class="ecosystem-core"><span>ELÍNEA</span><small>Operação central</small></div>
+        <div class="ecosystem-core"><img :src="logoWhiteUrl" alt="Elínea" width="994" height="272"><small>Operação central</small></div>
       </div>
     </div>
   </section>
