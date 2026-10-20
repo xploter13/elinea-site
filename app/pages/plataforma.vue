@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import merchantUrl from '~/assets/images/elinea-platform-operation-documental.png'
+import merchantUrl from '~/assets/images/elinea-merchant-operation.jpg'
 import platformHeroUrl from '~/assets/images/elinea-platform-hero-documental.png'
 import pricingHeroUrl from '~/assets/images/elinea-pricing-hero-documental.png'
 import controlConceptUrl from '~/assets/images/elinea-worktable-documental.png'
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-documental.png'
-import IntegrationsSection from '~/components/home/IntegrationsSection.vue'
+import IntegrationsSection from '~/components/site/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
 import {
   ArrowRight,

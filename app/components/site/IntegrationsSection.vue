@@ -2,11 +2,11 @@
 import { BarChart3, CreditCard, MessageCircle, Network, Radio, Share2 } from '@lucide/vue'
 
 const integrations = [
-  { icon: MessageCircle, name: 'WhatsApp', status: 'Disponível', available: true, pos: 'one' },
-  { icon: CreditCard, name: 'Fiserv', status: 'Em evolução', available: false, pos: 'two' },
-  { icon: BarChart3, name: 'Google Analytics', status: 'Em evolução', available: false, pos: 'three' },
-  { icon: Share2, name: 'Meta', status: 'Em evolução', available: false, pos: 'four' },
-  { icon: Radio, name: 'Gateways', status: 'Em evolução', available: false, pos: 'five' },
+  { icon: MessageCircle, name: 'WhatsApp', status: 'Em breve', available: false, pos: 'one' },
+  { icon: CreditCard, name: 'Fiserv', status: 'Em breve', available: false, pos: 'two' },
+  { icon: BarChart3, name: 'Google Analytics', status: 'Disponível', available: true, pos: 'three' },
+  { icon: Share2, name: 'Meta', status: 'Disponível', available: true, pos: 'four' },
+  { icon: Radio, name: 'Gateways', status: 'Disponível', available: true, pos: 'five' },
 ]
 </script>
 
