@@ -707,7 +707,7 @@ onBeforeUnmount(() => destroyMotion?.())
 .operation-feature > small {
   justify-self: end;
   color: #a7d6b8;
-  font-size: .65rem;
+  font-size: .8rem;
   font-weight: 500;
   text-align: right;
 }
@@ -819,7 +819,7 @@ onBeforeUnmount(() => destroyMotion?.())
   border-radius: 999px;
   background: #064d36;
   color: white;
-  font-size: .7rem;
+  font-size: .8rem;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -852,9 +852,6 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .intelligence-heading__body > p {
   max-width: 23rem;
-  padding: 1.1rem 1.25rem;
-  border-left: 2px solid #bbefcd;
-  background: #075e40;
   color: #f0fff3;
   font-size: clamp(1rem, 1.15vw, 1.15rem);
   line-height: 1.7;
@@ -882,7 +879,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .agent-flow__step {
   color: #467b5d;
-  font-size: .72rem;
+  font-size: var(--description-size);
   font-weight: 500;
 }
 
