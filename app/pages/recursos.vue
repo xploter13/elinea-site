@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import resourcesHeroUrl from '~/assets/images/elinea-resources-hero-documental.webp'
-import operationMachineUrl from '~/assets/images/portrait-woman-arranging-flowers-shop.jpg'
+import operationMachineUrl from '~/assets/images/portrait-woman-arranging-flowers-shop.webp'
 import { MarketingButton } from '@elinea/ui/marketing'
 import {
   ArrowRight,
@@ -254,7 +254,7 @@ onBeforeUnmount(() => destroyMotion?.())
             </div>
 
             <figure class="operation-editorial__image">
-              <img :src="operationMachineUrl" alt="Florista organizando flores na bancada da própria loja" loading="lazy" width="1024" height="1536">
+              <img :src="operationMachineUrl" alt="Florista organizando flores na bancada da própria loja" loading="lazy" width="1800" height="2700">
               <figcaption><span aria-hidden="true"></span>Uma venda ativa toda a estrutura ao redor.</figcaption>
             </figure>
           </div>

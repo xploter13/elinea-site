@@ -356,11 +356,13 @@ arquivos, locais de uso, dimensões e otimização está em [docs/imagens.md](do
 - logos oficiais dark e white em SVG;
 - hero documental da Home e quatro fotografias de segmentos em WebP sem perdas;
 - mesa de expedição da Home em WebP;
-- hero documental da Plataforma em WebP e comerciante em JPEG;
-- hero documental de Recursos em WebP e fotografia da florista em JPEG.
+- hero documental da Plataforma e comerciante em WebP;
+- hero documental de Recursos e fotografia da florista em WebP.
 
-A limpeza e otimização de 20 de outubro de 2026 preserva dimensões, cores e pixels
-das imagens exibidas. Versões antigas e arquivos sem uso foram removidos.
+Na otimização de 20 de outubro de 2026, os sete PNGs foram convertidos sem perdas.
+As fotografias do comerciante e da florista foram convertidas para WebP de alta
+qualidade, em 2400 × 1602 e 1800 × 2700, respectivamente, com comparação visual
+antes/depois. Versões antigas e arquivos sem uso foram removidos.
 
 Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente atende à
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens

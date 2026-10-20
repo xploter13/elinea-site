@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import merchantUrl from '~/assets/images/elinea-merchant-operation.jpg'
+import merchantUrl from '~/assets/images/elinea-merchant-operation.webp'
 import platformHeroUrl from '~/assets/images/elinea-platform-hero-documental.webp'
 import IntegrationsSection from '~/components/site/IntegrationsSection.vue'
 import {MarketingButton, MarketingTextButton} from '@elinea/ui/marketing'
@@ -279,7 +279,7 @@ onBeforeUnmount(() => destroyMotion?.())
       <section class="chapter platform-scale">
         <div class="site-container platform-scale__layout">
           <div class="platform-scale__image">
-            <img :src="merchantUrl" alt="Comerciante conferindo pedidos em um tablet entre as embalagens da loja" loading="lazy" width="1672" height="941">
+            <img :src="merchantUrl" alt="Comerciante conferindo pedidos em um tablet entre as embalagens da loja" loading="lazy" width="2400" height="1602">
             <span><Sparkles :size="18"/> Estrutura que acompanha o negócio</span>
           </div>
           <div class="platform-section-copy" data-platform-reveal>
