@@ -550,7 +550,7 @@ body .page-shell .marketing-social-rail__label {
 
 .sale-step small {
     color: var(--muted);
-    font-size: .72rem;
+    font-size: .8rem;
 }
 
 .sale-step strong {
@@ -699,7 +699,7 @@ body .page-shell .marketing-social-rail__label {
 .ecosystem-core small {
     margin-top: .35rem;
     color: rgba(255, 255, 255, .45);
-    font-size: .65rem;
+    font-size: .8rem;
 }
 
 .ecosystem-module svg {
@@ -708,7 +708,7 @@ body .page-shell .marketing-social-rail__label {
 }
 
 .ecosystem-module span {
-    font-size: .72rem;
+    font-size: .8rem;
     font-weight: 500;
 }
 

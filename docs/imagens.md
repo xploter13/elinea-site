@@ -29,6 +29,11 @@ não o download de uma única página.
 | [logo-elinea-dark.svg](../app/assets/images/logo-elinea-dark.svg) | viewBox 993,67 × 272,4 (vetorial) | 5 KiB | 4,8 KiB | Header compartilhado (`SiteHeader.vue`) e manual de marca |
 | [logo-elinea-white.svg](../app/assets/images/logo-elinea-white.svg) | viewBox 993,67 × 272,4 (vetorial) | 5 KiB | 4,8 KiB | Header e footer compartilhados (`SiteHeader.vue`, `SiteFooter.vue`), núcleos do ecossistema (`EcosystemSection.vue`) e integrações (`IntegrationsSection.vue`) e manual de marca |
 
+O favicon `app/assets/images/favicon.png` foi adicionado posteriormente pelo usuário
+e é carregado globalmente por `app/app.vue` como `rel="icon"` em PNG.
+Com ele, o inventário atual contém 13 arquivos; os totais acima se referem à otimização
+das 12 imagens anteriores.
+
 ## Critério de otimização
 
 - Padrão aprovado: WebP de alta qualidade, qualidade 92, esforço 6 e smart subsampling, priorizando qualidade visual na exibição do site.

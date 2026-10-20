@@ -56,15 +56,15 @@ onBeforeUnmount(() => {
         <i class="orbit orbit--outer" aria-hidden="true"></i><i class="orbit orbit--inner" aria-hidden="true"></i>
         <div class="orbit-track orbit-track--outer">
           <div v-for="(module, index) in outerModules" :key="module.label" class="ecosystem-node" :style="{ '--angle': `${index * 72 - 90}deg`, '--angle-negative': `${(index * 72 - 90) * -1}deg` }">
-            <div class="ecosystem-module"><component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span></div>
+            <div class="ecosystem-module"><component :is="module.icon" :size="24" aria-hidden="true" /><span>{{ module.label }}</span></div>
           </div>
         </div>
         <div class="orbit-track orbit-track--inner">
           <div v-for="(module, index) in innerModules" :key="module.label" class="ecosystem-node" :style="{ '--angle': `${index * 120 - 30}deg`, '--angle-negative': `${(index * 120 - 30) * -1}deg` }">
-            <div class="ecosystem-module"><component :is="module.icon" :size="18" aria-hidden="true" /><span>{{ module.label }}</span></div>
+            <div class="ecosystem-module"><component :is="module.icon" :size="24" aria-hidden="true" /><span>{{ module.label }}</span></div>
           </div>
         </div>
-        <div class="ecosystem-core"><img :src="logoWhiteUrl" alt="Elínea" width="994" height="272"><small>Operação central</small></div>
+        <div class="ecosystem-core"><img :src="logoWhiteUrl" alt="Elínea" width="994" height="272"><small>Operação centralizada</small></div>
       </div>
     </div>
   </section>

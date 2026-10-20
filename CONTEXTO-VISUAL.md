@@ -21,6 +21,8 @@ genérico nem copiar outras marcas usadas como referência.
 - Hierarquia tipográfica forte e seções tratadas como capítulos de uma narrativa.
 - Alternância deliberada entre superfícies claras e escuras.
 - Preto profundo, branco/off-white e verde Elínea como base; cinzas são discretos.
+- O favicon global usa `app/assets/images/favicon.png`, fornecido pelo usuário,
+  configurado no `head` em `app/app.vue`.
 - O site usa os logotipos oficiais `logo-elinea-dark.svg` em superfícies claras e
   `logo-elinea-white.svg` em superfícies escuras, preservando suas proporções. A cor
   principal da versão dark acompanha o token `--ink` (`#0d1715`).
@@ -356,7 +358,7 @@ comerciais dos planos. Não inventar preços nem disponibilidade de integraçõe
 
 ## Assets atuais
 
-Os 12 assets utilizados ficam em `app/assets/images`. O inventário completo de
+Os 13 assets utilizados ficam em `app/assets/images`. O inventário completo de
 arquivos, locais de uso, dimensões e otimização está em [docs/imagens.md](docs/imagens.md).
 
 - logos oficiais dark e white em SVG;
