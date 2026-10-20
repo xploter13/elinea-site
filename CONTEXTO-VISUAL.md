@@ -215,6 +215,9 @@ WhatsApp é apresentado como disponível. Gateways variam conforme o plano; ERP,
 logística e emissão fiscal dependem de configuração ou projeto personalizado; Agente
 de IA, Google Analytics e Meta permanecem identificados como recursos em evolução.
 
+Nos blocos “Base técnica para SEO” e “Relatórios para agir”, manter espaçamento
+uniforme entre ícones e títulos, com os textos alinhados pelo topo.
+
 ## Movimento e interação
 
 - GSAP e ScrollTrigger são carregados dinamicamente na Home.

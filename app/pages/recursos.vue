@@ -1066,7 +1066,8 @@ onBeforeUnmount(() => destroyMotion?.())
 .insight-card:not(.insight-card--measurement) .insight-card__body {
   grid-row: 2;
   grid-column: 1;
-  align-self: end;
+  align-self: start;
+  margin-top: 1.25rem;
 }
 
 .insight-card:not(.insight-card--measurement) .insight-card__tags {
