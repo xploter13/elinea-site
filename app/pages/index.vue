@@ -14,7 +14,7 @@ import {ArrowRight} from '@lucide/vue'
 const pageRoot = ref<HTMLElement | null>(null)
 const heroRoot = ref<HTMLElement | null>(null)
 const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
-const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug, periodo: interval } })
+const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/contratar-loja', query: { plano: plan.slug, periodo: interval } })
 
 const TYPED_PHRASES = ['negócios reais.', 'lojas de verdade.', 'vender mais.']
 const typedWord = ref(TYPED_PHRASES[0])
@@ -261,7 +261,7 @@ onBeforeUnmount(() => {
             <p class="hero-support">Uma plataforma completa para criar, gerenciar e fazer o seu negócio crescer, com
               mais vendas e menos complicação.</p>
             <div class="hero-actions">
-              <MarketingButton class="hero-action" variant="primary" href="/criar-loja">Criar minha loja
+              <MarketingButton class="hero-action" variant="primary" href="/contratar-loja">Contratar loja
                 <template #icon>
                   <ArrowRight :size="17"/>
                 </template>
@@ -287,7 +287,7 @@ onBeforeUnmount(() => {
           <h2 class="site-title">Seu negócio<br>pode vender<br>melhor.</h2>
           <p>Comece com uma estrutura simples hoje e evolua sem trocar de plataforma amanhã.</p>
           <div>
-            <MarketingButton variant="primary" href="/criar-loja">Criar minha loja
+            <MarketingButton variant="primary" href="/contratar-loja">Contratar loja
               <template #icon>
                 <ArrowRight :size="18"/>
               </template>

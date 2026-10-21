@@ -80,7 +80,7 @@ async function submitCheckout() {
         store_name: form.store_name.trim(),
         segment: form.segment.trim(),
         success_url: `${origin}/compra-concluida`,
-        cancel_url: `${origin}/criar-loja?plano=${encodeURIComponent(plan.slug)}&periodo=${selectedInterval.value}`,
+        cancel_url: `${origin}/contratar-loja?plano=${encodeURIComponent(plan.slug)}&periodo=${selectedInterval.value}`,
       },
     })
     window.location.assign(checkout.checkout_url)
@@ -93,7 +93,7 @@ async function submitCheckout() {
 }
 
 useSeoMeta({
-  title: 'Criar minha loja — Elínea',
+  title: 'Contratar loja — Elínea',
   description: 'Escolha seu plano e informe os dados da sua loja para iniciar a implantação com a Elínea.',
   robots: 'noindex, nofollow',
 })

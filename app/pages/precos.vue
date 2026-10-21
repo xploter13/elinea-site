@@ -37,7 +37,7 @@ const faqs = [
 const heroStatement = 'Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a operação evoluir.'
 
 const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.modules.every(module => plan.modules.includes(module))
-const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/criar-loja', query: { plano: plan.slug, periodo: interval } })
+const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/contratar-loja', query: { plano: plan.slug, periodo: interval } })
 
 useSeoMeta({
   title: 'Planos e preços Elínea — Escolha a estrutura do seu negócio',

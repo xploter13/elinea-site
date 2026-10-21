@@ -1,6 +1,6 @@
 # Contexto visual e técnico do `elinea-site`
 
-Atualizado em 20 de outubro de 2026. Este documento registra decisões aprovadas
+Atualizado em 21 de outubro de 2026. Este documento registra decisões aprovadas
 para o site institucional da Elínea e serve de referência para futuras alterações.
 Novas instruções explícitas do usuário prevalecem. Registre aqui somente decisões
 confirmadas, não propostas ainda em avaliação.
@@ -95,7 +95,7 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 5. Operação: seção “Tecnologia a favor de quem faz acontecer” com abertura tipográfica
    “Seu negócio em primeiro lugar.” sobre fundo verde claro e um painel verde escuro
    que apresenta loja, rotina conectada e suporte. A composição aprovada não usa
-   fotografia nem indicadores numéricos ilustrativos. O CTA “Criar minha loja” aponta
+   fotografia nem indicadores numéricos ilustrativos. O CTA “Contratar loja” aponta
    para os planos.
 6. Central de controle ampla: painel editorial, imagem conceitual da operação e cards
    narrativos para Pedidos, Catálogo, Clientes e WhatsApp. A imagem comunica controle
@@ -169,14 +169,17 @@ copiar texto, promessas ou identidade de concorrentes:
 Os planos ativos, preços, períodos de cobrança e módulos exibidos na Home e em Preços
 vêm de `GET /api/v1/plans`. `app/data/plans.ts` mantém apenas tipos, formatação e
 tratamento visual. Preços anuais aparecem somente quando cadastrados na API. Os botões
-de escolha levam a `/criar-loja?plano=<slug>&periodo=<intervalo>`. Alterações
+de escolha levam a `/contratar-loja?plano=<slug>&periodo=<intervalo>`. Alterações
 comerciais são feitas na Gestão e validadas na API antes de publicação.
 
-## Página Criar loja
+## Página Contratar loja
 
-A rota `/criar-loja` concentra o início da contratação. Mostra o plano escolhido, a
+A nomenclatura comercial aprovada é “Contratar loja” nos CTAs e no título da página.
+A rota aprovada é `/contratar-loja`, incluindo links de planos e retorno do checkout.
+
+A rota `/contratar-loja` concentra o início da contratação. Mostra o plano escolhido, a
 mensalidade, a implantação e os dados necessários para criar a solicitação. Os CTAs
-“Criar minha loja” apontam para essa página; os links “Conhecer os planos” continuam
+“Contratar loja” apontam para essa página; os links “Conhecer os planos” continuam
 na comparação de preços. A composição usa resumo escuro do plano e formulário claro,
 em colunas no desktop e em fluxo vertical no mobile.
 
