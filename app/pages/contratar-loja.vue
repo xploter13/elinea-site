@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { isValidCpf, normalizeCpf } from '~/utils/cpf'
 import { ArrowLeft, ArrowRight, Check, LockKeyhole } from '@lucide/vue'
 import { formatPlanMoney, type BillingInterval, type Plan } from '~/data/plans'
 
-type Field = 'owner_name' | 'owner_email' | 'phone' | 'store_name' | 'segment'
+type Field = 'owner_cpf' | 'owner_name' | 'owner_email' | 'phone' | 'store_name' | 'segment'
 type CheckoutResponse = { checkout_url: string }
 
 const route = useRoute()
@@ -14,7 +15,7 @@ const selectedPlan = computed<Plan | undefined>(() => plans.value.find(plan => p
 const canCheckout = computed(() => !!selectedPlan.value && (selectedInterval.value === 'yearly' ? selectedPlan.value.can_checkout_yearly : selectedPlan.value.can_checkout_monthly))
 const recurringAmount = computed(() => selectedInterval.value === 'yearly' ? selectedPlan.value?.yearly_amount : selectedPlan.value?.monthly_amount)
 const firstPayment = computed(() => (recurringAmount.value ?? 0) + (selectedPlan.value?.implementation_amount ?? 0))
-const form = reactive({ owner_name: '', owner_email: '', phone: '', store_name: '', segment: '' })
+const form = reactive({ owner_name: '', owner_email: '', owner_cpf: '', phone: '', store_name: '', segment: '' })
 const errors = reactive<Partial<Record<Field, string>>>({})
 const submitting = ref(false)
 const submitError = ref('')
@@ -30,13 +31,14 @@ watch(() => route.query.periodo, value => {
 const money = (value: number, currency = 'brl') => formatPlanMoney(value, currency)
 
 const requiredMessages: Partial<Record<Field, string>> = {
-  owner_name: 'Informe seu nome.', owner_email: 'Informe o e-mail.', store_name: 'Informe o nome da loja.', segment: 'Informe o segmento.',
+  owner_cpf: 'Informe o CPF do responsável.', owner_name: 'Informe seu nome.', owner_email: 'Informe o e-mail.', store_name: 'Informe o nome da loja.', segment: 'Informe o segmento.',
 }
 
 function validateField(field: Field) {
   const value = form[field].trim()
   delete errors[field]
   if (field !== 'phone' && !value) errors[field] = requiredMessages[field]
+  else if (field === 'owner_cpf' && !isValidCpf(value)) errors[field] = 'Informe um CPF válido.'
   else if (field === 'owner_email' && !/^\S+@\S+\.\S+$/.test(value)) errors[field] = 'Informe um e-mail válido.'
   else if (value.length > (field === 'segment' ? 100 : field === 'phone' ? 30 : 255)) errors[field] = 'O texto é longo demais.'
   return !errors[field]
@@ -76,6 +78,7 @@ async function submitCheckout() {
         interval: selectedInterval.value,
         owner_name: form.owner_name.trim(),
         owner_email: form.owner_email.trim(),
+        owner_cpf: normalizeCpf(form.owner_cpf),
         phone: form.phone.trim() || null,
         store_name: form.store_name.trim(),
         segment: form.segment.trim(),
@@ -86,6 +89,13 @@ async function submitCheckout() {
     window.location.assign(checkout.checkout_url)
   } catch (error) {
     const data = typeof error === 'object' && error && 'data' in error ? (error as { data?: { message?: string, errors?: Record<string, string[]> } }).data : undefined
+    if (data?.errors) {
+      for (const [field, messages] of Object.entries(data.errors)) {
+        if (field in form) errors[field as Field] = messages[0] ?? 'Revise este campo.'
+      }
+      await nextTick()
+      errorSummary.value?.focus()
+    }
     submitError.value = data?.errors ? Object.values(data.errors).flat()[0] || 'Não foi possível iniciar o pagamento.' : data?.message || 'Não foi possível iniciar o pagamento. Tente novamente.'
   } finally {
     submitting.value = false
@@ -163,6 +173,7 @@ useSeoMeta({
             <div class="create-store-fields">
               <label for="create-store-owner_name"><span>Seu nome <b>*</b></span><input id="create-store-owner_name" v-model="form.owner_name" autocomplete="name" required :aria-invalid="!!errors.owner_name" :aria-describedby="errors.owner_name ? 'error-owner_name' : undefined" @blur="validateField('owner_name')" @input="delete errors.owner_name"><small v-if="errors.owner_name" id="error-owner_name">{{ errors.owner_name }}</small></label>
               <label for="create-store-owner_email"><span>E-mail <b>*</b></span><input id="create-store-owner_email" v-model="form.owner_email" type="email" autocomplete="email" required :aria-invalid="!!errors.owner_email" :aria-describedby="errors.owner_email ? 'error-owner_email' : undefined" @blur="validateField('owner_email')" @input="delete errors.owner_email"><small v-if="errors.owner_email" id="error-owner_email">{{ errors.owner_email }}</small></label>
+              <label for="create-store-owner_cpf"><span>CPF do responsável <b>*</b></span><input id="create-store-owner_cpf" v-model="form.owner_cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required :aria-invalid="!!errors.owner_cpf" :aria-describedby="errors.owner_cpf ? 'error-owner_cpf' : undefined" @blur="validateField('owner_cpf')" @input="delete errors.owner_cpf"><small v-if="errors.owner_cpf" id="error-owner_cpf">{{ errors.owner_cpf }}</small></label>
               <label for="create-store-phone"><span>Telefone <em>opcional</em></span><input id="create-store-phone" v-model="form.phone" type="tel" autocomplete="tel" :aria-invalid="!!errors.phone" :aria-describedby="errors.phone ? 'error-phone' : undefined" @blur="validateField('phone')" @input="delete errors.phone"><small v-if="errors.phone" id="error-phone">{{ errors.phone }}</small></label>
               <label for="create-store-segment"><span>Segmento <b>*</b></span><input id="create-store-segment" v-model="form.segment" required placeholder="Ex.: moda, farmácia, papelaria" :aria-invalid="!!errors.segment" :aria-describedby="errors.segment ? 'error-segment' : undefined" @blur="validateField('segment')" @input="delete errors.segment"><small v-if="errors.segment" id="error-segment">{{ errors.segment }}</small></label>
               <label class="create-store-field-wide" for="create-store-store_name"><span>Nome da loja <b>*</b></span><input id="create-store-store_name" v-model="form.store_name" autocomplete="organization" required :aria-invalid="!!errors.store_name" :aria-describedby="errors.store_name ? 'error-store_name' : undefined" @blur="validateField('store_name')" @input="delete errors.store_name"><small v-if="errors.store_name" id="error-store_name">{{ errors.store_name }}</small></label>
