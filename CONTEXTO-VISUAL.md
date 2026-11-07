@@ -382,6 +382,16 @@ Antes de gerar ou adicionar uma nova imagem, verifique se um asset existente ate
 necessidade. Sempre inclua `alt` útil quando a imagem comunica conteúdo; imagens
 puramente decorativas devem ter `alt=""`.
 
+## Apresentação comercial
+
+A apresentação comercial em `docs/apresentacao-elinea.html` é um documento estático
+voltado à exportação em PDF, sem navegação ou interações. Cada seção corresponde a
+uma página independente em formato 16:9, com dimensões físicas definidas na impressão
+para impedir cortes ou redimensionamentos inesperados. Sua direção visual traduz as
+referências editoriais de `docs/ref` para a identidade Elínea: tipografia em grande
+escala, composições assimétricas, arcos geométricos, fotografias documentais e uso
+contido de verde, tinta e papel.
+
 ## Checklist para futuras alterações
 
 1. Ler este documento e o contexto do `@elinea/ui` quando houver componente
