@@ -390,7 +390,9 @@ uma página independente em formato 16:9, com dimensões físicas definidas na i
 para impedir cortes ou redimensionamentos inesperados. Sua direção visual traduz as
 referências editoriais de `docs/ref` para a identidade Elínea: tipografia em grande
 escala, composições assimétricas, arcos geométricos, fotografias documentais e uso
-contido de verde, tinta e papel.
+contido de verde, tinta e papel. As fotografias da capa, encerramento, segmentos e
+suporte são exclusivas da apresentação e não devem reutilizar as imagens institucionais
+do site.
 
 ## Checklist para futuras alterações
 
