@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { drawPresentationText, hidePresentationText, measurePresentationText } from '~/utils/presentationPdfText'
+
 definePageMeta({ middleware: 'local-only' })
 
 useHead({
@@ -63,10 +65,11 @@ async function exportPdf() {
     await document.fonts.ready
     await Promise.all([...documentRoot.value.querySelectorAll('img')].map(image => image.decode().catch(() => undefined)))
 
-    const fontRules = (await Promise.all([400, 500, 600, 700].map(async weight => {
+    const fonts = await Promise.all([400, 500, 600, 700].map(async weight => {
       const source = await embeddedAsset(assetUrl(`fonts/inter-${weight}.ttf`))
-      return `@font-face { font-family: InterPresentation; src: url('${source}') format('truetype'); font-weight: ${weight}; }`
-    }))).join('\n')
+      return { weight, source }
+    }))
+    const fontRules = fonts.map(font => `@font-face { font-family: InterPresentation; src: url('${font.source}') format('truetype'); font-weight: ${font.weight}; }`).join('\n')
     const embeddedImages = new Map(await Promise.all(
       [...new Set([...documentRoot.value.querySelectorAll('img')].map(image => image.src))]
         .map(async source => [source, await embeddedAsset(source)] as const),
@@ -87,7 +90,7 @@ async function exportPdf() {
       } catch {
         return ''
       }
-    }).join('\n') + `\n${fontRules}\nhtml, body { margin: 0; background: #dfe5e2; } .page { width: 1600px; height: 900px; margin: 0; box-shadow: none; }`
+    }).join('\n') + `\n${fontRules}\nhtml, body { margin: 0; background: #dfe5e2; } .page { width: 1600px; height: 900px; margin: 0; box-shadow: none; } .page * { font-variant-ligatures: none; }`
     exportDocument.head.append(exportStyles)
     const exportShell = documentRoot.value.parentElement!.cloneNode(false) as HTMLElement
     exportDocument.body.append(exportShell)
@@ -99,7 +102,13 @@ async function exportPdf() {
       format: [1600, 900],
       compress: true,
       hotfixes: ['px_scaling'],
+      putOnlyUsedFonts: true,
     })
+    for (const font of fonts) {
+      const filename = `inter-${font.weight}.ttf`
+      pdf.addFileToVFS(filename, font.source.split(',')[1]!)
+      pdf.addFont(filename, 'InterPresentation', 'normal', font.weight)
+    }
 
     for (const [index, page] of pages.entries()) {
       exportLabel.value = `Gerando ${index + 1}/${pages.length}…`
@@ -112,6 +121,7 @@ async function exportPdf() {
       }
       await Promise.all([...exportPage.querySelectorAll('img')].map(image => image.decode()))
       await exportDocument.fonts.ready
+      const text = measurePresentationText(exportPage)
 
       const canvas = await html2canvas(exportPage, {
         backgroundColor: null,
@@ -139,11 +149,13 @@ async function exportPdf() {
           clonedPage.style.height = '900px'
           clonedPage.style.margin = '0'
           clonedPage.style.boxShadow = 'none'
+          hidePresentationText(clonedPage)
         },
       })
 
       if (index > 0) pdf.addPage([1600, 900], 'landscape')
       pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 1600, 900, undefined, 'FAST')
+      drawPresentationText(pdf, text)
       await new Promise(resolve => window.setTimeout(resolve, 0))
     }
 

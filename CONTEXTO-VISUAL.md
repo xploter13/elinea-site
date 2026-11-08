@@ -407,6 +407,10 @@ preservar a composição anterior: título “Novas oportunidades.”, fotografi
 recorte elíptico, arcos verdes e faixa de apoio em duas colunas, sem cabeçalho ou
 rodapé adicional.
 
+Na exportação, os textos são desenhados em vetor com os quatro pesos da Inter
+incorporados ao PDF. Fotografias e efeitos permanecem na camada visual. Preservar
+essa separação: rasterizar as letras junto das fotos prejudica a nitidez em zoom de 100%.
+
 ## Checklist para futuras alterações
 
 1. Ler este documento e o contexto do `@elinea/ui` quando houver componente
