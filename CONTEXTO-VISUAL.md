@@ -441,7 +441,9 @@ sem “Ver todos”. As listas usam duas colunas no desktop para caber no format
 o PDF preserva a lista completa, sem ocultar itens durante a captura.
 
 No slide de planos, os cards ficam centralizados verticalmente na área disponível
-abaixo do cabeçalho, sem o link de comparação. No encerramento, manter apenas o
+abaixo do cabeçalho, sem o link de comparação. Os botões de contato ficam alinhados
+na base dos cards, depois dos recursos e das observações comerciais.
+No encerramento, manter apenas o
 e-mail com ícone de envelope abaixo do CTA de demonstração; o link com o número
 do WhatsApp foi removido, mas o CTA continua apontando para o WhatsApp comercial.
 Em “O mercado mudou”, o campo gráfico mantém apenas os dois arcos concêntricos

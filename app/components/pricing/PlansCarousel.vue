@@ -76,7 +76,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 .is-featured .plan-action--link { border-color: var(--green); background: var(--green); color: white; }
 .plans-carousel--presentation { min-width: 0; min-height: 0; }
 .plans-carousel--presentation .pricing-rail { grid-auto-columns: minmax(290px, 1fr); gap: 1cqw; max-height: 100%; margin: 0; padding: 12px 0 0; }
-.plans-carousel--presentation .plan-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'name price' 'description description' 'implementation label' 'action action' 'features features' 'note note'; align-content: start; gap: 10px 8px; min-height: 0; padding: 1.25cqw; border-radius: 12px; box-shadow: none; }
+.plans-carousel--presentation .plan-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'name price' 'description description' 'implementation label' 'features features' 'note note' 'action action'; grid-template-rows: auto auto auto auto 1fr auto; gap: 10px 8px; min-height: 0; padding: 1.25cqw; border-radius: 12px; box-shadow: none; }
 .plans-carousel--presentation h3 { grid-area: name; align-self: center; color: inherit; font-family: inherit; font-size: clamp(22px, 1.7cqw, 28px); font-weight: 600; letter-spacing: -.035em; }
 .plans-carousel--presentation .is-featured h3 { color: white; }
 .plans-carousel--presentation .is-featured .feature-toggle { color: var(--green-bright); }
@@ -94,7 +94,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 .plans-carousel--presentation li { font-size: 14px; line-height: 1.3; }
 .plans-carousel--presentation li svg { display: none; }
 .plans-carousel--presentation .feature-toggle { min-height: 30px; margin-top: 8px; font-size: 14px; }
-.plans-carousel--presentation .plan-commercial-note { grid-area: note; margin: 0; padding-top: 8px; font-size: 14px; line-height: 1.35; }
+.plans-carousel--presentation .plan-commercial-note { grid-area: note; align-self: start; margin: 0; padding-top: 8px; font-size: 14px; line-height: 1.35; }
 .plans-carousel--presentation .pricing-controls { margin-top: 12px; }
 @media (min-width: 1101px) and (max-width: 1400px) {
   .plans-carousel--presentation .plan-card { row-gap: 8px; }
@@ -103,7 +103,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 @media (max-width: 1100px) {
   .plans-carousel--presentation .pricing-rail { gap: 16px; }
   .plans-carousel--presentation .plan-card { padding: 22px; }
-  .plans-carousel--presentation .plan-card { grid-template-columns: 1fr; grid-template-areas: 'name' 'price' 'description' 'implementation' 'label' 'action' 'features' 'note'; }
+  .plans-carousel--presentation .plan-card { grid-template-columns: 1fr; grid-template-areas: 'name' 'price' 'description' 'implementation' 'label' 'features' 'note' 'action'; grid-template-rows: auto auto auto auto auto auto 1fr auto; }
   .plans-carousel--presentation ul { grid-template-columns: 1fr; }
 }
 @media print {
