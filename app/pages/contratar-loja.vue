@@ -140,7 +140,7 @@ useSeoMeta({
               <div><dt>{{ selectedInterval === 'yearly' ? 'Anualidade' : 'Mensalidade' }}</dt><dd>{{ recurringAmount == null ? 'Sob consulta' : `${money(recurringAmount, selectedPlan.currency)} / ${selectedInterval === 'yearly' ? 'ano' : 'mês'}` }}</dd></div>
               <div><dt>Implantação</dt><dd>{{ selectedPlan.implementation_amount === null ? 'Sob consulta' : selectedPlan.implementation_amount === 0 ? 'Grátis' : money(selectedPlan.implementation_amount, selectedPlan.currency) }}</dd></div>
             </dl>
-            <p class="create-store-summary__includes">Módulos e recursos cadastrados</p>
+            <p class="create-store-summary__includes">{{ selectedPlan.feature_label ?? 'Inclui' }}</p>
             <ul>
               <li v-for="feature in selectedPlan.features.slice(0, 4)" :key="feature"><Check :size="16" aria-hidden="true" />{{ feature }}</li>
             </ul>

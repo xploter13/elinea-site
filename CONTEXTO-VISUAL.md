@@ -166,11 +166,24 @@ copiar texto, promessas ou identidade de concorrentes:
 5. Perguntas frequentes baseadas somente nas condições comerciais já cadastradas.
 6. CTA final para conhecer os planos e footer institucional.
 
-Os planos ativos, preços, períodos de cobrança e módulos exibidos na Home e em Preços
-vêm de `GET /api/v1/plans`. `app/data/plans.ts` mantém apenas tipos, formatação e
-tratamento visual. Preços anuais aparecem somente quando cadastrados na API. Os botões
-de escolha levam a `/contratar-loja?plano=<slug>&periodo=<intervalo>`. Alterações
-comerciais são feitas na Gestão e validadas na API antes de publicação.
+Os planos, preços, períodos de cobrança, descrições e recursos exibidos na Home,
+em Preços e na contratação vêm exclusivamente de `GET /api/v1/plans`.
+`app/data/plans.ts` mantém tipos, formatação e apresentação; não duplica preços nem
+substitui condições cadastradas na API. Recursos herdados por “Tudo do plano” são
+resolvidos a partir das listas retornadas pela API para montar a comparação.
+
+As condições comerciais fornecidas em 8 de novembro de 2026 são: Catálogo
+(R$ 99,90/mês, implantação grátis), E-commerce (R$ 249,90/mês, implantação grátis)
+e Personalizado (mensalidade e implantação sob consulta). O cadastro e a atualização
+dessas ofertas pertencem à API/Gestão. O Personalizado usa “Pode incluir” e
+“Conforme escopo”, sem prometer todas as personalizações como inclusões automáticas.
+Parágrafos adicionais da descrição retornada pela API aparecem como observações.
+
+Os botões preservam o fluxo `/contratar-loja?plano=<slug>&periodo=<intervalo>`.
+A disponibilidade de checkout é informada pela API; planos sem preços de cobrança
+configurados seguem o contato com a equipe já existente nessa página. Preços anuais
+só aparecem quando cadastrados. A contratação continua validando os valores na API
+antes de iniciar o pagamento.
 
 ## Página Contratar loja
 

@@ -1,4 +1,4 @@
-import { presentPlan, type ApiPlan, type Plan } from '~/data/plans'
+import { presentPlans, type ApiPlan, type Plan } from '~/data/plans'
 
 type PlansResponse = { data: ApiPlan[], meta: { current_page: number, last_page: number } }
 
@@ -14,6 +14,6 @@ export const usePublicPlans = () => {
       throw new Error('Há mais planos do que a consulta pública retornou.')
     }
 
-    return response.data.filter(plan => plan.is_active).map(presentPlan)
+    return presentPlans(response.data)
   }, { server: false, default: () => [] })
 }

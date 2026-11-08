@@ -9,39 +9,51 @@ const {data: plans, pending: plansPending, error: plansError, refresh: refreshPl
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
-  {label: 'Produtos e estoque', modules: ['products', 'inventory']},
-  {label: 'Vendas e pedidos', modules: ['orders']},
-  {label: 'Clientes', modules: ['customers']},
-  {label: 'Campanhas', modules: ['marketing']},
-  {label: 'Automações', modules: ['automations']},
-  {label: 'Atendimento por WhatsApp', modules: ['messaging']},
-  {label: 'Relatórios', modules: ['reports']},
-  {label: 'Integrações', modules: ['integrations']},
+  {label: 'Catálogo, categorias, marcas e variações', feature: 'catalog'},
+  {label: 'Controle de estoque', feature: 'inventory'},
+  {label: 'Painel administrativo', feature: 'administration'},
+  {label: 'Botão de contato pelo WhatsApp', feature: 'whatsapp'},
+  {label: 'Carrinho e checkout', feature: 'checkout'},
+  {label: 'Gestão de pedidos', feature: 'orders'},
+  {label: 'Pagamento online, gateways, Pix e cartão', feature: 'payments'},
+  {label: 'Cálculo de frete', feature: 'shipping'},
+  {label: 'Cupons e promoções', feature: 'coupons'},
+  {label: 'Avaliações de produtos', feature: 'reviews'},
+  {label: 'Lista de desejos', feature: 'wishlist'},
+  {label: 'Newsletter e campanhas por e-mail', feature: 'email'},
+  {label: 'Integrações com serviços externos', feature: 'integrations'},
+  {label: 'Relatórios', feature: 'reports'},
+  {label: 'Suporte', feature: 'support'},
+  {label: 'Layout, integrações e regras sob medida', feature: 'customization'},
 ]
 
 const faqs = [
   {
     question: 'Qual é a diferença entre mensalidade e implantação?',
-    answer: 'A mensalidade corresponde ao uso recorrente da plataforma. A implantação cobre a preparação inicial indicada para cada plano e aparece separadamente nos cards.',
+    answer: 'A mensalidade corresponde ao uso recorrente da plataforma: R$ 99,90 no Catálogo e R$ 249,90 no E-commerce. A implantação é grátis nos dois planos. No Personalizado, mensalidade e implantação são definidas conforme o escopo.',
   },
   {
     question: 'Posso começar com um plano e evoluir depois?',
     answer: 'Os planos representam diferentes momentos da operação. Para definir a evolução mais adequada entre eles, a equipe Elínea pode avaliar sua estrutura e as necessidades do negócio.',
   },
   {
-    question: 'O uso do WhatsApp pode gerar custos adicionais?',
-    answer: 'Sim. O consumo de mensagens pode possuir franquia ou cobrança adicional, conforme o modelo adotado com o provedor oficial de WhatsApp.',
+    question: 'O plano Catálogo permite comprar e pagar dentro do site?',
+    answer: 'Não. O Catálogo apresenta os produtos online e inclui um botão de contato pelo WhatsApp. Para concluir a compra dentro do site, com carrinho, checkout e pagamento online, escolha o plano E-commerce.',
+  },
+  {
+    question: 'Como funciona o plano Personalizado?',
+    answer: 'Cada projeto é analisado individualmente. Ele pode incluir os recursos do E-commerce, layout exclusivo, integrações, regras próprias, funcionalidades e automações sob demanda. O orçamento pode envolver implantação, desenvolvimento e mensalidade, conforme o escopo aprovado.',
   },
 ]
 
 const heroStatement = 'Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a operação evoluir.'
 
-const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => row.modules.every(module => plan.modules.includes(module))
+const hasFeature = (row: typeof comparisonRows[number], plan: Plan) => plan.comparison_features?.includes(row.feature) ?? false
 const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ path: '/contratar-loja', query: { plano: plan.slug, periodo: interval } })
 
 useSeoMeta({
   title: 'Planos e preços Elínea — Escolha a estrutura do seu negócio',
-  description: 'Compare os planos Elínea para catálogo, WhatsApp, ecommerce e uma operação completa. Consulte mensalidades, implantação e recursos incluídos.',
+  description: 'Catálogo por R$ 99,90/mês e E-commerce por R$ 249,90/mês, com implantação grátis. Conheça também o plano Personalizado, sob consulta.',
   ogTitle: 'Planos e preços Elínea',
   ogDescription: 'Planos claros para começar com o que o seu negócio precisa e evoluir com estrutura.',
 })
@@ -123,6 +135,7 @@ onBeforeUnmount(() => destroyMotion?.())
             <div class="pricing-comparison__legend" aria-label="Legenda da comparação">
               <span><span class="pricing-table__status pricing-table__status--included"><Check :size="15" aria-hidden="true"/></span>Incluído</span>
               <span><span class="pricing-table__status pricing-table__status--absent"><Minus :size="15" aria-hidden="true"/></span>Não incluído</span>
+              <span>Personalizado: conforme o escopo</span>
             </div>
           </div>
 
@@ -133,7 +146,7 @@ onBeforeUnmount(() => destroyMotion?.())
               <thead>
               <tr>
                 <th scope="col">Recurso</th>
-                <th v-for="plan in plans" :key="plan.id" scope="col" :class="{ featured: plan.featured }">
+                <th v-for="plan in plans" :key="plan.slug" scope="col" :class="{ featured: plan.featured }">
                   <span class="pricing-table__plan-name">{{ plan.name }}</span>
                   <span v-if="plan.featured" class="pricing-table__featured-label">Em destaque</span>
                 </th>
@@ -142,8 +155,9 @@ onBeforeUnmount(() => destroyMotion?.())
               <tbody>
               <tr v-for="row in comparisonRows" :key="row.label">
                 <th scope="row">{{ row.label }}</th>
-                <td v-for="plan in plans" :key="plan.id" :class="{ featured: plan.featured }">
-                  <span class="pricing-table__status" :class="hasFeature(row, plan) ? 'pricing-table__status--included' : 'pricing-table__status--absent'">
+                <td v-for="plan in plans" :key="plan.slug" :class="{ featured: plan.featured }">
+                  <span v-if="plan.feature_label === 'Pode incluir'" class="pricing-table__scope">Conforme escopo</span>
+                  <span v-else class="pricing-table__status" :class="hasFeature(row, plan) ? 'pricing-table__status--included' : 'pricing-table__status--absent'">
                     <span class="sr-only">{{ hasFeature(row, plan) ? 'Incluído' : 'Não incluído' }}</span>
                     <Check v-if="hasFeature(row, plan)" :size="17" aria-hidden="true"/>
                     <Minus v-else :size="17" aria-hidden="true"/>
@@ -167,15 +181,15 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="pricing-value__breakdown" data-pricing-reveal>
             <article>
               <h3>Mensalidade</h3>
-              <p>O valor recorrente da plataforma aparece conforme os períodos cadastrados para cada plano.</p>
+              <p>R$ 99,90/mês no Catálogo e R$ 249,90/mês no E-commerce. No Personalizado, o valor é definido após a análise do projeto.</p>
             </article>
             <article>
               <h3>Implantação</h3>
-              <p>A preparação inicial aparece separada da mensalidade quando há uma taxa de implantação cadastrada.</p>
+              <p>Grátis nos planos Catálogo e E-commerce. No Personalizado, a implantação é orçada conforme as necessidades do negócio.</p>
             </article>
             <article>
               <h3>Evolução</h3>
-              <p>Quando a operação exige regras próprias, o plano Personalizado é analisado de acordo com o escopo.</p>
+              <p>O plano Personalizado pode envolver implantação, desenvolvimento e mensalidade. Cada projeto é analisado individualmente.</p>
             </article>
           </div>
         </div>
@@ -387,6 +401,7 @@ onBeforeUnmount(() => destroyMotion?.())
 
 .pricing-comparison__legend {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1.5rem;
   color: var(--muted);
@@ -488,6 +503,12 @@ onBeforeUnmount(() => destroyMotion?.())
 .pricing-table__status--absent {
   background: #f0f3f1;
   color: #687771;
+}
+
+.pricing-table__scope {
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.4;
 }
 
 .pricing-table .featured {
