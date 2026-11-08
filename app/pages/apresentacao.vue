@@ -36,7 +36,7 @@ const exportLabel = ref('Exportar PDF')
 const assetUrl = (path: string) => `/apresentacao-assets/${path}`
 const { data: plans, pending: plansPending, error: plansError, refresh: refreshPlans } = usePublicPlans()
 const presentationContact = {
-  email: 'contato@elinea.com.br',
+  email: 'comercial@elinea.com.br',
   whatsapp: '5524998164753',
   message: 'Olá! Gostaria de agendar uma demonstração do Elínea.',
 }
