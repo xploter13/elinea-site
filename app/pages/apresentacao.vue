@@ -175,13 +175,11 @@ async function exportPdf() {
         <div class="cover__photo"><img :src="assetUrl('capa-exclusiva.png')" alt="Comerciante abrindo sua loja no início do dia"></div>
         <div class="cover__veil"></div>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Seu negócio. Novas possibilidades.</span><span class="page-meta__folio">01 / 10</span></header>
           <div class="cover__content">
             <div class="cover__brand"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
             <h1 id="page-01-title" class="cover__title">Novas oportunidades.</h1>
             <div class="cover__statement"><strong>Seu negócio conectado ao próximo cliente.</strong><p>Soluções inteligentes para vender online com simplicidade e estrutura.</p></div>
           </div>
-          <div class="cover__foot"><span>Apresentação comercial</span><span>Tecnologia para negócios reais.</span></div>
         </div>
       </section>
     
@@ -439,17 +437,20 @@ async function exportPdf() {
 .connection-field i:nth-child(3) { display: none; }
 .connection-field i:nth-child(4) { top: calc(50% - 5px); right: 17%; width: 10px; height: 10px; background: currentColor; }
 
-.cover__photo { position: absolute; inset: 13% 0 0 56%; border-top-left-radius: 16cqw; overflow: hidden; background: var(--green); }
-.cover__photo img, .closing__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 56% center; filter: grayscale(1) contrast(1.06); }
-.cover__photo::after { position: absolute; inset: 0; background: rgba(7,148,94,.6); mix-blend-mode: multiply; content: ""; }
-.cover__veil { position: absolute; z-index: 1; left: 55.8%; top: 13%; height: 87%; width: 7%; background: linear-gradient(90deg, var(--ink), transparent); pointer-events: none; }
-.cover__content { position: relative; width: 65%; margin: auto 0; padding-top: 1cqw; }
-.cover__brand { width: 12cqw; }
-.cover__title { margin-top: 3.2cqw; font-size: clamp(64px, 7.4cqw, 119px); font-weight: 600; line-height: .96; letter-spacing: -.075em; max-width: 12ch; }
-.cover__statement { width: 70%; margin-top: 3cqw; padding-left: 1.5cqw; border-left: 2px solid var(--green-bright); }
-.cover__statement strong { display: block; max-width: 27ch; font-size: clamp(19px, 1.6cqw, 26px); line-height: 1.3; font-weight: 500; letter-spacing: -.025em; }
-.cover__statement p { max-width: 37ch; margin-top: 14px; font-size: clamp(15px, 1.1cqw, 18px); color: rgba(250,252,251,.68); }
-.cover__foot { display: flex; justify-content: space-between; width: 49%; font-size: clamp(12px, .9cqw, 14px); color: rgba(250,252,251,.6); }
+.cover::before { position: absolute; z-index: 2; width: 68%; aspect-ratio: 1; right: -26%; top: -57%; border: 3px solid var(--green-bright); border-radius: 50%; content: ""; }
+.cover::after { position: absolute; z-index: 4; width: 40%; aspect-ratio: 1; right: -6%; bottom: -47%; border: 2px solid rgba(92,221,164,.7); border-radius: 50%; content: ""; }
+.cover .page__frame { z-index: 3; padding: clamp(30px, 3.8vw, 62px) clamp(38px, 4.5vw, 76px) clamp(34px, 4vw, 68px); }
+.cover__photo { position: absolute; z-index: 0; inset: 0 0 0 55%; overflow: hidden; clip-path: ellipse(78% 78% at 78% 50%); }
+.closing__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 56% center; filter: grayscale(1) contrast(1.06); }
+.cover__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; filter: grayscale(1) contrast(1.08); }
+.cover__photo::after { position: absolute; inset: 0; background: rgba(0,150,91,.78); mix-blend-mode: multiply; content: ""; }
+.cover__veil { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, var(--ink) 0 49%, rgba(13,23,21,.97) 56%, transparent 78%); }
+.cover__content { width: 61%; margin: auto 0; }
+.cover__brand { width: clamp(124px, 13vw, 205px); }
+.cover__title { max-width: 8ch; margin-top: clamp(38px, 6vh, 76px); font-size: clamp(58px, 8.6vw, 138px); font-weight: 700; line-height: .82; letter-spacing: -.085em; }
+.cover__statement { display: grid; grid-template-columns: 1.18fr .82fr; gap: clamp(20px, 3vw, 46px); align-items: end; margin-top: clamp(36px, 7vh, 78px); padding-top: 18px; border-top: 1px solid var(--white-line); }
+.cover__statement strong { max-width: 22ch; font-size: clamp(18px, 1.65vw, 27px); line-height: 1.18; letter-spacing: -.035em; }
+.cover__statement p { max-width: 30ch; color: rgba(255,255,255,.66); font-size: clamp(12px, .95vw, 16px); }
 
 .market .connection-field { left: -34%; top: 30%; }
 .market__layout { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.05fr 1fr; gap: 5cqw; padding-top: 3.5cqw; }
@@ -595,10 +596,6 @@ async function exportPdf() {
   .page__frame { height: auto; min-height: inherit; padding: 36px; }
   .page-meta { font-size: 14px; }
   .page-title { font-size: clamp(40px, 5.3cqw, 60px); }
-  .cover__content { padding: 48px 0; }
-  .cover__title { font-size: 8cqw; }
-  .cover__statement { width: 82%; }
-  .cover__foot { width: 52%; gap: 20px; }
   .market__layout, .solution__layout, .support__layout { padding-top: 40px; gap: 36px; }
   .market__visual, .support__visual { min-height: 520px; }
   .problem .page__frame { gap: 40px; }
@@ -651,16 +648,11 @@ async function exportPdf() {
   .connection-field { display: none; }
   .cover, .closing { display: flex; flex-direction: column; }
   .cover .page__frame, .closing .page__frame { order: -1; }
-  .cover__photo { position: relative; inset: auto; height: 350px; margin-left: 24px; border-radius: 110px 0 0 0; }
+  .cover__photo { position: relative; inset: auto; height: 380px; clip-path: none; }
   .cover__veil { display: none; }
-  .cover .page__frame { min-height: 0; }
-  .cover__content { width: 100%; padding: 36px 0; }
-  .cover__brand { width: 140px; }
-  .cover__title { margin-top: 34px; font-size: 14cqw; line-height: 1; }
-  .cover__statement { width: 100%; margin-top: 28px; padding-left: 18px; }
-  .cover__statement strong { font-size: 22px; }
-  .cover__statement p { font-size: 16px; }
-  .cover__foot { width: 100%; font-size: 12px; }
+  .cover .page__frame { min-height: 0; padding: 28px 24px 36px; }
+  .cover__content { width: 100%; margin: 0; }
+  .cover__statement { grid-template-columns: 1fr; }
   .market__layout, .solution__layout, .support__layout { grid-template-columns: 1fr; gap: 32px; padding-top: 36px; }
   .market__copy .page-title, .solution__copy .page-title, .support__copy .page-title { font-size: 11cqw; max-width: 14ch; }
   .market__copy .market__intro { margin-top: 24px; }

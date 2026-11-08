@@ -402,6 +402,11 @@ usa um campo gráfico de alcance: círculos concêntricos finos, eixos discretos
 ponto verde, sugerindo conexão, presença digital e encontro com novos clientes sem
 competir com a hierarquia tipográfica.
 
+O redesign das páginas 02 a 10 foi aprovado em 8 de novembro de 2026. A capa deve
+preservar a composição anterior: título “Novas oportunidades.”, fotografia com
+recorte elíptico, arcos verdes e faixa de apoio em duas colunas, sem cabeçalho ou
+rodapé adicional.
+
 ## Checklist para futuras alterações
 
 1. Ler este documento e o contexto do `@elinea/ui` quando houver componente
