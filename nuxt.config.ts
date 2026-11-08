@@ -22,6 +22,10 @@ export default defineNuxtConfig({
     server: { fs: { allow: [resolve('..')] } },
   },
   runtimeConfig: { public: { apiBase, facebookUrl, instagramUrl } },
+  routeRules: {
+    '/apresentacao': { prerender: false },
+    '/apresentacao-assets/**': { prerender: false },
+  },
   app: { head: { htmlAttrs: { lang: 'pt-BR' }, title: 'Elínea — Sua loja online, simples de verdade', meta: [
     { name: 'description', content: 'Crie e gerencie sua loja online com catálogo, pedidos, pagamentos e suporte em uma única plataforma.' },
     { name: 'theme-color', content: '#079455' },
@@ -32,7 +36,7 @@ export default defineNuxtConfig({
   ] } },
   nitro: {
     preset: 'static',
-    serverAssets: [{ baseName: 'presentation', dir: resolve('docs') }],
+    serverAssets: [{ baseName: 'presentation', dir: resolve('docs/assets/apresentacao') }],
   },
   typescript: {
     strict: true,

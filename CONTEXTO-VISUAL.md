@@ -384,9 +384,12 @@ puramente decorativas devem ter `alt=""`.
 
 ## Apresentação comercial
 
-A apresentação comercial em `docs/apresentacao-elinea.html` é um documento estático
-voltado à exportação em PDF, sem navegação entre páginas. A única interação é o botão
-utilitário que gera no navegador um novo PDF de 10 páginas em 16:9. A apresentação é servida pelo projeto na rota local `/apresentacao`; o HTML e seus assets ficam em armazenamento interno do Nitro e os handlers recusam hosts não locais. O controle é ocultado automaticamente durante a captura. Cada seção corresponde a
+A apresentação comercial em `app/pages/apresentacao.vue` é uma página Nuxt
+voltada à exportação em PDF, sem navegação entre páginas. A única interação é o botão
+utilitário que gera no navegador um novo PDF de 10 páginas em 16:9. A apresentação é
+servida exclusivamente na rota local `/apresentacao`; o middleware da página e o
+handler dos assets recusam hosts não locais. O controle é ocultado automaticamente
+durante a captura. Cada seção corresponde a
 uma página independente em formato 16:9, com dimensões físicas definidas na impressão
 para impedir cortes ou redimensionamentos inesperados. A fonte Inter é servida localmente
 na apresentação para manter métricas consistentes durante a geração do PDF. Sua direção visual traduz as
@@ -394,9 +397,10 @@ referências editoriais de `docs/ref` para a identidade Elínea: tipografia em g
 escala, composições assimétricas, arcos geométricos, fotografias documentais e uso
 contido de verde, tinta e papel. As fotografias da capa, encerramento, segmentos e
 suporte são exclusivas da apresentação e não devem reutilizar as imagens institucionais
-do site. Os `mark-word` com a letra “E” usam uma construção geométrica de haste e três
-braços arredondados, inspirada na letra estrutural das referências corporativas, sempre
-adaptada à paleta e às composições da Elínea.
+do site. O antigo monograma estrutural “E” foi descartado. Em seu lugar, a apresentação
+usa um campo gráfico de alcance: círculos concêntricos finos, eixos discretos e um único
+ponto verde, sugerindo conexão, presença digital e encontro com novos clientes sem
+competir com a hierarquia tipográfica.
 
 ## Checklist para futuras alterações
 

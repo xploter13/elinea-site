@@ -1,27 +1,296 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0d1715">
-  <meta name="description" content="Apresentação comercial da plataforma Elínea, diagramada para exportação em PDF.">
-  <title>Elínea — Apresentação comercial</title>
-  <script>
-    if (window.location.protocol === 'file:') {
-      window.location.replace('http://localhost:3000/apresentacao');
-    }
-  </script>
-  <link rel="preload" href="./assets/apresentacao/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="./assets/apresentacao/fonts/inter-500.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="./assets/apresentacao/fonts/inter-600.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="./assets/apresentacao/fonts/inter-700.ttf" as="font" type="font/ttf" crossorigin>
-  <style>
-    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: block; }
-    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-500.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: block; }
-    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-600.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: block; }
-    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: block; }
+<script setup lang="ts">
+definePageMeta({ middleware: 'local-only' })
 
-    :root {
+useHead({
+  title: 'Elínea — Apresentação comercial',
+  meta: [
+    { name: 'description', content: 'Apresentação comercial da plataforma Elínea, diagramada para exportação em PDF.' },
+    { name: 'theme-color', content: '#0d1715' },
+  ],
+  link: [
+    { rel: 'preload', href: '/apresentacao-assets/fonts/inter-400.ttf', as: 'font', type: 'font/ttf', crossorigin: 'anonymous' },
+    { rel: 'preload', href: '/apresentacao-assets/fonts/inter-500.ttf', as: 'font', type: 'font/ttf', crossorigin: 'anonymous' },
+    { rel: 'preload', href: '/apresentacao-assets/fonts/inter-600.ttf', as: 'font', type: 'font/ttf', crossorigin: 'anonymous' },
+    { rel: 'preload', href: '/apresentacao-assets/fonts/inter-700.ttf', as: 'font', type: 'font/ttf', crossorigin: 'anonymous' },
+  ],
+  style: [{
+    key: 'presentation-fonts',
+    textContent: `
+      @font-face { font-family: InterPresentation; src: url('/apresentacao-assets/fonts/inter-400.ttf') format('truetype'); font-weight: 400; font-display: block; }
+      @font-face { font-family: InterPresentation; src: url('/apresentacao-assets/fonts/inter-500.ttf') format('truetype'); font-weight: 500; font-display: block; }
+      @font-face { font-family: InterPresentation; src: url('/apresentacao-assets/fonts/inter-600.ttf') format('truetype'); font-weight: 600; font-display: block; }
+      @font-face { font-family: InterPresentation; src: url('/apresentacao-assets/fonts/inter-700.ttf') format('truetype'); font-weight: 700; font-display: block; }
+    `,
+  }],
+})
+
+const documentRoot = ref<HTMLElement | null>(null)
+const exporting = ref(false)
+const exportLabel = ref('Exportar PDF')
+const assetUrl = (path: string) => `/apresentacao-assets/${path}`
+
+async function exportPdf() {
+  if (exporting.value || !documentRoot.value) return
+
+  exporting.value = true
+  exportLabel.value = 'Preparando…'
+
+  try {
+    const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+      import('html2canvas'),
+      import('jspdf'),
+    ])
+
+    await document.fonts.ready
+    await Promise.all([...documentRoot.value.querySelectorAll('img')].map(image => image.decode().catch(() => undefined)))
+
+    const pages = [...documentRoot.value.querySelectorAll<HTMLElement>('.page')]
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [1600, 900],
+      compress: true,
+      hotfixes: ['px_scaling'],
+    })
+
+    for (const [index, page] of pages.entries()) {
+      exportLabel.value = `Gerando ${index + 1}/${pages.length}…`
+
+      const canvas = await html2canvas(page, {
+        backgroundColor: null,
+        logging: false,
+        scale: 1.25,
+        useCORS: true,
+        width: 1600,
+        height: 900,
+        windowWidth: 1664,
+        windowHeight: 964,
+        onclone: (clonedDocument: Document) => {
+          clonedDocument.documentElement.style.background = '#dfe5e2'
+          clonedDocument.body.style.background = '#dfe5e2'
+          clonedDocument.body.style.color = '#0d1715'
+
+          const clonedPage = clonedDocument.getElementById(page.id)
+          if (!clonedPage) return
+          clonedPage.style.width = '1600px'
+          clonedPage.style.height = '900px'
+          clonedPage.style.margin = '0'
+          clonedPage.style.boxShadow = 'none'
+        },
+      })
+
+      if (index > 0) pdf.addPage([1600, 900], 'landscape')
+      pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 1600, 900, undefined, 'FAST')
+      await new Promise(resolve => window.setTimeout(resolve, 0))
+    }
+
+    pdf.save('apresentacao-comercial-elinea.pdf')
+  } catch (error) {
+    console.error(error)
+    const message = error instanceof Error ? error.message : 'Recarregue a apresentação e tente novamente.'
+    window.alert(`Não foi possível gerar o PDF. ${message}`)
+  } finally {
+    exporting.value = false
+    exportLabel.value = 'Exportar PDF'
+  }
+}
+</script>
+
+<template>
+  <div class="presentation-shell">
+    <button class="pdf-export" type="button" :aria-busy="exporting" aria-label="Gerar apresentação em PDF" @click="exportPdf">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+      <span>{{ exportLabel }}</span>
+    </button>
+    <main ref="documentRoot" class="presentation-document" aria-label="Apresentação comercial Elínea">
+      <section id="page-01" class="page page--ink cover" aria-labelledby="page-01-title">
+        <div class="cover__photo"><img :src="assetUrl('capa-exclusiva.png')" alt="Comerciante abrindo sua loja no início do dia"></div>
+        <div class="cover__veil"></div>
+        <div class="page__frame">
+          <div class="cover__content">
+            <div class="cover__brand"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
+            <h1 id="page-01-title" class="cover__title">Novas oportunidades.</h1>
+            <div class="cover__statement"><strong>Seu negócio conectado ao próximo cliente.</strong><p>Soluções inteligentes para vender online com simplicidade e estrutura.</p></div>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-02" class="page market" aria-labelledby="page-02-title">
+        <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 10</span></header>
+          <div class="market__layout">
+            <div class="market__copy">
+              <h2 id="page-02-title" class="page-title page-title--wide">Seus clientes já estão no digital.</h2>
+              <p class="page-copy market__intro">A jornada de compra começa muito antes da visita à loja.</p>
+              <ul class="market__points">
+                <li><b>01</b>Pesquisam produtos e preços pela internet.</li>
+                <li><b>02</b>Escolhem também pela facilidade de comprar.</li>
+                <li><b>03</b>Esperam encontrar negócios locais online.</li>
+                <li><b>04</b>Podem desistir quando a compra depende só do presencial.</li>
+              </ul>
+            </div>
+            <figure class="market__visual">
+              <div class="market__image"><img :src="assetUrl('cliente-digital-documental.png')" alt="Cliente pesquisando produtos pelo celular em casa"></div>
+              <figcaption class="market__caption">Quando alguém procurar o que sua empresa vende, encontrará o seu negócio?</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-03" class="page page--ink problem" aria-labelledby="page-03-title">
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 10</span></header>
+          <div class="problem__head">
+            <h2 id="page-03-title" class="page-title page-title--wide">Vender online não deveria ser complicado.</h2>
+            <p class="page-copy">A vontade de crescer existe. O que falta é uma tecnologia compatível com a rotina de quem toca o negócio todos os dias.</p>
+          </div>
+          <div class="problem__grid">
+            <article class="problem__item"><small>01</small><h3>Tempo curto.</h3><p>A operação já exige atenção constante.</p></article>
+            <article class="problem__item"><small>02</small><h3>Custo alto.</h3><p>Projetos sob medida nem sempre cabem no início.</p></article>
+            <article class="problem__item"><small>03</small><h3>Ferramentas complexas.</h3><p>Tecnologia não pode virar mais uma barreira.</p></article>
+            <article class="problem__item"><small>04</small><h3>Canais dispersos.</h3><p>Pedidos e informações se perdem no caminho.</p></article>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-04" class="page solution" aria-labelledby="page-04-title">
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 10</span></header>
+          <div class="solution__layout">
+            <div class="solution__copy">
+              <h2 id="page-04-title" class="page-title">Conheça o Elínea.</h2>
+              <p>Sua loja virtual, de forma simples e profissional. Produtos, pedidos e operação digital reunidos em um único ambiente.</p>
+              <ul class="solution__features">
+                <li>Identidade própria</li><li>Painel administrativo</li><li>Produtos e pedidos</li>
+                <li>Compra responsiva</li><li>Pagamentos por plano</li><li>Pedidos via WhatsApp</li>
+              </ul>
+            </div>
+            <div class="solution__map" aria-label="Representação conceitual dos recursos da plataforma">
+              <div class="solution__map-logo"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
+              <span class="solution__map-note">Visão funcional<br>Representação conceitual</span>
+              <div class="solution__map-main"><small>Experiência de compra</small><strong>Uma loja com a identidade da sua marca.</strong></div>
+              <div class="solution__nodes">
+                <div class="solution__node"><small>Operação</small><strong>Produtos e pedidos organizados.</strong></div>
+                <div class="solution__node"><small>Relacionamento</small><strong>WhatsApp próximo da venda.</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-05" class="page page--green flow" aria-labelledby="page-05-title">
+        <span class="mark-word" aria-hidden="true">04</span>
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 10</span></header>
+          <div class="flow__head">
+            <h2 id="page-05-title" class="page-title page-title--wide">Do cadastro do produto à realização da venda.</h2>
+            <p class="page-copy">A tecnologia trabalha a favor do negócio enquanto você acompanha o que realmente importa.</p>
+          </div>
+          <div class="flow__track">
+            <article class="flow__step"><small>01</small><h3>Cadastre.</h3><p>Organize produtos, preço e disponibilidade.</p></article>
+            <article class="flow__step"><small>02</small><h3>Publique.</h3><p>Sua loja fica disponível em qualquer tela.</p></article>
+            <article class="flow__step"><small>03</small><h3>Venda.</h3><p>O cliente encontra e realiza o pedido.</p></article>
+            <article class="flow__step"><small>04</small><h3>Acompanhe.</h3><p>Você administra a operação em um só lugar.</p></article>
+          </div>
+          <div class="flow__demo"><span>Ponto de transição da apresentação</span><strong>Demonstração real da plataforma</strong></div>
+        </div>
+      </section>
+    
+      <section id="page-06" class="page benefits" aria-labelledby="page-06-title">
+        <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 10</span></header>
+          <div class="benefits__head">
+            <h2 id="page-06-title" class="page-title">Mais do que uma loja virtual.</h2>
+            <p class="page-copy">Uma base que faz sentido agora e continua fazendo quando a operação crescer.</p>
+          </div>
+          <div class="benefits__body">
+            <div class="benefits__number" aria-hidden="true">05</div>
+            <ul class="benefits__list">
+              <li><strong>Presença digital</strong><span>Um canal próprio para sua empresa vender.</span></li>
+              <li><strong>Independência</strong><span>Sua marca além das redes sociais.</span></li>
+              <li><strong>Organização</strong><span>Produtos e pedidos no mesmo ambiente.</span></li>
+              <li><strong>Profissionalismo</strong><span>Uma experiência de compra estruturada.</span></li>
+              <li><strong>Escalabilidade</strong><span>Recursos que acompanham a evolução.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-07" class="page segments" aria-labelledby="page-07-title">
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 10</span></header>
+          <div class="segments__head">
+            <h2 id="page-07-title" class="page-title">O Elínea se adapta ao seu negócio.</h2>
+            <p class="page-copy">Tecnologia próxima da rotina de pequenos e médios negócios reais.</p>
+          </div>
+          <div class="segments__grid">
+            <figure class="segment"><img :src="assetUrl('segmento-farmacia-exclusiva.png')" alt="Farmacêutica organizando um pedido no balcão"><figcaption class="segment__label"><strong>Farmácias</strong><small>01</small></figcaption></figure>
+            <figure class="segment"><img :src="assetUrl('segmento-boutique-exclusiva.png')" alt="Lojista organizando peças em uma boutique"><figcaption class="segment__label"><strong>Lojas e boutiques</strong><small>02</small></figcaption></figure>
+            <figure class="segment"><img :src="assetUrl('segmento-especializados-exclusiva.png')" alt="Comerciante medindo materiais especializados"><figcaption class="segment__label"><strong>Especializados</strong><small>03</small></figcaption></figure>
+            <figure class="segment"><img :src="assetUrl('segmento-comercio-local-paisagem.png')" alt="Comerciante organizando produtos frescos em sua loja"><figcaption class="segment__label"><strong>Comércio local</strong><small>04</small></figcaption></figure>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-08" class="page page--mist plans" aria-labelledby="page-08-title">
+        <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">08 / 10</span></header>
+          <div class="plans__head">
+            <h2 id="page-08-title" class="page-title">Comece com o que precisa.</h2>
+            <p class="page-copy">Evolua quando quiser, sem carregar a operação com recursos antes da hora.</p>
+          </div>
+          <div class="plans__grid">
+            <article class="plan"><span class="plan__tag">PARA COMEÇAR</span><h3>Essencial</h3><p class="plan__price"><strong>R$ 149</strong><span>/mês</span></p><ul><li>Até 500 produtos</li><li>Loja virtual e carrinho</li><li>Pedidos via WhatsApp</li><li>Painel administrativo</li><li>Relatórios básicos</li><li>SSL e suporte</li></ul></article>
+            <article class="plan plan--featured"><span class="plan__tag">MAIS ESCOLHIDO</span><h3>Profissional</h3><p class="plan__price"><strong>R$ 249</strong><span>/mês</span></p><ul><li>Tudo do Essencial</li><li>Até 2.000 produtos</li><li>Pagamentos online</li><li>Cupons e banners</li><li>SEO básico</li><li>Relatórios</li></ul></article>
+            <article class="plan"><span class="plan__tag">PARA EVOLUIR</span><h3>Premium</h3><p class="plan__price"><strong>R$ 399</strong><span>/mês</span></p><ul><li>Tudo do Profissional</li><li>Integrações específicas</li><li>Serviços de tráfego ADS</li><li>Suporte prioritário</li></ul></article>
+            <article class="plan"><span class="plan__tag">SOB MEDIDA</span><h3>Personalizado</h3><p class="plan__price"><strong>Sob consulta</strong></p><ul><li>Layout personalizado</li><li>Funcionalidades sob demanda</li><li>Escopo definido com sua equipe</li></ul></article>
+          </div>
+          <div class="plans__foot"><span>Implantação prevista entre R$ 790 e R$ 1.490, conforme o escopo.</span><span>Valores do planejamento comercial inicial.</span></div>
+        </div>
+      </section>
+    
+      <section id="page-09" class="page support" aria-labelledby="page-09-title">
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 10</span></header>
+          <div class="support__layout">
+            <figure class="support__visual"><div class="support__image"><img :src="assetUrl('suporte-exclusiva.png')" alt="Comerciante recebendo orientação durante a implantação"></div></figure>
+            <div class="support__copy">
+              <h2 id="page-09-title" class="page-title">Você não precisa fazer tudo sozinho.</h2>
+              <p class="page-copy">Acompanhamento próximo para simplificar a parte tecnológica desde o primeiro passo.</p>
+              <ul class="support__list">
+                <li><b>01</b>Configuração inicial</li><li><b>02</b>Personalização com a identidade da empresa</li>
+                <li><b>03</b>Orientação para utilizar o painel</li><li><b>04</b>Apoio na publicação</li><li><b>05</b>Suporte conforme o plano</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <section id="page-10" class="page page--ink closing" aria-labelledby="page-10-title">
+        <div class="closing__photo"><img :src="assetUrl('encerramento-exclusiva.png')" alt="Comerciante finalizando um pedido para entrega"></div>
+        <div class="closing__veil"></div>
+        <div class="page__frame">
+          <div class="closing__content">
+            <div class="closing__logo"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
+            <h2 id="page-10-title">Seu próximo cliente pode estar a um clique.</h2>
+            <p>Leve seu negócio para o digital com uma solução feita para crescer com você.</p>
+            <div class="closing__cta"><strong>Solicite uma demonstração</strong><span>contato@elinea.com.br</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</template>
+
+<style scoped>
+    .presentation-shell {
       --ink: #0d1715;
       --ink-soft: #14221f;
       --paper: #fafcfb;
@@ -38,20 +307,20 @@
       --gutter: clamp(38px, 4.5vw, 76px);
     }
 
-    * { box-sizing: border-box; }
-    html { background: #dfe6e2; }
-    body {
+    .presentation-shell, .presentation-shell * { box-sizing: border-box; }
+    .presentation-shell {
       margin: 0;
       overflow-x: hidden;
       background: #dfe6e2;
       color: var(--ink);
-      font: 400 16px/1.45 Inter, "Segoe UI", sans-serif;
+      font: 400 16px/1.45 InterPresentation, Inter, "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
-    h1, h2, h3, p, ul, ol, figure { margin: 0; }
-    ul, ol { padding: 0; }
-    img { display: block; max-width: 100%; }
+    .presentation-shell h1, .presentation-shell h2, .presentation-shell h3, .presentation-shell p, .presentation-shell ul, .presentation-shell ol, .presentation-shell figure { margin: 0; }
+    .presentation-shell :where(h1, h2, h3) { color: inherit; font-family: inherit; }
+    .presentation-shell ul, .presentation-shell ol { padding: 0; }
+    .presentation-shell img { display: block; max-width: 100%; }
 
     .pdf-export {
       position: fixed;
@@ -68,7 +337,7 @@
       background: var(--ink);
       box-shadow: 0 12px 32px rgba(13,23,21,.24);
       color: white;
-      font: 650 14px/1 Inter, "Segoe UI", sans-serif;
+      font: 650 14px/1 InterPresentation, Inter, "Segoe UI", sans-serif;
       text-decoration: none;
       cursor: pointer;
     }
@@ -77,7 +346,7 @@
     .pdf-export:focus-visible { outline: 3px solid var(--green-bright); outline-offset: 3px; }
     .pdf-export[aria-busy="true"] { pointer-events: none; opacity: .72; }
 
-    .document { display: grid; gap: 32px; padding: 32px 0; }
+    .presentation-document { display: grid; gap: 32px; padding: 32px 0; }
     .page {
       position: relative;
       width: var(--page-width);
@@ -136,22 +405,56 @@
       user-select: none;
     }
     .page--ink .mark-word { color: rgba(92,221,164,.055); }
-    .mark-word--e {
-      --e-color: rgba(7,148,94,.12);
+
+
+    .connection-field {
+      position: absolute;
       z-index: 0;
-      width: min(46vw, 720px);
-      height: 84%;
-      color: transparent;
-      font-size: 0;
-      letter-spacing: 0;
-      opacity: 1;
+      width: min(45vw, 720px);
+      aspect-ratio: 1;
+      pointer-events: none;
+      opacity: .78;
     }
-    .mark-word--e i { position: absolute; display: block; background: var(--e-color); }
-    .mark-word--e i:nth-child(1) { inset: 0 auto 0 0; width: 27%; }
-    .mark-word--e i:nth-child(n+2) { left: 18%; height: 22%; border-radius: 0 999px 999px 0; }
-    .mark-word--e i:nth-child(2) { top: 0; width: 82%; }
-    .mark-word--e i:nth-child(3) { top: 39%; width: 68%; }
-    .mark-word--e i:nth-child(4) { bottom: 0; width: 82%; }
+    .connection-field::before,
+    .connection-field::after,
+    .connection-field i:not(:last-child) {
+      position: absolute;
+      border: 1px solid rgba(7, 148, 94, .2);
+      border-radius: 50%;
+      content: "";
+    }
+    .connection-field::before { inset: 0; border-color: rgba(7, 148, 94, .14); }
+    .connection-field::after { inset: 17%; }
+    .connection-field i:nth-child(1) { inset: 34%; }
+    .connection-field i:nth-child(2) {
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      border: 0;
+      border-radius: 0;
+      background: linear-gradient(90deg, transparent, rgba(7, 148, 94, .24) 22%, rgba(7, 148, 94, .24) 78%, transparent);
+    }
+    .connection-field i:nth-child(3) {
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      border: 0;
+      border-radius: 0;
+      background: linear-gradient(180deg, transparent, rgba(7, 148, 94, .18) 24%, rgba(7, 148, 94, .18) 76%, transparent);
+    }
+    .connection-field i:nth-child(4) {
+      position: absolute;
+      top: calc(50% - 7px);
+      right: 15.5%;
+      width: 14px;
+      height: 14px;
+      border: 4px solid var(--paper);
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 1px rgba(7, 148, 94, .38);
+    }
 
     /* 01 — Capa */
     .cover::before {
@@ -184,7 +487,7 @@
     .cover__statement p { max-width: 30ch; color: rgba(255,255,255,.66); font-size: clamp(12px, .95vw, 16px); }
 
     /* 02 — Mercado */
-    .market .mark-word--e { left: -3%; bottom: -8%; }
+    .market .connection-field { left: -16%; top: 9%; transform: rotate(-8deg); }
     .market__layout { display: grid; grid-template-columns: .94fr 1.06fr; gap: clamp(32px, 6vw, 92px); flex: 1; align-items: center; }
     .market__copy { position: relative; z-index: 2; }
     .market__copy .page-title { margin-top: clamp(28px, 4.5vh, 54px); }
@@ -266,7 +569,7 @@
     .flow__demo strong { color: white; }
 
     /* 06 — Benefícios */
-    .benefits .mark-word--e { left: -5%; top: 13%; transform: scale(.92); transform-origin: left center; }
+    .benefits .connection-field { left: -18%; top: 12%; transform: rotate(-12deg) scale(.9); }
     .benefits__head { display: flex; justify-content: space-between; gap: 50px; align-items: end; margin-top: clamp(34px, 5vh, 62px); }
     .benefits__head .page-title { max-width: 11ch; }
     .benefits__head p { max-width: 39ch; padding-bottom: 8px; }
@@ -297,7 +600,7 @@
     .segment__label small { color: rgba(255,255,255,.58); font-size: 12px; }
 
     /* 08 — Planos */
-    .plans .mark-word--e { right: -4%; bottom: -10%; transform: scale(.9); transform-origin: right center; }
+    .plans .connection-field { right: -17%; bottom: -27%; transform: rotate(164deg) scale(.88); }
     .plans__head { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin-top: clamp(24px, 4vh, 46px); }
     .plans__head .page-title { max-width: 13ch; font-size: clamp(38px, 4.7vw, 74px); }
     .plans__head p { max-width: 38ch; padding-bottom: 5px; }
@@ -363,7 +666,7 @@
     }
 
     @media (max-width: 767px) {
-      .document { gap: 16px; padding: 16px 0; }
+      .presentation-document { gap: 16px; padding: 16px 0; }
       .page { width: calc(100vw - 24px); min-height: 0; overflow: visible; }
       .page__frame { height: auto; min-height: 0; padding: 28px 24px 36px; }
       .page-title { font-size: clamp(42px, 13vw, 68px); }
@@ -405,9 +708,9 @@
 
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
-      html, body { width: auto; height: auto; margin: 0; overflow: visible; background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .presentation-shell { width: auto; height: auto; min-height: 0; margin: 0; overflow: visible; background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       .pdf-export { display: none !important; }
-      .document { display: block; padding: 0; }
+      .presentation-document { display: block; padding: 0; }
       .page {
         width: 13.333in;
         height: 7.5in;
@@ -421,261 +724,4 @@
       .page:last-child { break-after: auto; page-break-after: auto; }
       .page__frame { height: 100%; }
     }
-  </style>
-</head>
-<body>
-<button class="pdf-export" type="button" data-filename="apresentacao-comercial-elinea.pdf" aria-label="Gerar apresentação em PDF">
-  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path>
-  </svg>
-  <span>Exportar PDF</span>
-</button>
-<main class="document" aria-label="Apresentação comercial Elínea">
-  <section id="page-01" class="page page--ink cover" aria-labelledby="page-01-title">
-    <div class="cover__photo"><img src="./assets/apresentacao/capa-exclusiva.png" alt="Comerciante abrindo sua loja no início do dia"></div>
-    <div class="cover__veil"></div>
-    <div class="page__frame">
-      <div class="cover__content">
-        <div class="cover__brand"><img src="./assets/apresentacao/logo-elinea-white.svg" alt="Elínea"></div>
-        <h1 id="page-01-title" class="cover__title">Novas oportunidades.</h1>
-        <div class="cover__statement"><strong>Seu negócio conectado ao próximo cliente.</strong><p>Soluções inteligentes para vender online com simplicidade e estrutura.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-02" class="page market" aria-labelledby="page-02-title">
-    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 10</span></header>
-      <div class="market__layout">
-        <div class="market__copy">
-          <h2 id="page-02-title" class="page-title page-title--wide">Seus clientes já estão no digital.</h2>
-          <p class="page-copy market__intro">A jornada de compra começa muito antes da visita à loja.</p>
-          <ul class="market__points">
-            <li><b>01</b>Pesquisam produtos e preços pela internet.</li>
-            <li><b>02</b>Escolhem também pela facilidade de comprar.</li>
-            <li><b>03</b>Esperam encontrar negócios locais online.</li>
-            <li><b>04</b>Podem desistir quando a compra depende só do presencial.</li>
-          </ul>
-        </div>
-        <figure class="market__visual">
-          <div class="market__image"><img src="./assets/apresentacao/cliente-digital-documental.png" alt="Cliente pesquisando produtos pelo celular em casa"></div>
-          <figcaption class="market__caption">Quando alguém procurar o que sua empresa vende, encontrará o seu negócio?</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-03" class="page page--ink problem" aria-labelledby="page-03-title">
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 10</span></header>
-      <div class="problem__head">
-        <h2 id="page-03-title" class="page-title page-title--wide">Vender online não deveria ser complicado.</h2>
-        <p class="page-copy">A vontade de crescer existe. O que falta é uma tecnologia compatível com a rotina de quem toca o negócio todos os dias.</p>
-      </div>
-      <div class="problem__grid">
-        <article class="problem__item"><small>01</small><h3>Tempo curto.</h3><p>A operação já exige atenção constante.</p></article>
-        <article class="problem__item"><small>02</small><h3>Custo alto.</h3><p>Projetos sob medida nem sempre cabem no início.</p></article>
-        <article class="problem__item"><small>03</small><h3>Ferramentas complexas.</h3><p>Tecnologia não pode virar mais uma barreira.</p></article>
-        <article class="problem__item"><small>04</small><h3>Canais dispersos.</h3><p>Pedidos e informações se perdem no caminho.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-04" class="page solution" aria-labelledby="page-04-title">
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 10</span></header>
-      <div class="solution__layout">
-        <div class="solution__copy">
-          <h2 id="page-04-title" class="page-title">Conheça o Elínea.</h2>
-          <p>Sua loja virtual, de forma simples e profissional. Produtos, pedidos e operação digital reunidos em um único ambiente.</p>
-          <ul class="solution__features">
-            <li>Identidade própria</li><li>Painel administrativo</li><li>Produtos e pedidos</li>
-            <li>Compra responsiva</li><li>Pagamentos por plano</li><li>Pedidos via WhatsApp</li>
-          </ul>
-        </div>
-        <div class="solution__map" aria-label="Representação conceitual dos recursos da plataforma">
-          <div class="solution__map-logo"><img src="./assets/apresentacao/logo-elinea-white.svg" alt="Elínea"></div>
-          <span class="solution__map-note">Visão funcional<br>Representação conceitual</span>
-          <div class="solution__map-main"><small>Experiência de compra</small><strong>Uma loja com a identidade da sua marca.</strong></div>
-          <div class="solution__nodes">
-            <div class="solution__node"><small>Operação</small><strong>Produtos e pedidos organizados.</strong></div>
-            <div class="solution__node"><small>Relacionamento</small><strong>WhatsApp próximo da venda.</strong></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-05" class="page page--green flow" aria-labelledby="page-05-title">
-    <span class="mark-word" aria-hidden="true">04</span>
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 10</span></header>
-      <div class="flow__head">
-        <h2 id="page-05-title" class="page-title page-title--wide">Do cadastro do produto à realização da venda.</h2>
-        <p class="page-copy">A tecnologia trabalha a favor do negócio enquanto você acompanha o que realmente importa.</p>
-      </div>
-      <div class="flow__track">
-        <article class="flow__step"><small>01</small><h3>Cadastre.</h3><p>Organize produtos, preço e disponibilidade.</p></article>
-        <article class="flow__step"><small>02</small><h3>Publique.</h3><p>Sua loja fica disponível em qualquer tela.</p></article>
-        <article class="flow__step"><small>03</small><h3>Venda.</h3><p>O cliente encontra e realiza o pedido.</p></article>
-        <article class="flow__step"><small>04</small><h3>Acompanhe.</h3><p>Você administra a operação em um só lugar.</p></article>
-      </div>
-      <div class="flow__demo"><span>Ponto de transição da apresentação</span><strong>Demonstração real da plataforma</strong></div>
-    </div>
-  </section>
-
-  <section id="page-06" class="page benefits" aria-labelledby="page-06-title">
-    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 10</span></header>
-      <div class="benefits__head">
-        <h2 id="page-06-title" class="page-title">Mais do que uma loja virtual.</h2>
-        <p class="page-copy">Uma base que faz sentido agora e continua fazendo quando a operação crescer.</p>
-      </div>
-      <div class="benefits__body">
-        <div class="benefits__number" aria-hidden="true">05</div>
-        <ul class="benefits__list">
-          <li><strong>Presença digital</strong><span>Um canal próprio para sua empresa vender.</span></li>
-          <li><strong>Independência</strong><span>Sua marca além das redes sociais.</span></li>
-          <li><strong>Organização</strong><span>Produtos e pedidos no mesmo ambiente.</span></li>
-          <li><strong>Profissionalismo</strong><span>Uma experiência de compra estruturada.</span></li>
-          <li><strong>Escalabilidade</strong><span>Recursos que acompanham a evolução.</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-07" class="page segments" aria-labelledby="page-07-title">
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 10</span></header>
-      <div class="segments__head">
-        <h2 id="page-07-title" class="page-title">O Elínea se adapta ao seu negócio.</h2>
-        <p class="page-copy">Tecnologia próxima da rotina de pequenos e médios negócios reais.</p>
-      </div>
-      <div class="segments__grid">
-        <figure class="segment"><img src="./assets/apresentacao/segmento-farmacia-exclusiva.png" alt="Farmacêutica organizando um pedido no balcão"><figcaption class="segment__label"><strong>Farmácias</strong><small>01</small></figcaption></figure>
-        <figure class="segment"><img src="./assets/apresentacao/segmento-boutique-exclusiva.png" alt="Lojista organizando peças em uma boutique"><figcaption class="segment__label"><strong>Lojas e boutiques</strong><small>02</small></figcaption></figure>
-        <figure class="segment"><img src="./assets/apresentacao/segmento-especializados-exclusiva.png" alt="Comerciante medindo materiais especializados"><figcaption class="segment__label"><strong>Especializados</strong><small>03</small></figcaption></figure>
-        <figure class="segment"><img src="./assets/apresentacao/segmento-comercio-local-paisagem.png" alt="Comerciante organizando produtos frescos em sua loja"><figcaption class="segment__label"><strong>Comércio local</strong><small>04</small></figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-08" class="page page--mist plans" aria-labelledby="page-08-title">
-    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">08 / 10</span></header>
-      <div class="plans__head">
-        <h2 id="page-08-title" class="page-title">Comece com o que precisa.</h2>
-        <p class="page-copy">Evolua quando quiser, sem carregar a operação com recursos antes da hora.</p>
-      </div>
-      <div class="plans__grid">
-        <article class="plan"><span class="plan__tag">PARA COMEÇAR</span><h3>Essencial</h3><p class="plan__price"><strong>R$ 149</strong><span>/mês</span></p><ul><li>Até 500 produtos</li><li>Loja virtual e carrinho</li><li>Pedidos via WhatsApp</li><li>Painel administrativo</li><li>Relatórios básicos</li><li>SSL e suporte</li></ul></article>
-        <article class="plan plan--featured"><span class="plan__tag">MAIS ESCOLHIDO</span><h3>Profissional</h3><p class="plan__price"><strong>R$ 249</strong><span>/mês</span></p><ul><li>Tudo do Essencial</li><li>Até 2.000 produtos</li><li>Pagamentos online</li><li>Cupons e banners</li><li>SEO básico</li><li>Relatórios</li></ul></article>
-        <article class="plan"><span class="plan__tag">PARA EVOLUIR</span><h3>Premium</h3><p class="plan__price"><strong>R$ 399</strong><span>/mês</span></p><ul><li>Tudo do Profissional</li><li>Integrações específicas</li><li>Serviços de tráfego ADS</li><li>Suporte prioritário</li></ul></article>
-        <article class="plan"><span class="plan__tag">SOB MEDIDA</span><h3>Personalizado</h3><p class="plan__price"><strong>Sob consulta</strong></p><ul><li>Layout personalizado</li><li>Funcionalidades sob demanda</li><li>Escopo definido com sua equipe</li></ul></article>
-      </div>
-      <div class="plans__foot"><span>Implantação prevista entre R$ 790 e R$ 1.490, conforme o escopo.</span><span>Valores do planejamento comercial inicial.</span></div>
-    </div>
-  </section>
-
-  <section id="page-09" class="page support" aria-labelledby="page-09-title">
-    <div class="page__frame">
-      <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 10</span></header>
-      <div class="support__layout">
-        <figure class="support__visual"><div class="support__image"><img src="./assets/apresentacao/suporte-exclusiva.png" alt="Comerciante recebendo orientação durante a implantação"></div></figure>
-        <div class="support__copy">
-          <h2 id="page-09-title" class="page-title">Você não precisa fazer tudo sozinho.</h2>
-          <p class="page-copy">Acompanhamento próximo para simplificar a parte tecnológica desde o primeiro passo.</p>
-          <ul class="support__list">
-            <li><b>01</b>Configuração inicial</li><li><b>02</b>Personalização com a identidade da empresa</li>
-            <li><b>03</b>Orientação para utilizar o painel</li><li><b>04</b>Apoio na publicação</li><li><b>05</b>Suporte conforme o plano</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-10" class="page page--ink closing" aria-labelledby="page-10-title">
-    <div class="closing__photo"><img src="./assets/apresentacao/encerramento-exclusiva.png" alt="Comerciante finalizando um pedido para entrega"></div>
-    <div class="closing__veil"></div>
-    <div class="page__frame">
-      <div class="closing__content">
-        <div class="closing__logo"><img src="./assets/apresentacao/logo-elinea-white.svg" alt="Elínea"></div>
-        <h2 id="page-10-title">Seu próximo cliente pode estar a um clique.</h2>
-        <p>Leve seu negócio para o digital com uma solução feita para crescer com você.</p>
-        <div class="closing__cta"><strong>Solicite uma demonstração</strong><span>contato@elinea.com.br</span></div>
-      </div>
-    </div>
-  </section>
-</main>
-<script src="./assets/apresentacao/vendor/html2canvas.min.js"></script>
-<script src="./assets/apresentacao/vendor/jspdf.umd.min.js"></script>
-<script>
-  const pdfExport = document.querySelector('.pdf-export');
-  const pdfExportLabel = pdfExport.querySelector('span');
-
-  pdfExport.addEventListener('click', async (event) => {
-    event.preventDefault();
-    if (pdfExport.getAttribute('aria-busy') === 'true') return;
-
-    pdfExport.setAttribute('aria-busy', 'true');
-    pdfExportLabel.textContent = 'Preparando…';
-
-    try {
-      if (!window.html2canvas || !window.jspdf?.jsPDF) {
-        throw new Error('As ferramentas de exportação não foram carregadas.');
-      }
-
-      await document.fonts.ready;
-      await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)));
-
-      const pages = [...document.querySelectorAll('.page')];
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'px',
-        format: [1600, 900],
-        compress: true,
-        hotfixes: ['px_scaling']
-      });
-
-      for (const [index, page] of pages.entries()) {
-        pdfExportLabel.textContent = `Gerando ${index + 1}/${pages.length}…`;
-
-        const canvas = await window.html2canvas(page, {
-          backgroundColor: null,
-          logging: false,
-          scale: 1.25,
-          useCORS: true,
-          width: 1600,
-          height: 900,
-          windowWidth: 1664,
-          windowHeight: 964,
-          onclone: (clonedDocument) => {
-            const clonedPage = clonedDocument.getElementById(page.id);
-            clonedPage.style.width = '1600px';
-            clonedPage.style.height = '900px';
-            clonedPage.style.margin = '0';
-            clonedPage.style.boxShadow = 'none';
-          }
-        });
-
-        if (index > 0) pdf.addPage([1600, 900], 'landscape');
-        pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 1600, 900, undefined, 'FAST');
-        await new Promise((resolve) => window.setTimeout(resolve, 0));
-      }
-
-      pdf.save(pdfExport.dataset.filename);
-    } catch (error) {
-      console.error(error);
-      window.alert(`Não foi possível gerar o PDF. ${error.message || 'Recarregue a apresentação e tente novamente.'}`);
-    } finally {
-      pdfExport.removeAttribute('aria-busy');
-      pdfExportLabel.textContent = 'Exportar PDF';
-    }
-  });
-</script>
-</body>
-</html>
+</style>

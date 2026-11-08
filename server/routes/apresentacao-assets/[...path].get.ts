@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Arquivo não encontrado' })
   }
 
-  const asset = await useStorage('/assets').getItemRaw(`presentation:assets/apresentacao/${assetPath}`)
+  const asset = await useStorage('/assets').getItemRaw(`presentation:${assetPath}`)
   if (!asset) {
     throw createError({ statusCode: 404, message: 'Arquivo não encontrado' })
   }
