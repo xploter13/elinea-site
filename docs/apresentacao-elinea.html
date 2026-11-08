@@ -6,10 +6,16 @@
   <meta name="theme-color" content="#0d1715">
   <meta name="description" content="Apresentação comercial da plataforma Elínea, diagramada para exportação em PDF.">
   <title>Elínea — Apresentação comercial</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="./assets/apresentacao/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="./assets/apresentacao/fonts/inter-500.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="./assets/apresentacao/fonts/inter-600.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="./assets/apresentacao/fonts/inter-700.ttf" as="font" type="font/ttf" crossorigin>
   <style>
+    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-500.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-600.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: Inter; src: url('./assets/apresentacao/fonts/inter-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: block; }
+
     :root {
       --ink: #0d1715;
       --ink-soft: #14221f;
@@ -41,6 +47,30 @@
     h1, h2, h3, p, ul, ol, figure { margin: 0; }
     ul, ol { padding: 0; }
     img { display: block; max-width: 100%; }
+
+    .pdf-export {
+      position: fixed;
+      z-index: 100;
+      top: 18px;
+      right: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 17px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      background: var(--ink);
+      box-shadow: 0 12px 32px rgba(13,23,21,.24);
+      color: white;
+      font: 650 14px/1 Inter, "Segoe UI", sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .pdf-export svg { width: 17px; height: 17px; }
+    .pdf-export:hover { background: var(--green-deep); }
+    .pdf-export:focus-visible { outline: 3px solid var(--green-bright); outline-offset: 3px; }
+    .pdf-export[aria-busy="true"] { pointer-events: none; opacity: .72; }
 
     .document { display: grid; gap: 32px; padding: 32px 0; }
     .page {
@@ -101,6 +131,22 @@
       user-select: none;
     }
     .page--ink .mark-word { color: rgba(92,221,164,.055); }
+    .mark-word--e {
+      --e-color: rgba(7,148,94,.12);
+      z-index: 0;
+      width: min(46vw, 720px);
+      height: 84%;
+      color: transparent;
+      font-size: 0;
+      letter-spacing: 0;
+      opacity: 1;
+    }
+    .mark-word--e i { position: absolute; display: block; background: var(--e-color); }
+    .mark-word--e i:nth-child(1) { inset: 0 auto 0 0; width: 27%; }
+    .mark-word--e i:nth-child(n+2) { left: 18%; height: 22%; border-radius: 0 999px 999px 0; }
+    .mark-word--e i:nth-child(2) { top: 0; width: 82%; }
+    .mark-word--e i:nth-child(3) { top: 39%; width: 68%; }
+    .mark-word--e i:nth-child(4) { bottom: 0; width: 82%; }
 
     /* 01 — Capa */
     .cover::before {
@@ -133,7 +179,7 @@
     .cover__statement p { max-width: 30ch; color: rgba(255,255,255,.66); font-size: clamp(12px, .95vw, 16px); }
 
     /* 02 — Mercado */
-    .market .mark-word { left: -4%; bottom: -16%; }
+    .market .mark-word--e { left: -3%; bottom: -8%; }
     .market__layout { display: grid; grid-template-columns: .94fr 1.06fr; gap: clamp(32px, 6vw, 92px); flex: 1; align-items: center; }
     .market__copy { position: relative; z-index: 2; }
     .market__copy .page-title { margin-top: clamp(28px, 4.5vh, 54px); }
@@ -215,7 +261,7 @@
     .flow__demo strong { color: white; }
 
     /* 06 — Benefícios */
-    .benefits .mark-word { left: -3%; top: 16%; }
+    .benefits .mark-word--e { left: -5%; top: 13%; transform: scale(.92); transform-origin: left center; }
     .benefits__head { display: flex; justify-content: space-between; gap: 50px; align-items: end; margin-top: clamp(34px, 5vh, 62px); }
     .benefits__head .page-title { max-width: 11ch; }
     .benefits__head p { max-width: 39ch; padding-bottom: 8px; }
@@ -246,7 +292,7 @@
     .segment__label small { color: rgba(255,255,255,.58); font-size: 12px; }
 
     /* 08 — Planos */
-    .plans .mark-word { right: -4%; bottom: -15%; }
+    .plans .mark-word--e { right: -4%; bottom: -10%; transform: scale(.9); transform-origin: right center; }
     .plans__head { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin-top: clamp(24px, 4vh, 46px); }
     .plans__head .page-title { max-width: 13ch; font-size: clamp(38px, 4.7vw, 74px); }
     .plans__head p { max-width: 38ch; padding-bottom: 5px; }
@@ -355,6 +401,7 @@
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
       html, body { width: auto; height: auto; margin: 0; overflow: visible; background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .pdf-export { display: none !important; }
       .document { display: block; padding: 0; }
       .page {
         width: 13.333in;
@@ -372,6 +419,12 @@
   </style>
 </head>
 <body>
+<button class="pdf-export" type="button" data-filename="apresentacao-comercial-elinea.pdf" aria-label="Gerar apresentação em PDF">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path>
+  </svg>
+  <span>Exportar PDF</span>
+</button>
 <main class="document" aria-label="Apresentação comercial Elínea">
   <section id="page-01" class="page page--ink cover" aria-labelledby="page-01-title">
     <div class="cover__photo"><img src="./assets/apresentacao/capa-exclusiva.png" alt="Comerciante abrindo sua loja no início do dia"></div>
@@ -386,7 +439,7 @@
   </section>
 
   <section id="page-02" class="page market" aria-labelledby="page-02-title">
-    <span class="mark-word" aria-hidden="true">E</span>
+    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     <div class="page__frame">
       <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 10</span></header>
       <div class="market__layout">
@@ -468,7 +521,7 @@
   </section>
 
   <section id="page-06" class="page benefits" aria-labelledby="page-06-title">
-    <span class="mark-word" aria-hidden="true">E</span>
+    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     <div class="page__frame">
       <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 10</span></header>
       <div class="benefits__head">
@@ -505,7 +558,7 @@
   </section>
 
   <section id="page-08" class="page page--mist plans" aria-labelledby="page-08-title">
-    <span class="mark-word" aria-hidden="true">E</span>
+    <span class="mark-word mark-word--e" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     <div class="page__frame">
       <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">08 / 10</span></header>
       <div class="plans__head">
@@ -552,5 +605,103 @@
     </div>
   </section>
 </main>
+<script src="./assets/apresentacao/vendor/html2canvas.min.js"></script>
+<script src="./assets/apresentacao/vendor/jspdf.umd.min.js"></script>
+<script>
+  const pdfExport = document.querySelector('.pdf-export');
+  const pdfExportLabel = pdfExport.querySelector('span');
+  const localPdfReady = window.location.protocol === 'file:'
+    ? new Promise((resolve, reject) => {
+        const localPdfScript = document.createElement('script');
+        localPdfScript.src = './assets/apresentacao/apresentacao-pdf-base64.js';
+        localPdfScript.onload = resolve;
+        localPdfScript.onerror = () => reject(new Error('A cópia local do PDF não foi encontrada.'));
+        document.head.append(localPdfScript);
+      })
+    : Promise.resolve();
+
+  pdfExport.addEventListener('click', async (event) => {
+    event.preventDefault();
+    if (pdfExport.getAttribute('aria-busy') === 'true') return;
+
+    pdfExport.setAttribute('aria-busy', 'true');
+    pdfExportLabel.textContent = 'Preparando…';
+
+    try {
+      if (window.location.protocol === 'file:') {
+        pdfExportLabel.textContent = 'Preparando PDF…';
+        await localPdfReady;
+        if (!window.ELINEA_LOCAL_PDF_BASE64) throw new Error('A cópia local do PDF está vazia.');
+
+        const pdfBinary = window.atob(window.ELINEA_LOCAL_PDF_BASE64);
+        const pdfBytes = new Uint8Array(pdfBinary.length);
+        for (let index = 0; index < pdfBinary.length; index += 1) {
+          pdfBytes[index] = pdfBinary.charCodeAt(index);
+        }
+
+        const localPdfUrl = URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
+        const localDownload = document.createElement('a');
+        localDownload.href = localPdfUrl;
+        localDownload.download = pdfExport.dataset.filename;
+        document.body.append(localDownload);
+        localDownload.click();
+        localDownload.remove();
+        window.setTimeout(() => URL.revokeObjectURL(localPdfUrl), 1000);
+        return;
+      }
+
+      if (!window.html2canvas || !window.jspdf?.jsPDF) {
+        throw new Error('As ferramentas de exportação não foram carregadas.');
+      }
+
+      await document.fonts.ready;
+      await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)));
+
+      const pages = [...document.querySelectorAll('.page')];
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [1600, 900],
+        compress: true,
+        hotfixes: ['px_scaling']
+      });
+
+      for (const [index, page] of pages.entries()) {
+        pdfExportLabel.textContent = `Gerando ${index + 1}/${pages.length}…`;
+
+        const canvas = await window.html2canvas(page, {
+          backgroundColor: null,
+          logging: false,
+          scale: 1.25,
+          useCORS: true,
+          width: 1600,
+          height: 900,
+          windowWidth: 1664,
+          windowHeight: 964,
+          onclone: (clonedDocument) => {
+            const clonedPage = clonedDocument.getElementById(page.id);
+            clonedPage.style.width = '1600px';
+            clonedPage.style.height = '900px';
+            clonedPage.style.margin = '0';
+            clonedPage.style.boxShadow = 'none';
+          }
+        });
+
+        if (index > 0) pdf.addPage([1600, 900], 'landscape');
+        pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 1600, 900, undefined, 'FAST');
+        await new Promise((resolve) => window.setTimeout(resolve, 0));
+      }
+
+      pdf.save(pdfExport.dataset.filename);
+    } catch (error) {
+      console.error(error);
+      window.alert(`Não foi possível gerar o PDF. ${error.message || 'Recarregue a apresentação e tente novamente.'}`);
+    } finally {
+      pdfExport.removeAttribute('aria-busy');
+      pdfExportLabel.textContent = 'Exportar PDF';
+    }
+  });
+</script>
 </body>
 </html>

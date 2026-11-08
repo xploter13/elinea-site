@@ -385,14 +385,18 @@ puramente decorativas devem ter `alt=""`.
 ## Apresentação comercial
 
 A apresentação comercial em `docs/apresentacao-elinea.html` é um documento estático
-voltado à exportação em PDF, sem navegação ou interações. Cada seção corresponde a
+voltado à exportação em PDF, sem navegação entre páginas. A única interação é o botão
+utilitário que gera no navegador um novo PDF de 10 páginas em 16:9 quando servido por HTTP e reconstrói uma cópia equivalente como `Blob` quando aberto diretamente por `file://`, evitando as restrições de segurança do canvas e dos downloads entre arquivos locais. O controle é ocultado automaticamente durante a captura. Cada seção corresponde a
 uma página independente em formato 16:9, com dimensões físicas definidas na impressão
-para impedir cortes ou redimensionamentos inesperados. Sua direção visual traduz as
+para impedir cortes ou redimensionamentos inesperados. A fonte Inter é servida localmente
+na apresentação para manter métricas consistentes durante a geração do PDF. Sua direção visual traduz as
 referências editoriais de `docs/ref` para a identidade Elínea: tipografia em grande
 escala, composições assimétricas, arcos geométricos, fotografias documentais e uso
 contido de verde, tinta e papel. As fotografias da capa, encerramento, segmentos e
 suporte são exclusivas da apresentação e não devem reutilizar as imagens institucionais
-do site.
+do site. Os `mark-word` com a letra “E” usam uma construção geométrica de haste e três
+braços arredondados, inspirada na letra estrutural das referências corporativas, sempre
+adaptada à paleta e às composições da Elínea.
 
 ## Checklist para futuras alterações
 
