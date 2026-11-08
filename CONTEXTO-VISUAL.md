@@ -144,6 +144,7 @@ nos componentes compartilhados `app/components/site/SiteHeader.vue` e
 
 O carrossel de planos permanece rolável por gesto, teclado e controles visuais, mas a
 barra de rolagem nativa não deve ficar visível.
+Os controles de anterior/próximo só aparecem quando há mais de três planos.
 
 O hero, o header e o footer preservam sua direção atual. Mudanças futuras devem ser
 refinamentos, salvo nova orientação explícita.
@@ -171,6 +172,8 @@ em Preços e na contratação vêm exclusivamente de `GET /api/v1/plans`.
 `app/data/plans.ts` mantém tipos, formatação e apresentação; não duplica preços nem
 substitui condições cadastradas na API. Recursos herdados por “Tudo do plano” são
 resolvidos a partir das listas retornadas pela API para montar a comparação.
+O FAQ e os resumos de mensalidade e implantação também derivam desses dados;
+a descrição de SEO não deve fixar preços que possam ficar desatualizados.
 
 As condições comerciais fornecidas em 8 de novembro de 2026 são: Catálogo
 (R$ 99,90/mês, implantação grátis), E-commerce (R$ 249,90/mês, implantação grátis)
@@ -428,6 +431,21 @@ essa separação: rasterizar as letras junto das fotos prejudica a nitidez em zo
 Os convites de demonstração abrem o WhatsApp comercial (24) 99816-4753, informado
 pelo usuário, com uma mensagem pronta. O e-mail comercial permanece clicável no
 encerramento. Os destinos ficam centralizados em `presentationContact` na página.
+
+A página de planos da apresentação reutiliza `PlansCarousel.vue`, o mesmo carrossel
+da Home e de Preços, com os dados de `GET /api/v1/plans`. Não manter uma lista de
+preços separada na apresentação. Na exportação, cada página mostra até três planos,
+com os controles ocultados e links clicáveis para contato.
+Na apresentação, todos os recursos de cada plano ficam visíveis desde a abertura,
+sem “Ver todos”. As listas usam duas colunas no desktop para caber no formato 16:9;
+o PDF preserva a lista completa, sem ocultar itens durante a captura.
+
+No slide de planos, os cards ficam centralizados verticalmente na área disponível
+abaixo do cabeçalho, sem o link de comparação. No encerramento, manter apenas o
+e-mail com ícone de envelope abaixo do CTA de demonstração; o link com o número
+do WhatsApp foi removido, mas o CTA continua apontando para o WhatsApp comercial.
+Em “O mercado mudou”, o campo gráfico mantém apenas os dois arcos concêntricos
+maiores, sem círculo interno, eixo ou ponto.
 
 ## Checklist para futuras alterações
 

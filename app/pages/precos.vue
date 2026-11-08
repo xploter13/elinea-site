@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import PricingSection from '~/components/home/PricingSection.vue'
-import type {BillingInterval, Plan} from '~/data/plans'
+import {formatPlanMoney, type BillingInterval, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
 const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
+const monthlySummary = computed(() => plans.value
+  .filter(plan => plan.monthly_amount !== null)
+  .map(plan => `${formatPlanMoney(plan.monthly_amount!, plan.currency)}/mês no plano ${plan.name}`)
+  .join('; '))
+const implementationSummary = computed(() => plans.value
+  .filter(plan => plan.implementation_amount !== null)
+  .map(plan => `${plan.name}: ${plan.implementation_amount === 0 ? 'implantação grátis' : `implantação de ${formatPlanMoney(plan.implementation_amount!, plan.currency)}`}`)
+  .join('. '))
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
@@ -27,10 +35,10 @@ const comparisonRows = [
   {label: 'Layout, integrações e regras sob medida', feature: 'customization'},
 ]
 
-const faqs = [
+const faqs = computed(() => [
   {
     question: 'Qual é a diferença entre mensalidade e implantação?',
-    answer: 'A mensalidade corresponde ao uso recorrente da plataforma: R$ 99,90 no Catálogo e R$ 249,90 no E-commerce. A implantação é grátis nos dois planos. No Personalizado, mensalidade e implantação são definidas conforme o escopo.',
+    answer: `A mensalidade corresponde ao uso recorrente da plataforma. ${monthlySummary.value ? `Valores atuais: ${monthlySummary.value}. ` : ''}${implementationSummary.value ? `${implementationSummary.value}. ` : ''}Os valores sob consulta são definidos conforme o escopo do projeto.`,
   },
   {
     question: 'Posso começar com um plano e evoluir depois?',
@@ -44,7 +52,7 @@ const faqs = [
     question: 'Como funciona o plano Personalizado?',
     answer: 'Cada projeto é analisado individualmente. Ele pode incluir os recursos do E-commerce, layout exclusivo, integrações, regras próprias, funcionalidades e automações sob demanda. O orçamento pode envolver implantação, desenvolvimento e mensalidade, conforme o escopo aprovado.',
   },
-]
+])
 
 const heroStatement = 'Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a operação evoluir.'
 
@@ -53,7 +61,7 @@ const openCheckout = (plan: Plan, interval: BillingInterval) => navigateTo({ pat
 
 useSeoMeta({
   title: 'Planos e preços Elínea — Escolha a estrutura do seu negócio',
-  description: 'Catálogo por R$ 99,90/mês e E-commerce por R$ 249,90/mês, com implantação grátis. Conheça também o plano Personalizado, sob consulta.',
+  description: 'Compare os planos Catálogo, E-commerce e Personalizado do Elínea. Consulte mensalidades, condições de implantação e recursos incluídos.',
   ogTitle: 'Planos e preços Elínea',
   ogDescription: 'Planos claros para começar com o que o seu negócio precisa e evoluir com estrutura.',
 })
@@ -181,11 +189,11 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="pricing-value__breakdown" data-pricing-reveal>
             <article>
               <h3>Mensalidade</h3>
-              <p>R$ 99,90/mês no Catálogo e R$ 249,90/mês no E-commerce. No Personalizado, o valor é definido após a análise do projeto.</p>
+              <p>{{ monthlySummary || 'Os valores recorrentes são informados nos detalhes de cada plano' }}. Nos planos sob consulta, o valor é definido após a análise do projeto.</p>
             </article>
             <article>
               <h3>Implantação</h3>
-              <p>Grátis nos planos Catálogo e E-commerce. No Personalizado, a implantação é orçada conforme as necessidades do negócio.</p>
+              <p>{{ implementationSummary || 'As condições de implantação são informadas nos detalhes de cada plano' }}. Nos planos sob consulta, a implantação é orçada conforme as necessidades do negócio.</p>
             </article>
             <article>
               <h3>Evolução</h3>

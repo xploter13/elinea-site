@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import PlansCarousel from '~/components/pricing/PlansCarousel.vue'
+import { Mail } from '@lucide/vue'
+import type { Plan } from '~/data/plans'
 import { drawPresentationText, hidePresentationText, measurePresentationText } from '~/utils/presentationPdfText'
 import { addPresentationLinks } from '~/utils/presentationPdfLinks'
 
@@ -31,19 +34,14 @@ const documentRoot = ref<HTMLElement | null>(null)
 const exporting = ref(false)
 const exportLabel = ref('Exportar PDF')
 const assetUrl = (path: string) => `/apresentacao-assets/${path}`
+const { data: plans, pending: plansPending, error: plansError, refresh: refreshPlans } = usePublicPlans()
 const presentationContact = {
   email: 'contato@elinea.com.br',
   whatsapp: '5524998164753',
-  whatsappLabel: '(24) 99816-4753',
   message: 'Olá! Gostaria de agendar uma demonstração do Elínea.',
 }
 const demonstrationUrl = `https://wa.me/${presentationContact.whatsapp}?text=${encodeURIComponent(presentationContact.message)}`
-const commercialPlans = [
-  { name: 'Essencial', tag: 'O primeiro passo', price: 'R$ 149', recurring: true, featured: false, features: ['Até 500 produtos', 'Loja virtual e carrinho', 'Pedidos via WhatsApp', 'Painel administrativo', 'Relatórios básicos', 'SSL e suporte'] },
-  { name: 'Profissional', tag: 'Uma operação completa', price: 'R$ 249', recurring: true, featured: true, features: ['Tudo do Essencial', 'Até 2.000 produtos', 'Pagamentos online', 'Cupons e banners', 'SEO básico', 'Relatórios'] },
-  { name: 'Premium', tag: 'Mais possibilidades', price: 'R$ 399', recurring: true, featured: false, features: ['Tudo do Profissional', 'Integrações específicas', 'Serviços de tráfego ADS', 'Suporte prioritário'] },
-  { name: 'Personalizado', tag: 'Do seu jeito', price: 'Sob consulta', recurring: false, featured: false, features: ['Layout personalizado', 'Funcionalidades sob demanda', 'Escopo definido com sua equipe'] },
-]
+const presentationPlanUrl = (plan: Plan) => `https://wa.me/${presentationContact.whatsapp}?text=${encodeURIComponent(`Olá! Tenho interesse no plano ${plan.name} do Elínea e gostaria de saber mais.`)}`
 
 async function embeddedAsset(url: string): Promise<string> {
   const response = await fetch(url)
@@ -65,6 +63,10 @@ async function exportPdf() {
   let exportFrame: HTMLIFrameElement | undefined
 
   try {
+    await refreshPlans()
+    if (plansError.value || !plans.value.length) throw new Error('Não foi possível carregar os planos atualizados. Tente novamente.')
+    await nextTick()
+
     const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
       import('html2canvas'),
       import('jspdf'),
@@ -103,7 +105,17 @@ async function exportPdf() {
     const exportShell = documentRoot.value.parentElement!.cloneNode(false) as HTMLElement
     exportDocument.body.append(exportShell)
 
-    const pages = [...documentRoot.value.querySelectorAll<HTMLElement>('.page')]
+    const pages = [...documentRoot.value.querySelectorAll<HTMLElement>('.page')].flatMap(page => {
+      const cards = [...page.querySelectorAll('.plan-card')]
+      if (cards.length <= 3) return [page]
+      return Array.from({ length: Math.ceil(cards.length / 3) }, (_, batch) => {
+        const clone = page.cloneNode(true) as HTMLElement
+        clone.querySelectorAll('.plan-card').forEach((card, cardIndex) => {
+          if (Math.floor(cardIndex / 3) !== batch) card.remove()
+        })
+        return clone
+      })
+    })
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'px',
@@ -123,6 +135,14 @@ async function exportPdf() {
 
       const exportPage = page.cloneNode(true) as HTMLElement
       exportShell.replaceChildren(exportPage)
+      const exportRail = exportPage.querySelector<HTMLElement>('.pricing-rail')
+      if (exportRail) {
+        exportRail.style.gridAutoFlow = 'row'
+        exportRail.style.gridTemplateColumns = `repeat(${exportRail.querySelectorAll('.plan-card').length}, minmax(0, 1fr))`
+        exportRail.style.overflow = 'visible'
+        exportRail.scrollLeft = 0
+        exportPage.querySelectorAll<HTMLElement>('.pricing-controls, .feature-toggle').forEach(control => control.style.display = 'none')
+      }
       for (const image of exportPage.querySelectorAll('img')) {
         image.src = embeddedImages.get(image.src)!
         image.removeAttribute('srcset')
@@ -205,7 +225,7 @@ async function exportPdf() {
       </section>
     
       <section id="page-02" class="page market" aria-labelledby="page-02-title">
-        <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="connection-field" aria-hidden="true"></span>
         <div class="page__frame">
           <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 10</span></header>
           <div class="market__layout">
@@ -331,14 +351,8 @@ async function exportPdf() {
             <h2 id="page-08-title" class="page-title">Comece com o que precisa.</h2>
             <p class="page-copy">Evolua quando quiser, sem carregar a operação com recursos antes da hora.</p>
           </div>
-          <div class="plans__grid">
-            <article v-for="plan in commercialPlans" :key="plan.name" class="plan" :class="{ 'plan--featured': plan.featured, 'plan--custom': !plan.recurring }">
-              <span class="plan__tag">{{ plan.tag }}</span><h3>{{ plan.name }}</h3>
-              <p class="plan__price"><strong>{{ plan.price }}</strong><span v-if="plan.recurring">/mês</span></p>
-              <ul><li v-for="feature in plan.features" :key="feature">{{ feature }}</li></ul>
-            </article>
-          </div>
-          <div class="plans__foot"><span>Implantação prevista entre R$ 790 e R$ 1.490, conforme o escopo.</span><span>Valores do planejamento comercial inicial.</span></div>
+          <PlansCarousel class="plans__carousel" :plans="plans" :loading="plansPending" :error="Boolean(plansError)"
+                         :link-for-plan="presentationPlanUrl" presentation @retry="refreshPlans" />
         </div>
       </section>
     
@@ -371,8 +385,7 @@ async function exportPdf() {
             <div class="closing__cta">
               <a class="closing__button" :href="demonstrationUrl" target="_blank" rel="noopener noreferrer">Solicite uma demonstração <span aria-hidden="true">↗</span></a>
               <div class="closing__contacts">
-                <a :href="demonstrationUrl" target="_blank" rel="noopener noreferrer">WhatsApp {{ presentationContact.whatsappLabel }}</a>
-                <a :href="`mailto:${presentationContact.email}`">{{ presentationContact.email }}</a>
+                <a :href="`mailto:${presentationContact.email}`"><Mail :size="18" aria-hidden="true" />{{ presentationContact.email }}</a>
               </div>
             </div>
           </div>
@@ -566,29 +579,20 @@ async function exportPdf() {
 .segment__label strong { display: block; max-width: 13ch; font-size: clamp(19px, 1.65cqw, 27px); line-height: 1.2; font-weight: 500; letter-spacing: -.035em; }
 .segment__label small { display: none; }
 
+.plans .page__frame { padding: 3cqw 4.5cqw; }
 .plans .connection-field { right: -25%; bottom: -35%; opacity: .1; }
-.plans__head { display: flex; justify-content: space-between; align-items: end; gap: 5cqw; margin-top: 2.8cqw; }
-.plans__head .page-title { max-width: 18ch; font-size: clamp(38px, 4.1cqw, 66px); }
+.plans__head { display: flex; justify-content: space-between; align-items: end; gap: 5cqw; margin-top: 1.8cqw; }
+.plans__head .page-title { max-width: 18ch; font-size: clamp(38px, 3.8cqw, 61px); }
 .plans__head p { max-width: 31ch; padding-bottom: .2cqw; }
-.plans__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; flex: 1; min-height: 0; margin-top: 2.8cqw; }
-.plan { padding: 1.8cqw; border-top: 2px solid var(--green); border-right: 1px solid var(--line); background: var(--paper); }
-.plan:last-child { border-right: 0; }
-.plan--featured { color: white; background: var(--green-deep); border-top-color: var(--green-bright); }
-.plan__tag { color: var(--green-deep); font-size: clamp(12px, .9cqw, 15px); }
-.plan--featured .plan__tag { color: var(--green-light); }
-.plan h3 { margin-top: .65cqw; font-size: clamp(22px, 1.8cqw, 29px); font-weight: 500; letter-spacing: -.04em; }
-.plan__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px; margin-top: 1.5cqw; padding-bottom: 1.5cqw; border-bottom: 1px solid var(--line); }
-.plan__price strong { font-size: clamp(30px, 2.8cqw, 45px); line-height: 1; font-weight: 600; letter-spacing: -.07em; white-space: nowrap; }
-.plan__price span { color: var(--muted); font-size: 14px; }
-.plan--featured .plan__price { border-color: rgba(255,255,255,.25); }
-.plan--featured .plan__price span { color: rgba(250,252,251,.75); }
-.plan--custom .plan__price strong { font-size: clamp(24px, 2.15cqw, 35px); letter-spacing: -.05em; }
-.plan ul { display: grid; gap: .6cqw; margin-top: 1.5cqw; }
-.plan li { position: relative; padding-left: 15px; color: var(--muted); font-size: clamp(14px, .98cqw, 16px); line-height: 1.4; }
-.plan li::before { position: absolute; top: .55em; left: 0; width: 4px; height: 4px; border-radius: 50%; background: var(--green); content: ""; }
-.plan--featured li { color: rgba(250,252,251,.86); }
-.plan--featured li::before { background: var(--green-bright); }
-.plans__foot { display: flex; justify-content: space-between; gap: 24px; margin-top: 1.3cqw; color: var(--muted); font-size: clamp(12px, .85cqw, 14px); line-height: 1.4; }
+.plans__carousel { display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; margin-top: 1.8cqw; }
+
+@media (min-width: 1101px) and (max-width: 1500px) {
+  .plans .page__frame { padding-block: 2cqw; }
+  .plans__head { gap: 2cqw; margin-top: 1cqw; }
+  .plans__head .page-title { max-width: none; font-size: 3.2cqw; }
+  .plans__head p { font-size: 15px; line-height: 1.4; }
+  .plans__carousel { margin-top: 1cqw; }
+}
 
 .support__layout { display: grid; grid-template-columns: .94fr 1.06fr; gap: 6cqw; flex: 1; min-height: 0; padding-top: 3.8cqw; }
 .support__visual { position: relative; min-height: 0; }
@@ -618,8 +622,12 @@ async function exportPdf() {
 .closing__cta .closing__button { display: inline-flex; align-items: center; gap: 2cqw; padding: 1cqw 1.5cqw; border-radius: 3px; background: var(--paper); color: var(--green-deep); font-size: clamp(16px, 1.2cqw, 20px); font-weight: 500; }
 .closing__button span { font-size: 25px; }
 .closing__contacts { display: flex; flex-wrap: wrap; gap: 12px 24px; color: rgba(250,252,251,.75); font-size: clamp(14px, 1cqw, 16px); }
+.closing__contacts a { display: inline-flex; align-items: center; gap: 10px; }
+.closing__contacts svg { flex-shrink: 0; }
 
 @media (max-width: 1100px) {
+  .plans .page__frame { padding: 36px; }
+  .plans__carousel { margin-top: 30px; }
   .presentation-document { gap: 24px; padding: 24px 0; }
   .page { width: calc(100vw - 32px); height: auto; min-height: 680px; }
   .page__frame { height: auto; min-height: inherit; padding: 36px; }
@@ -648,14 +656,6 @@ async function exportPdf() {
   .segments__grid { min-height: 360px; margin-top: 36px; }
   .segment__label { left: 14px; right: 14px; bottom: 18px; }
   .segment__label strong { font-size: 20px; }
-  .plans__grid { grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 36px; }
-  .plan { padding: 28px; border-right: 0; }
-  .plan h3 { margin-top: 10px; font-size: 28px; }
-  .plan__price { margin-top: 20px; padding-bottom: 18px; }
-  .plan__price strong { font-size: 40px; }
-  .plan--custom .plan__price strong { font-size: 32px; }
-  .plan ul { gap: 10px; margin-top: 20px; }
-  .plans__foot { margin-top: 24px; font-size: 13px; }
   .support__list { margin-top: 24px; }
   .support__list li { padding: 12px 0; }
   .closing__content { padding: 40px 0; }
@@ -665,6 +665,7 @@ async function exportPdf() {
   .closing__cta .closing__button { padding: 14px 20px; }
 }
 @media (max-width: 700px) {
+  .plans .page__frame { padding: 28px 24px; }
   .pdf-export { top: 10px; right: 10px; min-height: 42px; padding: 0 14px; font-size: 12px; }
   .presentation-document { gap: 16px; padding: 68px 0 16px; }
   .page { width: calc(100vw - 24px); min-height: 0; }
@@ -731,12 +732,6 @@ async function exportPdf() {
   .segments__grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, 290px); gap: 12px; min-height: 0; margin-top: 30px; }
   .segment__label { left: 12px; right: 12px; bottom: 18px; padding-top: 14px; }
   .segment__label strong { font-size: 20px; }
-  .plans__grid { grid-template-columns: 1fr; gap: 20px; }
-  .plan__tag { font-size: 14px; }
-  .plan h3 { font-size: 30px; }
-  .plan__price strong { font-size: 44px; }
-  .plan li { font-size: 16px; }
-  .plans__foot { flex-direction: column; gap: 12px; }
   .support__visual { min-height: 390px; }
   .support__image { border-radius: 0 0 100px 0; }
   .support__copy > p { margin-top: 24px; }
