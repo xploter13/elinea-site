@@ -386,7 +386,7 @@ puramente decorativas devem ter `alt=""`.
 
 A apresentação comercial em `docs/apresentacao-elinea.html` é um documento estático
 voltado à exportação em PDF, sem navegação entre páginas. A única interação é o botão
-utilitário que gera no navegador um novo PDF de 10 páginas em 16:9 quando servido por HTTP e reconstrói uma cópia equivalente como `Blob` quando aberto diretamente por `file://`, evitando as restrições de segurança do canvas e dos downloads entre arquivos locais. O controle é ocultado automaticamente durante a captura. Cada seção corresponde a
+utilitário que gera no navegador um novo PDF de 10 páginas em 16:9. A apresentação é servida pelo projeto na rota local `/apresentacao`; o HTML e seus assets ficam em armazenamento interno do Nitro e os handlers recusam hosts não locais. O controle é ocultado automaticamente durante a captura. Cada seção corresponde a
 uma página independente em formato 16:9, com dimensões físicas definidas na impressão
 para impedir cortes ou redimensionamentos inesperados. A fonte Inter é servida localmente
 na apresentação para manter métricas consistentes durante a geração do PDF. Sua direção visual traduz as

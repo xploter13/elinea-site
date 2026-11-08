@@ -1,13 +1,14 @@
-import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
-import { defineEventHandler, setHeader } from 'h3'
+import { createError, defineEventHandler, setHeader } from 'h3'
 import { assertLocalRequest } from '../utils/assertLocalRequest'
 
 export default defineEventHandler(async (event) => {
   assertLocalRequest(event)
 
-  const presentationPath = resolve(process.cwd(), 'docs/apresentacao-elinea.html')
-  const presentation = await readFile(presentationPath, 'utf8')
+  const presentationStorage = useStorage('/assets')
+  const presentation = await presentationStorage.getItem<string>('presentation:apresentacao-elinea.html')
+  if (!presentation) {
+    throw createError({ statusCode: 404, message: 'Apresentação não encontrada' })
+  }
 
   setHeader(event, 'content-type', 'text/html; charset=utf-8')
   setHeader(event, 'cache-control', 'no-store')

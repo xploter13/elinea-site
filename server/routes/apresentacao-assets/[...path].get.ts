@@ -1,5 +1,3 @@
-import { readFile } from 'node:fs/promises'
-import { extname, resolve, sep } from 'node:path'
 import { createError, defineEventHandler, getRouterParam, setHeader } from 'h3'
 import { assertLocalRequest } from '../../utils/assertLocalRequest'
 
@@ -15,27 +13,23 @@ export default defineEventHandler(async (event) => {
   assertLocalRequest(event)
 
   const assetPath = getRouterParam(event, 'path')
-  if (!assetPath || assetPath.includes('\0')) {
-    throw createError({ statusCode: 404, statusMessage: 'Arquivo não encontrado' })
+  if (!assetPath || !/^[a-zA-Z0-9._/-]+$/.test(assetPath) || assetPath.includes('..')) {
+    throw createError({ statusCode: 404, message: 'Arquivo não encontrado' })
   }
 
-  const assetsRoot = resolve(process.cwd(), 'docs/assets/apresentacao')
-  const requestedFile = resolve(assetsRoot, assetPath)
-  if (!requestedFile.startsWith(`${assetsRoot}${sep}`)) {
-    throw createError({ statusCode: 404, statusMessage: 'Arquivo não encontrado' })
-  }
-
-  const contentType = CONTENT_TYPES[extname(requestedFile).toLowerCase()]
+  const extensionStart = assetPath.lastIndexOf('.')
+  const extension = extensionStart >= 0 ? assetPath.slice(extensionStart).toLowerCase() : ''
+  const contentType = CONTENT_TYPES[extension]
   if (!contentType) {
-    throw createError({ statusCode: 404, statusMessage: 'Arquivo não encontrado' })
+    throw createError({ statusCode: 404, message: 'Arquivo não encontrado' })
   }
 
-  try {
-    const asset = await readFile(requestedFile)
-    setHeader(event, 'content-type', contentType)
-    setHeader(event, 'cache-control', 'no-store')
-    return asset
-  } catch {
-    throw createError({ statusCode: 404, statusMessage: 'Arquivo não encontrado' })
+  const asset = await useStorage('/assets').getItemRaw(`presentation:assets/apresentacao/${assetPath}`)
+  if (!asset) {
+    throw createError({ statusCode: 404, message: 'Arquivo não encontrado' })
   }
+
+  setHeader(event, 'content-type', contentType)
+  setHeader(event, 'cache-control', 'no-store')
+  return asset
 })

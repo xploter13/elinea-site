@@ -10,7 +10,7 @@ export function assertLocalRequest(event: H3Event) {
     : host.split(':')[0]
   const address = getRequestIP(event, { xForwardedFor: false })
 
-  if (!hostname || !LOCAL_HOSTS.has(hostname) || !address || !LOCAL_ADDRESSES.has(address)) {
-    throw createError({ statusCode: 404, statusMessage: 'Página não encontrada' })
+  if (!hostname || !LOCAL_HOSTS.has(hostname) || (address && !LOCAL_ADDRESSES.has(address))) {
+    throw createError({ statusCode: 404, message: 'Página não encontrada' })
   }
 }

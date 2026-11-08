@@ -6,6 +6,11 @@
   <meta name="theme-color" content="#0d1715">
   <meta name="description" content="Apresentação comercial da plataforma Elínea, diagramada para exportação em PDF.">
   <title>Elínea — Apresentação comercial</title>
+  <script>
+    if (window.location.protocol === 'file:') {
+      window.location.replace('http://localhost:3000/apresentacao');
+    }
+  </script>
   <link rel="preload" href="./assets/apresentacao/fonts/inter-400.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="./assets/apresentacao/fonts/inter-500.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="./assets/apresentacao/fonts/inter-600.ttf" as="font" type="font/ttf" crossorigin>
@@ -610,15 +615,6 @@
 <script>
   const pdfExport = document.querySelector('.pdf-export');
   const pdfExportLabel = pdfExport.querySelector('span');
-  const localPdfReady = window.location.protocol === 'file:'
-    ? new Promise((resolve, reject) => {
-        const localPdfScript = document.createElement('script');
-        localPdfScript.src = './assets/apresentacao/apresentacao-pdf-base64.js';
-        localPdfScript.onload = resolve;
-        localPdfScript.onerror = () => reject(new Error('A cópia local do PDF não foi encontrada.'));
-        document.head.append(localPdfScript);
-      })
-    : Promise.resolve();
 
   pdfExport.addEventListener('click', async (event) => {
     event.preventDefault();
@@ -628,28 +624,6 @@
     pdfExportLabel.textContent = 'Preparando…';
 
     try {
-      if (window.location.protocol === 'file:') {
-        pdfExportLabel.textContent = 'Preparando PDF…';
-        await localPdfReady;
-        if (!window.ELINEA_LOCAL_PDF_BASE64) throw new Error('A cópia local do PDF está vazia.');
-
-        const pdfBinary = window.atob(window.ELINEA_LOCAL_PDF_BASE64);
-        const pdfBytes = new Uint8Array(pdfBinary.length);
-        for (let index = 0; index < pdfBinary.length; index += 1) {
-          pdfBytes[index] = pdfBinary.charCodeAt(index);
-        }
-
-        const localPdfUrl = URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        const localDownload = document.createElement('a');
-        localDownload.href = localPdfUrl;
-        localDownload.download = pdfExport.dataset.filename;
-        document.body.append(localDownload);
-        localDownload.click();
-        localDownload.remove();
-        window.setTimeout(() => URL.revokeObjectURL(localPdfUrl), 1000);
-        return;
-      }
-
       if (!window.html2canvas || !window.jspdf?.jsPDF) {
         throw new Error('As ferramentas de exportação não foram carregadas.');
       }
