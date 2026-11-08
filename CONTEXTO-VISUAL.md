@@ -385,8 +385,9 @@ puramente decorativas devem ter `alt=""`.
 ## Apresentação comercial
 
 A apresentação comercial em `app/pages/apresentacao.vue` é uma página Nuxt
-voltada à exportação em PDF, sem navegação entre páginas. A única interação é o botão
-utilitário que gera no navegador um novo PDF de 10 páginas em 16:9. A apresentação é
+voltada à exportação em PDF, sem navegação entre páginas. O botão de exportação
+gera no navegador um novo PDF de 10 páginas em 16:9. Os convites de demonstração e
+os contatos usam links reais, também incorporados como áreas clicáveis no PDF. A apresentação é
 servida exclusivamente na rota local `/apresentacao`; o middleware da página e o
 handler dos assets recusam hosts não locais. O controle é ocultado automaticamente
 durante a captura. Cada seção corresponde a
@@ -410,6 +411,10 @@ rodapé adicional.
 Na exportação, os textos são desenhados em vetor com os quatro pesos da Inter
 incorporados ao PDF. Fotografias e efeitos permanecem na camada visual. Preservar
 essa separação: rasterizar as letras junto das fotos prejudica a nitidez em zoom de 100%.
+
+Os convites de demonstração abrem o WhatsApp comercial (24) 99816-4753, informado
+pelo usuário, com uma mensagem pronta. O e-mail comercial permanece clicável no
+encerramento. Os destinos ficam centralizados em `presentationContact` na página.
 
 ## Checklist para futuras alterações
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { drawPresentationText, hidePresentationText, measurePresentationText } from '~/utils/presentationPdfText'
+import { addPresentationLinks } from '~/utils/presentationPdfLinks'
 
 definePageMeta({ middleware: 'local-only' })
 
@@ -30,6 +31,13 @@ const documentRoot = ref<HTMLElement | null>(null)
 const exporting = ref(false)
 const exportLabel = ref('Exportar PDF')
 const assetUrl = (path: string) => `/apresentacao-assets/${path}`
+const presentationContact = {
+  email: 'contato@elinea.com.br',
+  whatsapp: '5524998164753',
+  whatsappLabel: '(24) 99816-4753',
+  message: 'Olá! Gostaria de agendar uma demonstração do Elínea.',
+}
+const demonstrationUrl = `https://wa.me/${presentationContact.whatsapp}?text=${encodeURIComponent(presentationContact.message)}`
 const commercialPlans = [
   { name: 'Essencial', tag: 'O primeiro passo', price: 'R$ 149', recurring: true, featured: false, features: ['Até 500 produtos', 'Loja virtual e carrinho', 'Pedidos via WhatsApp', 'Painel administrativo', 'Relatórios básicos', 'SSL e suporte'] },
   { name: 'Profissional', tag: 'Uma operação completa', price: 'R$ 249', recurring: true, featured: true, features: ['Tudo do Essencial', 'Até 2.000 produtos', 'Pagamentos online', 'Cupons e banners', 'SEO básico', 'Relatórios'] },
@@ -156,6 +164,7 @@ async function exportPdf() {
       if (index > 0) pdf.addPage([1600, 900], 'landscape')
       pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 1600, 900, undefined, 'FAST')
       drawPresentationText(pdf, text)
+      addPresentationLinks(pdf, exportPage)
       await new Promise(resolve => window.setTimeout(resolve, 0))
     }
 
@@ -273,7 +282,7 @@ async function exportPdf() {
             <article class="flow__step"><small>03</small><h3>Venda.</h3><p>O cliente encontra e realiza o pedido.</p></article>
             <article class="flow__step"><small>04</small><h3>Acompanhe.</h3><p>Você administra a operação em um só lugar.</p></article>
           </div>
-          <div class="flow__demo"><span>Da ideia à prática.</span><strong>Conheça a plataforma em uma demonstração real <span aria-hidden="true">↗</span></strong></div>
+          <div class="flow__demo"><span>Da ideia à prática.</span><a :href="demonstrationUrl" target="_blank" rel="noopener noreferrer">Conheça a plataforma em uma demonstração real <span aria-hidden="true">↗</span></a></div>
         </div>
       </section>
     
@@ -359,7 +368,13 @@ async function exportPdf() {
             <div class="closing__logo"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
             <h2 id="page-10-title">Seu próximo cliente pode estar a um clique de distância.</h2>
             <p>Leve seu negócio para o digital com uma solução feita para crescer com você.</p>
-            <div class="closing__cta"><strong>Solicite uma demonstração <span aria-hidden="true">↗</span></strong><span>contato@elinea.com.br</span></div>
+            <div class="closing__cta">
+              <a class="closing__button" :href="demonstrationUrl" target="_blank" rel="noopener noreferrer">Solicite uma demonstração <span aria-hidden="true">↗</span></a>
+              <div class="closing__contacts">
+                <a :href="demonstrationUrl" target="_blank" rel="noopener noreferrer">WhatsApp {{ presentationContact.whatsappLabel }}</a>
+                <a :href="`mailto:${presentationContact.email}`">{{ presentationContact.email }}</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -392,6 +407,8 @@ async function exportPdf() {
 .presentation-shell :where(h1, h2, h3) { color: inherit; font-family: inherit; }
 .presentation-shell :where(ul, ol) { padding: 0; list-style: none; }
 .presentation-shell img { display: block; max-width: 100%; }
+.presentation-shell a { color: inherit; text-decoration: none; }
+.presentation-shell a:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 5px; }
 .pdf-export {
   position: fixed; z-index: 100; top: 18px; right: 18px;
   display: inline-flex; align-items: center; gap: 10px;
@@ -518,8 +535,8 @@ async function exportPdf() {
 .flow__step p { max-width: 23ch; margin-top: 1cqw; font-size: clamp(15px, 1.1cqw, 18px); line-height: 1.5; color: rgba(250,252,251,.8); }
 .flow__demo { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 1.5cqw; border-top: 1px solid rgba(255,255,255,.35); font-size: clamp(14px, 1cqw, 16px); }
 .flow__demo > span { color: rgba(250,252,251,.75); }
-.flow__demo strong { display: flex; align-items: center; gap: 2cqw; font-weight: 500; }
-.flow__demo strong span { font-size: 26px; }
+.flow__demo a { display: flex; align-items: center; gap: 2cqw; font-weight: 500; }
+.flow__demo a span { font-size: 26px; }
 
 .benefits .connection-field { left: -21%; bottom: -26%; opacity: .1; }
 .benefits__head { display: flex; justify-content: space-between; gap: 6cqw; align-items: end; margin-top: 3.5cqw; }
@@ -598,9 +615,9 @@ async function exportPdf() {
 .closing__content h2 { max-width: 14ch; margin-top: 2.8cqw; font-size: clamp(46px, 5cqw, 80px); line-height: 1.02; font-weight: 500; letter-spacing: -.065em; }
 .closing__content > p { max-width: 39ch; margin-top: 1.7cqw; font-size: clamp(16px, 1.25cqw, 20px); color: rgba(250,252,251,.8); }
 .closing__cta { display: flex; flex-direction: column; align-items: flex-start; gap: 1.2cqw; margin-top: 2cqw; }
-.closing__cta strong { display: inline-flex; align-items: center; gap: 2cqw; padding: 1cqw 1.5cqw; border-radius: 3px; background: var(--paper); color: var(--green-deep); font-size: clamp(16px, 1.2cqw, 20px); font-weight: 500; }
-.closing__cta strong span { font-size: 25px; }
-.closing__cta > span { color: rgba(250,252,251,.75); font-size: clamp(14px, 1cqw, 16px); }
+.closing__cta .closing__button { display: inline-flex; align-items: center; gap: 2cqw; padding: 1cqw 1.5cqw; border-radius: 3px; background: var(--paper); color: var(--green-deep); font-size: clamp(16px, 1.2cqw, 20px); font-weight: 500; }
+.closing__button span { font-size: 25px; }
+.closing__contacts { display: flex; flex-wrap: wrap; gap: 12px 24px; color: rgba(250,252,251,.75); font-size: clamp(14px, 1cqw, 16px); }
 
 @media (max-width: 1100px) {
   .presentation-document { gap: 24px; padding: 24px 0; }
@@ -645,7 +662,7 @@ async function exportPdf() {
   .closing__content h2 { font-size: 5.6cqw; }
   .closing__content > p { margin-top: 24px; }
   .closing__cta { gap: 18px; margin-top: 30px; }
-  .closing__cta strong { padding: 14px 20px; }
+  .closing__cta .closing__button { padding: 14px 20px; }
 }
 @media (max-width: 700px) {
   .pdf-export { top: 10px; right: 10px; min-height: 42px; padding: 0 14px; font-size: 12px; }
@@ -701,7 +718,7 @@ async function exportPdf() {
   .flow__step h3 { padding-top: 5px; font-size: 28px; }
   .flow__step p { margin-top: 12px; font-size: 16px; max-width: none; }
   .flow__demo { flex-direction: column; align-items: flex-start; gap: 12px; font-size: 14px; }
-  .flow__demo strong { gap: 18px; }
+  .flow__demo a { gap: 18px; }
   .benefits__head, .segments__head, .plans__head { flex-direction: column; align-items: flex-start; gap: 24px; }
   .benefits__head p, .segments__head p, .plans__head p { max-width: none; }
   .benefits__body { grid-template-columns: 1fr; padding-top: 36px; }
@@ -730,8 +747,8 @@ async function exportPdf() {
   .closing__logo { width: 130px; }
   .closing__content h2 { max-width: 14ch; margin-top: 32px; font-size: 11cqw; }
   .closing__content > p { font-size: 17px; }
-  .closing__cta strong { font-size: 16px; gap: 20px; }
-  .closing__cta > span { font-size: 15px; }
+  .closing__cta .closing__button { font-size: 16px; gap: 20px; }
+  .closing__contacts { font-size: 15px; }
 }
 @media print {
   @page { size: 13.333in 7.5in; margin: 0; }
