@@ -167,6 +167,5 @@ onBeforeUnmount(() => {
 
 <style>
 html { scroll-padding-bottom: var(--cookie-banner-height, 0px); }
-body { padding-bottom: var(--cookie-banner-height, 0px); }
 body:has(.cookie-dialog[open]) { overflow: hidden; }
 </style>

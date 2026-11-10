@@ -469,3 +469,8 @@ As rotas `/privacidade` e `/cookies` usam Inter, tokens e header/footer comparti
 O rodapé dá acesso às políticas e à revisão das preferências de cookies.
 Não registrar dados empresariais, prazos ou fornecedores como aprovados antes de
 confirmação explícita do responsável.
+
+O usuário solicitou os links das políticas no rodapé e a remoção da faixa branca
+após ele. As políticas e “Gerenciar cookies” ficam em uma faixa inferior própria.
+O espaço de proteção do banner é absorvido pelo fundo escuro do rodapé, sem
+acrescentar padding ao body; ao dispensar o banner, volta o espaçamento normal.

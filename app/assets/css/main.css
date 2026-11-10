@@ -1760,7 +1760,7 @@ body .page-shell .marketing-social-rail__label {
 .footer-container {
     width: min(100% - (var(--gutter) * 2), 1280px);
     margin-inline: auto;
-    padding-block: clamp(3.5rem, 5vw, 5rem) clamp(3.5rem, 5vw, 5rem);
+    padding-block: clamp(3.5rem, 5vw, 5rem) max(clamp(3.5rem, 5vw, 5rem), var(--cookie-banner-height, 0px));
 }
 
 .footer-logo {
