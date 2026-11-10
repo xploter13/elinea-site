@@ -3,6 +3,7 @@ import logoWhiteUrl from '~/assets/images/logo-elinea-white.svg'
 import { Mail } from '@lucide/vue'
 
 const config = useRuntimeConfig()
+const { openPreferences } = useCookieConsent()
 </script>
 
 <template>
@@ -36,6 +37,9 @@ const config = useRuntimeConfig()
         <div class="footer-links__group">
           <h2>Atendimento</h2>
           <a href="mailto:contato@elinea.com.br">Fale com a Elínea</a>
+          <NuxtLink to="/privacidade">Política de privacidade</NuxtLink>
+          <NuxtLink to="/cookies">Política de cookies</NuxtLink>
+          <button class="footer-privacy-button" type="button" @click="openPreferences">Gerenciar cookies</button>
         </div>
       </nav>
 
@@ -69,3 +73,9 @@ const config = useRuntimeConfig()
     </div>
   </footer>
 </template>
+
+<style scoped>
+.footer-privacy-button { display: block; padding: 0; border: 0; background: none; color: #f1f3f8; font: inherit; font-size: 1rem; line-height: 1.45; text-align: left; cursor: pointer; min-height: 44px; }
+.footer-privacy-button:hover { color: #9ee2c0; text-decoration: underline; text-underline-offset: .25em; }
+.footer-privacy-button:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 4px; }
+</style>

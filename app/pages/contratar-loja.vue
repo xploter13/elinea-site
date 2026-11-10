@@ -179,6 +179,7 @@ useSeoMeta({
               <label class="create-store-field-wide" for="create-store-store_name"><span>Nome da loja <b>*</b></span><input id="create-store-store_name" v-model="form.store_name" autocomplete="organization" required :aria-invalid="!!errors.store_name" :aria-describedby="errors.store_name ? 'error-store_name' : undefined" @blur="validateField('store_name')" @input="delete errors.store_name"><small v-if="errors.store_name" id="error-store_name">{{ errors.store_name }}</small></label>
             </div>
             <p v-if="submitError" class="create-store-submit-error" role="alert">{{ submitError }} <a href="mailto:contato@elinea.com.br">Falar com a equipe</a></p>
+            <SitePrivacyNotice />
             <div class="create-store-submit">
               <button type="submit" :disabled="submitting" :aria-busy="submitting">
                 {{ submitting ? 'Preparando pagamento...' : `Continuar para pagamento · ${money(firstPayment, selectedPlan.currency)}` }}

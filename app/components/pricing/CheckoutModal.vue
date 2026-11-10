@@ -100,6 +100,7 @@ onBeforeUnmount(() => checkoutDialog.value?.close())
         <label><span>Segmento *</span><input v-model="form.segment" :aria-invalid="!!formErrors.segment" @input="clearError('segment')"><small v-if="formErrors.segment" role="alert">{{ formErrors.segment }}</small></label>
         <label class="full"><span>Nome da loja *</span><input v-model="form.store_name" :aria-invalid="!!formErrors.store_name" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" role="alert">{{ formErrors.store_name }}</small></label>
         <p v-if="submitError" class="form-error full" role="alert">{{ submitError }}</p>
+        <SitePrivacyNotice />
         <div class="modal-actions full">
           <MarketingButton variant="outline" type="button" @click="close">Cancelar</MarketingButton>
           <MarketingButton variant="solid" type="submit" :disabled="submitting">

@@ -35,6 +35,8 @@ async function checkStatus() {
 onMounted(checkStatus)
 onBeforeUnmount(() => clearTimeout(pollTimer))
 
+useHead({ meta: [{ name: 'referrer', content: 'no-referrer' }] })
+
 useSeoMeta({ title: 'Acompanhe sua contratação — Elínea', robots: 'noindex, nofollow' })
 </script>
 

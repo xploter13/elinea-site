@@ -62,7 +62,8 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 - Títulos auxiliares em cards e módulos usam `1rem`; descrições curtas usam `.9rem`.
   Textos de abertura dos capítulos podem ser maiores. Rótulos, estados e valores
   compactos seguem a escala própria da interface.
-- As fontes são carregadas pelo `head` do Nuxt via Google Fonts.
+- As fontes Inter são servidas localmente em `public/fonts`, com `@font-face`,
+  sem conexões ao Google Fonts. A família e os pesos aprovados são preservados.
 - Grandes títulos usam `clamp()`, line-height compacto próximo de `0.9–1.05` e
   tracking negativo suave, em geral entre `-0.04em` e `-0.02em`, para preservar
   legibilidade e respiro entre as letras.
@@ -459,3 +460,12 @@ maiores, sem círculo interno, eixo ou ponto.
 5. Testar desktop, tablet e mobile, incluindo foco por teclado e redução de movimento.
 6. Verificar console, warnings relevantes e overflow horizontal.
 7. Atualizar este arquivo apenas quando uma nova decisão for aprovada.
+
+## Privacidade e cookies
+
+Em 10 de novembro de 2026, o usuário autorizou a implementação das correções da
+auditoria, incluindo política de privacidade e controle de cookies, mantendo o visual.
+As rotas `/privacidade` e `/cookies` usam Inter, tokens e header/footer compartilhados.
+O rodapé dá acesso às políticas e à revisão das preferências de cookies.
+Não registrar dados empresariais, prazos ou fornecedores como aprovados antes de
+confirmação explícita do responsável.
