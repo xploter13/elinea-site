@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ title: string, intro: string }>()
+withDefaults(defineProps<{ title: string, intro: string, updatedAt?: string }>(), { updatedAt: '10 de novembro de 2026' })
 </script>
 
 <template>
@@ -7,7 +7,7 @@ defineProps<{ title: string, intro: string }>()
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <SiteHeader light />
     <main id="conteudo" class="site-container legal-main">
-      <header class="legal-heading"><h1>{{ title }}</h1><p>{{ intro }}</p><span>Atualização: 10 de novembro de 2026</span></header>
+      <header class="legal-heading"><h1>{{ title }}</h1><p>{{ intro }}</p><span>Atualização: {{ updatedAt }}</span></header>
       <div class="legal-content"><slot /></div>
     </main>
     <SiteFooter />

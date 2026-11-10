@@ -1,16 +1,21 @@
 <script setup lang="ts">
+import { termsAcceptancePayload } from '~/data/serviceTerms'
 import type { Plan } from '~/data/plans'
 import { MarketingButton } from '@elinea/ui/marketing'
 import { ArrowRight, X } from '@lucide/vue'
 
 type CheckoutResponse = { data: { public_id: string }, checkout_url: string }
-type FormKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
+type DataKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
+
+type FormKey = DataKey | 'terms_accepted'
 
 const props = defineProps<{ open: boolean, plan: Plan | null }>()
 const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 const config = useRuntimeConfig()
 const route = useRoute()
+const { document: serviceTerms, refresh: refreshTerms, error: termsLoadingError } = useServiceTerms()
 const checkoutDialog = ref<HTMLDialogElement | null>(null)
+const termsAccepted = ref(false)
 const submitting = ref(false)
 const submitError = ref('')
 const form = reactive({ owner_name: '', owner_email: '', phone: '', store_name: '', segment: '' })
@@ -28,7 +33,7 @@ const close = () => {
 const clearError = (field: FormKey) => delete formErrors[field]
 const validateForm = () => {
   Object.keys(formErrors).forEach(key => delete formErrors[key as FormKey])
-  const required: Array<[FormKey, string]> = [
+  const required: Array<[DataKey, string]> = [
     ['owner_name', 'Informe seu nome.'],
     ['owner_email', 'Informe seu e-mail.'],
     ['segment', 'Informe o segmento da loja.'],
@@ -38,6 +43,7 @@ const validateForm = () => {
     if (!form[field].trim()) formErrors[field] = message
   })
   if (form.owner_email && !/^\S+@\S+\.\S+$/.test(form.owner_email)) formErrors.owner_email = 'Informe um e-mail válido.'
+  if (!termsAccepted.value || !serviceTerms.value || termsLoadingError.value) formErrors.terms_accepted = 'Para continuar, leia e aceite os Termos de Uso e Contratação.'
   return Object.keys(formErrors).length === 0
 }
 
@@ -50,11 +56,19 @@ const submitCheckout = async () => {
   submitting.value = true
   submitError.value = ''
   try {
+    const acceptedDocument = serviceTerms.value!
+    await refreshTerms()
+    if (termsLoadingError.value || !serviceTerms.value || serviceTerms.value.sha256 !== acceptedDocument.sha256 || !termsAccepted.value) {
+      termsAccepted.value = false
+      formErrors.terms_accepted = 'Os termos foram atualizados ou estão indisponíveis. Confira a versão vigente antes de continuar.'
+      return
+    }
     const origin = window.location.origin
     const cancelPath = route.path === '/' ? '/#planos' : `${route.path}#planos`
     const response = await $fetch<CheckoutResponse>(`${config.public.apiBase}/implementation-checkouts`, {
       method: 'POST',
       body: {
+        ...termsAcceptancePayload(termsAccepted.value, acceptedDocument),
         plan_id: props.plan.id,
         ...form,
         phone: form.phone || null,
@@ -72,6 +86,8 @@ const submitCheckout = async () => {
     submitting.value = false
   }
 }
+
+watch(() => props.plan?.id, () => { termsAccepted.value = false; delete formErrors.terms_accepted })
 
 watch(() => props.open, async (isOpen) => {
   await nextTick()
@@ -101,6 +117,7 @@ onBeforeUnmount(() => checkoutDialog.value?.close())
         <label class="full"><span>Nome da loja *</span><input v-model="form.store_name" :aria-invalid="!!formErrors.store_name" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" role="alert">{{ formErrors.store_name }}</small></label>
         <p v-if="submitError" class="form-error full" role="alert">{{ submitError }}</p>
         <SitePrivacyNotice />
+        <SiteTermsAcceptance id="modal-terms-accepted" v-model="termsAccepted" :error="formErrors.terms_accepted" @update:model-value="clearError('terms_accepted')" />
         <div class="modal-actions full">
           <MarketingButton variant="outline" type="button" @click="close">Cancelar</MarketingButton>
           <MarketingButton variant="solid" type="submit" :disabled="submitting">

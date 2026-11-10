@@ -474,3 +474,20 @@ O usuário solicitou os links das políticas no rodapé e a remoção da faixa b
 após ele. As políticas e “Gerenciar cookies” ficam em uma faixa inferior própria.
 O espaço de proteção do banner é absorvido pelo fundo escuro do rodapé, sem
 acrescentar padding ao body; ao dispensar o banner, volta o espaçamento normal.
+
+## Termos de contratação e gestão de versões
+
+Em 10 de novembro de 2026, o usuário forneceu os termos versão 1.1 e solicitou
+aceite obrigatório no formulário, registro na API e edição pelo `elinea-gestao`.
+Diante da divergência sobre o início da cobrança, escolheu manter o fluxo atual:
+a primeira mensalidade ou anuidade é paga na contratação, junto da implantação
+quando aplicável, antes da preparação da loja. As cláusulas 4 e 5 e a declaração
+de aceite foram alinhadas a essa escolha, sem alterar o processamento Stripe.
+
+A rota `/termos` mantém o visual das políticas. O formulário consulta a versão
+publicada em `GET /service-terms`, abre o texto da versão específica em outra aba
+e exige novo aceite quando seu conteúdo ou as condições do plano mudarem.
+O aceite contratual é independente do controle de cookies e de marketing.
+A Gestão oferece rascunhos e publicação de novas versões; o histórico publicado
+e os registros de aceite não são substituídos por edições posteriores.
+Dados empresariais ainda ausentes permanecem identificados como pendentes.

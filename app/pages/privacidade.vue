@@ -25,6 +25,7 @@ useSeoMeta({ title: 'Política de privacidade — Elínea',
     <section id="dados">
       <h2>Dados informados na contratação</h2>
       <p>Ao iniciar a contratação, você informa nome, e-mail, CPF do responsável, nome da loja e segmento. O telefone é opcional. Esses dados são enviados à API da Elínea para registrar a solicitação e dar continuidade à contratação e à preparação do acesso.</p>
+      <p>Quando você aceita os Termos de Uso e Contratação, registramos a versão e o conteúdo apresentados, a data e hora, o endereço IP, a identificação do navegador e as condições do plano escolhido. Esse registro fica associado à solicitação para documentar a manifestação de vontade e as condições da contratação.</p>
       <p v-if="privacy.cpfPurpose">{{ privacy.cpfPurpose }}</p>
       <p v-else>A finalidade específica e a necessidade do CPF nesta etapa estão em confirmação. Você pode solicitar esclarecimentos antes de preencher o formulário pelo canal de contato desta política.</p>
       <p>O fluxo de contratação se relaciona à execução de contrato ou a procedimentos preliminares solicitados por você. Eventuais obrigações legais devem ser avaliadas conforme o uso efetivo dos dados. O envio do formulário não constitui autorização genérica para publicidade.</p>

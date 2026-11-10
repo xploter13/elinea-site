@@ -68,6 +68,7 @@ const { openPreferences } = useCookieConsent()
         <p class="footer-meta__legal">© 2026 Elínea. Todos os direitos reservados.</p>
       </div>
       <nav class="footer-privacy" aria-label="Privacidade e cookies">
+        <NuxtLink to="/termos">Termos de uso e contratação</NuxtLink>
         <NuxtLink to="/privacidade">Política de privacidade</NuxtLink>
         <NuxtLink to="/cookies">Política de cookies</NuxtLink>
         <button class="footer-privacy-button" type="button" @click="openPreferences">Gerenciar cookies</button>

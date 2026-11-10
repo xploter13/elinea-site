@@ -50,3 +50,30 @@ Referências: [Guia de cookies da ANPD](https://www.gov.br/anpd/pt-br/centrais-d
 - Chromium com Playwright instalado apenas em `/tmp`: aceitação, recusa após recarga, seleção granular, revisão/revogação, sincronização entre abas, expiração/corrupção e armazenamento bloqueado passaram. Conferidos aviso do formulário, fonte local, `no-referrer` na conclusão e `noindex` da política preliminar, sem erros JavaScript.
 - Conferidas larguras de 1440, 1280, 1024, 768, 390 e 320 pixels, sem overflow horizontal; painel cabe na viewport, com rolagem quando necessário. Capturas de desktop e mobile foram inspecionadas.
 - As chamadas à API foram simuladas no navegador; não foram enviados formulários nem criadas cobranças. Nenhuma requisição ao Google Fonts ou a rastreadores foi observada nas páginas testadas. Isso não substitui a inspeção da infraestrutura publicada.
+
+## Termos de uso e contratação
+
+O site utiliza `GET /api/v1/service-terms` como fonte da versão publicada. A página
+`/termos?versao=<versão>` consulta uma publicação específica. A versão 1.1 em
+`app/assets/legal/terms-1.1.md` é a cópia inicial de referência; os aceites usam a
+versão e o SHA-256 retornados pela API, nunca uma preferência de cookies.
+Quando a API estiver indisponível, o formulário impede novo aceite e permite tentar
+novamente. Uma atualização publicada durante o preenchimento exige nova confirmação.
+
+O painel Gestão disponibiliza o editor em `/platform/service-terms`, exclusivo a
+superusuários. Rascunhos podem ser editados, mas a publicação exige uma versão
+superior à vigente, identificação de versão consistente e preenchimento dos campos
+empresariais. Publicações anteriores continuam consultáveis e imutáveis.
+
+Publicar a API e aplicar suas três migrations novas antes de disponibilizar os
+frontends atualizados. O comando operacional é `php artisan migrate --force`, no
+ambiente apropriado; a implementação só executou migrations em banco de testes em
+memória. A migration inicial conserva o texto fornecido pelo usuário com os campos
+empresariais pendentes; preencher os dados em uma nova versão pela Gestão antes da
+publicação definitiva do contrato.
+
+A API registra versão, SHA-256, texto integral, horário do servidor, IP, navegador
+e resumo do plano junto da solicitação de contratação. Esses dados não são expostos
+na consulta pública de acompanhamento. Registros anteriores permanecem sem aceite,
+sem preenchimento retroativo fictício. A revisão das regras operacionais, retenção
+e demais pendências de privacidade permanece sob responsabilidade da empresa.

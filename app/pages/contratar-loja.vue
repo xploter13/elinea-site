@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import { termsAcceptancePayload } from '~/data/serviceTerms'
 import { isValidCpf, normalizeCpf } from '~/utils/cpf'
 import { ArrowLeft, ArrowRight, Check, LockKeyhole } from '@lucide/vue'
 import { formatPlanMoney, type BillingInterval, type Plan } from '~/data/plans'
 
-type Field = 'owner_cpf' | 'owner_name' | 'owner_email' | 'phone' | 'store_name' | 'segment'
+type DataField = 'owner_cpf' | 'owner_name' | 'owner_email' | 'phone' | 'store_name' | 'segment'
+type Field = DataField | 'terms_accepted'
 type CheckoutResponse = { checkout_url: string }
 
 const route = useRoute()
 const config = useRuntimeConfig()
 const { data: plans, pending: plansPending, error: plansError, refresh: refreshPlans } = usePublicPlans()
+const { document: serviceTerms, refresh: refreshTerms, error: termsLoadingError } = useServiceTerms()
 const selectedSlug = ref('')
 const selectedInterval = ref<BillingInterval>('monthly')
 const selectedPlan = computed<Plan | undefined>(() => plans.value.find(plan => plan.slug === selectedSlug.value))
@@ -17,6 +20,7 @@ const recurringAmount = computed(() => selectedInterval.value === 'yearly' ? sel
 const firstPayment = computed(() => (recurringAmount.value ?? 0) + (selectedPlan.value?.implementation_amount ?? 0))
 const form = reactive({ owner_name: '', owner_email: '', owner_cpf: '', phone: '', store_name: '', segment: '' })
 const errors = reactive<Partial<Record<Field, string>>>({})
+const termsAccepted = ref(false)
 const submitting = ref(false)
 const submitError = ref('')
 const errorSummary = ref<HTMLElement | null>(null)
@@ -34,7 +38,7 @@ const requiredMessages: Partial<Record<Field, string>> = {
   owner_cpf: 'Informe o CPF do responsável.', owner_name: 'Informe seu nome.', owner_email: 'Informe o e-mail.', store_name: 'Informe o nome da loja.', segment: 'Informe o segmento.',
 }
 
-function validateField(field: Field) {
+function validateField(field: DataField) {
   const value = form[field].trim()
   delete errors[field]
   if (field !== 'phone' && !value) errors[field] = requiredMessages[field]
@@ -47,9 +51,12 @@ function validateField(field: Field) {
 async function submitCheckout() {
   submitError.value = ''
   const plan = selectedPlan.value
+  const acceptedDocument = serviceTerms.value
   if (!plan || !canCheckout.value) return
-  const valid = (Object.keys(form) as Field[]).map(validateField).every(Boolean)
-  if (!valid) {
+  const valid = (Object.keys(form) as DataField[]).map(validateField).every(Boolean)
+  if (!acceptedDocument || termsLoadingError.value || !termsAccepted.value) errors.terms_accepted = 'Para continuar, leia e aceite os Termos de Uso e Contratação.'
+  else delete errors.terms_accepted
+  if (!valid || !termsAccepted.value || !acceptedDocument || termsLoadingError.value) {
     await nextTick()
     errorSummary.value?.focus()
     return
@@ -57,7 +64,7 @@ async function submitCheckout() {
 
   submitting.value = true
   try {
-    await refreshPlans()
+    await Promise.all([refreshPlans(), refreshTerms()])
     if (plansError.value) {
       submitError.value = 'Não foi possível confirmar os valores agora. Tente novamente.'
       return
@@ -70,10 +77,15 @@ async function submitCheckout() {
       return
     }
 
+    if (termsLoadingError.value || !serviceTerms.value || serviceTerms.value.sha256 !== acceptedDocument.sha256 || !termsAccepted.value) {
+      errors.terms_accepted = 'Confira as condições do plano e aceite os termos para continuar.'
+      return
+    }
     const origin = window.location.origin
     const checkout = await $fetch<CheckoutResponse>(`${config.public.apiBase}/implementation-checkouts`, {
       method: 'POST',
       body: {
+        ...termsAcceptancePayload(termsAccepted.value, acceptedDocument),
         plan_id: currentPlan.id,
         interval: selectedInterval.value,
         owner_name: form.owner_name.trim(),
@@ -92,7 +104,12 @@ async function submitCheckout() {
     if (data?.errors) {
       for (const [field, messages] of Object.entries(data.errors)) {
         if (field in form) errors[field as Field] = messages[0] ?? 'Revise este campo.'
+        if (field.startsWith('terms_')) {
+          termsAccepted.value = false
+          errors.terms_accepted = messages[0] ?? 'Revise os termos e confirme o aceite.'
+        }
       }
+      if (Object.keys(data.errors).some(field => field.startsWith('terms_'))) await refreshTerms()
       await nextTick()
       errorSummary.value?.focus()
     }
@@ -101,6 +118,11 @@ async function submitCheckout() {
     submitting.value = false
   }
 }
+
+watch([selectedSlug, selectedInterval, () => selectedPlan.value?.monthly_amount, () => selectedPlan.value?.yearly_amount, () => selectedPlan.value?.implementation_amount], () => {
+  termsAccepted.value = false
+  delete errors.terms_accepted
+})
 
 useSeoMeta({
   title: 'Contratar loja — Elínea',
@@ -180,6 +202,7 @@ useSeoMeta({
             </div>
             <p v-if="submitError" class="create-store-submit-error" role="alert">{{ submitError }} <a href="mailto:contato@elinea.com.br">Falar com a equipe</a></p>
             <SitePrivacyNotice />
+            <SiteTermsAcceptance id="create-store-terms_accepted" v-model="termsAccepted" :error="errors.terms_accepted" @update:model-value="delete errors.terms_accepted" />
             <div class="create-store-submit">
               <button type="submit" :disabled="submitting" :aria-busy="submitting">
                 {{ submitting ? 'Preparando pagamento...' : `Continuar para pagamento · ${money(firstPayment, selectedPlan.currency)}` }}
