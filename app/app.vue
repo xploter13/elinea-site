@@ -6,4 +6,4 @@ useHead({
 })
 </script>
 
-<template><NuxtPage /><SiteCookieConsent /></template>
+<template><NuxtPage /><SiteWhatsAppButton /><SiteCookieConsent /></template>

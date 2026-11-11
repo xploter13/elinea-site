@@ -1772,7 +1772,7 @@ body .page-shell .marketing-social-rail__label {
 .footer-brand { min-width: 0; }
 .footer-logo { display: inline-block; }
 .footer-logo img { display: block; width: clamp(160px, 12vw, 195px); height: auto; }
-.footer-brand__tagline { max-width: 15rem; margin: 1.75rem 0 1rem; font-size: 1.1rem; font-weight: 500; line-height: 1.5; }
+.footer-brand__tagline { max-width: 15rem; margin: .75rem 0 1rem; font-size: 1.1rem; font-weight: 500; line-height: 1.5; }
 .footer-contact { display: inline-flex; align-items: center; min-height: 44px; color: #d6dce9; font-size: .9rem; overflow-wrap: anywhere; }
 
 .footer-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }

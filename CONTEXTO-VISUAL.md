@@ -127,7 +127,8 @@ esquerda; quatro grupos de navegação à direita no desktop; políticas e prefe
 de cookies na base, seguidas dos direitos reservados e do crédito “Powered by
 Gênios Mídia - Soluções Digitais”. Não repetir o nome “Elínea” acima do CNPJ nem
 incluir o título “Siga-nos”. Em seguida, o usuário solicitou o título “Redes Sociais”
-acima dos ícones. Preservar essa composição e sua adaptação responsiva.
+acima dos ícones e o slogan mais próximo do logotipo. Preservar essa composição
+e sua adaptação responsiva.
 
 ## Página Plataforma
 
@@ -259,6 +260,10 @@ de IA, Google Analytics e Meta permanecem identificados como recursos em evoluç
 
 Nos blocos “Base técnica para SEO” e “Relatórios para agir”, manter espaçamento
 uniforme entre ícones e títulos, com os textos alinhados pelo topo.
+
+Em 11 de novembro de 2026, o usuário solicitou um botão flutuante de WhatsApp
+no site. O contato comercial já informado é (24) 99816-4753. O atalho deve respeitar
+a área do aviso de cookies, o foco por teclado e as margens seguras do mobile.
 
 ## Movimento e interação
 
