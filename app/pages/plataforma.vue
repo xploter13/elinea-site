@@ -210,9 +210,6 @@ onBeforeUnmount(() => destroyMotion?.())
               </div>
             </div>
           </div>
-          <ul class="platform-hero__scope" aria-label="Áreas da plataforma">
-            <li>Loja virtual</li><li>Operação</li><li>Relacionamento</li>
-          </ul>
         </div>
       </section>
 
