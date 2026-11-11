@@ -68,18 +68,24 @@ const { openPreferences } = useCookieConsent()
         </div>
         <p class="footer-meta__legal">© 2026 Elínea. Todos os direitos reservados.</p>
       </div>
-      <nav class="footer-privacy" aria-label="Privacidade e cookies">
-        <NuxtLink to="/termos">Termos de uso e contratação</NuxtLink>
-        <NuxtLink to="/privacidade">Política de privacidade</NuxtLink>
-        <NuxtLink to="/cookies">Política de cookies</NuxtLink>
-        <button class="footer-privacy-button" type="button" @click="openPreferences">Gerenciar cookies</button>
-      </nav>
+      <div class="footer-bottom">
+        <nav class="footer-privacy" aria-label="Privacidade e cookies">
+          <NuxtLink to="/termos">Termos de uso e contratação</NuxtLink>
+          <NuxtLink to="/privacidade">Política de privacidade</NuxtLink>
+          <NuxtLink to="/cookies">Política de cookies</NuxtLink>
+          <button class="footer-privacy-button" type="button" @click="openPreferences">Gerenciar cookies</button>
+        </nav>
+        <p class="footer-meta__owner">Um produto da <strong>Gênios Mídia Soluções Digitais</strong>.</p>
+      </div>
     </div>
   </footer>
 </template>
 
 <style scoped>
-.footer-privacy { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 2rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 12%); }
+.footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 12%); }
+.footer-meta__owner { margin: 0 0 0 auto; color: #d6dce9; font-size: .85rem; line-height: 1.55; text-align: right; }
+.footer-meta__owner strong { color: #f1f3f8; font-weight: 500; }
+.footer-privacy { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 2rem; }
 .footer-privacy a, .footer-privacy-button { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; color: #d6dce9; font: inherit; font-size: .9rem; line-height: 1.45; text-align: left; cursor: pointer; }
 .footer-privacy a:hover, .footer-privacy-button:hover { color: #9ee2c0; text-decoration: underline; text-underline-offset: .25em; }
 .footer-privacy :is(a, button):focus-visible { outline: 2px solid var(--green-bright); outline-offset: 4px; }

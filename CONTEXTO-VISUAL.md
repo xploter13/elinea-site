@@ -113,6 +113,10 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 O rodapé compartilhado usa fundo verde escuro (`#07110f`), logotipo no topo,
 quatro colunas de navegação e uma faixa inferior com contato, redes sociais e
 direitos reservados. A navegação aponta apenas para páginas e seções existentes.
+Na faixa inferior, abaixo da linha divisória e alinhada à direita, incluir a
+assinatura “Um produto da Gênios Mídia Soluções Digitais”, proprietária do produto
+informada pelo usuário. Manter o tratamento discreto e a adaptação da assinatura
+em telas menores, junto à área de políticas e preferências de cookies.
 
 ## Página Plataforma
 
