@@ -523,3 +523,7 @@ redirecionamentos ou certificados automáticos sem uma implementação verificad
 Não incluir comandos de terminal, configuração de VPS, Cloudflare for SaaS, modos
 de SSL ou instalação de certificados no passo a passo do cliente. Essas tarefas
 pertencem à operação da Elínea. A página é orientação e não altera infraestrutura.
+
+Na documentação, o usuário pediu a remoção do bloco de três passos numerados
+e do sublinhado no hover do CTA “Falar com a Elínea”. Aplicar essa exceção apenas
+a esse CTA, preservando o foco por teclado e o padrão dos demais links e botões.

@@ -99,11 +99,6 @@ useSeoMeta({
             <Globe2 :size="21" aria-hidden="true" />
             <div><strong>Use o endereço que foi criado para a sua loja.</strong><p>Neste exemplo, a loja é <code>exemplo.elinea.com.br</code> e o domínio do cliente é <code>exemplo.com</code>. No seu caso, substitua os exemplos pelo endereço gerado pela plataforma e pelo domínio que você possui.</p></div>
           </div>
-          <ol class="docs-flow" aria-label="Etapas para conectar seu domínio">
-            <li><span>01</span><strong>Localize sua loja</strong><p>Tenha em mãos o endereço criado na contratação.</p></li>
-            <li><span>02</span><strong>Aponte seu domínio</strong><p>Crie os registros A e CNAME no seu provedor de DNS.</p></li>
-            <li><span>03</span><strong>Conclua a ativação</strong><p>Informe o domínio próprio à Elínea para vinculá-lo à loja.</p></li>
-          </ol>
         </section>
 
         <section id="antes-de-comecar" class="docs-section" aria-labelledby="heading-antes" tabindex="-1">
@@ -188,7 +183,7 @@ useSeoMeta({
           <details><summary>O domínio principal abre, mas o www não</summary><p>Confira o CNAME e avise a Elínea de que o endereço com www também será utilizado. Os dois endereços precisam estar contemplados na ativação; o registro DNS sozinho não cria essa configuração.</p></details>
           <details><summary>O apontamento da loja muda meu e-mail?</summary><p>Você deve manter os registros do serviço de e-mail, como MX e os TXT de SPF, DKIM e DMARC. Se o e-mail parar após uma alteração, compare os registros com a cópia anterior e procure o provedor do seu e-mail.</p></details>
           <details><summary>Aparece um erro da Cloudflare ou de conexão segura</summary><p>Envie o domínio e uma captura do erro ao atendimento da Elínea. Se você usa Cloudflare, confira se os registros da loja estão em “Somente DNS”. A equipe verifica o que precisa ser ajustado na plataforma.</p></details>
-          <div class="docs-support"><h3>Precisa de ajuda com o seu domínio?</h3><p>Informe o endereço da loja e envie uma captura dos registros. Não envie senhas ou chaves de acesso.</p><MarketingTextButton href="mailto:contato@elinea.com.br">Falar com a Elínea</MarketingTextButton></div>
+          <div class="docs-support"><h3>Precisa de ajuda com o seu domínio?</h3><p>Informe o endereço da loja e envie uma captura dos registros. Não envie senhas ou chaves de acesso.</p><MarketingTextButton class="docs-support-action" href="mailto:contato@elinea.com.br">Falar com a Elínea</MarketingTextButton></div>
         </section>
         <p class="docs-copy-notice" role="status" aria-live="polite">{{ copyNotice }}</p>
       </article>
@@ -224,18 +219,13 @@ useSeoMeta({
 .docs-section > ul { padding-left: 1.2rem; list-style: disc; }
 .docs-section > ul > li + li { margin-top: .65rem; }
 .docs-section code { overflow-wrap: anywhere; border-radius: 4px; padding: .12rem .3rem; background: #edf2ef; color: var(--ink-2); font-size: .85em; }
-.docs-section a:not(.docs-copy) { color: #08734b; text-decoration: underline; text-underline-offset: .2em; }
+.docs-section a:not(.docs-copy):not(.docs-support-action) { color: #08734b; text-decoration: underline; text-underline-offset: .2em; }
 .docs-section a svg { display: inline; vertical-align: middle; }
 .docs-note { display: flex; align-items: flex-start; gap: .9rem; margin-block: 1.7rem; padding: 1.3rem 1.5rem; border-left: 3px solid var(--green); background: var(--green-light); }
 .docs-note > svg { flex-shrink: 0; margin-top: .15rem; color: #08734b; }
 .docs-note strong { display: block; line-height: 1.5; }
 .docs-note p { margin-top: .5rem; color: #365b4a; font-size: .9rem; }
 .docs-note--plain { background: var(--warm-white); }
-.docs-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.6rem; margin-top: 2rem; padding: 1.4rem 0; border-block: 1px solid var(--line); }
-.docs-flow li { min-width: 0; }
-.docs-flow span { display: block; margin-bottom: .7rem; color: #08734b; font-size: .8rem; }
-.docs-flow strong { display: block; font-size: .9rem; }
-.docs-flow p { margin-top: .4rem; font-size: .85rem; line-height: 1.6; }
 .docs-section > .docs-checklist { list-style: none; padding-left: 0; }
 .docs-checklist li { display: flex; align-items: flex-start; gap: .7rem; }
 .docs-checklist svg { flex-shrink: 0; margin-top: .35rem; color: var(--green); }
@@ -264,6 +254,7 @@ useSeoMeta({
 .docs-section details > p { margin: 0 0 1.3rem; font-size: .9rem; }
 .docs-support { margin-top: 2.5rem; }
 .docs-support p { margin-block: .7rem 1rem; }
+.docs-support-action { --elinea-marketing-text-button-color: #08734b; --elinea-marketing-text-button-line: transparent; }
 .docs-copy-notice { position: fixed; z-index: 70; right: 1.5rem; bottom: 1.5rem; max-width: min(340px, calc(100vw - 3rem)); border-radius: 8px; background: var(--ink); color: white; font-size: .85rem; line-height: 1.5; }
 .docs-copy-notice:not(:empty) { padding: .9rem 1.2rem; box-shadow: 0 6px 24px rgb(0 0 0 / 12%); }
 .docs-page :is(a, button, summary, [tabindex="0"]):focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
@@ -287,9 +278,6 @@ useSeoMeta({
   .docs-heading > p:not(.docs-breadcrumb) { font-size: 1rem; }
   .docs-section { padding-block: 2rem; }
   .docs-note { padding: 1rem; }
-  .docs-flow { grid-template-columns: 1fr; gap: 1.2rem; }
-  .docs-flow li { display: grid; grid-template-columns: 24px 1fr; column-gap: .6rem; }
-  .docs-flow span { grid-row: span 2; margin: .1rem 0 0; }
 }
 @media (prefers-reduced-motion: reduce) { .docs-menu-toggle svg { transition: none; } }
 </style>
