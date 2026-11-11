@@ -1787,7 +1787,8 @@ body .page-shell .marketing-social-rail__label {
 .footer-company p { margin: 0; }
 .footer-company address { max-width: 40rem; margin-top: .25rem; font-style: normal; }
 .footer-company__placeholder { font-size: .8rem; }
-.footer-social > div { display: flex; margin-top: 1rem; gap: .5rem; align-items: center; }
+.footer-social h2 { margin: 1.25rem 0 .5rem; color: white; font-size: .9rem; font-weight: 600; line-height: 1.4; }
+.footer-social > div { display: flex; gap: .5rem; align-items: center; }
 .footer-social a { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; color: white; transition: color .2s ease; }
 
 .footer-bottom { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgb(255 255 255 / 12%); }

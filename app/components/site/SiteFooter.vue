@@ -22,6 +22,7 @@ const { openPreferences } = useCookieConsent()
             <address>{{ config.public.privacy.address || 'Endereço a informar' }}</address>
           </div>
           <div class="footer-social" role="group" aria-label="Redes sociais da Elínea">
+            <h2>Redes Sociais</h2>
             <div>
               <a :href="config.public.instagramUrl" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Elínea">
                 <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">

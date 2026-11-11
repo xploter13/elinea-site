@@ -126,7 +126,8 @@ A composição final do rodapé foi aprovada pelo usuário em 11 de novembro de
 esquerda; quatro grupos de navegação à direita no desktop; políticas e preferências
 de cookies na base, seguidas dos direitos reservados e do crédito “Powered by
 Gênios Mídia - Soluções Digitais”. Não repetir o nome “Elínea” acima do CNPJ nem
-incluir o título “Siga-nos”. Preservar essa composição e sua adaptação responsiva.
+incluir o título “Siga-nos”. Em seguida, o usuário solicitou o título “Redes Sociais”
+acima dos ícones. Preservar essa composição e sua adaptação responsiva.
 
 ## Página Plataforma
 
