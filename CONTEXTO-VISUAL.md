@@ -119,6 +119,14 @@ discreto, a adaptação para telas menores e os acessos às políticas e prefer�
 de cookies. CNPJ e endereço reais ainda não foram fornecidos; os campos provisórios
 não representam dados empresariais confirmados. Reutilizar os valores públicos de
 `privacy.cnpj` e `privacy.address` quando configurados.
+O usuário solicitou a remoção da primeira linha divisória, acima dos dados
+empresariais; manter apenas a divisória da área de políticas.
+A composição final do rodapé foi aprovada pelo usuário em 11 de novembro de
+2026: marca, slogan, contato, CNPJ, endereço e ícones sociais juntos na coluna
+esquerda; quatro grupos de navegação à direita no desktop; políticas e preferências
+de cookies na base, seguidas dos direitos reservados e do crédito “Powered by
+Gênios Mídia - Soluções Digitais”. Não repetir o nome “Elínea” acima do CNPJ nem
+incluir o título “Siga-nos”. Preservar essa composição e sua adaptação responsiva.
 
 ## Página Plataforma
 
