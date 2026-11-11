@@ -69,6 +69,8 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 </template>
 
 <style scoped>
+.plan-action :deep(.marketing-button__label) { flex: 1; min-width: 0; }
+.plan-action :deep(.marketing-button__icon) { flex-shrink: 0; margin-left: auto; }
 .pricing-state { padding: 2rem; color: var(--muted); }
 .pricing-state button { margin-top: .75rem; color: var(--green); font: inherit; font-weight: 600; text-decoration: underline; }
 .plan-commercial-note { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; line-height: 1.6; }

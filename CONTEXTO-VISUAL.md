@@ -146,6 +146,9 @@ nos componentes compartilhados `app/components/site/SiteHeader.vue` e
 O carrossel de planos permanece rolável por gesto, teclado e controles visuais, mas a
 barra de rolagem nativa não deve ficar visível.
 Os controles de anterior/próximo só aparecem quando há mais de três planos.
+Nos botões dos cards de planos, manter a seta alinhada à borda direita do botão,
+respeitando o padding de cada variante, com o texto centralizado no espaço restante.
+Aplicar no carrossel compartilhado, preservando o estilo dos demais CTAs do site.
 
 O hero, o header e o footer preservam sua direção atual. Mudanças futuras devem ser
 refinamentos, salvo nova orientação explícita.
