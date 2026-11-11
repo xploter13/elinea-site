@@ -36,6 +36,7 @@ const { openPreferences } = useCookieConsent()
         </div>
         <div class="footer-links__group">
           <h2>Atendimento</h2>
+          <NuxtLink to="/documentacao">Documentação</NuxtLink>
           <a href="mailto:contato@elinea.com.br">Fale com a Elínea</a>
         </div>
       </nav>

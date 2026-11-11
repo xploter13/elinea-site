@@ -497,3 +497,19 @@ que não correspondam a campos disponíveis no formulário.
 A Gestão oferece rascunhos e publicação de novas versões; o histórico publicado
 e os registros de aceite não são substituídos por edições posteriores.
 Dados empresariais ainda ausentes permanecem identificados como pendentes.
+
+## Documentação de domínios e DNS
+
+A rota `/documentacao` reúne o guia de apontamento, acessível pelo rodapé em
+Atendimento. Preservar Inter, tokens e header/footer do site. O usuário solicitou
+um menu de âncoras fixo à esquerda: o índice acompanha a rolagem no desktop e
+vira um menu compacto no mobile, com indicação da seção atual.
+
+O guia diferencia nameservers de registros A/CNAME e usa os dados fornecidos:
+IP `193.160.119.94`, destino de exemplo `sualoja.elinea.com.br` e pares de DNS
+`daisy/weston.ns.cloudflare.com` e `lunar/solar.dns-parking.com`. Os nameservers
+da Cloudflare devem ser confirmados por zona; não instruir todos os clientes a
+copiar o mesmo par. O destino da loja, os domínios e o HTTPS exigem confirmação
+da implantação. Não apresentar o DNS como cadastro ou emissão automática de SSL,
+nem presumir que Cloudflare for SaaS já está habilitado. A página é orientação;
+não altera DNS, configurações da Cloudflare ou a VPS.
