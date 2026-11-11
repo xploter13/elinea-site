@@ -9,42 +9,50 @@ const { openPreferences } = useCookieConsent()
 <template>
   <footer id="rodape" class="site-footer">
     <div class="footer-container">
-      <NuxtLink to="/" class="footer-logo" aria-label="Elínea — início">
-        <img :src="logoWhiteUrl" alt="">
-      </NuxtLink>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <NuxtLink to="/" class="footer-logo" aria-label="Elínea — início">
+            <img :src="logoWhiteUrl" alt="">
+          </NuxtLink>
+          <p class="footer-brand__tagline">Ecommerce simples para negócios reais.</p>
+          <a class="footer-contact" href="mailto:contato@elinea.com.br">contato@elinea.com.br</a>
+        </div>
 
-      <nav class="footer-links" aria-label="Navegação do rodapé">
-        <div class="footer-links__group">
-          <h2>Loja online</h2>
-          <NuxtLink to="/plataforma">Plataforma</NuxtLink>
-          <NuxtLink to="/recursos">Recursos</NuxtLink>
-          <NuxtLink to="/precos">Preços</NuxtLink>
-        </div>
-        <div class="footer-links__group">
-          <h2>Operação</h2>
-          <NuxtLink to="/operacao/pagamentos">Pagamentos</NuxtLink>
-          <NuxtLink to="/operacao/frete-e-logistica">Frete e logística</NuxtLink>
-          <NuxtLink to="/operacao/gestao-e-erp">Gestão e ERP</NuxtLink>
-          <NuxtLink to="/operacao/whatsapp">WhatsApp</NuxtLink>
-          <NuxtLink to="/operacao/dados-e-crescimento">Dados e crescimento</NuxtLink>
-        </div>
-        <div class="footer-links__group">
-          <h2>Ecossistema</h2>
-          <NuxtLink to="/ecossistema/visao-geral">Visão geral</NuxtLink>
-          <NuxtLink to="/ecossistema/integracoes">Integrações</NuxtLink>
-          <NuxtLink to="/ecossistema/migracao">Migração</NuxtLink>
-        </div>
-        <div class="footer-links__group">
-          <h2>Atendimento</h2>
-          <NuxtLink to="/documentacao">Documentação</NuxtLink>
-          <a href="mailto:contato@elinea.com.br">Fale com a Elínea</a>
-        </div>
-      </nav>
+        <nav class="footer-links" aria-label="Navegação do rodapé">
+          <div class="footer-links__group">
+            <h2>Loja online</h2>
+            <NuxtLink to="/plataforma">Plataforma</NuxtLink>
+            <NuxtLink to="/recursos">Recursos</NuxtLink>
+            <NuxtLink to="/precos">Preços</NuxtLink>
+          </div>
+          <div class="footer-links__group">
+            <h2>Operação</h2>
+            <NuxtLink to="/operacao/pagamentos">Pagamentos</NuxtLink>
+            <NuxtLink to="/operacao/frete-e-logistica">Frete e logística</NuxtLink>
+            <NuxtLink to="/operacao/gestao-e-erp">Gestão e ERP</NuxtLink>
+            <NuxtLink to="/operacao/whatsapp">WhatsApp</NuxtLink>
+            <NuxtLink to="/operacao/dados-e-crescimento">Dados e crescimento</NuxtLink>
+          </div>
+          <div class="footer-links__group">
+            <h2>Ecossistema</h2>
+            <NuxtLink to="/ecossistema/visao-geral">Visão geral</NuxtLink>
+            <NuxtLink to="/ecossistema/integracoes">Integrações</NuxtLink>
+            <NuxtLink to="/ecossistema/migracao">Migração</NuxtLink>
+          </div>
+          <div class="footer-links__group">
+            <h2>Atendimento</h2>
+            <NuxtLink to="/documentacao">Documentação</NuxtLink>
+            <a href="mailto:contato@elinea.com.br">Fale com a Elínea</a>
+          </div>
+        </nav>
+      </div>
 
       <div class="footer-meta">
-        <div class="footer-meta__brand">
-          <strong>Ecommerce simples para negócios reais.</strong>
-          <a href="mailto:contato@elinea.com.br">contato@elinea.com.br</a>
+        <div class="footer-company">
+          <h2>Elínea</h2>
+          <p v-if="config.public.privacy.cnpj">CNPJ: {{ config.public.privacy.cnpj }}</p>
+          <p v-else>CNPJ: 00.000.000/0000-00 <span class="footer-company__placeholder">(provisório)</span></p>
+          <address>{{ config.public.privacy.address || 'Endereço a informar' }}</address>
         </div>
         <div class="footer-meta__social">
           <h2>Siga-nos</h2>
@@ -66,7 +74,6 @@ const { openPreferences } = useCookieConsent()
             </a>
           </div>
         </div>
-        <p class="footer-meta__legal">© 2026 Elínea. Todos os direitos reservados.</p>
       </div>
       <div class="footer-bottom">
         <nav class="footer-privacy" aria-label="Privacidade e cookies">
@@ -75,18 +82,11 @@ const { openPreferences } = useCookieConsent()
           <NuxtLink to="/cookies">Política de cookies</NuxtLink>
           <button class="footer-privacy-button" type="button" @click="openPreferences">Gerenciar cookies</button>
         </nav>
-        <p class="footer-meta__owner">Um produto da <strong>Gênios Mídia Soluções Digitais</strong>.</p>
+      </div>
+      <div class="footer-credits">
+        <p class="footer-meta__legal">© 2026 Elínea. Todos os direitos reservados.</p>
+        <p class="footer-meta__owner">Powered by <strong>Gênios Mídia - Soluções Digitais</strong></p>
       </div>
     </div>
   </footer>
 </template>
-
-<style scoped>
-.footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 12%); }
-.footer-meta__owner { margin: 0 0 0 auto; color: #d6dce9; font-size: .85rem; line-height: 1.55; text-align: right; }
-.footer-meta__owner strong { color: #f1f3f8; font-weight: 500; }
-.footer-privacy { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 2rem; }
-.footer-privacy a, .footer-privacy-button { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; color: #d6dce9; font: inherit; font-size: .9rem; line-height: 1.45; text-align: left; cursor: pointer; }
-.footer-privacy a:hover, .footer-privacy-button:hover { color: #9ee2c0; text-decoration: underline; text-underline-offset: .25em; }
-.footer-privacy :is(a, button):focus-visible { outline: 2px solid var(--green-bright); outline-offset: 4px; }
-</style>

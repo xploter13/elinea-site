@@ -110,13 +110,15 @@ Os tokens locais ficam em `app/assets/css/main.css`. Valores de referência atua
 9. Planos e valores reais da aplicação.
 10. CTA final e footer institucional.
 
-O rodapé compartilhado usa fundo verde escuro (`#07110f`), logotipo no topo,
-quatro colunas de navegação e uma faixa inferior com contato, redes sociais e
-direitos reservados. A navegação aponta apenas para páginas e seções existentes.
-Na faixa inferior, abaixo da linha divisória e alinhada à direita, incluir a
-assinatura “Um produto da Gênios Mídia Soluções Digitais”, proprietária do produto
-informada pelo usuário. Manter o tratamento discreto e a adaptação da assinatura
-em telas menores, junto à área de políticas e preferências de cookies.
+O rodapé compartilhado usa fundo verde escuro (`#07110f`), logotipo oficial e
+quatro grupos de navegação, com links apenas para páginas e seções existentes.
+Em 11 de novembro de 2026, o usuário solicitou uma rediagramação do rodapé,
+a inclusão de CNPJ e endereço e a assinatura “Powered by Gênios Mídia - Soluções
+Digitais”, substituindo o crédito anterior “Um produto da”. Preservar o tratamento
+discreto, a adaptação para telas menores e os acessos às políticas e preferências
+de cookies. CNPJ e endereço reais ainda não foram fornecidos; os campos provisórios
+não representam dados empresariais confirmados. Reutilizar os valores públicos de
+`privacy.cnpj` e `privacy.address` quando configurados.
 
 ## Página Plataforma
 
