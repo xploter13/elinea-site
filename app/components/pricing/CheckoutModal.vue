@@ -5,7 +5,7 @@ import { MarketingButton } from '@elinea/ui/marketing'
 import { ArrowRight, X } from '@lucide/vue'
 
 type CheckoutResponse = { data: { public_id: string }, checkout_url: string }
-type DataKey = 'owner_name' | 'owner_email' | 'segment' | 'store_name'
+type DataKey = 'owner_name' | 'owner_email' | 'phone' | 'segment' | 'store_name'
 
 type FormKey = DataKey | 'terms_accepted'
 
@@ -48,19 +48,21 @@ const validateForm = () => {
 }
 
 const submitCheckout = async () => {
+  submitError.value = ''
   if (!props.plan || !validateForm()) {
     await nextTick()
     checkoutDialog.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
     return
   }
   submitting.value = true
-  submitError.value = ''
   try {
     const acceptedDocument = serviceTerms.value!
     await refreshTerms()
     if (termsLoadingError.value || !serviceTerms.value || serviceTerms.value.sha256 !== acceptedDocument.sha256 || !termsAccepted.value) {
       termsAccepted.value = false
       formErrors.terms_accepted = 'Os termos foram atualizados ou estão indisponíveis. Confira a versão vigente antes de continuar.'
+      await nextTick()
+      checkoutDialog.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
       return
     }
     const origin = window.location.origin
@@ -81,7 +83,24 @@ const submitCheckout = async () => {
     const data = typeof error === 'object' && error && 'data' in error ? (error as {
       data?: { message?: string, errors?: Record<string, string[]> }
     }).data : undefined
-    submitError.value = data?.errors ? Object.values(data.errors).flat()[0] || '' : data?.message || 'Não foi possível iniciar o pagamento.'
+    const generalErrors: string[] = []
+    let hasFieldErrors = false
+    if (data?.errors) {
+      for (const [field, messages] of Object.entries(data.errors)) {
+        if (field in form) {
+          formErrors[field as DataKey] = messages[0] ?? 'Revise este campo.'
+          hasFieldErrors = true
+        } else if (field.startsWith('terms_')) {
+          termsAccepted.value = false
+          formErrors.terms_accepted = messages[0] ?? 'Revise os termos e confirme o aceite.'
+          hasFieldErrors = true
+        } else generalErrors.push(...messages)
+      }
+      if (Object.keys(data.errors).some(field => field.startsWith('terms_'))) await refreshTerms()
+      await nextTick()
+      checkoutDialog.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
+    }
+    submitError.value = generalErrors[0] || (hasFieldErrors ? '' : data?.message || 'Não foi possível iniciar o pagamento.')
   } finally {
     submitting.value = false
   }
@@ -110,11 +129,11 @@ onBeforeUnmount(() => checkoutDialog.value?.close())
       <h2>Comece com o plano {{ plan?.name }}</h2>
       <p>Preencha os dados do responsável. Na próxima etapa, o pagamento será processado com segurança pela Stripe.</p>
       <form novalidate @submit.prevent="submitCheckout">
-        <label><span>Seu nome *</span><input v-model="form.owner_name" :aria-invalid="!!formErrors.owner_name" autocomplete="name" @input="clearError('owner_name')"><small v-if="formErrors.owner_name" role="alert">{{ formErrors.owner_name }}</small></label>
-        <label><span>E-mail *</span><input v-model="form.owner_email" type="email" :aria-invalid="!!formErrors.owner_email" autocomplete="email" @input="clearError('owner_email')"><small v-if="formErrors.owner_email" role="alert">{{ formErrors.owner_email }}</small></label>
-        <label><span>Telefone</span><input v-model="form.phone" type="tel" autocomplete="tel"></label>
-        <label><span>Segmento *</span><input v-model="form.segment" :aria-invalid="!!formErrors.segment" @input="clearError('segment')"><small v-if="formErrors.segment" role="alert">{{ formErrors.segment }}</small></label>
-        <label class="full"><span>Nome da loja *</span><input v-model="form.store_name" :aria-invalid="!!formErrors.store_name" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" role="alert">{{ formErrors.store_name }}</small></label>
+        <label><span>Seu nome *</span><input v-model="form.owner_name" :aria-invalid="!!formErrors.owner_name" :aria-describedby="formErrors.owner_name ? 'modal-checkout-owner_name-error' : undefined" autocomplete="name" @input="clearError('owner_name')"><small v-if="formErrors.owner_name" id="modal-checkout-owner_name-error" role="alert">{{ formErrors.owner_name }}</small></label>
+        <label><span>E-mail *</span><input v-model="form.owner_email" type="email" :aria-invalid="!!formErrors.owner_email" :aria-describedby="formErrors.owner_email ? 'modal-checkout-owner_email-error' : undefined" autocomplete="email" @input="clearError('owner_email')"><small v-if="formErrors.owner_email" id="modal-checkout-owner_email-error" role="alert">{{ formErrors.owner_email }}</small></label>
+        <label><span>Telefone</span><input v-model="form.phone" type="tel" autocomplete="tel" :aria-invalid="!!formErrors.phone" :aria-describedby="formErrors.phone ? 'modal-checkout-phone-error' : undefined" @input="clearError('phone')"><small v-if="formErrors.phone" id="modal-checkout-phone-error" role="alert">{{ formErrors.phone }}</small></label>
+        <label><span>Segmento *</span><input v-model="form.segment" :aria-invalid="!!formErrors.segment" :aria-describedby="formErrors.segment ? 'modal-checkout-segment-error' : undefined" @input="clearError('segment')"><small v-if="formErrors.segment" id="modal-checkout-segment-error" role="alert">{{ formErrors.segment }}</small></label>
+        <label class="full"><span>Nome da loja *</span><input v-model="form.store_name" :aria-invalid="!!formErrors.store_name" :aria-describedby="formErrors.store_name ? 'modal-checkout-store_name-error' : undefined" autocomplete="organization" @input="clearError('store_name')"><small v-if="formErrors.store_name" id="modal-checkout-store_name-error" role="alert">{{ formErrors.store_name }}</small></label>
         <p v-if="submitError" class="form-error full" role="alert">{{ submitError }}</p>
         <SitePrivacyNotice />
         <SiteTermsAcceptance id="modal-terms-accepted" v-model="termsAccepted" :error="formErrors.terms_accepted" @update:model-value="clearError('terms_accepted')" />

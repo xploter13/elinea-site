@@ -488,9 +488,12 @@ A rota `/termos` mantém o visual das políticas. O formulário consulta a vers�
 publicada em `GET /service-terms`, abre o texto da versão específica em outra aba
 e exige novo aceite quando seu conteúdo ou as condições do plano mudarem.
 O aceite contratual é independente do controle de cookies e de marketing.
-Em `/contratar-loja`, a validação mostra erros junto aos campos, sem resumo de
-mensagens acima do formulário. Ao enviar dados inválidos, focar o primeiro campo
-com erro. Preservar o feedback de falhas gerais ao iniciar o pagamento.
+Todos os formulários do site, incluindo `/contratar-loja` e o modal de contratação,
+mostram erros de validação junto aos respectivos campos, sem resumos ou repetição
+em mensagens gerais. Aplicar esse padrão também às respostas de validação da API,
+incluindo telefone e aceite dos termos. Ao enviar dados inválidos, focar o primeiro
+campo com erro. Manter feedback separado para falhas gerais de pagamento ou erros
+que não correspondam a campos disponíveis no formulário.
 A Gestão oferece rascunhos e publicação de novas versões; o histórico publicado
 e os registros de aceite não são substituídos por edições posteriores.
 Dados empresariais ainda ausentes permanecem identificados como pendentes.

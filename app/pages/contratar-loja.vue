@@ -101,19 +101,24 @@ async function submitCheckout() {
     window.location.assign(checkout.checkout_url)
   } catch (error) {
     const data = typeof error === 'object' && error && 'data' in error ? (error as { data?: { message?: string, errors?: Record<string, string[]> } }).data : undefined
+    const generalErrors: string[] = []
+    let hasFieldErrors = false
     if (data?.errors) {
       for (const [field, messages] of Object.entries(data.errors)) {
-        if (field in form) errors[field as Field] = messages[0] ?? 'Revise este campo.'
-        if (field.startsWith('terms_')) {
+        if (field in form) {
+          errors[field as Field] = messages[0] ?? 'Revise este campo.'
+          hasFieldErrors = true
+        } else if (field.startsWith('terms_')) {
           termsAccepted.value = false
           errors.terms_accepted = messages[0] ?? 'Revise os termos e confirme o aceite.'
-        }
+          hasFieldErrors = true
+        } else generalErrors.push(...messages)
       }
       if (Object.keys(data.errors).some(field => field.startsWith('terms_'))) await refreshTerms()
       await nextTick()
       checkoutForm.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
     }
-    submitError.value = data?.errors ? Object.values(data.errors).flat()[0] || 'Não foi possível iniciar o pagamento.' : data?.message || 'Não foi possível iniciar o pagamento. Tente novamente.'
+    submitError.value = generalErrors[0] || (hasFieldErrors ? '' : data?.message || 'Não foi possível iniciar o pagamento. Tente novamente.')
   } finally {
     submitting.value = false
   }
