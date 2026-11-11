@@ -69,6 +69,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 </template>
 
 <style scoped>
+.plan-action.marketing-button { min-height: 60px; }
 .plan-action :deep(.marketing-button__label) { flex: 1; min-width: 0; }
 .plan-action :deep(.marketing-button__icon) { flex-shrink: 0; margin-left: auto; }
 .pricing-state { padding: 2rem; color: var(--muted); }

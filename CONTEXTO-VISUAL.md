@@ -149,6 +149,8 @@ Os controles de anterior/próximo só aparecem quando há mais de três planos.
 Nos botões dos cards de planos, manter a seta alinhada à borda direita do botão,
 respeitando o padding de cada variante, com o texto centralizado no espaço restante.
 Aplicar no carrossel compartilhado, preservando o estilo dos demais CTAs do site.
+Na Home e em Preços, todas as variantes desses botões usam altura mínima de 60px,
+mantendo a mesma altura entre o plano em destaque e os demais cards.
 
 O hero, o header e o footer preservam sua direção atual. Mudanças futuras devem ser
 refinamentos, salvo nova orientação explícita.
