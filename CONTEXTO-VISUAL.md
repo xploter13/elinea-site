@@ -506,12 +506,14 @@ um menu de âncoras fixo à esquerda: o índice acompanha a rolagem no desktop e
 vira um menu compacto no mobile, com indicação da seção atual.
 
 O público da documentação é o cliente que contratou uma loja, não o gestor da
-infraestrutura. O roteiro é: informar o domínio à Elínea, editar A/CNAME no provedor
-atual, comunicar a alteração e testar depois da confirmação da ativação. Manter os
+infraestrutura. O roteiro parte da contratação: a plataforma recebe os dados e o nome da loja e
+cria um endereço padrão, por exemplo `exemplo.elinea.com.br`. Depois o cliente
+aponta seu domínio próprio com A/CNAME e informa os dois endereços à Elínea para
+vinculação e ativação. Usar o mesmo exemplo em todo o guia. Manter os
 nameservers atuais; não publicar os pares de DNS do projeto como instrução para
 clientes. Cloudflare aparece apenas como opção para quem já a usa no próprio domínio.
 
-O IP informado é `193.160.119.94`; `sualoja.elinea.com.br` é um exemplo que deve ser
+O IP informado é `193.160.119.94`; `exemplo.elinea.com.br` é um exemplo que deve ser
 substituído pelo endereço recebido na implantação. O servidor multitenant identifica
 a loja pelo domínio associado; o CNAME não faz essa associação automaticamente nem
 altera o hostname que o visitante usa. A Elínea cuida da vinculação e do HTTPS,

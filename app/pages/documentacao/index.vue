@@ -3,7 +3,7 @@ import { ArrowUpRight, BookOpen, Check, ChevronDown, Copy, Globe2 } from '@lucid
 import { MarketingTextButton } from '@elinea/ui/marketing'
 
 const sections = [
-  { id: 'visao-geral', label: 'Conecte sua loja' },
+  { id: 'visao-geral', label: 'Seu endereço Elínea' },
   { id: 'antes-de-comecar', label: 'Antes de começar' },
   { id: 'nameservers', label: 'Onde alterar o DNS' },
   { id: 'registros-dns', label: 'Registros A e CNAME' },
@@ -14,7 +14,7 @@ const sections = [
 ]
 const records = [
   { type: 'A', name: '@', domain: 'exemplo.com', target: '193.160.119.94' },
-  { type: 'CNAME', name: 'www', domain: 'www.exemplo.com', target: 'sualoja.elinea.com.br' },
+  { type: 'CNAME', name: 'www', domain: 'www.exemplo.com', target: 'exemplo.elinea.com.br' },
 ]
 const activeSection = ref('visao-geral')
 const menuOpen = ref(false)
@@ -62,7 +62,7 @@ onBeforeUnmount(() => {
 })
 useSeoMeta({
   title: 'Documentação de domínios e DNS — Elínea',
-  description: 'Conecte seu domínio à loja contratada na Elínea. Veja quais registros DNS alterar, o que informar ao atendimento e como conferir a ativação.',
+  description: 'Sua loja já tem um endereço como exemplo.elinea.com.br. Saiba como apontar seu domínio próprio para a mesma loja com registros A e CNAME.',
 })
 </script>
 
@@ -87,21 +87,22 @@ useSeoMeta({
         <header class="docs-heading">
           <p class="docs-breadcrumb">Documentação <span aria-hidden="true">/</span> Domínios e DNS</p>
           <h1>Seu domínio.<br>Conectado à Elínea.</h1>
-          <p>Conecte o domínio que você já possui à sua loja Elínea. Veja o que alterar no seu provedor e como concluir a ativação com a nossa equipe.</p>
+          <p>Sua loja já tem um endereço na Elínea. Agora, veja como usar o seu próprio domínio para que seus clientes acessem essa mesma loja.</p>
           <span class="docs-updated">Atualizado em 11 de novembro de 2026</span>
         </header>
 
         <section id="visao-geral" class="docs-section" aria-labelledby="heading-visao-geral" tabindex="-1">
-          <h2 id="heading-visao-geral">Sua loja, com o seu endereço</h2>
-          <p>Depois de contratar a Elínea, você pode conectar um domínio próprio, como <code>exemplo.com</code>, à sua loja. A configuração é feita nos registros DNS do seu domínio, no painel do provedor em que eles são gerenciados.</p>
+          <h2 id="heading-visao-geral">Sua loja começa com um endereço Elínea</h2>
+          <p>Ao contratar a plataforma, você informa os dados do responsável e o nome da loja. A Elínea cria um endereço padrão para ela. Por exemplo, uma loja chamada <strong>Exemplo</strong> pode receber o endereço <code>exemplo.elinea.com.br</code>.</p>
+          <p>Se você possui o domínio <code>exemplo.com</code>, pode conectá-lo à loja que já foi criada. Assim, seus clientes poderão acessar essa mesma loja pelo domínio próprio, conforme a configuração de ativação.</p>
           <div class="docs-note">
             <Globe2 :size="21" aria-hidden="true" />
-            <div><strong>Primeiro, informe à Elínea qual domínio será usado na sua loja.</strong><p>A Elínea associa esse endereço à sua loja. Mesmo que várias lojas apontem para o mesmo servidor, cada uma é reconhecida pelo domínio cadastrado. Alterar o DNS é apenas uma parte da conexão.</p></div>
+            <div><strong>Use o endereço que foi criado para a sua loja.</strong><p>Neste exemplo, a loja é <code>exemplo.elinea.com.br</code> e o domínio do cliente é <code>exemplo.com</code>. No seu caso, substitua os exemplos pelo endereço gerado pela plataforma e pelo domínio que você possui.</p></div>
           </div>
           <ol class="docs-flow" aria-label="Etapas para conectar seu domínio">
-            <li><span>01</span><strong>Informe seu domínio</strong><p>Envie o endereço desejado ao atendimento da Elínea.</p></li>
-            <li><span>02</span><strong>Ajuste os registros DNS</strong><p>Configure os apontamentos no seu provedor atual.</p></li>
-            <li><span>03</span><strong>Confirme a ativação</strong><p>Avise a Elínea e teste o acesso à sua loja.</p></li>
+            <li><span>01</span><strong>Localize sua loja</strong><p>Tenha em mãos o endereço criado na contratação.</p></li>
+            <li><span>02</span><strong>Aponte seu domínio</strong><p>Crie os registros A e CNAME no seu provedor de DNS.</p></li>
+            <li><span>03</span><strong>Conclua a ativação</strong><p>Informe o domínio próprio à Elínea para vinculá-lo à loja.</p></li>
           </ol>
         </section>
 
@@ -110,11 +111,11 @@ useSeoMeta({
           <ul class="docs-checklist">
             <li><Check :size="17" aria-hidden="true" /><span>Um domínio registrado que você administra, como <code>exemplo.com</code>.</span></li>
             <li><Check :size="17" aria-hidden="true" /><span>Acesso ao painel do provedor que gerencia o DNS desse domínio.</span></li>
-            <li><Check :size="17" aria-hidden="true" /><span>O endereço da sua loja Elínea, informado na implantação, para preencher o destino do CNAME.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>O endereço padrão gerado para sua loja na contratação, como <code>exemplo.elinea.com.br</code>. Ele será o destino do registro CNAME.</span></li>
             <li><Check :size="17" aria-hidden="true" /><span>Uma cópia ou captura dos registros atuais. Se você usa e-mail no domínio, preserve os registros desse serviço.</span></li>
           </ul>
-          <p>Neste guia, <code>exemplo.com</code> representa o domínio que você possui. <code>sualoja.elinea.com.br</code> representa o endereço da sua loja informado pela Elínea; substitua esse exemplo pelo endereço recebido.</p>
-          <p>Se ainda não recebeu o endereço da sua loja ou não sabe qual domínio informar, fale com o atendimento antes de alterar os registros.</p>
+          <p>O endereço <code>exemplo.elinea.com.br</code> é um exemplo: use o endereço exato que a plataforma criou para a sua loja. O domínio <code>exemplo.com</code> também deve ser substituído pelo seu.</p>
+          <p>Se você não souber qual é o endereço padrão da sua loja, confirme com o atendimento antes de preencher o CNAME.</p>
         </section>
 
         <section id="nameservers" class="docs-section" aria-labelledby="heading-nameservers" tabindex="-1">
@@ -126,22 +127,23 @@ useSeoMeta({
 
         <section id="registros-dns" class="docs-section" aria-labelledby="heading-registros" tabindex="-1">
           <h2 id="heading-registros">Configure os registros da loja</h2>
-          <p>No painel de DNS do seu domínio, crie ou ajuste os dois registros abaixo. O registro A aponta o domínio principal para a Elínea; o CNAME configura o endereço com <code>www</code>.</p>
+          <p>No painel de DNS de <code>exemplo.com</code>, selecione a opção de adicionar um registro e preencha os campos conforme a tabela. Crie um registro para o domínio principal e outro para o endereço com <code>www</code>.</p>
           <div class="docs-table-scroll" role="region" aria-label="Registros DNS da loja" tabindex="0">
             <table class="docs-table">
               <caption>Apontamentos para o domínio principal e o endereço com www</caption>
               <thead><tr><th scope="col">Tipo</th><th scope="col">Nome</th><th scope="col">Destino</th><th scope="col">Copiar</th></tr></thead>
-              <tbody><tr v-for="record in records" :key="record.type"><td><span class="docs-record-type">{{ record.type }}</span></td><td><code>{{ record.name }}</code><small>{{ record.domain }}</small></td><td><code>{{ record.target }}</code><small v-if="record.type === 'CNAME'">Exemplo: use o endereço da sua loja.</small></td><td><button type="button" class="docs-copy" :aria-label="record.type === 'CNAME' ? 'Copiar exemplo de destino CNAME' : 'Copiar destino do registro A'" @click="copy(record.target, record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')"><Check v-if="copied === (record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></td></tr></tbody>
+              <tbody><tr v-for="record in records" :key="record.type"><td><span class="docs-record-type">{{ record.type }}</span></td><td><code>{{ record.name }}</code><small>{{ record.domain }}</small></td><td><code>{{ record.target }}</code><small v-if="record.type === 'CNAME'">Substitua pelo endereço gerado para sua loja.</small></td><td><button type="button" class="docs-copy" :aria-label="record.type === 'CNAME' ? 'Copiar exemplo de destino CNAME' : 'Copiar destino do registro A'" @click="copy(record.target, record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')"><Check v-if="copied === (record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></td></tr></tbody>
             </table>
           </div>
           <p class="docs-table-hint">Deslize a tabela para ver os destinos e os botões de copiar.</p>
           <ul>
-            <li><code>@</code> representa o domínio principal, como <code>exemplo.com</code>. Alguns painéis pedem o domínio completo no lugar de <code>@</code>.</li>
-            <li>No CNAME, substitua <code>sualoja.elinea.com.br</code> pelo endereço da sua loja recebido na implantação. Preencha apenas o nome, sem <code>https://</code>, barras ou caminhos.</li>
+            <li><strong>Domínio principal:</strong> selecione o tipo A, preencha o nome com <code>@</code> e o destino com <code>193.160.119.94</code>. Alguns painéis pedem o domínio completo no lugar de <code>@</code>.</li>
+            <li><strong>Endereço com www:</strong> selecione o tipo CNAME, preencha o nome com <code>www</code> e o destino com o endereço padrão da sua loja, como <code>exemplo.elinea.com.br</code>. Use apenas o nome, sem <code>https://</code>, barras ou caminhos.</li>
             <li>Deixe o TTL no padrão do seu provedor. Na Cloudflare, selecione “Auto”.</li>
             <li>Se já houver apontamentos de site para <code>@</code> ou <code>www</code>, ajuste os antigos para não manter destinos conflitantes. Isso pode incluir registros A, AAAA ou CNAME. Em caso de dúvida, envie uma captura ao atendimento antes de excluir algo.</li>
           </ul>
-          <p class="docs-detail">Preserve os registros de e-mail e de outros serviços. Altere somente os apontamentos do site indicados neste guia. Seu domínio próprio também precisa estar associado à sua loja pela Elínea, mesmo que o CNAME aponte para o endereço correto.</p>
+          <p>Na prática, o registro A faz <code>exemplo.com</code> resolver para o servidor da Elínea. O CNAME faz <code>www.exemplo.com</code> usar o destino DNS de <code>exemplo.elinea.com.br</code>. Depois da vinculação e da ativação, a plataforma entrega a sua loja quando esses domínios são acessados.</p>
+          <p class="docs-detail">Preserve os registros de e-mail e de outros serviços. O apontamento leva as visitas até a Elínea; a associação do domínio próprio à sua loja é concluída na etapa de ativação abaixo.</p>
         </section>
 
         <section id="cloudflare" class="docs-section" aria-labelledby="heading-cloudflare" tabindex="-1">
@@ -159,9 +161,9 @@ useSeoMeta({
 
         <section id="https" class="docs-section" aria-labelledby="heading-https" tabindex="-1">
           <h2 id="heading-https">Solicite a conclusão da ativação</h2>
-          <p>Depois de salvar os registros, avise o atendimento da Elínea. Envie o domínio próprio, o endereço da sua loja Elínea e uma captura dos apontamentos.</p>
+          <p>Depois de salvar os registros, informe à Elínea qual domínio próprio deve abrir a sua loja. Envie os dois endereços: por exemplo, <code>exemplo.elinea.com.br</code> (a loja criada na contratação) e <code>exemplo.com</code> (seu domínio próprio), além de uma captura dos apontamentos.</p>
           <p>Informe também se deseja usar o endereço com <code>www</code> e qual será o endereço principal. Por exemplo: <code>exemplo.com</code> como principal e <code>www.exemplo.com</code> como alternativa.</p>
-          <div class="docs-note docs-note--plain"><div><strong>A vinculação da loja e o acesso seguro ficam com a Elínea.</strong><p>A equipe confere a associação do domínio à sua loja e a configuração do HTTPS. Você não precisa acessar o servidor nem instalar certificados para seguir este guia.</p></div></div>
+          <div class="docs-note docs-note--plain"><div><strong>A vinculação da loja e o acesso seguro ficam com a Elínea.</strong><p>A equipe associa o domínio próprio à loja criada na contratação e confere o acesso por HTTPS. Como várias lojas usam a mesma plataforma, é essa associação que permite reconhecer qual loja atender em cada domínio.</p></div></div>
           <p>Aguarde a confirmação da Elínea antes de divulgar o novo endereço. Apenas salvar o registro DNS não confirma que a ativação está concluída.</p>
         </section>
 
@@ -180,8 +182,8 @@ useSeoMeta({
         <section id="duvidas" class="docs-section" aria-labelledby="heading-duvidas" tabindex="-1">
           <h2 id="heading-duvidas">Dúvidas frequentes</h2>
           <details><summary>Preciso trocar de provedor ou usar Cloudflare?</summary><p>Você pode manter o provedor de DNS que já utiliza. Para conectar a loja, configure os registros A e CNAME e informe o domínio à Elínea.</p></details>
-          <details><summary>Outras lojas usam o mesmo IP. Como a minha é identificada?</summary><p>O IP leva o acesso até a plataforma. A Elínea identifica a sua loja pelo domínio que foi associado a ela. Por isso, informe o endereço completo ao atendimento antes de concluir a configuração.</p></details>
-          <details><summary>Qual endereço devo colocar no CNAME?</summary><p>Use o endereço da sua loja Elínea informado na implantação. <code>sualoja.elinea.com.br</code> é apenas um exemplo. Se você ainda não recebeu o destino, solicite ao atendimento antes de preencher esse registro.</p></details>
+          <details><summary>Outras lojas usam o mesmo IP. Como a minha é identificada?</summary><p>O IP leva o acesso até a plataforma. Quando alguém abre <code>exemplo.com</code>, a Elínea consulta a associação desse domínio e entrega a mesma loja criada com o endereço <code>exemplo.elinea.com.br</code>. Essa associação precisa estar concluída para o domínio próprio funcionar.</p></details>
+          <details><summary>Qual endereço devo colocar no CNAME?</summary><p>Use o endereço padrão que a plataforma gerou para a sua loja na contratação. Por exemplo, se a sua loja foi criada como <code>exemplo.elinea.com.br</code>, esse será o destino do CNAME de <code>www.exemplo.com</code>. Não use o endereço de outra loja.</p></details>
           <details><summary>O domínio mostra “loja não encontrada” ou abre uma página diferente</summary><p>Confirme os registros DNS e informe o domínio ao atendimento. A equipe vai conferir se esse endereço está vinculado à sua loja. Se o domínio já apontava para outro site, a atualização do DNS também pode estar em andamento.</p></details>
           <details><summary>O domínio principal abre, mas o www não</summary><p>Confira o CNAME e avise a Elínea de que o endereço com www também será utilizado. Os dois endereços precisam estar contemplados na ativação; o registro DNS sozinho não cria essa configuração.</p></details>
           <details><summary>O apontamento da loja muda meu e-mail?</summary><p>Você deve manter os registros do serviço de e-mail, como MX e os TXT de SPF, DKIM e DMARC. Se o e-mail parar após uma alteração, compare os registros com a cópia anterior e procure o provedor do seu e-mail.</p></details>
