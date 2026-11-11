@@ -505,11 +505,19 @@ Atendimento. Preservar Inter, tokens e header/footer do site. O usuário solicit
 um menu de âncoras fixo à esquerda: o índice acompanha a rolagem no desktop e
 vira um menu compacto no mobile, com indicação da seção atual.
 
-O guia diferencia nameservers de registros A/CNAME e usa os dados fornecidos:
-IP `193.160.119.94`, destino de exemplo `sualoja.elinea.com.br` e pares de DNS
-`daisy/weston.ns.cloudflare.com` e `lunar/solar.dns-parking.com`. Os nameservers
-da Cloudflare devem ser confirmados por zona; não instruir todos os clientes a
-copiar o mesmo par. O destino da loja, os domínios e o HTTPS exigem confirmação
-da implantação. Não apresentar o DNS como cadastro ou emissão automática de SSL,
-nem presumir que Cloudflare for SaaS já está habilitado. A página é orientação;
-não altera DNS, configurações da Cloudflare ou a VPS.
+O público da documentação é o cliente que contratou uma loja, não o gestor da
+infraestrutura. O roteiro é: informar o domínio à Elínea, editar A/CNAME no provedor
+atual, comunicar a alteração e testar depois da confirmação da ativação. Manter os
+nameservers atuais; não publicar os pares de DNS do projeto como instrução para
+clientes. Cloudflare aparece apenas como opção para quem já a usa no próprio domínio.
+
+O IP informado é `193.160.119.94`; `sualoja.elinea.com.br` é um exemplo que deve ser
+substituído pelo endereço recebido na implantação. O servidor multitenant identifica
+a loja pelo domínio associado; o CNAME não faz essa associação automaticamente nem
+altera o hostname que o visitante usa. A Elínea cuida da vinculação e do HTTPS,
+incluindo a validação dos endereços com e sem www. Não prometer cadastro de aliases,
+redirecionamentos ou certificados automáticos sem uma implementação verificada.
+
+Não incluir comandos de terminal, configuração de VPS, Cloudflare for SaaS, modos
+de SSL ou instalação de certificados no passo a passo do cliente. Essas tarefas
+pertencem à operação da Elínea. A página é orientação e não altera infraestrutura.

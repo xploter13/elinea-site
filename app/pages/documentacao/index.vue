@@ -3,12 +3,12 @@ import { ArrowUpRight, BookOpen, Check, ChevronDown, Copy, Globe2 } from '@lucid
 import { MarketingTextButton } from '@elinea/ui/marketing'
 
 const sections = [
-  { id: 'visao-geral', label: 'Entenda o apontamento' },
+  { id: 'visao-geral', label: 'Conecte sua loja' },
   { id: 'antes-de-comecar', label: 'Antes de começar' },
-  { id: 'nameservers', label: 'Servidores de nomes' },
+  { id: 'nameservers', label: 'Onde alterar o DNS' },
   { id: 'registros-dns', label: 'Registros A e CNAME' },
   { id: 'cloudflare', label: 'Configurar na Cloudflare' },
-  { id: 'https', label: 'Domínio e HTTPS' },
+  { id: 'https', label: 'Solicite a ativação' },
   { id: 'verificar', label: 'Verificar a configuração' },
   { id: 'duvidas', label: 'Resolver problemas' },
 ]
@@ -16,8 +16,6 @@ const records = [
   { type: 'A', name: '@', domain: 'exemplo.com', target: '193.160.119.94' },
   { type: 'CNAME', name: 'www', domain: 'www.exemplo.com', target: 'sualoja.elinea.com.br' },
 ]
-const commands = 'dig +short NS exemplo.com\ndig +short A exemplo.com\ndig +short CNAME www.exemplo.com'
-const windowsCommands = 'nslookup -type=ns exemplo.com\nnslookup exemplo.com\nnslookup -type=cname www.exemplo.com'
 const activeSection = ref('visao-geral')
 const menuOpen = ref(false)
 const menuToggle = ref<HTMLButtonElement | null>(null)
@@ -64,7 +62,7 @@ onBeforeUnmount(() => {
 })
 useSeoMeta({
   title: 'Documentação de domínios e DNS — Elínea',
-  description: 'Configure o domínio da sua loja Elínea: registros A e CNAME, nameservers, Cloudflare, HTTPS e verificação do apontamento.',
+  description: 'Conecte seu domínio à loja contratada na Elínea. Veja quais registros DNS alterar, o que informar ao atendimento e como conferir a ativação.',
 })
 </script>
 
@@ -89,103 +87,106 @@ useSeoMeta({
         <header class="docs-heading">
           <p class="docs-breadcrumb">Documentação <span aria-hidden="true">/</span> Domínios e DNS</p>
           <h1>Seu domínio.<br>Conectado à Elínea.</h1>
-          <p>Um guia para apontar o endereço da sua loja, configurar o DNS e conferir o acesso seguro.</p>
+          <p>Conecte o domínio que você já possui à sua loja Elínea. Veja o que alterar no seu provedor e como concluir a ativação com a nossa equipe.</p>
           <span class="docs-updated">Atualizado em 11 de novembro de 2026</span>
         </header>
 
         <section id="visao-geral" class="docs-section" aria-labelledby="heading-visao-geral" tabindex="-1">
-          <h2 id="heading-visao-geral">Cloudflare ou VPS?</h2>
-          <p>São duas partes da mesma configuração. Os <strong>nameservers</strong> definem quem gerencia o DNS do domínio. Os registros <strong>A e CNAME</strong>, criados nesse provedor, indicam o destino da loja.</p>
+          <h2 id="heading-visao-geral">Sua loja, com o seu endereço</h2>
+          <p>Depois de contratar a Elínea, você pode conectar um domínio próprio, como <code>exemplo.com</code>, à sua loja. A configuração é feita nos registros DNS do seu domínio, no painel do provedor em que eles são gerenciados.</p>
           <div class="docs-note">
             <Globe2 :size="21" aria-hidden="true" />
-            <div><strong>Você pode usar a Cloudflare e hospedar a loja na VPS.</strong><p>Nesse caso, o domínio usa os nameservers atribuídos pela Cloudflare, e os registros DNS são configurados no painel dela com os destinos da Elínea.</p></div>
+            <div><strong>Primeiro, informe à Elínea qual domínio será usado na sua loja.</strong><p>A Elínea associa esse endereço à sua loja. Mesmo que várias lojas apontem para o mesmo servidor, cada uma é reconhecida pelo domínio cadastrado. Alterar o DNS é apenas uma parte da conexão.</p></div>
           </div>
-          <p>Se você já gerencia o DNS em outro provedor, pode manter os nameservers atuais e editar os registros lá. Não é necessário mudar para a Cloudflare só para conectar a loja.</p>
-          <ol class="docs-flow" aria-label="Como as partes se conectam">
-            <li><span>01</span><strong>Registro do domínio</strong><p>É onde você escolhe os nameservers.</p></li>
-            <li><span>02</span><strong>Provedor de DNS</strong><p>É onde você cria os registros A e CNAME.</p></li>
-            <li><span>03</span><strong>Servidor Elínea</strong><p>Recebe o domínio e entrega a sua loja.</p></li>
+          <ol class="docs-flow" aria-label="Etapas para conectar seu domínio">
+            <li><span>01</span><strong>Informe seu domínio</strong><p>Envie o endereço desejado ao atendimento da Elínea.</p></li>
+            <li><span>02</span><strong>Ajuste os registros DNS</strong><p>Configure os apontamentos no seu provedor atual.</p></li>
+            <li><span>03</span><strong>Confirme a ativação</strong><p>Avise a Elínea e teste o acesso à sua loja.</p></li>
           </ol>
         </section>
 
         <section id="antes-de-comecar" class="docs-section" aria-labelledby="heading-antes" tabindex="-1">
-          <h2 id="heading-antes">Antes de começar</h2>
+          <h2 id="heading-antes">O que você precisa ter em mãos</h2>
           <ul class="docs-checklist">
-            <li><Check :size="17" aria-hidden="true" /><span>Tenha acesso ao painel de registro do domínio e ao provedor de DNS que está ativo.</span></li>
-            <li><Check :size="17" aria-hidden="true" /><span>Confirme com a Elínea o domínio da loja e o subdomínio de destino. <code>exemplo.com</code> e <code>sualoja.elinea.com.br</code> são exemplos neste guia.</span></li>
-            <li><Check :size="17" aria-hidden="true" /><span>Salve os registros existentes antes de editar, principalmente os de e-mail: MX, SPF, DKIM e DMARC.</span></li>
-            <li><Check :size="17" aria-hidden="true" /><span>Combine a liberação do domínio e do HTTPS com a Elínea. O DNS sozinho não conclui essa etapa.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>Um domínio registrado que você administra, como <code>exemplo.com</code>.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>Acesso ao painel do provedor que gerencia o DNS desse domínio.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>O endereço da sua loja Elínea, informado na implantação, para preencher o destino do CNAME.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>Uma cópia ou captura dos registros atuais. Se você usa e-mail no domínio, preserve os registros desse serviço.</span></li>
           </ul>
+          <p>Neste guia, <code>exemplo.com</code> representa o domínio que você possui. <code>sualoja.elinea.com.br</code> representa o endereço da sua loja informado pela Elínea; substitua esse exemplo pelo endereço recebido.</p>
+          <p>Se ainda não recebeu o endereço da sua loja ou não sabe qual domínio informar, fale com o atendimento antes de alterar os registros.</p>
         </section>
 
         <section id="nameservers" class="docs-section" aria-labelledby="heading-nameservers" tabindex="-1">
-          <h2 id="heading-nameservers">Escolha onde gerenciar o DNS</h2>
-          <p>No painel em que o domínio foi registrado, procure por “Servidores DNS” ou “Nameservers”. Use o conjunto indicado pelo provedor que vai gerenciar a zona DNS; não misture os dois pares abaixo.</p>
-          <div class="docs-nameservers">
-            <div><h3>Cloudflare</h3><p>Par informado para referência:</p><code>daisy.ns.cloudflare.com</code><code>weston.ns.cloudflare.com</code><p><strong>Confirme no painel do próprio domínio.</strong> A Cloudflare atribui um par a cada zona; os nomes acima não servem automaticamente para todos os clientes.</p></div>
-            <div><h3>Provedor de hospedagem</h3><p>Alternativa de DNS informada:</p><code>lunar.dns-parking.com</code><code>solar.dns-parking.com</code><p>Use somente se esse for o serviço que gerencia o DNS do domínio. Esses nomes não substituem o IP da VPS no registro A.</p></div>
-          </div>
-          <p>Quando a Cloudflare for o DNS ativo, faça as alterações nela. Editar registros no painel antigo da hospedagem não muda a zona que está respondendo pelo domínio.</p>
-          <p class="docs-reference">Referência: <a href="https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/" target="_blank" rel="noopener noreferrer">configuração de nameservers na Cloudflare <ArrowUpRight :size="14" aria-hidden="true" /></a>.</p>
+          <h2 id="heading-nameservers">Abra o painel de DNS do seu domínio</h2>
+          <p>Acesse o provedor que gerencia o DNS do seu domínio e procure uma área chamada “Zona DNS”, “Gerenciar DNS” ou “Registros DNS”. Ela pode estar no serviço em que você registrou o domínio ou em outro provedor que você já utiliza.</p>
+          <p><strong>Mantenha os servidores de nomes atuais.</strong> Para seguir este guia, você precisa alterar os registros A e CNAME; não é necessário transferir o domínio nem trocar os nameservers para os da Elínea.</p>
+          <p>Se seu domínio já usa Cloudflare, faça as alterações no painel dela. Caso não saiba onde o DNS é gerenciado, peça essa informação ao seu provedor de domínio ou ao responsável que fez a configuração atual.</p>
         </section>
 
         <section id="registros-dns" class="docs-section" aria-labelledby="heading-registros" tabindex="-1">
           <h2 id="heading-registros">Configure os registros da loja</h2>
-          <p>Crie os registros abaixo no <strong>provedor de DNS ativo</strong>. O IP informado para a VPS da Elínea é <code>193.160.119.94</code>. Antes de publicar, confirme que ele continua sendo o destino da sua implantação.</p>
+          <p>No painel de DNS do seu domínio, crie ou ajuste os dois registros abaixo. O registro A aponta o domínio principal para a Elínea; o CNAME configura o endereço com <code>www</code>.</p>
           <div class="docs-table-scroll" role="region" aria-label="Registros DNS da loja" tabindex="0">
             <table class="docs-table">
               <caption>Apontamentos para o domínio principal e o endereço com www</caption>
               <thead><tr><th scope="col">Tipo</th><th scope="col">Nome</th><th scope="col">Destino</th><th scope="col">Copiar</th></tr></thead>
-              <tbody><tr v-for="record in records" :key="record.type"><td><span class="docs-record-type">{{ record.type }}</span></td><td><code>{{ record.name }}</code><small>{{ record.domain }}</small></td><td><code>{{ record.target }}</code></td><td><button type="button" class="docs-copy" :aria-label="`Copiar destino do registro ${record.type}`" @click="copy(record.target, `Destino ${record.type}`)"><Check v-if="copied === `Destino ${record.type}`" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></td></tr></tbody>
+              <tbody><tr v-for="record in records" :key="record.type"><td><span class="docs-record-type">{{ record.type }}</span></td><td><code>{{ record.name }}</code><small>{{ record.domain }}</small></td><td><code>{{ record.target }}</code><small v-if="record.type === 'CNAME'">Exemplo: use o endereço da sua loja.</small></td><td><button type="button" class="docs-copy" :aria-label="record.type === 'CNAME' ? 'Copiar exemplo de destino CNAME' : 'Copiar destino do registro A'" @click="copy(record.target, record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')"><Check v-if="copied === (record.type === 'CNAME' ? 'Exemplo CNAME' : 'Destino A')" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></td></tr></tbody>
             </table>
           </div>
           <p class="docs-table-hint">Deslize a tabela para ver os destinos e os botões de copiar.</p>
           <ul>
             <li><code>@</code> representa o domínio principal, como <code>exemplo.com</code>. Alguns painéis pedem o domínio completo no lugar de <code>@</code>.</li>
-            <li>No CNAME, substitua <code>sualoja.elinea.com.br</code> pelo endereço confirmado pela Elínea, sem <code>https://</code>, portas ou caminhos.</li>
-            <li>Na Cloudflare, use TTL automático. Em outro provedor, mantenha o padrão ou o valor combinado para a implantação.</li>
-            <li>Revise registros A, AAAA ou CNAME antigos para <code>@</code> e <code>www</code> que apontem para outra hospedagem. Não apague registros de e-mail ou verificações de outros serviços.</li>
+            <li>No CNAME, substitua <code>sualoja.elinea.com.br</code> pelo endereço da sua loja recebido na implantação. Preencha apenas o nome, sem <code>https://</code>, barras ou caminhos.</li>
+            <li>Deixe o TTL no padrão do seu provedor. Na Cloudflare, selecione “Auto”.</li>
+            <li>Se já houver apontamentos de site para <code>@</code> ou <code>www</code>, ajuste os antigos para não manter destinos conflitantes. Isso pode incluir registros A, AAAA ou CNAME. Em caso de dúvida, envie uma captura ao atendimento antes de excluir algo.</li>
           </ul>
-          <p class="docs-detail">Um CNAME é um apelido DNS: ele não muda o endereço exibido no navegador e não cria um redirecionamento entre www e o domínio principal.</p>
+          <p class="docs-detail">Preserve os registros de e-mail e de outros serviços. Altere somente os apontamentos do site indicados neste guia. Seu domínio próprio também precisa estar associado à sua loja pela Elínea, mesmo que o CNAME aponte para o endereço correto.</p>
         </section>
 
         <section id="cloudflare" class="docs-section" aria-labelledby="heading-cloudflare" tabindex="-1">
-          <h2 id="heading-cloudflare">Passo a passo na Cloudflare</h2>
+          <h2 id="heading-cloudflare">Se o seu domínio já usa Cloudflare</h2>
+          <p>Siga estes passos na sua própria conta Cloudflare. Se você usa outro provedor de DNS, faça a configuração equivalente no painel dele.</p>
           <ol class="docs-steps">
-            <li><strong>Abra o domínio certo.</strong><p>Se ele já estiver ativo na Cloudflare, vá à área de registros DNS. Se estiver migrando, adicione o domínio e confira os registros importados, incluindo os de e-mail.</p></li>
-            <li><strong>Se necessário, altere os nameservers no registrador.</strong><p>Copie o par exibido para esse domínio. Se houver DNSSEC ativo, desative a configuração anterior no registrador antes de trocar os nameservers. Após a ativação do domínio, configure novamente o DNSSEC na Cloudflare.</p></li>
-            <li><strong>Cadastre os registros A e CNAME.</strong><p>Use os destinos da tabela. Para a conexão inicial, mantenha os registros da loja em <strong>Somente DNS (DNS only)</strong>, com a nuvem cinza, até a validação com a Elínea.</p></li>
-            <li><strong>Combine a ativação do proxy.</strong><p>A nuvem laranja adiciona a Cloudflare ao tráfego da loja. Ative apenas depois de confirmar a compatibilidade do destino e do HTTPS com a Elínea.</p></li>
+            <li><strong>Selecione o seu domínio.</strong><p>Abra o painel da Cloudflare e entre no domínio que deseja usar na loja.</p></li>
+            <li><strong>Abra DNS → Registros.</strong><p>Localize os registros do site e crie ou edite os apontamentos A e CNAME conforme a tabela.</p></li>
+            <li><strong>Selecione “Somente DNS”.</strong><p>Nos registros da loja, deixe o status do proxy como <strong>DNS only</strong>, com a nuvem cinza, para a configuração inicial. Mantenha o TTL em “Auto”.</p></li>
+            <li><strong>Salve e avise a Elínea.</strong><p>Envie o domínio e uma captura dos registros para que a equipe confira a conexão com sua loja. Só altere a opção de proxy depois disso se houver orientação da Elínea.</p></li>
           </ol>
-          <p><strong>Atenção ao destino do CNAME:</strong> a nuvem cinza no domínio do cliente não garante acesso direto à VPS se o destino também estiver com proxy. Um destino em outra conta Cloudflare pode exigir Cloudflare for SaaS; não basta copiar o CNAME para liberar o domínio.</p>
-          <p class="docs-reference">Leia sobre <a href="https://developers.cloudflare.com/dns/proxy-status/" target="_blank" rel="noopener noreferrer">status do proxy <ArrowUpRight :size="14" aria-hidden="true" /></a> e <a href="https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/start/getting-started/" target="_blank" rel="noopener noreferrer">domínios de clientes com Cloudflare for SaaS <ArrowUpRight :size="14" aria-hidden="true" /></a>.</p>
+          <p>Os serviços usados internamente pela Elínea não exigem que você mova seu domínio para a nossa conta Cloudflare. Você continua administrando o domínio no seu provedor.</p>
+          <p class="docs-reference">Ajuda do provedor: <a href="https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/" target="_blank" rel="noopener noreferrer">gerenciar registros DNS na Cloudflare <ArrowUpRight :size="14" aria-hidden="true" /></a>.</p>
         </section>
 
         <section id="https" class="docs-section" aria-labelledby="heading-https" tabindex="-1">
-          <h2 id="heading-https">Libere o domínio e o HTTPS</h2>
-          <p>Envie à Elínea os endereços que serão usados, como <code>exemplo.com</code> e <code>www.exemplo.com</code>. A equipe precisa preparar o reconhecimento desses endereços, o roteamento para a loja e os certificados correspondentes.</p>
-          <p>O certificado de <code>*.elinea.com.br</code> não cobre o domínio personalizado do cliente. Confirme também qual será o endereço principal e como o outro endereço será redirecionado.</p>
-          <div class="docs-note docs-note--plain"><div><strong>Com proxy Cloudflare, use Full (strict) após validar o certificado de origem.</strong><p>O servidor deve aceitar HTTPS e apresentar um certificado válido para o domínio solicitado. Um certificado Cloudflare Origin CA, sozinho, não é confiável para acesso direto pelo navegador quando o proxy está desligado.</p></div></div>
-          <p class="docs-reference">Referências: <a href="https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/full-strict/" target="_blank" rel="noopener noreferrer">modo Full (strict) <ArrowUpRight :size="14" aria-hidden="true" /></a> e <a href="https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/" target="_blank" rel="noopener noreferrer">certificados Origin CA <ArrowUpRight :size="14" aria-hidden="true" /></a>.</p>
+          <h2 id="heading-https">Solicite a conclusão da ativação</h2>
+          <p>Depois de salvar os registros, avise o atendimento da Elínea. Envie o domínio próprio, o endereço da sua loja Elínea e uma captura dos apontamentos.</p>
+          <p>Informe também se deseja usar o endereço com <code>www</code> e qual será o endereço principal. Por exemplo: <code>exemplo.com</code> como principal e <code>www.exemplo.com</code> como alternativa.</p>
+          <div class="docs-note docs-note--plain"><div><strong>A vinculação da loja e o acesso seguro ficam com a Elínea.</strong><p>A equipe confere a associação do domínio à sua loja e a configuração do HTTPS. Você não precisa acessar o servidor nem instalar certificados para seguir este guia.</p></div></div>
+          <p>Aguarde a confirmação da Elínea antes de divulgar o novo endereço. Apenas salvar o registro DNS não confirma que a ativação está concluída.</p>
         </section>
 
         <section id="verificar" class="docs-section" aria-labelledby="heading-verificar" tabindex="-1">
-          <h2 id="heading-verificar">Confira o apontamento</h2>
-          <p>Troque <code>exemplo.com</code> pelo domínio da loja. Estes comandos apenas consultam o DNS; não alteram a configuração.</p>
-          <div class="docs-code"><div><span>macOS / Linux · com dig instalado</span><button type="button" class="docs-copy" aria-label="Copiar comandos dig" @click="copy(commands, 'Comandos dig')"><Check v-if="copied === 'Comandos dig'" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></div><pre><code>{{ commands }}</code></pre></div>
-          <div class="docs-code"><div><span>Windows · Prompt de Comando</span><button type="button" class="docs-copy" aria-label="Copiar comandos nslookup" @click="copy(windowsCommands, 'Comandos nslookup')"><Check v-if="copied === 'Comandos nslookup'" :size="16" aria-hidden="true" /><Copy v-else :size="16" aria-hidden="true" /></button></div><pre><code>{{ windowsCommands }}</code></pre></div>
-          <p>Confira os nameservers do provedor escolhido. No acesso direto, o A deve retornar o IP combinado. Com proxy ativo, é esperado receber IPs da Cloudflare, e a resposta CNAME pode não ser exibida da mesma forma.</p>
-          <p>Depois, abra o domínio principal e o endereço com www usando HTTPS. Verifique se ambos chegam à loja correta, sem erro de certificado. A atualização do DNS depende do TTL e dos caches; nem todos os visitantes recebem a mudança ao mesmo tempo.</p>
+          <h2 id="heading-verificar">Teste o acesso à sua loja</h2>
+          <p>Após a confirmação da ativação, abra o seu domínio no navegador usando <code>https://</code>. Confira estes pontos:</p>
+          <ul class="docs-checklist">
+            <li><Check :size="17" aria-hidden="true" /><span>O endereço abre a sua loja, com o nome, a identidade e os produtos corretos.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>O navegador não mostra avisos de conexão insegura ou de certificado.</span></li>
+            <li><Check :size="17" aria-hidden="true" /><span>O domínio principal e o endereço com <code>www</code> funcionam conforme o que foi combinado com a Elínea.</span></li>
+          </ul>
+          <p>As alterações de DNS podem levar algum tempo para aparecer em todas as redes, por causa do cache e do prazo de atualização do provedor. Se ainda aparecer o site antigo, aguarde a atualização e teste novamente. Evite alterar os registros repetidamente durante esse período.</p>
+          <p>Se o endereço continuar sem abrir a loja correta, envie o domínio e uma captura do que aparece ao atendimento.</p>
         </section>
 
         <section id="duvidas" class="docs-section" aria-labelledby="heading-duvidas" tabindex="-1">
-          <h2 id="heading-duvidas">Se algo não funcionar</h2>
-          <details><summary>Ainda aparece o site antigo</summary><p>Confirme os nameservers ativos e o painel onde os registros foram alterados. Revise os destinos A e AAAA do domínio e aguarde os caches expirarem. Se o destino estiver correto, envie os resultados das consultas à Elínea.</p></details>
-          <details><summary>O domínio abre, mas o www não</summary><p>Confira o CNAME e confirme com a Elínea o cadastro, o roteamento e o certificado do endereço com www. Apontar o DNS para o mesmo servidor não configura essas etapas automaticamente.</p></details>
-          <details><summary>O e-mail parou depois da troca de DNS</summary><p>Compare a zona atual com a cópia anterior e restaure os registros MX e TXT exigidos pelo serviço de e-mail. O apontamento da loja não exige remover esses registros.</p></details>
-          <details><summary>A Cloudflare mostra erro 1014</summary><p>Pode haver um CNAME entre contas Cloudflare sem a configuração necessária no destino. Envie o domínio e o erro à Elínea para validar a configuração; alternar o proxy do cliente não resolve necessariamente o problema. <a href="https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1014/" target="_blank" rel="noopener noreferrer">Entenda o erro 1014 <ArrowUpRight :size="14" aria-hidden="true" /></a>.</p></details>
-          <details><summary>Há erro de certificado ou redirecionamento</summary><p>Confirme a emissão do certificado para os endereços usados e a configuração do proxy. Em Full (strict), o erro 526 pode indicar um certificado de origem incompatível. Peça à Elínea a verificação do HTTPS antes de alterar o modo de criptografia.</p></details>
-          <div class="docs-support"><h3>Vamos conferir juntos?</h3><p>Envie o domínio da loja, uma captura dos registros e o erro encontrado. Não envie senhas ou chaves de acesso.</p><MarketingTextButton href="mailto:contato@elinea.com.br">Falar com a Elínea</MarketingTextButton></div>
+          <h2 id="heading-duvidas">Dúvidas frequentes</h2>
+          <details><summary>Preciso trocar de provedor ou usar Cloudflare?</summary><p>Você pode manter o provedor de DNS que já utiliza. Para conectar a loja, configure os registros A e CNAME e informe o domínio à Elínea.</p></details>
+          <details><summary>Outras lojas usam o mesmo IP. Como a minha é identificada?</summary><p>O IP leva o acesso até a plataforma. A Elínea identifica a sua loja pelo domínio que foi associado a ela. Por isso, informe o endereço completo ao atendimento antes de concluir a configuração.</p></details>
+          <details><summary>Qual endereço devo colocar no CNAME?</summary><p>Use o endereço da sua loja Elínea informado na implantação. <code>sualoja.elinea.com.br</code> é apenas um exemplo. Se você ainda não recebeu o destino, solicite ao atendimento antes de preencher esse registro.</p></details>
+          <details><summary>O domínio mostra “loja não encontrada” ou abre uma página diferente</summary><p>Confirme os registros DNS e informe o domínio ao atendimento. A equipe vai conferir se esse endereço está vinculado à sua loja. Se o domínio já apontava para outro site, a atualização do DNS também pode estar em andamento.</p></details>
+          <details><summary>O domínio principal abre, mas o www não</summary><p>Confira o CNAME e avise a Elínea de que o endereço com www também será utilizado. Os dois endereços precisam estar contemplados na ativação; o registro DNS sozinho não cria essa configuração.</p></details>
+          <details><summary>O apontamento da loja muda meu e-mail?</summary><p>Você deve manter os registros do serviço de e-mail, como MX e os TXT de SPF, DKIM e DMARC. Se o e-mail parar após uma alteração, compare os registros com a cópia anterior e procure o provedor do seu e-mail.</p></details>
+          <details><summary>Aparece um erro da Cloudflare ou de conexão segura</summary><p>Envie o domínio e uma captura do erro ao atendimento da Elínea. Se você usa Cloudflare, confira se os registros da loja estão em “Somente DNS”. A equipe verifica o que precisa ser ajustado na plataforma.</p></details>
+          <div class="docs-support"><h3>Precisa de ajuda com o seu domínio?</h3><p>Informe o endereço da loja e envie uma captura dos registros. Não envie senhas ou chaves de acesso.</p><MarketingTextButton href="mailto:contato@elinea.com.br">Falar com a Elínea</MarketingTextButton></div>
         </section>
         <p class="docs-copy-notice" role="status" aria-live="polite">{{ copyNotice }}</p>
       </article>
@@ -236,10 +237,6 @@ useSeoMeta({
 .docs-section > .docs-checklist { list-style: none; padding-left: 0; }
 .docs-checklist li { display: flex; align-items: flex-start; gap: .7rem; }
 .docs-checklist svg { flex-shrink: 0; margin-top: .35rem; color: var(--green); }
-.docs-nameservers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 1.7rem; }
-.docs-nameservers > div { min-width: 0; padding-top: 1.2rem; border-top: 2px solid var(--line); }
-.docs-nameservers p { margin-block: .6rem; font-size: .87rem; }
-.docs-nameservers code { display: block; margin-block: .4rem; padding: .4rem .55rem; font-size: .85rem; }
 .docs-section .docs-reference { margin-top: 1.2rem; font-size: .8rem; }
 .docs-table-scroll { max-width: 100%; overflow-x: auto; margin-block: 1.5rem; border: 1px solid var(--line); border-radius: 10px; }
 .docs-table-hint { display: none; }
@@ -257,11 +254,6 @@ useSeoMeta({
 .docs-steps > li + li { margin-top: 1.3rem; }
 .docs-steps p { margin-top: .35rem; }
 .docs-section .docs-detail { padding-left: 1rem; border-left: 2px solid var(--line); font-size: .87rem; }
-.docs-code { min-width: 0; margin-block: 1.2rem; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; }
-.docs-code > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .5rem .8rem .5rem 1.2rem; border-bottom: 1px solid var(--line); background: var(--warm-white); color: var(--muted); font-size: .8rem; }
-.docs-code .docs-copy { border-color: transparent; }
-.docs-code pre { overflow-x: auto; padding: 1.3rem; }
-.docs-code code { background: none; padding: 0; font-size: .84rem; line-height: 1.9; white-space: pre; }
 .docs-section details { border-bottom: 1px solid var(--line); }
 .docs-section summary { display: flex; align-items: center; justify-content: space-between; min-height: 60px; gap: 1rem; padding: 1rem 0; color: var(--ink-2); font-size: 1rem; font-weight: 500; cursor: pointer; list-style: none; }
 .docs-section summary::-webkit-details-marker { display: none; }
@@ -296,7 +288,6 @@ useSeoMeta({
   .docs-flow { grid-template-columns: 1fr; gap: 1.2rem; }
   .docs-flow li { display: grid; grid-template-columns: 24px 1fr; column-gap: .6rem; }
   .docs-flow span { grid-row: span 2; margin: .1rem 0 0; }
-  .docs-nameservers { grid-template-columns: 1fr; gap: 1.3rem; }
 }
 @media (prefers-reduced-motion: reduce) { .docs-menu-toggle svg { transition: none; } }
 </style>
