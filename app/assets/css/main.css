@@ -1783,7 +1783,7 @@ body .page-shell .marketing-social-rail__label {
 .footer-links a:hover, .footer-contact:hover { text-decoration: underline; text-underline-offset: .25em; }
 .site-footer :is(a, button):focus-visible { outline: 2px solid var(--green-bright); outline-offset: 4px; border-radius: 2px; }
 
-.footer-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; margin-top: clamp(2.5rem, 4vw, 4rem); padding-top: 2rem; border-top: 1px solid rgb(255 255 255 / 12%); }
+.footer-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; margin-top: clamp(2.5rem, 4vw, 4rem); padding-top: 2rem; }
 .footer-company { min-width: 0; color: #d6dce9; font-size: .85rem; line-height: 1.7; overflow-wrap: anywhere; }
 .footer-company h2 { margin-bottom: .75rem; }
 .footer-company p { margin: 0; }
