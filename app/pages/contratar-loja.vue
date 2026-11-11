@@ -23,7 +23,7 @@ const errors = reactive<Partial<Record<Field, string>>>({})
 const termsAccepted = ref(false)
 const submitting = ref(false)
 const submitError = ref('')
-const errorSummary = ref<HTMLElement | null>(null)
+const checkoutForm = ref<HTMLFormElement | null>(null)
 
 watch(() => route.query.plano, value => {
   selectedSlug.value = typeof value === 'string' ? value : ''
@@ -58,7 +58,7 @@ async function submitCheckout() {
   else delete errors.terms_accepted
   if (!valid || !termsAccepted.value || !acceptedDocument || termsLoadingError.value) {
     await nextTick()
-    errorSummary.value?.focus()
+    checkoutForm.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
     return
   }
 
@@ -111,7 +111,7 @@ async function submitCheckout() {
       }
       if (Object.keys(data.errors).some(field => field.startsWith('terms_'))) await refreshTerms()
       await nextTick()
-      errorSummary.value?.focus()
+      checkoutForm.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
     }
     submitError.value = data?.errors ? Object.values(data.errors).flat()[0] || 'Não foi possível iniciar o pagamento.' : data?.message || 'Não foi possível iniciar o pagamento. Tente novamente.'
   } finally {
@@ -187,11 +187,7 @@ useSeoMeta({
             <p>Este plano não possui contratação online para o período escolhido. Entre em contato para conhecer o próximo passo.</p>
             <a :href="`mailto:contato@elinea.com.br?subject=${encodeURIComponent(`Interesse no plano ${selectedPlan.name}`)}`" class="create-store-contact">Falar com a equipe <ArrowRight :size="17" aria-hidden="true" /></a>
           </div>
-          <form v-else class="create-store-form" novalidate @submit.prevent="submitCheckout">
-            <div v-if="Object.keys(errors).length" ref="errorSummary" class="create-store-error-summary" role="alert" tabindex="-1">
-              <strong>Confira os campos indicados.</strong>
-              <a v-for="field in (Object.keys(errors) as Field[])" :key="field" :href="`#create-store-${field}`">{{ errors[field] }}</a>
-            </div>
+          <form v-else ref="checkoutForm" class="create-store-form" novalidate @submit.prevent="submitCheckout">
             <div class="create-store-fields">
               <label for="create-store-owner_name"><span>Seu nome <b>*</b></span><input id="create-store-owner_name" v-model="form.owner_name" autocomplete="name" required :aria-invalid="!!errors.owner_name" :aria-describedby="errors.owner_name ? 'error-owner_name' : undefined" @blur="validateField('owner_name')" @input="delete errors.owner_name"><small v-if="errors.owner_name" id="error-owner_name">{{ errors.owner_name }}</small></label>
               <label for="create-store-owner_email"><span>E-mail <b>*</b></span><input id="create-store-owner_email" v-model="form.owner_email" type="email" autocomplete="email" required :aria-invalid="!!errors.owner_email" :aria-describedby="errors.owner_email ? 'error-owner_email' : undefined" @blur="validateField('owner_email')" @input="delete errors.owner_email"><small v-if="errors.owner_email" id="error-owner_email">{{ errors.owner_email }}</small></label>
@@ -263,9 +259,8 @@ useSeoMeta({
 .create-store-fields input[aria-invalid="true"] { border-color: #b83c36; }
 .create-store-fields small { color: #a02e29; font-size: .78rem; font-weight: 400; }
 .create-store-field-wide { grid-column: 1 / -1; }
-.create-store-error-summary, .create-store-submit-error { margin-bottom: 1.5rem; padding: 1rem 1.2rem; border-left: 3px solid #b83c36; background: #fff1ef; color: #762824; font-size: .9rem; line-height: 1.5; }
-.create-store-error-summary { display: grid; gap: .35rem; }
-.create-store-error-summary a, .create-store-submit-error a { color: inherit; text-decoration: underline; }
+.create-store-submit-error { margin-bottom: 1.5rem; padding: 1rem 1.2rem; border-left: 3px solid #b83c36; background: #fff1ef; color: #762824; font-size: .9rem; line-height: 1.5; }
+.create-store-submit-error a { color: inherit; text-decoration: underline; }
 .create-store-submit { margin-top: 2rem; }
 .create-store-submit button, .create-store-contact { display: inline-flex; align-items: center; justify-content: center; gap: 1rem; min-height: 54px; padding: .9rem 1.4rem; border: 0; border-radius: 9px; background: var(--green); color: white; cursor: pointer; font: inherit; font-weight: 600; text-decoration: none; transition: background .2s; }
 .create-store-submit button:hover, .create-store-contact:hover { background: #067a4e; }
