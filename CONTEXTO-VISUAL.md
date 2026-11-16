@@ -479,16 +479,16 @@ do WhatsApp foi removido, mas o CTA continua apontando para o WhatsApp comercial
 Em “O mercado mudou”, o campo gráfico mantém apenas os dois arcos concêntricos
 maiores, sem círculo interno, eixo ou ponto.
 
-O usuário solicitou seções separadas para Autonomia e Com especialista na
+O usuário solicitou seções separadas para Com autonomia e Com especialista na
 apresentação, substituindo a proposta anterior de abas. Ambas ficam visíveis
 e usam os mesmos dados e condições de Preços. A ordem solicitada pelo usuário
-é Autonomia (08), “Você não precisa fazer tudo sozinho.” / suporte (09),
+é Com autonomia (08), “Você não precisa fazer tudo sozinho.” / suporte (09),
 Com especialista (10) e encerramento (11), tanto na página quanto no PDF.
 Os cards mantêm todas as funcionalidades visíveis e os limites fora das listas.
 A implantação aparece com um resumo para caber no formato 16:9; a página de
 Preços preserva a lista detalhada dos serviços. Em notebooks, o slide de planos
 pode crescer em altura para preservar a leitura; a exportação continua em 16:9.
-Os CTAs de Autonomia dos planos de assinatura abrem a contratação no site oficial;
+Os CTAs da modalidade Com autonomia dos planos de assinatura abrem a contratação no site oficial;
 especialista e Personalizado mantêm o contato comercial pelo WhatsApp.
 
 ## Checklist para futuras alterações
@@ -571,17 +571,17 @@ a esse CTA, preservando o foco por teclado e o padrão dos demais links e botõe
 
 ## Modalidades de contratação em Preços — 16 de novembro de 2026
 
-O usuário solicitou duas abas em `/precos`: Autonomia (padrão) e Com especialista.
+O usuário solicitou duas abas em `/precos`: Com autonomia (padrão) e Com especialista.
 Preservar hero, estrutura da página, tokens e destaque do E-commerce. O parâmetro
 `modalidade=autonomia|especialista` deve acompanhar a seleção e o histórico do navegador.
 Os cards compartilham mensalidades, funcionalidades e limites vindos da API:
 500 produtos ativos no Catálogo, 2.000 no E-commerce e limite personalizado no
-Personalizado. A Autonomia mantém implantação grátis nos dois primeiros planos;
+Personalizado. A modalidade Com autonomia mantém implantação grátis nos dois primeiros planos;
 o serviço opcional com especialista custa R$ 299,00 e R$ 599,00, respectivamente,
 em pagamento único, sem alterar a mensalidade. O Personalizado segue sob consulta.
 A API expõe o serviço em `specialist_implementation`, separado de
 `implementation_amount`, que continua representando a condição do checkout direto.
-Os CTAs de Autonomia preservam `/contratar-loja?plano=<slug>&periodo=<intervalo>`;
+Os CTAs da modalidade Com autonomia preservam `/contratar-loja?plano=<slug>&periodo=<intervalo>`;
 os de especialista e orçamento usam o WhatsApp comercial existente com mensagem
 identificando plano e modalidade. O escopo do serviço deve ser informado e trabalhos
 adicionais podem exigir orçamento separado. Não há obrigação de contratar especialista.
@@ -595,3 +595,7 @@ O conteúdo sobre a implantação deve aparecer diretamente nos cards de Preços
 sem o controle expansível “Sobre a implantação”, conforme solicitado pelo usuário.
 O usuário aprovou essa exibição direta e solicitou manter “Sobre a implantação”
 apenas como título, sem interação de expandir ou recolher.
+
+A nomenclatura solicitada pelo usuário para a modalidade é “Com autonomia”,
+na página de Preços, na apresentação e nas mensagens de contato. O identificador
+`autonomia` e os parâmetros de URL permanecem os mesmos.

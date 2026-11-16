@@ -37,8 +37,8 @@ const comparisonRows = [
 
 const faqs = [
   {
-    question: 'Qual é a diferença entre Autonomia e Com especialista?',
-    answer: 'Na modalidade Autonomia, você configura sua loja por conta própria, sem taxa de implantação nos planos Catálogo e E-commerce. Na modalidade Com especialista, nossa equipe oferece configuração inicial, orientação e treinamento mediante pagamento único.',
+    question: 'Qual é a diferença entre Com autonomia e Com especialista?',
+    answer: 'Na modalidade Com autonomia, você configura sua loja por conta própria, sem taxa de implantação nos planos Catálogo e E-commerce. Na modalidade Com especialista, nossa equipe oferece configuração inicial, orientação e treinamento mediante pagamento único.',
   },
   {
     question: 'Preciso contratar um especialista para começar?',
@@ -213,7 +213,7 @@ onBeforeUnmount(() => destroyMotion?.())
             </article>
             <article>
               <h3>Implantação</h3>
-              <p>Você escolhe como começar. Na modalidade Autonomia, configure sua loja por conta própria e não pague implantação nos planos Catálogo e E-commerce. Se preferir, conte com nossa equipe na modalidade Com especialista, que oferece configuração e orientação mediante pagamento único.</p>
+              <p>Você escolhe como começar. Na modalidade Com autonomia, configure sua loja por conta própria e não pague implantação nos planos Catálogo e E-commerce. Se preferir, conte com nossa equipe na modalidade Com especialista, que oferece configuração e orientação mediante pagamento único.</p>
             </article>
             <article>
               <h3>Evolução</h3>

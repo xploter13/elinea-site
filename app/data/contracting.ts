@@ -3,7 +3,7 @@ import type { Plan } from './plans'
 export type ContractingMode = 'autonomia' | 'especialista'
 export const contractingModes: { id: ContractingMode, label: string, description: string }[] = [
   {
-    id: 'autonomia', label: 'Autonomia',
+    id: 'autonomia', label: 'Com autonomia',
     description: 'Você no controle, desde o início. Escolha seu plano, configure sua loja no seu ritmo e aproveite todos os recursos da plataforma sem taxa de implantação.',
   },
   {

@@ -22,7 +22,7 @@ const href = computed(() => {
   const { plan, mode } = props
   if (mode && (mode === 'especialista' || plan.monthly_amount === null)) {
     return whatsappContactUrl(plan.monthly_amount === null
-      ? `Olá! Gostaria de solicitar um orçamento para o plano ${plan.name} do Elínea na modalidade ${mode === 'especialista' ? 'Com especialista' : 'Autonomia'}.`
+      ? `Olá! Gostaria de solicitar um orçamento para o plano ${plan.name} do Elínea na modalidade ${mode === 'especialista' ? 'Com especialista' : 'Com autonomia'}.`
       : `Olá! Tenho interesse no plano ${plan.name} do Elínea com acompanhamento de um especialista. Gostaria de saber mais sobre a implantação.`)
   }
   return props.linkForPlan?.(plan, props.interval)
