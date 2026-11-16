@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { contractingModes } from '~/data/contracting'
 import PlansCarousel from '~/components/pricing/PlansCarousel.vue'
 import { Mail } from '@lucide/vue'
-import type { Plan } from '~/data/plans'
+import type { BillingInterval, Plan } from '~/data/plans'
 import { drawPresentationText, hidePresentationText, measurePresentationText } from '~/utils/presentationPdfText'
 import { addPresentationLinks } from '~/utils/presentationPdfLinks'
 
@@ -41,7 +42,11 @@ const presentationContact = {
   message: 'Olá! Gostaria de agendar uma demonstração do Elínea.',
 }
 const demonstrationUrl = `https://wa.me/${presentationContact.whatsapp}?text=${encodeURIComponent(presentationContact.message)}`
-const presentationPlanUrl = (plan: Plan) => `https://wa.me/${presentationContact.whatsapp}?text=${encodeURIComponent(`Olá! Tenho interesse no plano ${plan.name} do Elínea e gostaria de saber mais.`)}`
+const presentationPlanUrl = (plan: Plan, interval: BillingInterval) => {
+  const url = new URL('/contratar-loja', 'https://elinea.com.br')
+  url.search = new URLSearchParams({ plano: plan.slug, periodo: interval }).toString()
+  return url.href
+}
 
 async function embeddedAsset(url: string): Promise<string> {
   const response = await fetch(url)
@@ -134,6 +139,7 @@ async function exportPdf() {
       exportLabel.value = `Gerando ${index + 1}/${pages.length}…`
 
       const exportPage = page.cloneNode(true) as HTMLElement
+      Object.assign(exportPage.style, { display: '', width: '1600px', height: '900px', minHeight: '0', margin: '0', boxShadow: 'none' })
       exportShell.replaceChildren(exportPage)
       const exportRail = exportPage.querySelector<HTMLElement>('.pricing-rail')
       if (exportRail) {
@@ -227,7 +233,7 @@ async function exportPdf() {
       <section id="page-02" class="page market" aria-labelledby="page-02-title">
         <span class="connection-field" aria-hidden="true"></span>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 11</span></header>
           <div class="market__layout">
             <div class="market__copy">
               <h2 id="page-02-title" class="page-title page-title--wide">Seus clientes já estão no digital.</h2>
@@ -249,7 +255,7 @@ async function exportPdf() {
     
       <section id="page-03" class="page page--ink problem" aria-labelledby="page-03-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 11</span></header>
           <div class="problem__head">
             <h2 id="page-03-title" class="page-title page-title--wide">Vender online não deveria ser complicado.</h2>
             <p class="page-copy">A vontade de crescer existe. O que falta é uma tecnologia compatível com a rotina de quem toca o negócio todos os dias.</p>
@@ -265,7 +271,7 @@ async function exportPdf() {
     
       <section id="page-04" class="page solution" aria-labelledby="page-04-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 11</span></header>
           <div class="solution__layout">
             <div class="solution__copy">
               <h2 id="page-04-title" class="page-title">Conheça o Elínea.</h2>
@@ -291,7 +297,7 @@ async function exportPdf() {
     
       <section id="page-05" class="page page--green flow" aria-labelledby="page-05-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 11</span></header>
           <div class="flow__head">
             <h2 id="page-05-title" class="page-title page-title--wide">Do cadastro do produto à realização da venda.</h2>
             <p class="page-copy">A tecnologia trabalha a favor do negócio enquanto você acompanha o que realmente importa.</p>
@@ -309,7 +315,7 @@ async function exportPdf() {
       <section id="page-06" class="page benefits" aria-labelledby="page-06-title">
         <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 11</span></header>
           <div class="benefits__head">
             <h2 id="page-06-title" class="page-title">Mais do que uma loja virtual.</h2>
             <p class="page-copy">Uma base que faz sentido agora e continua fazendo quando a operação crescer.</p>
@@ -329,7 +335,7 @@ async function exportPdf() {
     
       <section id="page-07" class="page segments" aria-labelledby="page-07-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 11</span></header>
           <div class="segments__head">
             <h2 id="page-07-title" class="page-title">O Elínea se adapta ao seu negócio.</h2>
             <p class="page-copy">Tecnologia próxima da rotina de pequenos e médios negócios reais.</p>
@@ -343,41 +349,48 @@ async function exportPdf() {
         </div>
       </section>
     
-      <section id="page-08" class="page page--mist plans" aria-labelledby="page-08-title">
-        <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">08 / 10</span></header>
-          <div class="plans__head">
-            <h2 id="page-08-title" class="page-title">Comece com o que precisa.</h2>
-            <p class="page-copy">Evolua quando quiser, sem carregar a operação com recursos antes da hora.</p>
-          </div>
-          <PlansCarousel class="plans__carousel" :plans="plans" :loading="plansPending" :error="Boolean(plansError)"
-                         :link-for-plan="presentationPlanUrl" presentation @retry="refreshPlans" />
-        </div>
-      </section>
-    
-      <section id="page-09" class="page support" aria-labelledby="page-09-title">
-        <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 10</span></header>
-          <div class="support__layout">
-            <figure class="support__visual"><div class="support__image"><img :src="assetUrl('suporte-exclusiva.png')" alt="Comerciante recebendo orientação durante a implantação"></div></figure>
-            <div class="support__copy">
-              <h2 id="page-09-title" class="page-title">Você não precisa fazer tudo sozinho.</h2>
-              <p class="page-copy">Acompanhamento próximo para simplificar a parte tecnológica desde o primeiro passo.</p>
-              <ul class="support__list">
-                <li><b>01</b>Configuração inicial</li><li><b>02</b>Personalização com a identidade da empresa</li>
-                <li><b>03</b>Orientação para utilizar o painel</li><li><b>04</b>Apoio na publicação</li><li><b>05</b>Suporte conforme o plano</li>
-              </ul>
+      <template v-for="mode in contractingModes" :key="mode.id">
+        <section v-if="mode.id === 'especialista'" id="page-09" class="page support" aria-labelledby="page-09-title">
+          <div class="page__frame">
+            <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 11</span></header>
+            <div class="support__layout">
+              <figure class="support__visual"><div class="support__image"><img :src="assetUrl('suporte-exclusiva.png')" alt="Comerciante recebendo orientação durante a implantação"></div></figure>
+              <div class="support__copy">
+                <h2 id="page-09-title" class="page-title">Você não precisa fazer tudo sozinho.</h2>
+                <p class="page-copy">Acompanhamento próximo para simplificar a parte tecnológica desde o primeiro passo.</p>
+                <ul class="support__list">
+                  <li><b>01</b>Configuração inicial</li><li><b>02</b>Personalização com a identidade da empresa</li>
+                  <li><b>03</b>Orientação para utilizar o painel</li><li><b>04</b>Apoio na publicação</li><li><b>05</b>Suporte conforme o plano</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    
+        </section>
+
+        <section :id="`page-08-${mode.id}`"
+                 class="page page--mist plans" :aria-labelledby="`page-08-title-${mode.id}`">
+          <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="page__frame">
+            <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">{{ mode.id === 'autonomia' ? '08' : '10' }} / 11</span></header>
+            <div class="plans__head">
+              <h2 :id="`page-08-title-${mode.id}`" class="page-title">{{ mode.label }}.</h2>
+              <p class="page-copy">{{ mode.id === 'autonomia' ? 'Você no controle, desde o início. Configure sua loja no seu ritmo, sem taxa de implantação nos planos Catálogo e E-commerce.' : 'Conte com nossa equipe para configurar sua loja e orientar os primeiros passos. Implantação opcional, com pagamento único.' }}</p>
+            </div>
+            <PlansCarousel class="plans__carousel" :plans="plans" :loading="plansPending" :error="Boolean(plansError)"
+                           :mode="mode.id" :link-for-plan="presentationPlanUrl" presentation @retry="refreshPlans" />
+            <div class="plans__implementation">
+              <h3>Sobre a implantação</h3>
+              <p>{{ mode.id === 'autonomia' ? 'Comece por conta própria nos planos Catálogo e E-commerce. No Personalizado, escopo e valores são definidos após análise do negócio.' : 'Configuração inicial, orientação e treinamento conforme o plano, sem alterar a mensalidade. Escopo definido antes da contratação; personalizações e integrações específicas podem exigir orçamento separado.' }}</p>
+            </div>
+          </div>
+        </section>
+      </template>
+
       <section id="page-10" class="page page--ink closing" aria-labelledby="page-10-title">
         <div class="closing__photo"><img :src="assetUrl('encerramento-exclusiva.png')" alt="Comerciante finalizando um pedido para entrega"></div>
         <div class="closing__veil"></div>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Vamos construir sua presença digital?</span><span class="page-meta__folio">10 / 10</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Vamos construir sua presença digital?</span><span class="page-meta__folio">11 / 11</span></header>
           <div class="closing__content">
             <div class="closing__logo"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
             <h2 id="page-10-title">Seu próximo cliente pode estar a um clique de distância.</h2>
@@ -582,12 +595,15 @@ async function exportPdf() {
 .plans .page__frame { padding: 3cqw 4.5cqw; }
 .plans .connection-field { right: -25%; bottom: -35%; opacity: .1; }
 .plans__head { display: flex; justify-content: space-between; align-items: end; gap: 5cqw; margin-top: 1.8cqw; }
-.plans__head .page-title { max-width: 18ch; font-size: clamp(38px, 3.8cqw, 61px); }
-.plans__head p { max-width: 31ch; padding-bottom: .2cqw; }
+.plans__head .page-title { max-width: 18ch; font-size: clamp(38px, 4.4cqw, 70px); }
+.plans__head p { max-width: 44ch; padding-bottom: .2cqw; }
+.plans__implementation { display: grid; grid-template-columns: minmax(0, .28fr) minmax(0, 1fr); gap: 2cqw; margin-top: 1.2cqw; padding-top: 1cqw; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.5; }
+.plans__implementation h3 { font-size: 14px; font-weight: 600; }
 .plans__carousel { display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 0; margin-top: 1.8cqw; }
 
-@media (min-width: 1101px) and (max-width: 1500px) {
-  .plans .page__frame { padding-block: 2cqw; }
+@media screen and (min-width: 1101px) and (max-width: 1500px) {
+  .plans.page { height: auto; min-height: 800px; }
+  .plans .page__frame { height: auto; min-height: 800px; padding-block: 2cqw; }
   .plans__head { gap: 2cqw; margin-top: 1cqw; }
   .plans__head .page-title { max-width: none; font-size: 3.2cqw; }
   .plans__head p { font-size: 15px; line-height: 1.4; }
@@ -666,6 +682,7 @@ async function exportPdf() {
 }
 @media (max-width: 700px) {
   .plans .page__frame { padding: 28px 24px; }
+  .plans__implementation { grid-template-columns: 1fr; gap: 8px; margin-top: 24px; padding-top: 18px; }
   .pdf-export { top: 10px; right: 10px; min-height: 42px; padding: 0 14px; font-size: 12px; }
   .presentation-document { gap: 16px; padding: 68px 0 16px; }
   .page { width: calc(100vw - 24px); min-height: 0; }

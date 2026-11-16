@@ -9,6 +9,7 @@ const props = defineProps<{
   plan: Plan
   interval: BillingInterval
   mode?: ContractingMode
+  compact?: boolean
   linkForPlan?: (plan: Plan, interval: BillingInterval) => string
 }>()
 const emit = defineEmits<{ select: [] }>()
@@ -29,7 +30,7 @@ const href = computed(() => {
 </script>
 
 <template>
-  <a v-if="linkForPlan && !mode" :href="href" class="plan-action plan-action--link" target="_blank" rel="noopener noreferrer">
+  <a v-if="linkForPlan && (!mode || compact)" :href="href" class="plan-action plan-action--link" target="_blank" rel="noopener noreferrer">
     {{ label }}<ArrowRight :size="16" aria-hidden="true" />
   </a>
   <MarketingButton v-else class="plan-action" :variant="plan.featured ? 'primary' : 'outline'"

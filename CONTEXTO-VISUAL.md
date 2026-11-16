@@ -428,7 +428,7 @@ puramente decorativas devem ter `alt=""`.
 
 A apresentação comercial em `app/pages/apresentacao.vue` é uma página Nuxt
 voltada à exportação em PDF, sem navegação entre páginas. O botão de exportação
-gera no navegador um novo PDF de 10 páginas em 16:9. Os convites de demonstração e
+gera no navegador um novo PDF de 11 páginas em 16:9, com uma página de planos por modalidade. Os convites de demonstração e
 os contatos usam links reais, também incorporados como áreas clicáveis no PDF. A apresentação é
 servida exclusivamente na rota local `/apresentacao`; o middleware da página e o
 handler dos assets recusam hosts não locais. O controle é ocultado automaticamente
@@ -464,16 +464,32 @@ preços separada na apresentação. Na exportação, cada página mostra até tr
 com os controles ocultados e links clicáveis para contato.
 Na apresentação, todos os recursos de cada plano ficam visíveis desde a abertura,
 sem “Ver todos”. As listas usam duas colunas no desktop para caber no formato 16:9;
-o PDF preserva a lista completa, sem ocultar itens durante a captura.
+o PDF preserva a lista completa, sem ocultar itens durante a captura. A leitura
+segue de cima para baixo em cada coluna. A área das listas respeita a altura
+do conteúdo, e os botões devem manter espaço após o último item, sem sobrepor
+“Suporte” ou qualquer outra funcionalidade.
 
 No slide de planos, os cards ficam centralizados verticalmente na área disponível
 abaixo do cabeçalho, sem o link de comparação. Os botões de contato ficam alinhados
-na base dos cards, depois dos recursos e das observações comerciais.
+na base dos cards, depois dos recursos. As orientações gerais de implantação e
+escopo ficam em uma nota compartilhada abaixo da grade.
 No encerramento, manter apenas o
 e-mail com ícone de envelope abaixo do CTA de demonstração; o link com o número
 do WhatsApp foi removido, mas o CTA continua apontando para o WhatsApp comercial.
 Em “O mercado mudou”, o campo gráfico mantém apenas os dois arcos concêntricos
 maiores, sem círculo interno, eixo ou ponto.
+
+O usuário solicitou seções separadas para Autonomia e Com especialista na
+apresentação, substituindo a proposta anterior de abas. Ambas ficam visíveis
+e usam os mesmos dados e condições de Preços. A ordem solicitada pelo usuário
+é Autonomia (08), “Você não precisa fazer tudo sozinho.” / suporte (09),
+Com especialista (10) e encerramento (11), tanto na página quanto no PDF.
+Os cards mantêm todas as funcionalidades visíveis e os limites fora das listas.
+A implantação aparece com um resumo para caber no formato 16:9; a página de
+Preços preserva a lista detalhada dos serviços. Em notebooks, o slide de planos
+pode crescer em altura para preservar a leitura; a exportação continua em 16:9.
+Os CTAs de Autonomia dos planos de assinatura abrem a contratação no site oficial;
+especialista e Personalizado mantêm o contato comercial pelo WhatsApp.
 
 ## Checklist para futuras alterações
 

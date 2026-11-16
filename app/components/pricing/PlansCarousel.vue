@@ -25,7 +25,7 @@ const implementationLabel = (plan: Plan) => implementationValue(plan) === null ?
 const isExpanded = (slug: string) => expanded.value.includes(slug)
 const toggle = (slug: string) => expanded.value = isExpanded(slug) ? expanded.value.filter(item => item !== slug) : [...expanded.value, slug]
 const visible = (plan: Plan) => props.presentation || isExpanded(plan.slug) ? plan.features : plan.features.slice(0, 6)
-const featureId = (slug: string) => `${props.presentation ? 'presentation' : 'pricing'}-features-${slug}`
+const featureId = (slug: string) => `${props.presentation ? `presentation-${props.mode ?? 'default'}` : 'pricing'}-features-${slug}`
 const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
   left: direction * (rail.value.clientWidth * .72),
   behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
@@ -33,7 +33,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 </script>
 
 <template>
-  <div class="plans-carousel" :class="{ 'plans-carousel--presentation': presentation, 'plans-carousel--modalities': Boolean(mode) }">
+  <div class="plans-carousel" :class="{ 'plans-carousel--presentation': presentation, 'plans-carousel--modalities': Boolean(mode) && !presentation, 'plans-carousel--contracting': Boolean(mode) && presentation }">
     <div v-if="(!hydrated || loading) && !plans.length" class="pricing-state" role="status">Carregando planos e preços...</div>
     <div v-else-if="error && !plans.length" class="pricing-state" role="alert">
       <p>Não foi possível carregar os planos agora.</p>
@@ -51,9 +51,9 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
         <p class="implementation" :class="{ 'implementation--free': mode && implementationValue(plan) === 0 }">
           <template v-if="mode && implementationValue(plan) === 0"><b>Implantação grátis</b></template>
           <template v-else>{{ mode === 'especialista' && plan.specialist_implementation ? 'Implantação com especialista' : 'Implantação' }}: <b>{{ implementationLabel(plan) }}</b></template>
-          <small v-if="mode">{{ implementationValue(plan) === null ? 'Escopo e valores definidos individualmente' : implementationValue(plan) === 0 ? 'Configure sua loja no seu ritmo' : 'Pagamento único' }}</small>
+          <small v-if="mode && (!presentation || (implementationValue(plan) ?? 0) > 0)">{{ implementationValue(plan) === null ? 'Escopo e valores definidos individualmente' : implementationValue(plan) === 0 ? 'Configure sua loja no seu ritmo' : 'Pagamento único' }}</small>
         </p>
-        <p v-if="mode" class="plan-description">{{ mode === 'especialista' && plan.slug === 'personalizado' ? 'Uma solução sob medida para sua empresa, com acompanhamento especializado desde o planejamento até a implementação dos recursos necessários.' : plan.description }}</p>
+        <p v-if="mode && !presentation" class="plan-description">{{ mode === 'especialista' && plan.slug === 'personalizado' ? 'Uma solução sob medida para sua empresa, com acompanhamento especializado desde o planejamento até a implementação dos recursos necessários.' : plan.description }}</p>
         <PlanAction v-if="!mode" :plan="plan" :interval="interval" :link-for-plan="linkForPlan"
                     @select="emit('select', plan, interval)" />
         <p class="feature-label">{{ plan.feature_label ?? 'Inclui' }}</p>
@@ -63,7 +63,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
         <button v-if="!presentation && plan.features.length > 6" class="feature-toggle" type="button" :aria-expanded="isExpanded(plan.slug)" :aria-controls="featureId(plan.slug)" @click="toggle(plan.slug)">
           {{ isExpanded(plan.slug) ? 'Ver menos' : `Ver todos (${plan.features.length})` }}<ChevronDown :size="15" />
         </button>
-        <div v-if="mode" class="implementation-details">
+        <div v-if="mode && !presentation" class="implementation-details">
           <h4 class="implementation-details__title">Sobre a implantação</h4>
           <div class="implementation-details__content">
             <div :class="{ 'is-active': mode === 'autonomia' }" :aria-hidden="mode !== 'autonomia'">
@@ -77,8 +77,8 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
             </div>
           </div>
         </div>
-        <p v-if="plan.commercial_note" class="plan-commercial-note">{{ plan.commercial_note }}</p>
-        <PlanAction v-if="mode" :plan="plan" :interval="interval" :mode="mode"
+        <p v-if="plan.commercial_note && (!presentation || !mode)" class="plan-commercial-note">{{ plan.commercial_note }}</p>
+        <PlanAction v-if="mode" :plan="plan" :interval="interval" :mode="mode" :link-for-plan="linkForPlan" :compact="presentation"
                     @select="emit('select', plan, interval)" />
       </article>
     </div>
@@ -157,6 +157,35 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
   .plans-carousel--presentation .plan-card { grid-template-columns: 1fr; grid-template-areas: 'name' 'price' 'description' 'implementation' 'label' 'features' 'note' 'action'; grid-template-rows: auto auto auto auto auto auto 1fr auto; }
   .plans-carousel--presentation ul { grid-template-columns: 1fr; }
 }
+
+.plans-carousel--contracting .pricing-rail { flex: 0 0 auto; max-height: none; gap: 1.2cqw; }
+.plans-carousel--contracting .plan-card {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'name' 'price' 'limit' 'implementation' 'label' 'features' 'action';
+  grid-template-rows: 30px 48px 22px 48px auto minmax(min-content, 1fr) auto;
+  gap: 8px;
+  padding: 1.4cqw;
+}
+.plans-carousel--contracting h3 { font-size: 24px; }
+.plans-carousel--contracting .plan-price { align-items: center; }
+.plans-carousel--contracting .plan-price strong { font-size: 40px; }
+.plans-carousel--contracting .plan-price--custom strong { font-size: 32px; }
+.plans-carousel--contracting .plan-price small, .plans-carousel--contracting .plan-price > span { margin-bottom: 0; }
+.plans-carousel--contracting .plan-limit { grid-area: limit; margin: 0; font-size: 14px; }
+.plans-carousel--contracting .implementation { line-height: 1.4; }
+.plans-carousel--contracting .implementation small { display: block; margin-top: 3px; font-size: 12px; }
+.plans-carousel--contracting .implementation--free b { color: var(--green); }
+.plans-carousel--contracting .is-featured .implementation--free b { color: var(--green-bright); }
+.plans-carousel--contracting .feature-label { align-self: start; padding-top: 12px; border-top: 1px solid var(--line); }
+.plans-carousel--contracting .is-featured .feature-label { border-color: rgba(255,255,255,.2); }
+.plans-carousel--contracting ul { display: block; columns: 2; column-gap: 24px; }
+.plans-carousel--contracting li { display: block; break-inside: avoid; padding-bottom: 6px; font-size: 14px; line-height: 1.4; }
+.plans-carousel--contracting .plan-action { align-self: end; min-height: 40px; margin-top: 12px; }
+@media (max-width: 1100px) {
+  .plans-carousel--contracting .plan-card { padding: 24px; }
+  .plans-carousel--contracting ul { columns: 1; }
+}
+
 @media print {
   .plans-carousel--presentation .pricing-controls, .plans-carousel--presentation .feature-toggle { display: none; }
   .plans-carousel--presentation .pricing-rail { grid-auto-columns: minmax(0, 1fr); overflow: visible; }
