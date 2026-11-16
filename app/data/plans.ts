@@ -8,6 +8,8 @@ export type Plan = {
   monthly_amount: number | null
   yearly_amount: number | null
   implementation_amount: number | null
+  product_limit?: number | null
+  specialist_implementation?: { amount: number, services: string[] } | null
   currency: string
   features: string[]
   modules: string[]
@@ -98,7 +100,8 @@ function includedFeatures(plan: Plan, plans: Plan[], visited = new Set<string>()
 export function presentPlans(apiPlans: ApiPlan[]): Plan[] {
   const plans = apiPlans.filter(plan => plan.is_active).map(presentPlan)
   return plans.map(plan => {
-    const features = new Set(includedFeatures(plan, plans))
+    const features = new Set(includedFeatures(plan, plans).map(feature =>
+      /^catalogo de ate [\d.]+ produtos$/.test(feature) ? normalizeFeature('Catálogo de produtos') : feature))
     return {
       ...plan,
       comparison_features: Object.entries(comparisonRequirements)

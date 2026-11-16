@@ -1,19 +1,19 @@
 <script setup lang="ts">
+import { parseContractingMode, type ContractingMode } from '~/data/contracting'
 import PricingSection from '~/components/home/PricingSection.vue'
-import {formatPlanMoney, type BillingInterval, type Plan} from '~/data/plans'
+import {type BillingInterval, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
 const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
-const monthlySummary = computed(() => plans.value
-  .filter(plan => plan.monthly_amount !== null)
-  .map(plan => `${formatPlanMoney(plan.monthly_amount!, plan.currency)}/mês no plano ${plan.name}`)
-  .join('; '))
-const implementationSummary = computed(() => plans.value
-  .filter(plan => plan.implementation_amount !== null)
-  .map(plan => `${plan.name}: ${plan.implementation_amount === 0 ? 'implantação grátis' : `implantação de ${formatPlanMoney(plan.implementation_amount!, plan.currency)}`}`)
-  .join('. '))
+const route = useRoute()
+const router = useRouter()
+const mode = computed(() => parseContractingMode(route.query.modalidade))
+const selectMode = (value: ContractingMode) => {
+  if (value === mode.value) return
+  return router.push({ path: route.path, query: { ...route.query, modalidade: value }, hash: route.hash })
+}
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
@@ -35,14 +35,30 @@ const comparisonRows = [
   {label: 'Layout, integrações e regras sob medida', feature: 'customization'},
 ]
 
-const faqs = computed(() => [
+const faqs = [
   {
-    question: 'Qual é a diferença entre mensalidade e implantação?',
-    answer: `A mensalidade corresponde ao uso recorrente da plataforma. ${monthlySummary.value ? `Valores atuais: ${monthlySummary.value}. ` : ''}${implementationSummary.value ? `${implementationSummary.value}. ` : ''}Os valores sob consulta são definidos conforme o escopo do projeto.`,
+    question: 'Qual é a diferença entre Autonomia e Com especialista?',
+    answer: 'Na modalidade Autonomia, você configura sua loja por conta própria, sem taxa de implantação nos planos Catálogo e E-commerce. Na modalidade Com especialista, nossa equipe oferece configuração inicial, orientação e treinamento mediante pagamento único.',
   },
   {
-    question: 'Posso começar com um plano e evoluir depois?',
-    answer: 'Os planos representam diferentes momentos da operação. Para definir a evolução mais adequada entre eles, a equipe Elínea pode avaliar sua estrutura e as necessidades do negócio.',
+    question: 'Preciso contratar um especialista para começar?',
+    answer: 'Não. Você pode contratar os planos Catálogo e E-commerce diretamente pelo site e configurar sua loja com autonomia.',
+  },
+  {
+    question: 'O acompanhamento de um especialista altera minha mensalidade?',
+    answer: 'Não. O serviço de implantação possui pagamento único e não altera o valor da mensalidade do plano.',
+  },
+  {
+    question: 'Existe limite de produtos?',
+    answer: 'Sim. O plano Catálogo permite até 500 produtos ativos, enquanto o E-commerce permite até 2.000 produtos ativos. No plano Personalizado, o limite é definido conforme a necessidade do negócio.',
+  },
+  {
+    question: 'Posso mudar de plano posteriormente?',
+    answer: 'Sim. Você pode solicitar a evolução do seu plano conforme seu negócio cresce, de acordo com as condições disponíveis.',
+  },
+  {
+    question: 'O que está incluído no serviço com especialista?',
+    answer: 'O serviço pode incluir configuração inicial, orientações técnicas e treinamento, conforme o plano contratado. O escopo será informado antes da contratação. Funcionalidades personalizadas, integrações específicas e desenvolvimentos adicionais podem exigir orçamento separado.',
   },
   {
     question: 'O plano Catálogo permite comprar e pagar dentro do site?',
@@ -52,7 +68,7 @@ const faqs = computed(() => [
     question: 'Como funciona o plano Personalizado?',
     answer: 'Cada projeto é analisado individualmente. Ele pode incluir os recursos do E-commerce, layout exclusivo, integrações, regras próprias, funcionalidades e automações sob demanda. O orçamento pode envolver implantação, desenvolvimento e mensalidade, conforme o escopo aprovado.',
   },
-])
+]
 
 const heroStatement = 'Escolha a estrutura que acompanha o seu momento agora e mantenha espaço para a operação evoluir.'
 
@@ -127,7 +143,7 @@ onBeforeUnmount(() => destroyMotion?.())
         </div>
       </section>
 
-      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
+      <PricingSection :mode="mode" @update:mode="selectMode" :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
 
       <section v-if="plans.length" id="comparacao" class="chapter pricing-comparison">
         <div class="site-container">
@@ -161,6 +177,10 @@ onBeforeUnmount(() => destroyMotion?.())
               </tr>
               </thead>
               <tbody>
+              <tr>
+                <th scope="row">Produtos ativos</th>
+                <td v-for="plan in plans" :key="plan.slug" :class="{ featured: plan.featured }">{{ plan.product_limit == null ? 'Personalizado' : `Até ${plan.product_limit.toLocaleString('pt-BR')}` }}</td>
+              </tr>
               <tr v-for="row in comparisonRows" :key="row.label">
                 <th scope="row">{{ row.label }}</th>
                 <td v-for="plan in plans" :key="plan.slug" :class="{ featured: plan.featured }">
@@ -189,15 +209,15 @@ onBeforeUnmount(() => destroyMotion?.())
           <div class="pricing-value__breakdown" data-pricing-reveal>
             <article>
               <h3>Mensalidade</h3>
-              <p>{{ monthlySummary || 'Os valores recorrentes são informados nos detalhes de cada plano' }}. Nos planos sob consulta, o valor é definido após a análise do projeto.</p>
+              <p>A mensalidade garante acesso contínuo à plataforma, incluindo os recursos e o suporte previstos no plano contratado.</p>
             </article>
             <article>
               <h3>Implantação</h3>
-              <p>{{ implementationSummary || 'As condições de implantação são informadas nos detalhes de cada plano' }}. Nos planos sob consulta, a implantação é orçada conforme as necessidades do negócio.</p>
+              <p>Você escolhe como começar. Na modalidade Autonomia, configure sua loja por conta própria e não pague implantação nos planos Catálogo e E-commerce. Se preferir, conte com nossa equipe na modalidade Com especialista, que oferece configuração e orientação mediante pagamento único.</p>
             </article>
             <article>
               <h3>Evolução</h3>
-              <p>O plano Personalizado pode envolver implantação, desenvolvimento e mensalidade. Cada projeto é analisado individualmente.</p>
+              <p>Seu negócio cresce, e o Elínea acompanha. Comece com o plano ideal para sua operação e evolua conforme suas necessidades, com a possibilidade de contratar soluções personalizadas.</p>
             </article>
           </div>
         </div>

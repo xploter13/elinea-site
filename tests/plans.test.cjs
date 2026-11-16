@@ -68,3 +68,21 @@ test('handles cyclic inheritance without inventing absent resources', () => {
   ])
   assert.ok(plans.every(plan => plan.comparison_features.length === 0))
 })
+
+test('preserves API product limits and specialist offers without changing recurring or checkout amounts', () => {
+  const offer = { amount: 29900, services: ['Configuração inicial da loja'] }
+  const [plan] = presentPlans([apiPlan({ product_limit: 500, specialist_implementation: offer })])
+  assert.equal(plan.product_limit, 500)
+  assert.deepEqual(plan.specialist_implementation, offer)
+  assert.equal(plan.monthly_amount, 9990)
+  assert.equal(plan.implementation_amount, 0)
+  assert.equal(plan.can_checkout_monthly, true)
+})
+
+test('compares limited catalogs and inherited catalog features', () => {
+  const plans = presentPlans([
+    apiPlan({ features: ['Catálogo de até 500 produtos', 'Categorias e marcas', 'Variações e imagens'] }),
+    apiPlan({ id: 13, name: 'E-commerce', slug: 'e-commerce', features: ['Tudo do plano Catálogo', 'Catálogo de até 2.000 produtos'] }),
+  ])
+  assert.ok(plans.every(plan => plan.comparison_features.includes('catalog')))
+})

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Check, ChevronDown } from '@lucide/vue'
-import { MarketingButton } from '@elinea/ui/marketing'
+import PlanAction from '~/components/pricing/PlanAction.vue'
+import { implementationAmount, productLimitLabel, type ContractingMode } from '~/data/contracting'
 import { formatPlanMoney, type BillingInterval, type Plan } from '~/data/plans'
 
 const props = withDefaults(defineProps<{
@@ -9,6 +10,7 @@ const props = withDefaults(defineProps<{
   error?: boolean
   interval?: BillingInterval
   presentation?: boolean
+  mode?: ContractingMode
   linkForPlan?: (plan: Plan, interval: BillingInterval) => string
 }>(), { interval: 'monthly' })
 const emit = defineEmits<{ select: [plan: Plan, interval: BillingInterval], retry: [] }>()
@@ -18,8 +20,8 @@ const hydrated = ref(false)
 onMounted(() => hydrated.value = true)
 
 const amount = (plan: Plan) => props.interval === 'yearly' ? plan.yearly_amount : plan.monthly_amount
-const checkoutAvailable = (plan: Plan) => props.interval === 'yearly' ? plan.can_checkout_yearly : plan.can_checkout_monthly
-const implementationLabel = (plan: Plan) => plan.implementation_amount === null ? 'Sob consulta' : plan.implementation_amount === 0 ? 'Grátis' : formatPlanMoney(plan.implementation_amount, plan.currency)
+const implementationValue = (plan: Plan) => props.mode ? implementationAmount(plan, props.mode) : plan.implementation_amount
+const implementationLabel = (plan: Plan) => implementationValue(plan) === null ? 'Sob consulta' : implementationValue(plan) === 0 ? 'Grátis' : formatPlanMoney(implementationValue(plan)!, plan.currency)
 const isExpanded = (slug: string) => expanded.value.includes(slug)
 const toggle = (slug: string) => expanded.value = isExpanded(slug) ? expanded.value.filter(item => item !== slug) : [...expanded.value, slug]
 const visible = (plan: Plan) => props.presentation || isExpanded(plan.slug) ? plan.features : plan.features.slice(0, 6)
@@ -31,7 +33,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 </script>
 
 <template>
-  <div class="plans-carousel" :class="{ 'plans-carousel--presentation': presentation }">
+  <div class="plans-carousel" :class="{ 'plans-carousel--presentation': presentation, 'plans-carousel--modalities': Boolean(mode) }">
     <div v-if="(!hydrated || loading) && !plans.length" class="pricing-state" role="status">Carregando planos e preços...</div>
     <div v-else-if="error && !plans.length" class="pricing-state" role="alert">
       <p>Não foi possível carregar os planos agora.</p>
@@ -42,15 +44,18 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
       <article v-for="plan in plans" :key="plan.slug" class="plan-card" :class="[{ 'is-featured': plan.featured }, `plan-card--${plan.tone}`]">
         <span v-if="plan.featured" class="plan-badge">Recomendado</span>
         <h3>{{ plan.name }}</h3>
-        <p class="plan-description">{{ plan.description }}</p>
+        <p v-if="!mode" class="plan-description">{{ plan.description }}</p>
         <div v-if="amount(plan) !== null" class="plan-price"><small>{{ plan.currency === 'brl' ? 'R$' : plan.currency.toUpperCase() }}</small><strong>{{ formatPlanMoney(amount(plan)!, plan.currency).replace(/^[^\d]+/, '') }}</strong><span>/{{ interval === 'yearly' ? 'ano' : 'mês' }}</span></div>
         <div v-else class="plan-price plan-price--custom"><strong>{{ interval === 'yearly' && plan.monthly_amount !== null ? 'Anual indisponível' : 'Sob consulta' }}</strong></div>
-        <p class="implementation">Implantação: <b>{{ implementationLabel(plan) }}</b></p>
-        <a v-if="linkForPlan" :href="linkForPlan(plan, interval)" class="plan-action plan-action--link" target="_blank" rel="noopener noreferrer">{{ checkoutAvailable(plan) ? 'Escolher plano' : 'Falar com especialista' }}<ArrowRight :size="16" aria-hidden="true" /></a>
-        <MarketingButton v-else class="plan-action" :variant="plan.featured ? 'primary' : 'outline'" type="button" @click="emit('select', plan, interval)">
-          {{ checkoutAvailable(plan) ? 'Escolher plano' : 'Falar com especialista' }}
-          <template #icon><ArrowRight :size="16" /></template>
-        </MarketingButton>
+        <p v-if="mode" class="plan-limit">{{ productLimitLabel(plan) }}</p>
+        <p class="implementation" :class="{ 'implementation--free': mode && implementationValue(plan) === 0 }">
+          <template v-if="mode && implementationValue(plan) === 0"><b>Implantação grátis</b></template>
+          <template v-else>{{ mode === 'especialista' && plan.specialist_implementation ? 'Implantação com especialista' : 'Implantação' }}: <b>{{ implementationLabel(plan) }}</b></template>
+          <small v-if="mode">{{ implementationValue(plan) === null ? 'Escopo e valores definidos individualmente' : implementationValue(plan) === 0 ? 'Configure sua loja no seu ritmo' : 'Pagamento único' }}</small>
+        </p>
+        <p v-if="mode" class="plan-description">{{ mode === 'especialista' && plan.slug === 'personalizado' ? 'Uma solução sob medida para sua empresa, com acompanhamento especializado desde o planejamento até a implementação dos recursos necessários.' : plan.description }}</p>
+        <PlanAction v-if="!mode" :plan="plan" :interval="interval" :link-for-plan="linkForPlan"
+                    @select="emit('select', plan, interval)" />
         <p class="feature-label">{{ plan.feature_label ?? 'Inclui' }}</p>
         <ul :id="featureId(plan.slug)">
           <li v-for="feature in visible(plan)" :key="feature"><Check :size="15" aria-hidden="true" />{{ feature }}</li>
@@ -58,7 +63,23 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
         <button v-if="!presentation && plan.features.length > 6" class="feature-toggle" type="button" :aria-expanded="isExpanded(plan.slug)" :aria-controls="featureId(plan.slug)" @click="toggle(plan.slug)">
           {{ isExpanded(plan.slug) ? 'Ver menos' : `Ver todos (${plan.features.length})` }}<ChevronDown :size="15" />
         </button>
+        <details v-if="mode" class="implementation-details">
+          <summary>Sobre a implantação</summary>
+          <div class="implementation-details__content">
+            <div :class="{ 'is-active': mode === 'autonomia' }" :aria-hidden="mode !== 'autonomia'">
+              <p>{{ plan.monthly_amount === null ? 'O escopo de implantação e os valores serão definidos individualmente após análise das necessidades do negócio.' : 'Configure sua loja por conta própria. Você não precisa contratar um especialista para utilizar a plataforma.' }}</p>
+            </div>
+            <div :class="{ 'is-active': mode === 'especialista' }" :aria-hidden="mode !== 'especialista'">
+              <ul v-if="plan.specialist_implementation">
+                <li v-for="service in plan.specialist_implementation.services" :key="service"><Check :size="15" aria-hidden="true" />{{ service }}</li>
+              </ul>
+              <p v-else>Os serviços, o escopo de implantação e os valores serão definidos individualmente após análise das necessidades do negócio.</p>
+            </div>
+          </div>
+        </details>
         <p v-if="plan.commercial_note" class="plan-commercial-note">{{ plan.commercial_note }}</p>
+        <PlanAction v-if="mode" :plan="plan" :interval="interval" :mode="mode"
+                    @select="emit('select', plan, interval)" />
       </article>
     </div>
     <div v-if="plans.length > 3" class="pricing-controls">
@@ -69,6 +90,33 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 </template>
 
 <style scoped>
+
+.plans-carousel--modalities .pricing-rail { margin-top: 2rem; }
+.plans-carousel--modalities .plan-card { display: flex; flex-direction: column; }
+.plans-carousel--modalities h3 { order: 0; }
+.plans-carousel--modalities .plan-price { order: 1; margin-top: 1rem; }
+.plan-limit { order: 2; margin-top: 1rem; font-size: .9rem; font-weight: 600; }
+.plans-carousel--modalities .implementation { order: 3; min-height: 5.4rem; margin-top: 1rem; padding-block: .75rem; border-block: 1px solid var(--line); line-height: 1.5; }
+.plans-carousel--modalities .implementation small { display: block; margin-top: .25rem; font-size: .8rem; }
+.plans-carousel--modalities .implementation--free b { color: var(--green); }
+.plans-carousel--modalities .is-featured .feature-toggle { color: var(--green-bright); }
+.plans-carousel--modalities .is-featured .plan-price > span { color: rgba(255,255,255,.8); }
+.plans-carousel--modalities .is-featured .implementation { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.18); }
+.plans-carousel--modalities .is-featured .implementation--free b { color: var(--green-bright); }
+.plans-carousel--modalities .plan-description { order: 4; min-height: 7rem; margin-top: 1.25rem; }
+.plans-carousel--modalities .feature-label { order: 5; margin-top: 1rem; }
+.plans-carousel--modalities .plan-card > ul { order: 6; }
+.plans-carousel--modalities .feature-toggle { order: 7; align-self: start; min-height: 44px; font-size: .85rem; }
+.implementation-details { order: 8; margin-top: 1.25rem; margin-bottom: 1.25rem; font-size: .85rem; line-height: 1.55; }
+.implementation-details summary { display: list-item; min-height: 44px; padding-block: .65rem; cursor: pointer; font-weight: 600; }
+.implementation-details__content { display: grid; }
+.implementation-details__content > div { grid-area: 1 / 1; visibility: hidden; }
+.implementation-details__content > .is-active { visibility: visible; }
+.plans-carousel--modalities .plan-commercial-note { order: 9; margin-bottom: 1.25rem; }
+.plans-carousel--modalities .plan-action { order: 10; margin-top: auto; min-height: 60px; }
+.plans-carousel--modalities :is(a, button, summary):focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }
+.plans-carousel--modalities .is-featured :is(a, button, summary):focus-visible { outline-color: var(--green-bright); }
+
 .plan-action.marketing-button { min-height: 60px; }
 .plan-action :deep(.marketing-button__label) { flex: 1; min-width: 0; }
 .plan-action :deep(.marketing-button__icon) { flex-shrink: 0; margin-left: auto; }

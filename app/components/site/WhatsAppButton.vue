@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { whatsappContactUrl } from '~/data/contact'
 import whatsappIconUrl from '~/assets/images/whatsapp.svg'
 const route = useRoute()
-const whatsappUrl = `https://wa.me/5524998164753?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre a Elínea.')}`
+const whatsappUrl = whatsappContactUrl('Olá! Gostaria de saber mais sobre a Elínea.')
 </script>
 
 <template>

@@ -552,3 +552,20 @@ pertencem à operação da Elínea. A página é orientação e não altera infr
 Na documentação, o usuário pediu a remoção do bloco de três passos numerados
 e do sublinhado no hover do CTA “Falar com a Elínea”. Aplicar essa exceção apenas
 a esse CTA, preservando o foco por teclado e o padrão dos demais links e botões.
+
+## Modalidades de contratação em Preços — 16 de novembro de 2026
+
+O usuário solicitou duas abas em `/precos`: Autonomia (padrão) e Com especialista.
+Preservar hero, estrutura da página, tokens e destaque do E-commerce. O parâmetro
+`modalidade=autonomia|especialista` deve acompanhar a seleção e o histórico do navegador.
+Os cards compartilham mensalidades, funcionalidades e limites vindos da API:
+500 produtos ativos no Catálogo, 2.000 no E-commerce e limite personalizado no
+Personalizado. A Autonomia mantém implantação grátis nos dois primeiros planos;
+o serviço opcional com especialista custa R$ 299,00 e R$ 599,00, respectivamente,
+em pagamento único, sem alterar a mensalidade. O Personalizado segue sob consulta.
+A API expõe o serviço em `specialist_implementation`, separado de
+`implementation_amount`, que continua representando a condição do checkout direto.
+Os CTAs de Autonomia preservam `/contratar-loja?plano=<slug>&periodo=<intervalo>`;
+os de especialista e orçamento usam o WhatsApp comercial existente com mensagem
+identificando plano e modalidade. O escopo do serviço deve ser informado e trabalhos
+adicionais podem exigir orçamento separado. Não há obrigação de contratar especialista.
