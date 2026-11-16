@@ -63,8 +63,8 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
         <button v-if="!presentation && plan.features.length > 6" class="feature-toggle" type="button" :aria-expanded="isExpanded(plan.slug)" :aria-controls="featureId(plan.slug)" @click="toggle(plan.slug)">
           {{ isExpanded(plan.slug) ? 'Ver menos' : `Ver todos (${plan.features.length})` }}<ChevronDown :size="15" />
         </button>
-        <details v-if="mode" class="implementation-details">
-          <summary>Sobre a implantação</summary>
+        <div v-if="mode" class="implementation-details">
+          <h4 class="implementation-details__title">Sobre a implantação</h4>
           <div class="implementation-details__content">
             <div :class="{ 'is-active': mode === 'autonomia' }" :aria-hidden="mode !== 'autonomia'">
               <p>{{ plan.monthly_amount === null ? 'O escopo de implantação e os valores serão definidos individualmente após análise das necessidades do negócio.' : 'Configure sua loja por conta própria. Você não precisa contratar um especialista para utilizar a plataforma.' }}</p>
@@ -76,7 +76,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
               <p v-else>Os serviços, o escopo de implantação e os valores serão definidos individualmente após análise das necessidades do negócio.</p>
             </div>
           </div>
-        </details>
+        </div>
         <p v-if="plan.commercial_note" class="plan-commercial-note">{{ plan.commercial_note }}</p>
         <PlanAction v-if="mode" :plan="plan" :interval="interval" :mode="mode"
                     @select="emit('select', plan, interval)" />
@@ -108,7 +108,7 @@ const scroll = (direction: -1 | 1) => rail.value?.scrollBy({
 .plans-carousel--modalities .plan-card > ul { order: 6; }
 .plans-carousel--modalities .feature-toggle { order: 7; align-self: start; min-height: 44px; font-size: .85rem; }
 .implementation-details { order: 8; margin-top: 1.25rem; margin-bottom: 1.25rem; font-size: .85rem; line-height: 1.55; }
-.implementation-details summary { display: list-item; min-height: 44px; padding-block: .65rem; cursor: pointer; font-weight: 600; }
+.implementation-details__title { margin: 0 0 .75rem; color: inherit; font-size: inherit; font-weight: 600; }
 .implementation-details__content { display: grid; }
 .implementation-details__content > div { grid-area: 1 / 1; visibility: hidden; }
 .implementation-details__content > .is-active { visibility: visible; }

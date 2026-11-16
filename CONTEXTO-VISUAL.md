@@ -569,3 +569,13 @@ Os CTAs de Autonomia preservam `/contratar-loja?plano=<slug>&periodo=<intervalo>
 os de especialista e orçamento usam o WhatsApp comercial existente com mensagem
 identificando plano e modalidade. O escopo do serviço deve ser informado e trabalhos
 adicionais podem exigir orçamento separado. Não há obrigação de contratar especialista.
+
+O usuário solicitou remover as quantidades de produtos das listas de inclusão.
+Manter os limites no campo próprio do card e na comparação. A lista do Catálogo
+usa “Catálogo de produtos”; E-commerce e Personalizado não repetem os limites
+nas funcionalidades. Os valores de `product_limit` permanecem inalterados.
+
+O conteúdo sobre a implantação deve aparecer diretamente nos cards de Preços,
+sem o controle expansível “Sobre a implantação”, conforme solicitado pelo usuário.
+O usuário aprovou essa exibição direta e solicitou manter “Sobre a implantação”
+apenas como título, sem interação de expandir ou recolher.
