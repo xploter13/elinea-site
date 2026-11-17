@@ -233,7 +233,7 @@ async function exportPdf() {
       <section id="page-02" class="page market" aria-labelledby="page-02-title">
         <span class="connection-field" aria-hidden="true"></span>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">O mercado mudou</span><span class="page-meta__folio">02 / 12</span></header>
           <div class="market__layout">
             <div class="market__copy">
               <h2 id="page-02-title" class="page-title page-title--wide">Seus clientes já estão no digital.</h2>
@@ -255,7 +255,7 @@ async function exportPdf() {
     
       <section id="page-03" class="page page--ink problem" aria-labelledby="page-03-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">O problema</span><span class="page-meta__folio">03 / 12</span></header>
           <div class="problem__head">
             <h2 id="page-03-title" class="page-title page-title--wide">Vender online não deveria ser complicado.</h2>
             <p class="page-copy">A vontade de crescer existe. O que falta é uma tecnologia compatível com a rotina de quem toca o negócio todos os dias.</p>
@@ -271,7 +271,7 @@ async function exportPdf() {
     
       <section id="page-04" class="page solution" aria-labelledby="page-04-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">A solução</span><span class="page-meta__folio">04 / 12</span></header>
           <div class="solution__layout">
             <div class="solution__copy">
               <h2 id="page-04-title" class="page-title">Conheça o Elínea.</h2>
@@ -297,7 +297,7 @@ async function exportPdf() {
     
       <section id="page-05" class="page page--green flow" aria-labelledby="page-05-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Como funciona</span><span class="page-meta__folio">05 / 12</span></header>
           <div class="flow__head">
             <h2 id="page-05-title" class="page-title page-title--wide">Do cadastro do produto à realização da venda.</h2>
             <p class="page-copy">A tecnologia trabalha a favor do negócio enquanto você acompanha o que realmente importa.</p>
@@ -315,7 +315,7 @@ async function exportPdf() {
       <section id="page-06" class="page benefits" aria-labelledby="page-06-title">
         <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Benefícios</span><span class="page-meta__folio">06 / 12</span></header>
           <div class="benefits__head">
             <h2 id="page-06-title" class="page-title">Mais do que uma loja virtual.</h2>
             <p class="page-copy">Uma base que faz sentido agora e continua fazendo quando a operação crescer.</p>
@@ -335,7 +335,7 @@ async function exportPdf() {
     
       <section id="page-07" class="page segments" aria-labelledby="page-07-title">
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Segmentos</span><span class="page-meta__folio">07 / 12</span></header>
           <div class="segments__head">
             <h2 id="page-07-title" class="page-title">O Elínea se adapta ao seu negócio.</h2>
             <p class="page-copy">Tecnologia próxima da rotina de pequenos e médios negócios reais.</p>
@@ -352,7 +352,7 @@ async function exportPdf() {
       <template v-for="mode in contractingModes" :key="mode.id">
         <section v-if="mode.id === 'especialista'" id="page-09" class="page support" aria-labelledby="page-09-title">
           <div class="page__frame">
-            <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 11</span></header>
+            <header class="page-meta"><span class="page-meta__chapter">Implantação e suporte</span><span class="page-meta__folio">09 / 12</span></header>
             <div class="support__layout">
               <figure class="support__visual"><div class="support__image"><img :src="assetUrl('suporte-exclusiva.png')" alt="Comerciante recebendo orientação durante a implantação"></div></figure>
               <div class="support__copy">
@@ -371,7 +371,7 @@ async function exportPdf() {
                  class="page page--mist plans" :aria-labelledby="`page-08-title-${mode.id}`">
           <span class="connection-field" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <div class="page__frame">
-            <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">{{ mode.id === 'autonomia' ? '08' : '10' }} / 11</span></header>
+            <header class="page-meta"><span class="page-meta__chapter">Planos</span><span class="page-meta__folio">{{ mode.id === 'autonomia' ? '08' : '10' }} / 12</span></header>
             <div class="plans__head">
               <h2 :id="`page-08-title-${mode.id}`" class="page-title">{{ mode.label }}.</h2>
               <p class="page-copy">{{ mode.id === 'autonomia' ? 'Você no controle, desde o início. Configure sua loja no seu ritmo, sem taxa de implantação nos planos Catálogo e E-commerce.' : 'Conte com nossa equipe para configurar sua loja e orientar os primeiros passos. Implantação opcional, com pagamento único.' }}</p>
@@ -386,11 +386,37 @@ async function exportPdf() {
         </section>
       </template>
 
+      <section id="page-agency" class="page agency" aria-labelledby="page-agency-title">
+        <div class="page__frame">
+          <header class="page-meta"><span class="page-meta__chapter">Quem está por trás do Elínea</span><span class="page-meta__folio">11 / 12</span></header>
+          <div class="agency__layout">
+            <div class="agency__identity" role="img" aria-label="Elínea, um produto da Gênios Mídia">
+              <span class="agency__orbits" aria-hidden="true"></span>
+              <img class="agency__logo" :src="assetUrl('logo-genios-midia-white.svg')" alt="" width="316" height="112">
+              <span class="agency__connection" aria-hidden="true"></span>
+              <img class="agency__product" :src="assetUrl('logo-elinea-white.svg')" alt="">
+            </div>
+            <div class="agency__copy">
+              <h2 id="page-agency-title" class="page-title">Tecnologia feita por quem entende de negócios.</h2>
+              <div class="agency__story">
+                <p>O Elínea é um produto da <strong>Gênios Mídia</strong>, empresa especializada em soluções digitais, com experiência no desenvolvimento de websites, lojas virtuais, sistemas web e aplicações personalizadas.</p>
+                <p>Nossa trajetória reúne tecnologia, design e estratégia para transformar necessidades reais de empresas em soluções digitais eficientes.</p>
+                <p>Com o Elínea, essa experiência se transforma em uma plataforma pensada para simplificar a entrada de pequenos e médios negócios no comércio eletrônico.</p>
+              </div>
+              <div class="agency__signature">
+                <p>Experiência em desenvolvimento.<br>Compromisso com seu crescimento.</p>
+                <a href="https://www.geniosmidia.com.br" target="_blank" rel="noopener noreferrer">www.geniosmidia.com.br <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="page-10" class="page page--ink closing" aria-labelledby="page-10-title">
         <div class="closing__photo"><img :src="assetUrl('encerramento-exclusiva.png')" alt="Comerciante finalizando um pedido para entrega"></div>
         <div class="closing__veil"></div>
         <div class="page__frame">
-          <header class="page-meta"><span class="page-meta__chapter">Vamos construir sua presença digital?</span><span class="page-meta__folio">11 / 11</span></header>
+          <header class="page-meta"><span class="page-meta__chapter">Vamos construir sua presença digital?</span><span class="page-meta__folio">12 / 12</span></header>
           <div class="closing__content">
             <div class="closing__logo"><img :src="assetUrl('logo-elinea-white.svg')" alt="Elínea"></div>
             <h2 id="page-10-title">Seu próximo cliente pode estar a um clique de distância.</h2>
@@ -623,6 +649,26 @@ async function exportPdf() {
 .support__list li:last-child { border-bottom: 1px solid var(--line); }
 .support__list b { font-size: 14px; font-weight: 500; color: var(--green-deep); }
 
+.agency__layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 5cqw; flex: 1; min-height: 0; padding-top: 3cqw; }
+.agency__identity { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; overflow: hidden; background: var(--ink); border-radius: 0 0 9cqw 0; }
+.agency__orbits { position: absolute; z-index: -1; width: 36cqw; aspect-ratio: 1; border: 1px solid var(--white-line); border-radius: 50%; opacity: .6; }
+.agency__orbits::before, .agency__orbits::after { position: absolute; border: 1px solid var(--white-line); border-radius: 50%; content: ""; }
+.agency__orbits::before { inset: 15%; }
+.agency__orbits::after { inset: -15%; }
+.agency__identity .agency__logo { width: 74%; height: auto; }
+.agency__connection { position: relative; width: 1px; height: 6cqw; margin: 2.5cqw 0; background: var(--green-bright); }
+.agency__connection::after { position: absolute; left: -3px; bottom: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--green-bright); content: ""; }
+.agency__identity .agency__product { width: 36%; height: auto; }
+.agency__copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.agency__copy .page-title { max-width: 19ch; font-size: clamp(36px, 3.5cqw, 56px); line-height: 1.06; letter-spacing: -.05em; }
+.agency__story { display: grid; gap: 1.1cqw; margin-top: 2cqw; color: var(--muted); font-size: clamp(15px, 1.2cqw, 19.2px); line-height: 1.6; }
+.agency__story strong { color: var(--ink); font-weight: 600; }
+.agency__signature { margin-top: 2cqw; padding-top: 1.5cqw; border-top: 1px solid var(--line); }
+.agency__signature p { font-size: clamp(18px, 1.5cqw, 24px); font-weight: 500; line-height: 1.35; letter-spacing: -.025em; }
+.agency__signature a { display: inline-flex; align-items: center; gap: 1.5cqw; min-height: 44px; margin-top: .7cqw; color: var(--green-deep); font-size: clamp(14px, 1.05cqw, 17px); font-weight: 500; text-decoration: underline; text-underline-offset: 5px; }
+.agency__signature a:hover { color: var(--ink); }
+.agency__signature a:focus-visible { outline-color: var(--green-deep); }
+
 .closing { background: var(--green-deep); }
 .closing__photo { position: absolute; inset: 0 0 0 62%; overflow: hidden; }
 .closing__photo img { object-position: 25% center; }
@@ -642,6 +688,12 @@ async function exportPdf() {
 .closing__contacts svg { flex-shrink: 0; }
 
 @media (max-width: 1100px) {
+  .agency__layout { gap: 32px; padding-top: 36px; }
+  .agency__copy .page-title { font-size: 36px; }
+  .agency__story { gap: 16px; margin-top: 24px; font-size: 16px; }
+  .agency__signature { margin-top: 24px; padding-top: 20px; }
+  .agency__signature p { font-size: 20px; }
+  .agency__signature a { margin-top: 12px; font-size: 15px; }
   .plans .page__frame { padding: 36px; }
   .plans__carousel { margin-top: 30px; }
   .presentation-document { gap: 24px; padding: 24px 0; }
@@ -681,6 +733,13 @@ async function exportPdf() {
   .closing__cta .closing__button { padding: 14px 20px; }
 }
 @media (max-width: 700px) {
+  .agency__layout { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
+  .agency__identity { min-height: 280px; border-radius: 0 0 64px 0; }
+  .agency__orbits { width: 80cqw; }
+  .agency__identity .agency__logo { width: 62%; max-width: 280px; }
+  .agency__connection { height: 40px; margin: 22px 0; }
+  .agency__identity .agency__product { width: 28%; max-width: 130px; }
+  .agency__copy .page-title { font-size: 10cqw; }
   .plans .page__frame { padding: 28px 24px; }
   .plans__implementation { grid-template-columns: 1fr; gap: 8px; margin-top: 24px; padding-top: 18px; }
   .pdf-export { top: 10px; right: 10px; min-height: 42px; padding: 0 14px; font-size: 12px; }

@@ -428,7 +428,7 @@ puramente decorativas devem ter `alt=""`.
 
 A apresentação comercial em `app/pages/apresentacao.vue` é uma página Nuxt
 voltada à exportação em PDF, sem navegação entre páginas. O botão de exportação
-gera no navegador um novo PDF de 11 páginas em 16:9, com uma página de planos por modalidade. Os convites de demonstração e
+gera no navegador um novo PDF de 12 páginas em 16:9, com uma página de planos por modalidade. Os convites de demonstração e
 os contatos usam links reais, também incorporados como áreas clicáveis no PDF. A apresentação é
 servida exclusivamente na rota local `/apresentacao`; o middleware da página e o
 handler dos assets recusam hosts não locais. O controle é ocultado automaticamente
@@ -449,6 +449,15 @@ O redesign das páginas 02 a 10 foi aprovado em 8 de novembro de 2026. A capa de
 preservar a composição anterior: título “Novas oportunidades.”, fotografia com
 recorte elíptico, arcos verdes e faixa de apoio em duas colunas, sem cabeçalho ou
 rodapé adicional.
+
+Em 17 de novembro de 2026, o usuário solicitou uma página sobre a Gênios Mídia,
+gestora do Elínea, imediatamente antes do encerramento da apresentação. Preservar
+o texto fornecido, com o título “Quem está por trás do Elínea”, a mensagem
+“Tecnologia feita por quem entende de negócios.”, os três parágrafos institucionais,
+a assinatura “Experiência em desenvolvimento. Compromisso com seu crescimento.”
+e o link `https://www.geniosmidia.com.br`, também clicável no PDF. O logotipo
+oficial fornecido está em `docs/assets/apresentacao/logo-genios-midia-white.svg`.
+A seção institucional é a página 11; o encerramento passa à página 12.
 
 Na exportação, os textos são desenhados em vetor com os quatro pesos da Inter
 incorporados ao PDF. Fotografias e efeitos permanecem na camada visual. Preservar
