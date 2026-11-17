@@ -11,6 +11,7 @@ import type {BillingInterval, Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
 import {ArrowRight} from '@lucide/vue'
 
+const { mode, selectMode } = useContractingMode()
 const pageRoot = ref<HTMLElement | null>(null)
 const heroRoot = ref<HTMLElement | null>(null)
 const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
@@ -278,7 +279,7 @@ onBeforeUnmount(() => {
       <ProductShotSection/>
       <SegmentsSection/>
       <IntegrationsSection/>
-      <PricingSection :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
+      <PricingSection :mode="mode" @update:mode="selectMode" :plans="plans" :loading="plansPending" :error="Boolean(plansError)" @retry="refreshPlans" @select="openCheckout"/>
       <section class="chapter final-cta">
         <div class="site-container final-cta__inner reveal-copy">
           <p class="site-label">

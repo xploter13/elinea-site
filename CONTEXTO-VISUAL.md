@@ -599,3 +599,9 @@ apenas como título, sem interação de expandir ou recolher.
 A nomenclatura solicitada pelo usuário para a modalidade é “Com autonomia”,
 na página de Preços, na apresentação e nas mensagens de contato. O identificador
 `autonomia` e os parâmetros de URL permanecem os mesmos.
+
+Em 17 de novembro de 2026, o usuário solicitou replicar na Home os cards de
+Preços. Ambas as páginas reutilizam `PricingSection.vue` com as abas “Com autonomia”
+e “Com especialista”, os mesmos limites, condições de implantação e CTAs.
+O controle de modalidade e URL é compartilhado em `useContractingMode`, mantendo
+`modalidade=autonomia|especialista`, Com autonomia como padrão e voltar/avançar.

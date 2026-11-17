@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { parseContractingMode, type ContractingMode } from '~/data/contracting'
 import PricingSection from '~/components/home/PricingSection.vue'
 import {type BillingInterval, type Plan} from '~/data/plans'
 import {MarketingButton} from '@elinea/ui/marketing'
@@ -7,13 +6,7 @@ import {ArrowRight, Check, Minus} from '@lucide/vue'
 
 const pageRoot = ref<HTMLElement | null>(null)
 const {data: plans, pending: plansPending, error: plansError, refresh: refreshPlans} = usePublicPlans()
-const route = useRoute()
-const router = useRouter()
-const mode = computed(() => parseContractingMode(route.query.modalidade))
-const selectMode = (value: ContractingMode) => {
-  if (value === mode.value) return
-  return router.push({ path: route.path, query: { ...route.query, modalidade: value }, hash: route.hash })
-}
+const { mode, selectMode } = useContractingMode()
 let destroyMotion: (() => void) | undefined
 
 const comparisonRows = [
