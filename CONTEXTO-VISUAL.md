@@ -458,6 +458,11 @@ a assinatura “Experiência em desenvolvimento. Compromisso com seu crescimento
 e o link `https://www.geniosmidia.com.br`, também clicável no PDF. O logotipo
 oficial fornecido está em `docs/assets/apresentacao/logo-genios-midia-white.svg`.
 A seção institucional é a página 11; o encerramento passa à página 12.
+O usuário forneceu o logotipo em SVG para substituir o PNG e, em seguida,
+solicitou uma rediagramação mais criativa dessa página, preservando seu conteúdo.
+O usuário aprovou a nova composição com abertura escura, título amplo e faixa clara
+em três colunas; pediu apenas o refinamento do círculo junto às marcas, cuja
+borda espessa e deslocada interferia na leitura do logotipo.
 
 Na exportação, os textos são desenhados em vetor com os quatro pesos da Inter
 incorporados ao PDF. Fotografias e efeitos permanecem na camada visual. Preservar
