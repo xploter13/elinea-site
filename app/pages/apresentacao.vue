@@ -390,16 +390,18 @@ async function exportPdf() {
         <div class="page__frame">
           <header class="page-meta"><span class="page-meta__chapter">Quem está por trás do Elínea</span><span class="page-meta__folio">11 / 12</span></header>
           <div class="agency__headline">
-            <h2 id="page-agency-title">Tecnologia feita por quem entende de negócios.</h2>
+            <div class="agency__intro">
+              <h2 id="page-agency-title">Tecnologia feita por quem entende de negócios.</h2>
+              <p>O Elínea é um produto da <strong>Gênios Mídia</strong>, empresa especializada em soluções digitais, com experiência no desenvolvimento de websites, lojas virtuais, sistemas web e aplicações personalizadas.</p>
+            </div>
             <div class="agency__identity" role="img" aria-label="Elínea, um produto da Gênios Mídia">
               <img class="agency__logo" :src="assetUrl('logo-genios-midia-white.svg')" alt="" width="316" height="112">
-              <span class="agency__connection" aria-hidden="true"></span>
+              <svg class="agency__connection" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M 1 0 V 40 Q 1 50, 11 50 H 189 Q 199 50, 199 60 V 100" /></svg>
               <div class="agency__platform"><img class="agency__product" :src="assetUrl('logo-elinea-white.svg')" alt=""></div>
             </div>
           </div>
           <div class="agency__foundation">
             <div class="agency__story">
-              <p>O Elínea é um produto da <strong>Gênios Mídia</strong>, empresa especializada em soluções digitais, com experiência no desenvolvimento de websites, lojas virtuais, sistemas web e aplicações personalizadas.</p>
               <p>Nossa trajetória reúne tecnologia, design e estratégia para transformar necessidades reais de empresas em soluções digitais eficientes.</p>
               <p>Com o Elínea, essa experiência se transforma em uma plataforma pensada para simplificar a entrada de pequenos e médios negócios no comércio eletrônico.</p>
             </div>
@@ -650,19 +652,19 @@ async function exportPdf() {
 
 .agency .page__frame { padding-bottom: 0; }
 .agency__headline { display: grid; grid-template-columns: 1.5fr 1fr; align-items: center; gap: 5cqw; flex: 1; min-height: 0; padding: 2.8cqw 0 3.2cqw; }
-.agency__headline h2 { max-width: 18ch; font-size: clamp(42px, 4.9cqw, 78.4px); font-weight: 500; line-height: 1.03; letter-spacing: -.06em; text-wrap: balance; }
+.agency__headline h2 { max-width: 18ch; font-size: clamp(40px, 4.3cqw, 68.8px); font-weight: 500; line-height: 1.06; letter-spacing: -.055em; text-wrap: balance; }
+.agency__intro > p { max-width: 53ch; margin-top: 1.8cqw; color: rgba(250,252,251,.72); font-size: clamp(15px, 1.15cqw, 18.4px); line-height: 1.65; }
+.agency__intro strong { color: var(--paper); font-weight: 600; }
 .agency__identity { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; }
 .agency__identity .agency__logo { align-self: flex-start; width: 22cqw; height: auto; }
-.agency__connection { position: relative; align-self: flex-start; width: 48%; height: 5cqw; margin: 1.5cqw 0 1.5cqw 32%; }
-.agency__connection::before { position: absolute; top: 0; left: 0; width: 100%; height: 50%; border-left: 1px solid var(--green-bright); border-bottom: 1px solid var(--green-bright); border-bottom-left-radius: 1cqw; content: ""; }
-.agency__connection::after { position: absolute; right: 0; bottom: 0; width: 1px; height: 50%; background: var(--green-bright); content: ""; }
+.agency__connection { display: block; align-self: flex-start; width: 48%; height: 6.5cqw; margin: 1.5cqw 0 0 32%; overflow: visible; fill: none; stroke: var(--green-bright); stroke-width: 1; }
+.agency__connection path { vector-effect: non-scaling-stroke; }
 .agency__platform { align-self: flex-end; display: flex; align-items: center; justify-content: center; width: 40%; padding: 1.8cqw; border: 1px solid rgba(92,221,164,.4); border-radius: .4cqw; background: rgba(7,148,94,.1); }
 .agency__identity .agency__product { width: 100%; height: auto; }
-.agency__foundation { margin-inline: -4.5cqw; padding: 2.6cqw 4.5cqw 2.2cqw; border-radius: 3.5cqw 0 0 0; background: var(--paper); color: var(--ink); }
-.agency__story { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 3cqw; color: var(--muted); font-size: clamp(15px, 1.15cqw, 18.4px); line-height: 1.6; }
-.agency__story p + p { border-left: 1px solid var(--line); padding-left: 2.4cqw; }
-.agency__story strong { color: var(--ink); font-weight: 600; }
-.agency__signature { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-top: 2cqw; padding-top: 1.4cqw; border-top: 1px solid var(--line); }
+.agency__foundation { margin-inline: -4.5cqw; padding: 2.7cqw 4.5cqw 2.2cqw; border-radius: 3.5cqw 0 0 0; background: var(--paper); color: var(--ink); }
+.agency__story { display: grid; grid-template-columns: 1fr 1fr; gap: 7cqw; color: var(--muted); font-size: clamp(16px, 1.25cqw, 20px); line-height: 1.65; }
+.agency__story p { max-width: 54ch; }
+.agency__signature { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-top: 2.5cqw; padding-top: 1.5cqw; border-top: 1px solid var(--line); }
 .agency__signature p { font-size: clamp(17px, 1.3cqw, 20.8px); font-weight: 500; line-height: 1.4; letter-spacing: -.025em; }
 .agency__signature a { display: inline-flex; align-items: center; gap: 2cqw; min-height: 44px; color: var(--green-deep); font-size: clamp(14px, 1.05cqw, 17px); font-weight: 500; text-decoration: underline; text-underline-offset: 5px; }
 .agency__signature a:hover { color: var(--ink); }
@@ -689,12 +691,12 @@ async function exportPdf() {
 @media (max-width: 1100px) {
   .agency .page__frame { padding-bottom: 0; }
   .agency__headline { gap: 32px; padding: 40px 0; }
-  .agency__headline h2 { font-size: clamp(38px, 5.1cqw, 56px); }
+  .agency__headline h2 { font-size: clamp(36px, 4.6cqw, 52px); }
+  .agency__intro > p { margin-top: 24px; font-size: 16px; }
   .agency__identity .agency__logo { width: 25cqw; }
 
   .agency__foundation { margin-inline: -36px; padding: 32px 36px; }
-  .agency__story { gap: 24px; font-size: 15px; }
-  .agency__story p + p { padding-left: 20px; }
+  .agency__story { gap: 40px; font-size: 17px; }
   .agency__signature { margin-top: 24px; padding-top: 20px; }
   .agency__signature p { font-size: 18px; }
   .agency__signature a { font-size: 15px; }
@@ -741,12 +743,10 @@ async function exportPdf() {
   .agency__headline h2 { max-width: 16ch; font-size: 11cqw; }
   .agency__identity { flex-direction: column; align-items: flex-start; padding: 0; }
   .agency__identity .agency__logo { width: 55cqw; }
-  .agency__connection { height: 44px; margin-block: 16px; }
-  .agency__connection::before { border-bottom-left-radius: 12px; }
+  .agency__connection { height: 60px; margin-block: 16px 0; }
   .agency__platform { padding: 20px; border-radius: 5px; }
   .agency__foundation { margin-inline: -24px; padding: 32px 24px; border-radius: 36px 0 0 0; }
-  .agency__story { grid-template-columns: 1fr; gap: 24px; font-size: 16px; }
-  .agency__story p + p { padding-left: 0; border-left: 0; }
+  .agency__story { grid-template-columns: 1fr; gap: 28px; font-size: 16px; }
   .agency__signature { flex-direction: column; align-items: flex-start; gap: 16px; margin-top: 28px; padding-top: 24px; }
   .plans .page__frame { padding: 28px 24px; }
   .plans__implementation { grid-template-columns: 1fr; gap: 8px; margin-top: 24px; padding-top: 18px; }

@@ -462,7 +462,15 @@ O usuário forneceu o logotipo em SVG para substituir o PNG e, em seguida,
 solicitou uma rediagramação mais criativa dessa página, preservando seu conteúdo.
 O usuário aprovou a nova composição com abertura escura, título amplo e faixa clara
 em três colunas; pediu apenas o refinamento do círculo junto às marcas, cuja
-borda espessa e deslocada interferia na leitura do logotipo.
+borda espessa e deslocada interferia na leitura do logotipo. Após gostar do
+refinamento, solicitou explorar outro tipo de representação para a relação entre
+as marcas, preservando o restante da composição.
+A representação de origem com Gênios Mídia acima e Elínea em uma moldura abaixo
+foi aprovada. O usuário pediu que a ligação passasse a ser curva e que os textos
+fossem redistribuídos com mais respiro, por considerar a faixa de três colunas
+muito compacta. Preservar o conteúdo completo nessa redistribuição.
+Em seguida, esclareceu que a ligação deve manter o percurso ortogonal anterior,
+com apenas os cantos levemente arredondados, em vez de uma curva contínua.
 
 Na exportação, os textos são desenhados em vetor com os quatro pesos da Inter
 incorporados ao PDF. Fotografias e efeitos permanecem na camada visual. Preservar
